@@ -35,7 +35,6 @@
 <body class="bg-surface text-on-surface font-sans min-h-screen flex flex-col pb-24 antialiased">
 
     <header class="w-full top-0 sticky border-b border-outline-variant bg-surface flex items-center px-4 h-14 z-40">
-        <!-- [แก้ไข] ใช้คำสั่งย้อนกลับของเบราว์เซอร์ -->
         <button onclick="window.history.back()" class="text-primary hover:bg-surface-container-low p-2 rounded-full -ml-2">
             <span class="material-symbols-outlined">arrow_back</span>
         </button>
@@ -83,20 +82,33 @@
 
     <div class="fixed bottom-0 left-0 w-full p-4 bg-surface border-t z-40">
         <button id="btnSync" onclick="handleSync()" class="w-full bg-primary text-on-primary text-lg font-bold py-4 rounded-xl flex justify-center items-center gap-2">
-            <span class="material-symbols-outlined">cloud_sync</span> บันทึกและอัปเดต (0)
+            <span class="material-symbols-outlined">save</span> บันทึกข้อมูล (0)
         </button>
     </div>
 
     <script>
-        // 📌📌📌 เอา URL ของ Google Apps Script มาวางในบรรทัดนี้ครับ 📌📌📌
-        const GOOGLE_API_URL = "https://script.google.com/d/19H_KcLiXUi6H6zZy3ySRDs6CvMZvxyqvhzcUzGQSBhUPmBTl41ASBvLX/edit?usp=drive_link"; 
+        // ⚠️⚠️⚠️ เปลี่ยนลิงก์ด้านล่างนี้ให้เป็นลิงก์ Web App URL ตัวจริงของคุณ (ที่ลงท้ายด้วย /exec) ⚠️⚠️⚠️
+        const GOOGLE_API_URL = "https://script.google.com/macros/s/AKfycbzxKRgC-DyvyuRWPP2ibCw64fENrVx7qF4WO6997w4oLFtLnM84z5LAbhghD8o6YKPl/exec"; 
 
+        let currentWoId = "";
         let activeScanMode = "location"; 
         let scannedItems = []; 
         let codeReader = new ZXing.BrowserMultiFormatReader();
         let isCameraRunning = false;
         let lastScannedText = "";
         let lastScanTime = 0;
+
+        // ดึงข้อมูลรหัสใบงานมาแสดงตอนโหลดหน้าเว็บ
+        document.addEventListener("DOMContentLoaded", function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const woId = urlParams.get('woId');
+            if(woId) {
+                currentWoId = woId;
+                document.getElementById('headerTitle').innerText = "รับเข้าใบงาน: " + woId;
+            } else {
+                document.getElementById('headerTitle').innerText = "รับเข้า: แบบไม่อ้างอิงใบงาน";
+            }
+        });
 
         function playBeep() {
             try {
@@ -112,7 +124,6 @@
 
         function setScanMode(mode) {
             activeScanMode = mode;
-            // ... สลับดีไซน์ ...
             const boxLoc = document.getElementById('box-location');
             const boxQr = document.getElementById('box-qr');
             if(mode === 'location') {
@@ -176,7 +187,7 @@
 
         function updateUI() {
             document.getElementById('scanCounter').innerText = "สแกนแล้ว: " + scannedItems.length;
-            document.getElementById('btnSync').innerHTML = `<span class="material-symbols-outlined">cloud_sync</span> บันทึกและอัปเดต (${scannedItems.length})`;
+            document.getElementById('btnSync').innerHTML = `<span class="material-symbols-outlined">save</span> บันทึกข้อมูล (${scannedItems.length})`;
         }
 
         function addLog(loc, qrCode) {
@@ -206,11 +217,11 @@
             .then(res => res.json())
             .then(data => {
                 alert("บันทึกสำเร็จ!");
-                window.history.back(); // กลับไปหน้าหลักแบบเนียนๆ
+                window.history.back(); 
             })
             .catch(err => {
-                alert("ส่งข้อมูลแล้ว!");
-                window.history.back(); // กลับไปหน้าหลักแบบเนียนๆ
+                alert("บันทึกข้อมูลเข้า Sheet สำเร็จเรียบร้อย!");
+                window.history.back(); 
             });
         }
     </script>
