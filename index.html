@@ -35,10 +35,11 @@
 <body class="bg-surface text-on-surface font-sans min-h-screen flex flex-col pb-24 antialiased">
 
     <header class="w-full top-0 sticky border-b border-outline-variant bg-surface flex items-center px-4 h-14 z-40">
-        <a href="https://liff.line.me/2010761292-fHq83HiZ" class="text-primary hover:bg-surface-container-low p-2 rounded-full -ml-2">
+        <!-- [แก้ไข] ใช้คำสั่งย้อนกลับของเบราว์เซอร์ -->
+        <button onclick="window.history.back()" class="text-primary hover:bg-surface-container-low p-2 rounded-full -ml-2">
             <span class="material-symbols-outlined">arrow_back</span>
-        </a>
-        <h1 id="headerTitle" class="text-lg font-bold text-primary flex-1 text-center pr-8">รับเข้า: แบบไม่อ้างอิงใบงาน</h1>
+        </button>
+        <h1 id="headerTitle" class="text-lg font-bold text-primary flex-1 text-center pr-8">รับเข้า...</h1>
     </header>
 
     <main class="p-4 flex flex-col gap-4 z-10">
@@ -205,12 +206,11 @@
             .then(res => res.json())
             .then(data => {
                 alert("บันทึกสำเร็จ!");
-                // บันทึกเสร็จแล้ว เด้งกลับหน้าแรก LIFF ทันที
-                window.location.href = "https://liff.line.me/2010761292-fHq83HiZ"; 
+                window.history.back(); // กลับไปหน้าหลักแบบเนียนๆ
             })
             .catch(err => {
                 alert("ส่งข้อมูลแล้ว!");
-                window.location.href = "https://liff.line.me/2010761292-fHq83HiZ";
+                window.history.back(); // กลับไปหน้าหลักแบบเนียนๆ
             });
         }
     </script>
