@@ -32,7 +32,7 @@
         @keyframes flash { 0% { background-color: rgba(76, 175, 80, 0.5); } 100% { background-color: transparent; } }
     </style>
 </head>
-<body class="bg-surface text-on-surface font-sans min-h-screen flex flex-col pb-24 antialiased">
+<body class="bg-surface text-on-surface font-sans min-h-screen flex flex-col pb-24 antialiased selection:bg-primary selection:text-on-primary relative">
 
     <header class="w-full top-0 sticky border-b border-outline-variant bg-surface flex items-center px-4 h-14 z-40">
         <button onclick="window.history.back()" class="text-primary hover:bg-surface-container-low p-2 rounded-full -ml-2">
@@ -59,7 +59,6 @@
                 </div>
             </div>
 
-            <!-- กล่องแสดงภาพจากกล้องสด -->
             <div id="videoContainer" class="hidden relative w-full bg-black rounded-lg overflow-hidden mt-2" style="aspect-ratio: 4/3;">
                 <video id="videoElement" class="w-full h-full object-cover"></video>
                 <div class="absolute inset-0 border-2 border-primary/50 pointer-events-none z-10 m-6 rounded-lg shadow-[0_0_0_4000px_rgba(0,0,0,0.5)]"></div>
@@ -72,23 +71,54 @@
             </button>
         </section>
 
+        <!-- รายการประวัติสแกน -->
         <section class="mt-2">
-            <h3 class="text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">ประวัติการสแกน</h3>
+            <h3 class="text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">ประวัติการสแกน (ปัดซ้ายเพื่อลบ)</h3>
             <div id="scanLogContainer" class="flex flex-col gap-2">
-                <div id="emptyLog" class="text-center py-6 text-on-surface-variant text-sm border rounded-lg">ยังไม่มีข้อมูลการสแกน</div>
+                <div id="emptyLog" class="text-center py-6 text-on-surface-variant text-sm border rounded-lg bg-surface-container-lowest">ยังไม่มีข้อมูลการสแกน</div>
             </div>
         </section>
     </main>
 
+    <!-- หน้าต่างม็อดดัลสำหรับแก้ไขข้อมูลกระสอบสินค้า -->
+    <div id="editItemModal" class="fixed inset-0 bg-black/50 z-50 hidden flex-col justify-end items-center px-2 pb-2">
+        <div class="bg-[#f4faff] w-full max-w-md rounded-2xl p-6 shadow-xl transform translate-y-full transition-transform duration-300" id="editItemModalContent">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-primary">แก้ไขข้อมูลรายการสแกน</h3>
+                <button onclick="closeEditItemModal()" class="text-on-surface-variant hover:text-error bg-surface-container-low p-1 rounded-full">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <input type="hidden" id="modalItemIndex">
+            <div class="flex flex-col gap-4">
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs font-bold text-on-surface-variant uppercase">Location</label>
+                    <input type="text" id="modalLocation" class="w-full px-3 py-3 bg-surface-container-lowest border border-outline-variant rounded-lg text-primary font-bold focus:border-primary outline-none">
+                </div>
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs font-bold text-on-surface-variant uppercase">QR Code / บาร์โค้ด</label>
+                    <input type="text" id="modalQrLabel" class="w-full px-3 py-3 bg-surface-container-lowest border border-outline-variant rounded-lg text-primary font-bold focus:border-primary outline-none">
+                </div>
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs font-bold text-on-surface-variant uppercase">น้ำหนัก (กก.)</label>
+                    <input type="number" id="modalWeight" class="w-full px-3 py-3 bg-surface-container-lowest border border-outline-variant rounded-lg text-primary font-bold focus:border-primary outline-none">
+                </div>
+                <button onclick="saveEditedItem()" class="w-full bg-primary text-on-primary font-bold py-4 rounded-xl mt-2 shadow-sm flex justify-center items-center gap-2 active:scale-95 transition-transform">
+                    <span class="material-symbols-outlined">save</span> บันทึกการแก้ไข
+                </button>
+            </div>
+        </div>
+    </div>
+
     <div class="fixed bottom-0 left-0 w-full p-4 bg-surface border-t z-40">
-        <button id="btnSync" onclick="handleSync()" class="w-full bg-primary text-on-primary text-lg font-bold py-4 rounded-xl flex justify-center items-center gap-2">
+        <button id="btnSync" onclick="handleSync()" class="w-full bg-primary text-on-primary text-lg font-bold py-4 rounded-xl flex justify-center items-center gap-2 shadow-md">
             <span class="material-symbols-outlined">save</span> บันทึกข้อมูล (0)
         </button>
     </div>
 
     <script>
-        // ⚠️⚠️⚠️ เปลี่ยนลิงก์ด้านล่างนี้ให้เป็นลิงก์ Web App URL ตัวจริงของคุณ (ที่ลงท้ายด้วย /exec) ⚠️⚠️⚠️
-        const GOOGLE_API_URL = "https://script.google.com/macros/s/AKfycbzxKRgC-DyvyuRWPP2ibCw64fENrVx7qF4WO6997w4oLFtLnM84z5LAbhghD8o6YKPl/exec"; 
+        // 📌 อย่าลืมใส่ URL ของ Web App ตัวจริง (ที่ลงท้ายด้วย /exec) นะครับ
+        const GOOGLE_API_URL = "https://script.google.com/macros/s/XXXXX/exec"; 
 
         let currentWoId = "";
         let activeScanMode = "location"; 
@@ -98,7 +128,6 @@
         let lastScannedText = "";
         let lastScanTime = 0;
 
-        // ดึงข้อมูลรหัสใบงานมาแสดงตอนโหลดหน้าเว็บ
         document.addEventListener("DOMContentLoaded", function() {
             const urlParams = new URLSearchParams(window.location.search);
             const woId = urlParams.get('woId');
@@ -108,6 +137,7 @@
             } else {
                 document.getElementById('headerTitle').innerText = "รับเข้า: แบบไม่อ้างอิงใบงาน";
             }
+            renderLog();
         });
 
         function playBeep() {
@@ -127,11 +157,11 @@
             const boxLoc = document.getElementById('box-location');
             const boxQr = document.getElementById('box-qr');
             if(mode === 'location') {
-                boxLoc.className = "border-2 border-primary bg-surface-container-low rounded-lg p-3";
-                boxQr.className = "border-2 border-outline-variant bg-surface-container-lowest rounded-lg p-3 opacity-60";
+                boxLoc.className = "border-2 border-primary bg-surface-container-low rounded-lg p-3 flex flex-col relative cursor-pointer transition-all";
+                boxQr.className = "border-2 border-outline-variant bg-surface-container-lowest rounded-lg p-3 flex flex-col relative cursor-pointer transition-all opacity-60";
             } else {
-                boxQr.className = "border-2 border-primary bg-surface-container-low rounded-lg p-3";
-                boxLoc.className = "border-2 border-outline-variant bg-surface-container-lowest rounded-lg p-3 opacity-60";
+                boxQr.className = "border-2 border-primary bg-surface-container-low rounded-lg p-3 flex flex-col relative cursor-pointer transition-all";
+                boxLoc.className = "border-2 border-outline-variant bg-surface-container-lowest rounded-lg p-3 flex flex-col relative cursor-pointer transition-all opacity-60";
             }
         }
 
@@ -170,6 +200,7 @@
         }
 
         function processScannedData(scannedText) {
+            let timeStr = new Date().toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' });
             if (activeScanMode === 'location') {
                 document.getElementById('val-location').innerText = scannedText;
                 setScanMode('qr'); 
@@ -180,8 +211,9 @@
                     setScanMode('qr'); return;
                 }
                 document.getElementById('val-qr').innerText = scannedText;
-                scannedItems.push({ qrLabel: scannedText, location: loc, actualWeight: 60 });
-                updateUI(); addLog(loc, scannedText);
+                scannedItems.push({ qrLabel: scannedText, location: loc, actualWeight: 60, time: timeStr });
+                updateUI(); 
+                renderLog();
             }
         }
 
@@ -190,13 +222,114 @@
             document.getElementById('btnSync').innerHTML = `<span class="material-symbols-outlined">save</span> บันทึกข้อมูล (${scannedItems.length})`;
         }
 
-        function addLog(loc, qrCode) {
+        // ==========================================
+        // 📱 ระบบลากซ้ายเพื่อลบ (Swipe to Delete)
+        // ==========================================
+        let startX = 0;
+        function touchStart(e) {
+            startX = e.touches[0].clientX;
+        }
+        function touchEnd(e, index, element) {
+            let endX = e.changedTouches[0].clientX;
+            // ปัดซ้ายเกิน 40px ให้เปิดปุ่มลบ
+            if (startX - endX > 40) { 
+                element.style.transform = "translateX(-75px)";
+            } 
+            // ปัดขวาเกิน 40px ให้ปิดปุ่มลบ
+            else if (endX - startX > 40) { 
+                element.style.transform = "translateX(0px)";
+            }
+        }
+
+        function deleteItem(index) {
+            scannedItems.splice(index, 1);
+            updateUI();
+            renderLog();
+        }
+
+        function renderLog() {
             const container = document.getElementById('scanLogContainer');
-            const emptyLog = document.getElementById('emptyLog');
-            if (emptyLog) emptyLog.remove();
-            const time = new Date().toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' });
-            const logHtml = `<div class="bg-surface-container-lowest border-l-4 border-primary p-3 flex justify-between shadow-sm mb-2"><div class="flex flex-col"><span class="text-sm font-bold">${qrCode}</span><span class="text-[10px]">Location: ${loc}</span></div><span class="text-xs bg-surface-container-low px-2 py-1 rounded">${time}</span></div>`;
-            container.insertAdjacentHTML('afterbegin', logHtml);
+            container.innerHTML = '';
+            
+            if (scannedItems.length === 0) {
+                container.innerHTML = '<div id="emptyLog" class="text-center py-6 text-on-surface-variant text-sm border rounded-lg bg-surface-container-lowest">ยังไม่มีข้อมูลการสแกน</div>';
+                return;
+            }
+
+            scannedItems.forEach((item, index) => {
+                let logHtml = `
+                <div class="relative overflow-hidden w-full rounded-lg shadow-sm border border-outline-variant h-[74px]">
+                    <!-- แผงปุ่มลบสีแดงด้านหลัง -->
+                    <div class="absolute inset-0 bg-error flex justify-end items-center text-white z-0">
+                        <button onclick="deleteItem(${index})" class="flex flex-col items-center justify-center h-full w-[75px] bg-error active:bg-red-800 transition-colors">
+                            <span class="material-symbols-outlined text-xl">delete</span>
+                            <span class="text-[10px] font-bold">ลบ</span>
+                        </button>
+                    </div>
+                    <!-- เนื้อหาการ์ดด้านหน้า (คอยรับคำสั่งปัด) -->
+                    <div class="absolute inset-0 bg-surface-container-lowest border-l-4 border-primary p-3 flex justify-between items-center z-10 transition-transform duration-300 select-none"
+                         style="touch-action: pan-y;"
+                         ontouchstart="touchStart(event)"
+                         ontouchend="touchEnd(event, ${index}, this)">
+                        <div class="flex flex-col min-w-0 flex-1 pr-2">
+                            <span class="text-sm font-bold truncate text-primary">${item.qrLabel}</span>
+                            <span class="text-[10px] text-on-surface-variant truncate">Location: ${item.location} | น้ำหนัก: ${item.actualWeight} กก.</span>
+                        </div>
+                        <div class="flex items-center gap-2 shrink-0">
+                            <!-- ปุ่มลูกตา 👁️ ดู/แก้ไขข้อมูลกระสอบนี้ -->
+                            <button onclick="openEditItemModal(${index}, event)" class="text-on-surface-variant hover:text-primary p-1.5 bg-surface-container-low rounded-full border border-outline-variant flex items-center justify-center active:scale-90 transition-transform">
+                                <span class="material-symbols-outlined text-[16px]">visibility</span>
+                            </button>
+                            <span class="text-xs bg-surface-container-low px-2 py-1 rounded font-mono text-on-surface-variant">${item.time}</span>
+                        </div>
+                    </div>
+                </div>
+                `;
+                container.insertAdjacentHTML('beforeend', logHtml);
+            });
+        }
+
+        // ==========================================
+        // 👁️ ระบบหน้าต่างดู/แก้ไขข้อมูลสินค้าแต่ละชิ้น
+        // ==========================================
+        function openEditItemModal(index, event) {
+            if (event) event.stopPropagation(); 
+            const item = scannedItems[index];
+            document.getElementById('modalItemIndex').value = index;
+            document.getElementById('modalLocation').value = item.location;
+            document.getElementById('modalQrLabel').value = item.qrLabel;
+            document.getElementById('modalWeight').value = item.actualWeight;
+
+            const modal = document.getElementById('editItemModal');
+            const content = document.getElementById('editItemModalContent');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            setTimeout(() => {
+                content.classList.remove('translate-y-full');
+                content.classList.add('translate-y-0');
+            }, 10);
+        }
+
+        function closeEditItemModal() {
+            const modal = document.getElementById('editItemModal');
+            const content = document.getElementById('editItemModalContent');
+            content.classList.remove('translate-y-0');
+            content.classList.add('translate-y-full');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 300);
+        }
+
+        function saveEditedItem() {
+            const index = document.getElementById('modalItemIndex').value;
+            scannedItems[index].location = document.getElementById('modalLocation').value;
+            scannedItems[index].qrLabel = document.getElementById('modalQrLabel').value;
+            scannedItems[index].actualWeight = parseInt(document.getElementById('modalWeight').value) || 0;
+
+            closeEditItemModal();
+            updateUI();
+            renderLog();
         }
 
         function handleSync() {
