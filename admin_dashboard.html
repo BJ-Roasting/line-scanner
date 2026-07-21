@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="th" class="light">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Admin Dashboard - Roastery Ops</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#271310", "on-primary": "#ffffff", "primary-container": "#3e2723",
+                        surface: "#f4faff", "on-surface": "#111d23", "on-surface-variant": "#504442",
+                        "surface-container-lowest": "#ffffff", "surface-container-low": "#e9f6fd",
+                        "surface-container-high": "#ddeaf2", "outline-variant": "#d3c3c0",
+                        "secondary-container": "#e1e1c9", "on-secondary-container": "#636451",
+                        error: "#ba1a1a", "error-container": "#ffdad6"
+                    },
+                    fontFamily: { sans: ['Noto Sans Thai', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        ::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-sans min-h-screen flex flex-col pb-20 antialiased">
+
+    <header class="w-full top-0 sticky border-b border-outline-variant bg-surface flex items-center justify-between px-4 h-14 z-40">
+        <h1 class="text-xl font-bold tracking-tighter text-primary flex-1">ADMIN DASHBOARD</h1>
+        <div class="flex gap-2">
+            <a href="admin.html" class="bg-primary text-on-primary px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1 active:scale-95 transition-transform">
+                <span class="material-symbols-outlined text-[16px]">add</span> สร้างใบงาน
+            </a>
+        </div>
+    </header>
+
+    <main class="p-4 flex flex-col gap-4 max-w-4xl mx-auto w-full z-10">
+        <div class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-surface-container-low border-b border-outline-variant">
+                            <th class="px-4 py-3 text-xs font-bold text-on-surface-variant uppercase whitespace-nowrap">รหัสใบงาน</th>
+                            <th class="px-4 py-3 text-xs font-bold text-on-surface-variant uppercase whitespace-nowrap">ประเภท</th>
+                            <th class="px-4 py-3 text-xs font-bold text-on-surface-variant uppercase whitespace-nowrap">สินค้า</th>
+                            <th class="px-4 py-3 text-xs font-bold text-on-surface-variant uppercase text-center whitespace-nowrap">ความคืบหน้า</th>
+                            <th class="px-4 py-3 text-xs font-bold text-on-surface-variant uppercase text-center whitespace-nowrap">สถานะ</th>
+                            <th class="px-4 py-3 text-xs font-bold text-on-surface-variant uppercase text-center whitespace-nowrap">จัดการ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <tr>
+                            <td colspan="6" class="text-center py-8 text-on-surface-variant animate-pulse font-bold text-sm">
+                                <span class="material-symbols-outlined animate-spin align-middle mr-2">sync</span> กำลังดึงข้อมูล...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bottom Nav -->
+    <nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-2 py-2 bg-surface border-t border-outline-variant z-40">
+        <a href="index.html" class="flex flex-col items-center justify-center text-on-surface-variant px-5 py-1.5 hover:bg-surface-container-high rounded-full active:scale-90 transition-all duration-150">
+            <span class="material-symbols-outlined text-[24px]">dashboard</span>
+            <span class="text-[10px] font-bold mt-1">หน้าแรก</span>
+        </a>
+        <a href="admin_dashboard.html" class="flex flex-col items-center justify-center text-primary bg-secondary-container rounded-full px-5 py-1.5 active:scale-90 transition-all duration-150">
+            <span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1;">list_alt</span>
+            <span class="text-[10px] font-bold mt-1">แอดมิน</span>
+        </a>
+    </nav>
+
+    <script>
+        const API_URL = "https://script.google.com/macros/s/AKfycbzxKRgC-DyvyuRWPP2ibCw64fENrVx7qF4WO6997w4oLFtLnM84z5LAbhghD8o6YKPl/exec";
+
+        document.addEventListener("DOMContentLoaded", loadTableData);
+
+        function loadTableData() {
+            const tableBody = document.getElementById("tableBody");
+            
+            fetch(API_URL + "?action=getActiveWorkOrders")
+                .then(res => res.json())
+                .then(res => {
+                    if (res.status !== 'success' || !res.data || res.data.length === 0) {
+                        tableBody.innerHTML = '<tr><td colspan="6" class="text-center py-8 text-on-surface-variant font-bold">ไม่มีใบงานที่กำลังดำเนินการ</td></tr>';
+                        return;
+                    }
+                    
+                    tableBody.innerHTML = '';
+                    res.data.forEach(wo => {
+                        let btnHtml = '-';
+                        if (wo.status === 'In-Progress' || wo.status === 'Re-opened') {
+                            btnHtml = `<button onclick="cancelWorkOrder('${wo.woId}')" class="text-error bg-error-container hover:bg-error hover:text-on-primary px-3 py-1.5 rounded-lg text-xs font-bold transition-colors active:scale-95 shadow-sm">ยกเลิก</button>`;
+                        }
+                        
+                        let tr = `
+                        <tr class="border-b border-outline-variant hover:bg-surface-container-low transition-colors">
+                            <td class="px-4 py-3 font-mono font-bold text-primary text-sm whitespace-nowrap">${wo.woId}</td>
+                            <td class="px-4 py-3 text-sm whitespace-nowrap">${wo.type}</td>
+                            <td class="px-4 py-3 text-sm font-bold whitespace-nowrap">${wo.item}</td>
+                            <td class="px-4 py-3 text-sm text-center whitespace-nowrap">
+                                <span class="font-bold text-primary">${wo.actual}</span> / ${wo.limit}
+                            </td>
+                            <td class="px-4 py-3 text-sm text-center whitespace-nowrap">
+                                <span class="bg-secondary-container text-on-secondary-container px-2 py-1 rounded text-[10px] font-bold uppercase">${wo.status}</span>
+                            </td>
+                            <td class="px-4 py-3 text-sm text-center whitespace-nowrap">${btnHtml}</td>
+                        </tr>`;
+                        tableBody.innerHTML += tr;
+                    });
+                })
+                .catch(err => {
+                    tableBody.innerHTML = '<tr><td colspan="6" class="text-center py-8 text-error font-bold">ไม่สามารถเชื่อมต่อระบบได้</td></tr>';
+                });
+        }
+
+        function cancelWorkOrder(woId) {
+            if (!confirm(`ยืนยันการยกเลิกใบงาน ${woId} ใช่หรือไม่?`)) return;
+            
+            const payload = { action: "cancelWorkOrder", woId: woId };
+
+            fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify(payload)
+            })
+            .then(res => res.json())
+            .then(res => {
+                if (res.status === 'success') {
+                    alert(res.message);
+                    loadTableData();
+                } else {
+                    alert("เกิดข้อผิดพลาด: " + res.message);
+                }
+            })
+            .catch(err => alert("ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้"));
+        }
+    </script>
+</body>
+</html>
