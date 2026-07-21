@@ -52,18 +52,18 @@
                     <div class="flex flex-col gap-1 col-span-2 sm:col-span-1">
                         <label class="text-xs font-bold text-on-surface-variant uppercase">ประเภท QR Code</label>
                         <select id="qrType" onchange="toggleQrType()" class="w-full px-3 py-3 bg-surface-container-lowest border border-outline-variant rounded-lg font-bold text-primary">
-                            <option value="ITEM">📦 QR สินค้า / พาเลท</option>
-                            <option value="LOCATION">📍 QR พื้นที่จัดเก็บ</option>
+                            <option value="ITEM">📦 QR สินค้า</option>
+                            <option value="LOCATION">📍 QR พื้นที่จัดเก็บ / พาเลท</option>
                         </select>
                     </div>
                     
-                    <!-- 👇 เพิ่มช่องสำหรับแก้ไขข้อความบนหัว QR 👇 -->
+                    <!-- ช่องสำหรับแก้ไขข้อความบนหัว QR -->
                     <div class="flex flex-col gap-1 col-span-2 sm:col-span-1">
                         <label class="text-xs font-bold text-on-surface-variant uppercase flex justify-between">
                             <span>ข้อความหัว QR (แก้ไขได้)</span>
                             <span class="material-symbols-outlined text-[14px]">edit</span>
                         </label>
-                        <input type="text" id="qrHeader" value="ITEM / PALLET" class="w-full px-3 py-3 bg-surface-container-low border border-outline-variant rounded-lg font-bold text-primary">
+                        <input type="text" id="qrHeader" value="ITEM" class="w-full px-3 py-3 bg-surface-container-low border border-outline-variant rounded-lg font-bold text-primary">
                     </div>
                 </div>
 
@@ -75,8 +75,8 @@
 
                 <!-- Input สำหรับ QR พื้นที่ (ซ่อนไว้เป็นค่าเริ่มต้น) -->
                 <div id="locInputGroup" class="flex flex-col gap-1 mt-2 hidden">
-                    <label class="text-xs font-bold text-on-surface-variant uppercase">ตัวอักษรโซน / พื้นที่</label>
-                    <input type="text" id="prefixCode" placeholder="เช่น A, B หรือ ZONE" class="w-full px-3 py-3 bg-surface-container-lowest border border-outline-variant rounded-lg font-bold text-primary uppercase">
+                    <label class="text-xs font-bold text-on-surface-variant uppercase">ตัวอักษรโซน / พื้นที่ / พาเลท</label>
+                    <input type="text" id="prefixCode" placeholder="เช่น A, B หรือ PLT" class="w-full px-3 py-3 bg-surface-container-lowest border border-outline-variant rounded-lg font-bold text-primary uppercase">
                 </div>
 
                 <div class="grid grid-cols-2 gap-4">
@@ -115,20 +115,20 @@
             const locInput = document.getElementById('locInputGroup');
             const lotCode = document.getElementById('lotCode');
             const prefixCode = document.getElementById('prefixCode');
-            const qrHeader = document.getElementById('qrHeader'); // ตัวแปรสำหรับช่องหัวข้อ
+            const qrHeader = document.getElementById('qrHeader');
 
             if (type === 'ITEM') {
                 itemInput.classList.remove('hidden');
                 locInput.classList.add('hidden');
                 lotCode.required = true;
                 prefixCode.required = false;
-                qrHeader.value = "ITEM / PALLET"; // เปลี่ยนข้อความแนะนำ
+                qrHeader.value = "ITEM"; // ข้อความเริ่มต้นของ QR สินค้า
             } else {
                 itemInput.classList.add('hidden');
                 locInput.classList.remove('hidden');
                 lotCode.required = false;
                 prefixCode.required = true;
-                qrHeader.value = "LOCATION"; // เปลี่ยนข้อความแนะนำ
+                qrHeader.value = "LOCATION / PALLET"; // ข้อความเริ่มต้นของ QR พื้นที่/พาเลท
             }
         }
 
@@ -137,10 +137,10 @@
             const type = document.getElementById('qrType').value;
             const qty = parseInt(document.getElementById('qty').value);
             const startNum = parseInt(document.getElementById('startNum').value);
-            const titleText = document.getElementById('qrHeader').value.trim(); // ดึงข้อความจากที่ผู้ใช้พิมพ์
+            const titleText = document.getElementById('qrHeader').value.trim(); 
             
             const printArea = document.getElementById('printArea');
-            printArea.innerHTML = ''; // ล้างของเก่าออก
+            printArea.innerHTML = ''; 
 
             for (let i = 0; i < qty; i++) {
                 const currentNum = startNum + i;
@@ -161,7 +161,7 @@
                 
                 const header = document.createElement('div');
                 header.className = 'text-[10px] font-bold text-on-surface-variant mb-2 px-1 text-center truncate w-full';
-                header.innerText = titleText; // ใช้ข้อความที่กำหนดเอง
+                header.innerText = titleText; 
                 card.appendChild(header);
 
                 const qrDiv = document.createElement('div');
