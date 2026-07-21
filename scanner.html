@@ -352,21 +352,26 @@
             btn.innerHTML = '<span class="material-symbols-outlined animate-spin">sync</span> กำลังบันทึกข้อมูล...';
             btn.disabled = true;
 
-            const payload = { workOrderId: currentWoId, itemCode: "Brazil Santos", items: scannedItems };
+            // 👇 เปลี่ยนโครงสร้าง payload ใหม่ให้มี action: "syncWorkOrder"
+            const payload = { 
+                action: "syncWorkOrder", 
+                data: { workOrderId: currentWoId, itemCode: "Brazil Santos", items: scannedItems }
+            };
 
-            fetch(GOOGLE_API_URL, {
+            fetch("https://script.google.com/macros/s/AKfycbzxKRgC-DyvyuRWPP2ibCw64fENrVx7qF4WO6997w4oLFtLnM84z5LAbhghD8o6YKPl/exec", {
                 method: 'POST',
                 headers: { 'Content-Type': 'text/plain;charset=utf-8' }, 
                 body: JSON.stringify(payload)
             })
             .then(res => res.json())
             .then(data => {
-                alert("บันทึกสำเร็จ!");
-                window.history.back(); 
+                alert(data.message || "บันทึกสำเร็จ!");
+                window.location.href = "index.html";  // กลับไปหน้าแรกแบบใหม่
             })
             .catch(err => {
-                alert("บันทึกข้อมูลเข้า Sheet สำเร็จเรียบร้อย!");
-                window.history.back(); 
+                alert("เกิดข้อผิดพลาดในการบันทึก");
+                btn.innerHTML = `<span class="material-symbols-outlined">save</span> บันทึกข้อมูล (${scannedItems.length})`;
+                btn.disabled = false;
             });
         }
     </script>
