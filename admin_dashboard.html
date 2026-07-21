@@ -29,9 +29,9 @@
         ::-webkit-scrollbar { display: none; }
     </style>
 </head>
-<body class="bg-surface text-on-surface font-sans min-h-screen flex flex-col pb-20 antialiased relative">
+<body class="bg-surface text-on-surface font-sans min-h-screen flex flex-col pb-24 antialiased relative">
 
-    <!-- 👇 เมนูด้านบน (แก้ใหม่ มีปุ่ม 3 ขีด) 👇 -->
+    <!-- เมนูด้านบน -->
     <header class="w-full top-0 sticky border-b border-outline-variant bg-surface flex items-center px-4 h-14 z-30 shadow-sm">
         <button onclick="toggleSidebar()" class="mr-3 p-1.5 rounded-full hover:bg-surface-container-high active:scale-90 transition-all">
             <span class="material-symbols-outlined text-primary text-[24px]">menu</span>
@@ -39,11 +39,9 @@
         <h1 class="text-xl font-bold tracking-tighter text-primary flex-1">ADMIN DASHBOARD</h1>
     </header>
 
-    <!-- 👇 แผง Sidebar ด้านข้าง 👇 -->
-    <!-- พื้นหลังสีดำเวลาเปิด Sidebar -->
+    <!-- แผง Sidebar ด้านข้าง -->
     <div id="sidebarOverlay" class="fixed inset-0 bg-on-surface/50 z-40 hidden opacity-0 transition-opacity duration-300 backdrop-blur-sm" onclick="toggleSidebar()"></div>
     
-    <!-- ตัว Sidebar -->
     <aside id="sidebar" class="fixed top-0 left-0 h-full w-64 bg-surface-container-lowest border-r border-outline-variant z-50 transform -translate-x-full transition-transform duration-300 flex flex-col shadow-2xl">
         <div class="h-14 flex items-center justify-between px-4 border-b border-outline-variant bg-surface">
             <h2 class="font-bold text-primary flex items-center gap-2">
@@ -58,8 +56,6 @@
             <a href="admin.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-on-surface hover:bg-surface-container-low transition-colors shadow-sm border border-transparent hover:border-outline-variant">
                 <span class="material-symbols-outlined text-primary">add_box</span> สร้างใบงาน
             </a>
-            
-            <!-- 💡 ลิงก์สร้าง QR Code (ถ้าไฟล์หน้าสร้าง QR ของคุณชื่ออื่น ให้แก้ตรง href นะครับ) -->
             <a href="qrcode.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-on-surface hover:bg-surface-container-low transition-colors shadow-sm border border-transparent hover:border-outline-variant">
                 <span class="material-symbols-outlined text-primary">qr_code_2</span> สร้าง QR Code
             </a>
@@ -70,29 +66,11 @@
         </div>
     </aside>
 
-    <main class="p-4 flex flex-col gap-4 max-w-4xl mx-auto w-full z-10">
-        <div class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden">
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
-                    <thead>
-                        <tr class="bg-surface-container-low border-b border-outline-variant">
-                            <th class="px-4 py-3 text-xs font-bold text-on-surface-variant uppercase whitespace-nowrap">รหัสใบงาน</th>
-                            <th class="px-4 py-3 text-xs font-bold text-on-surface-variant uppercase whitespace-nowrap">ประเภท</th>
-                            <th class="px-4 py-3 text-xs font-bold text-on-surface-variant uppercase whitespace-nowrap">สินค้า</th>
-                            <th class="px-4 py-3 text-xs font-bold text-on-surface-variant uppercase text-center whitespace-nowrap">ความคืบหน้า</th>
-                            <th class="px-4 py-3 text-xs font-bold text-on-surface-variant uppercase text-center whitespace-nowrap">สถานะ</th>
-                            <th class="px-4 py-3 text-xs font-bold text-on-surface-variant uppercase text-center whitespace-nowrap">จัดการ</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tableBody">
-                        <tr>
-                            <td colspan="6" class="text-center py-8 text-on-surface-variant animate-pulse font-bold text-sm">
-                                <span class="material-symbols-outlined animate-spin align-middle mr-2">sync</span> กำลังดึงข้อมูล...
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+    <!-- พื้นที่แสดงข้อมูลแบบ "การ์ด" -->
+    <main class="p-4 w-full max-w-2xl mx-auto z-10 flex flex-col gap-4" id="woContainer">
+        <!-- สถานะตอนกำลังโหลด -->
+        <div class="text-center py-10 text-on-surface-variant animate-pulse font-bold text-sm bg-surface-container-lowest rounded-2xl border border-outline-variant shadow-sm">
+            <span class="material-symbols-outlined animate-spin align-middle mr-2">sync</span> กำลังดึงข้อมูล...
         </div>
     </main>
 
@@ -111,63 +89,86 @@
     <script>
         const API_URL = "https://script.google.com/macros/s/AKfycbzxKRgC-DyvyuRWPP2ibCw64fENrVx7qF4WO6997w4oLFtLnM84z5LAbhghD8o6YKPl/exec";
 
-        document.addEventListener("DOMContentLoaded", loadTableData);
+        document.addEventListener("DOMContentLoaded", loadWorkOrders);
 
-        // 🚀 ระบบเปิด-ปิด Sidebar
+        // ระบบเปิด-ปิด Sidebar
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebarOverlay');
             
             if (sidebar.classList.contains('-translate-x-full')) {
-                // เปิด Sidebar
                 sidebar.classList.remove('-translate-x-full');
                 overlay.classList.remove('hidden');
                 setTimeout(() => overlay.classList.remove('opacity-0'), 10);
             } else {
-                // ปิด Sidebar
                 sidebar.classList.add('-translate-x-full');
                 overlay.classList.add('opacity-0');
                 setTimeout(() => overlay.classList.add('hidden'), 300);
             }
         }
 
-        // ระบบดึงข้อมูลใบงาน (เหมือนเดิม)
-        function loadTableData() {
-            const tableBody = document.getElementById("tableBody");
+        // ระบบดึงข้อมูลใบงานและสร้างการ์ด
+        function loadWorkOrders() {
+            const container = document.getElementById("woContainer");
             
             fetch(API_URL + "?action=getActiveWorkOrders")
                 .then(res => res.json())
                 .then(res => {
                     if (res.status !== 'success' || !res.data || res.data.length === 0) {
-                        tableBody.innerHTML = '<tr><td colspan="6" class="text-center py-8 text-on-surface-variant font-bold">ไม่มีใบงานที่กำลังดำเนินการ</td></tr>';
+                        container.innerHTML = `
+                            <div class="text-center py-10 text-on-surface-variant font-bold bg-surface-container-lowest rounded-2xl border border-outline-variant shadow-sm flex flex-col items-center gap-2">
+                                <span class="material-symbols-outlined text-4xl opacity-50">inbox</span>
+                                ไม่มีใบงานที่กำลังดำเนินการ
+                            </div>`;
                         return;
                     }
                     
-                    tableBody.innerHTML = '';
+                    container.innerHTML = '';
                     res.data.forEach(wo => {
-                        let btnHtml = '-';
+                        let btnHtml = '';
                         if (wo.status === 'In-Progress' || wo.status === 'Re-opened') {
-                            btnHtml = `<button onclick="cancelWorkOrder('${wo.woId}')" class="text-error bg-error-container hover:bg-error hover:text-on-primary px-3 py-1.5 rounded-lg text-xs font-bold transition-colors active:scale-95 shadow-sm">ยกเลิก</button>`;
+                            btnHtml = `<button onclick="cancelWorkOrder('${wo.woId}')" class="text-error bg-error-container hover:bg-error hover:text-on-primary px-3 py-2 rounded-lg text-[11px] font-bold transition-colors active:scale-95 shadow-sm flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">cancel</span> ยกเลิก</button>`;
                         }
                         
-                        let tr = `
-                        <tr class="border-b border-outline-variant hover:bg-surface-container-low transition-colors">
-                            <td class="px-4 py-3 font-mono font-bold text-primary text-sm whitespace-nowrap">${wo.woId}</td>
-                            <td class="px-4 py-3 text-sm whitespace-nowrap">${wo.type}</td>
-                            <td class="px-4 py-3 text-sm font-bold whitespace-nowrap">${wo.item}</td>
-                            <td class="px-4 py-3 text-sm text-center whitespace-nowrap">
-                                <span class="font-bold text-primary">${wo.actual}</span> / ${wo.limit}
-                            </td>
-                            <td class="px-4 py-3 text-sm text-center whitespace-nowrap">
-                                <span class="bg-secondary-container text-on-secondary-container px-2 py-1 rounded text-[10px] font-bold uppercase">${wo.status}</span>
-                            </td>
-                            <td class="px-4 py-3 text-sm text-center whitespace-nowrap">${btnHtml}</td>
-                        </tr>`;
-                        tableBody.innerHTML += tr;
+                        // สร้างการ์ดแทนตาราง
+                        let card = `
+                        <div class="bg-surface-container-lowest rounded-2xl border border-outline-variant shadow-sm p-4 flex flex-col gap-3 relative overflow-hidden">
+                            <!-- แถบสีตกแต่งด้านซ้าย -->
+                            <div class="absolute left-0 top-0 bottom-0 w-1 bg-primary"></div>
+                            
+                            <!-- ส่วนหัว: ID และ สถานะ -->
+                            <div class="flex justify-between items-start pl-2">
+                                <div>
+                                    <span class="text-[9px] font-bold text-on-surface-variant uppercase bg-surface-container-high border border-outline-variant px-2 py-0.5 rounded-md tracking-wider">${wo.type}</span>
+                                    <h3 class="font-mono font-bold text-primary mt-1 text-lg">${wo.woId}</h3>
+                                </div>
+                                <span class="bg-secondary-container text-on-secondary-container px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider">${wo.status}</span>
+                            </div>
+
+                            <!-- ส่วนกลาง: รายการสินค้า -->
+                            <div class="pl-2">
+                                <p class="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">รายการสินค้า</p>
+                                <p class="text-sm font-bold text-primary leading-tight mt-0.5">${wo.item}</p>
+                            </div>
+
+                            <!-- ส่วนท้าย: ความคืบหน้า และ ปุ่มจัดการ -->
+                            <div class="flex justify-between items-end mt-1 pt-3 border-t border-outline-variant pl-2">
+                                <div>
+                                    <p class="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">พาเลทที่รับเข้าแล้ว</p>
+                                    <p class="text-xl font-mono mt-0.5"><span class="font-bold text-primary">${wo.actual}</span><span class="text-sm text-on-surface-variant font-medium"> / ${wo.limit}</span></p>
+                                </div>
+                                ${btnHtml}
+                            </div>
+                        </div>`;
+                        container.innerHTML += card;
                     });
                 })
                 .catch(err => {
-                    tableBody.innerHTML = '<tr><td colspan="6" class="text-center py-8 text-error font-bold">ไม่สามารถเชื่อมต่อระบบได้</td></tr>';
+                    container.innerHTML = `
+                        <div class="text-center py-10 text-error font-bold bg-error-container rounded-2xl shadow-sm flex flex-col items-center gap-2">
+                            <span class="material-symbols-outlined text-4xl">wifi_off</span>
+                            ไม่สามารถเชื่อมต่อระบบได้
+                        </div>`;
                 });
         }
 
@@ -185,7 +186,7 @@
             .then(res => {
                 if (res.status === 'success') {
                     alert(res.message);
-                    loadTableData();
+                    loadWorkOrders();
                 } else {
                     alert("เกิดข้อผิดพลาด: " + res.message);
                 }
