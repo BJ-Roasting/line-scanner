@@ -121,6 +121,7 @@
         const GOOGLE_API_URL = "https://script.google.com/macros/s/AKfycbzxKRgC-DyvyuRWPP2ibCw64fENrVx7qF4WO6997w4oLFtLnM84z5LAbhghD8o6YKPl/exec"; 
 
         let currentWoId = "";
+        let defaultKg = 40; // เพิ่มบรรทัดนี้
         let activeScanMode = "location"; 
         let scannedItems = []; 
         let codeReader = new ZXing.BrowserMultiFormatReader();
@@ -131,14 +132,20 @@
         document.addEventListener("DOMContentLoaded", function() {
             const urlParams = new URLSearchParams(window.location.search);
             const woId = urlParams.get('woId');
+            const kgParam = urlParams.get('kg'); // อ่านค่าน้ำหนักจาก URL
+            
+            if(kgParam && kgParam !== "undefined") {
+                defaultKg = parseInt(kgParam);
+            }
+
             if(woId) {
                 currentWoId = woId;
-                document.getElementById('headerTitle').innerText = "รับเข้าใบงาน: " + woId;
+                document.getElementById('headerTitle').innerText = "รับเข้า: " + woId;
             } else {
                 document.getElementById('headerTitle').innerText = "รับเข้า: แบบไม่อ้างอิงใบงาน";
             }
             renderLog();
-        });
+        });;
 
         function playBeep() {
             try {
@@ -216,7 +223,7 @@
                     setScanMode('qr'); return;
                 }
                 document.getElementById('val-qr').innerText = scannedText;
-                scannedItems.push({ qrLabel: scannedText, location: loc, actualWeight: 60, time: timeStr });
+                scannedItems.push({ qrLabel: scannedText, location: loc, actualWeight: defaultKg, time: timeStr });
                 updateUI(); 
                 renderLog();
             }
