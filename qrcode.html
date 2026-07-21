@@ -48,22 +48,33 @@
             <form id="qrForm" onsubmit="generateQR(event)" class="flex flex-col gap-4">
                 
                 <!-- เลือกประเภท QR -->
-                <div class="flex flex-col gap-1">
-                    <label class="text-xs font-bold text-on-surface-variant uppercase">ประเภท QR Code</label>
-                    <select id="qrType" onchange="toggleQrType()" class="w-full px-3 py-3 bg-surface-container-lowest border border-outline-variant rounded-lg font-bold text-primary">
-                        <option value="ITEM">📦 QR สินค้า / พาเลท (ตัวเลขล้วน)</option>
-                        <option value="LOCATION">📍 QR พื้นที่จัดเก็บ (มีตัวอักษร)</option>
-                    </select>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="flex flex-col gap-1 col-span-2 sm:col-span-1">
+                        <label class="text-xs font-bold text-on-surface-variant uppercase">ประเภท QR Code</label>
+                        <select id="qrType" onchange="toggleQrType()" class="w-full px-3 py-3 bg-surface-container-lowest border border-outline-variant rounded-lg font-bold text-primary">
+                            <option value="ITEM">📦 QR สินค้า / พาเลท</option>
+                            <option value="LOCATION">📍 QR พื้นที่จัดเก็บ</option>
+                        </select>
+                    </div>
+                    
+                    <!-- 👇 เพิ่มช่องสำหรับแก้ไขข้อความบนหัว QR 👇 -->
+                    <div class="flex flex-col gap-1 col-span-2 sm:col-span-1">
+                        <label class="text-xs font-bold text-on-surface-variant uppercase flex justify-between">
+                            <span>ข้อความหัว QR (แก้ไขได้)</span>
+                            <span class="material-symbols-outlined text-[14px]">edit</span>
+                        </label>
+                        <input type="text" id="qrHeader" value="ITEM / PALLET" class="w-full px-3 py-3 bg-surface-container-low border border-outline-variant rounded-lg font-bold text-primary">
+                    </div>
                 </div>
 
                 <!-- Input สำหรับ QR สินค้า -->
-                <div id="itemInputGroup" class="flex flex-col gap-1">
+                <div id="itemInputGroup" class="flex flex-col gap-1 mt-2">
                     <label class="text-xs font-bold text-on-surface-variant uppercase">เลข Lot (ใส่เฉพาะตัวเลข)</label>
                     <input type="number" id="lotCode" required placeholder="เช่น 260726" class="w-full px-3 py-3 bg-surface-container-lowest border border-outline-variant rounded-lg font-bold text-primary">
                 </div>
 
                 <!-- Input สำหรับ QR พื้นที่ (ซ่อนไว้เป็นค่าเริ่มต้น) -->
-                <div id="locInputGroup" class="flex flex-col gap-1 hidden">
+                <div id="locInputGroup" class="flex flex-col gap-1 mt-2 hidden">
                     <label class="text-xs font-bold text-on-surface-variant uppercase">ตัวอักษรโซน / พื้นที่</label>
                     <input type="text" id="prefixCode" placeholder="เช่น A, B หรือ ZONE" class="w-full px-3 py-3 bg-surface-container-lowest border border-outline-variant rounded-lg font-bold text-primary uppercase">
                 </div>
@@ -104,17 +115,20 @@
             const locInput = document.getElementById('locInputGroup');
             const lotCode = document.getElementById('lotCode');
             const prefixCode = document.getElementById('prefixCode');
+            const qrHeader = document.getElementById('qrHeader'); // ตัวแปรสำหรับช่องหัวข้อ
 
             if (type === 'ITEM') {
                 itemInput.classList.remove('hidden');
                 locInput.classList.add('hidden');
                 lotCode.required = true;
                 prefixCode.required = false;
+                qrHeader.value = "ITEM / PALLET"; // เปลี่ยนข้อความแนะนำ
             } else {
                 itemInput.classList.add('hidden');
                 locInput.classList.remove('hidden');
                 lotCode.required = false;
                 prefixCode.required = true;
+                qrHeader.value = "LOCATION"; // เปลี่ยนข้อความแนะนำ
             }
         }
 
@@ -123,44 +137,36 @@
             const type = document.getElementById('qrType').value;
             const qty = parseInt(document.getElementById('qty').value);
             const startNum = parseInt(document.getElementById('startNum').value);
+            const titleText = document.getElementById('qrHeader').value.trim(); // ดึงข้อความจากที่ผู้ใช้พิมพ์
             
             const printArea = document.getElementById('printArea');
             printArea.innerHTML = ''; // ล้างของเก่าออก
 
             for (let i = 0; i < qty; i++) {
                 const currentNum = startNum + i;
-                // จัดรูปแบบตัวเลขให้เป็น 3 หลักเสมอ (เช่น 001, 002)
                 const numString = currentNum.toString().padStart(3, '0'); 
                 
                 let qrText = "";
-                let titleText = "";
 
-                // ตรวจสอบเงื่อนไขการสร้างรหัสตามประเภท
                 if (type === 'ITEM') {
                     const lot = document.getElementById('lotCode').value.trim();
-                    qrText = `${lot}${numString}`; // ตัวเลขติดกัน ไม่มีขีด
-                    titleText = "ITEM / PALLET";
+                    qrText = `${lot}${numString}`; 
                 } else {
                     const prefix = document.getElementById('prefixCode').value.trim().toUpperCase();
-                    qrText = `${prefix}${numString}`; // ตัวอักษรติดตัวเลข ไม่มีขีด
-                    titleText = "LOCATION";
+                    qrText = `${prefix}${numString}`; 
                 }
 
-                // สร้างกล่องบรรจุ QR
                 const card = document.createElement('div');
                 card.className = 'qr-card bg-surface-container-lowest flex flex-col items-center justify-center p-3 rounded-xl border border-outline-variant w-40 h-48 shadow-sm';
                 
-                // ส่วนหัว
                 const header = document.createElement('div');
-                header.className = 'text-[10px] font-bold text-on-surface-variant mb-2';
-                header.innerText = titleText;
+                header.className = 'text-[10px] font-bold text-on-surface-variant mb-2 px-1 text-center truncate w-full';
+                header.innerText = titleText; // ใช้ข้อความที่กำหนดเอง
                 card.appendChild(header);
 
-                // พื้นที่วางภาพ QR
                 const qrDiv = document.createElement('div');
                 card.appendChild(qrDiv);
 
-                // ส่วนข้อความด้านล่าง (รหัส)
                 const label = document.createElement('div');
                 label.className = 'font-mono font-bold text-primary mt-2 text-sm text-center break-all tracking-wider';
                 label.innerText = qrText;
@@ -168,7 +174,6 @@
 
                 printArea.appendChild(card);
 
-                // สร้างรูป QR
                 new QRCode(qrDiv, {
                     text: qrText,
                     width: 110,
@@ -180,9 +185,8 @@
             }
         }
 
-        // โหลดตัวอย่างทันทีที่เปิดหน้า
         window.onload = () => {
-            document.getElementById('lotCode').value = "260726"; // ใส่ค่าเริ่มต้นให้เห็นภาพ
+            document.getElementById('lotCode').value = "260726";
             document.getElementById('qrForm').dispatchEvent(new Event('submit'));
         };
     </script>
