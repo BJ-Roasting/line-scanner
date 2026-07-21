@@ -91,53 +91,47 @@
     <script>
         const API_URL = "https://script.google.com/macros/s/AKfycbzxKRgC-DyvyuRWPP2ibCw64fENrVx7qF4WO6997w4oLFtLnM84z5LAbhghD8o6YKPl/exec";
 
-        // 🗂️ ฐานข้อมูล Supplier และ Item ตามตารางเป๊ะๆ
-        const supplierDatabase = [
-            {
-                name: "บริษัท วิน วัน คอฟฟี่แฟมิลี่ จำกัด", code: "WW",
-                items: [{ code: "AD05", name: "ปางขอน" }]
-            },
-            {
-                name: "บริษัท เฟิร์ส คัพส์ จำกัด", code: "FC",
-                items: [{ code: "AD05", name: "ปางขอน" }]
-            },
-            {
-                name: "บริษัท สยาม คอฟฟี่ เทรด จำกัด", code: "SC",
-                items: [
-                    { code: "AD05 (P)", name: "สาร 3 สี" },
-                    { code: "AD05 (P)(FP)", name: "สาร 3 สี Full Process" },
-                    { code: "AD05 (PB)", name: "รวมดอย B Wash" },
-                    { code: "PY", name: "ดอยช้าง Wash สีอย่างเดียว" }
-                ]
-            },
-            {
-                name: "นิธินันท์ ศรีจำปา", code: "NS",
-                items: [
-                    { code: "LB", name: "ลาวโบลาเวน" },
-                    { code: "BC", name: "บราซิลเซราโด้" },
-                    { code: "BS", name: "บราซิลซานโตส" },
-                    { code: "RO", name: "โรบัสต้า" }
-                ]
-            }
-        ];
+        let supplierDatabase = []; // เปลี่ยนเป็นตัวแปรว่าง เพื่อรอรับจาก Sheet
 
         document.addEventListener("DOMContentLoaded", () => {
             loadNextWorkId();
-            initSupplierDropdown();
+            loadSupplierData(); // เรียกฟังก์ชันดึงข้อมูลเมื่อเปิดหน้า
         });
 
-        // โหลดข้อมูล Supplier ลง Dropdown
+        // 🚀 ฟังก์ชันดึงข้อมูลจาก Google Sheet
+        function loadSupplierData() {
+            const suppSel = document.getElementById('supplierSelect');
+            suppSel.innerHTML = '<option value="">กำลังโหลดข้อมูล...</option>';
+            suppSel.disabled = true;
+
+            fetch(API_URL + "?action=getSupplierMaster")
+                .then(res => res.json())
+                .then(res => {
+                    if (res.status === 'success' && res.data.length > 0) {
+                        supplierDatabase = res.data;
+                        initSupplierDropdown();
+                    } else {
+                        suppSel.innerHTML = '<option value="">ไม่พบข้อมูลในระบบ</option>';
+                    }
+                })
+                .catch(err => {
+                    suppSel.innerHTML = '<option value="">เกิดข้อผิดพลาดในการดึงข้อมูล</option>';
+                });
+        }
+
         function initSupplierDropdown() {
             const suppSel = document.getElementById('supplierSelect');
+            suppSel.innerHTML = '<option value="">-- เลือกซัพพลายเออร์ --</option>';
+            suppSel.disabled = false;
+            
             supplierDatabase.forEach((supp, index) => {
                 let option = document.createElement('option');
-                option.value = index; // เก็บ index เพื่อใช้อ้างอิง
+                option.value = index; 
                 option.text = `[${supp.code}] ${supp.name}`;
                 suppSel.appendChild(option);
             });
         }
 
-        // เมื่อเลือก Supplier ให้โหลด Item เปลี่ยนตาม
         function updateItems() {
             const suppSel = document.getElementById('supplierSelect');
             const itemSel = document.getElementById('itemSelect');
@@ -154,7 +148,6 @@
             
             selectedSupplier.items.forEach(item => {
                 let option = document.createElement('option');
-                // ตั้งค่า value ให้เป็นข้อความสวยๆ พร้อมบันทึกลง Sheet
                 option.value = `[${item.code}] ${item.name}`;
                 option.text = `[${item.code}] ${item.name}`;
                 itemSel.appendChild(option);
@@ -180,7 +173,6 @@
             btn.innerHTML = '<span class="material-symbols-outlined animate-spin">sync</span> กำลังบันทึก...';
             btn.disabled = true;
 
-            // ดึงข้อความ Supplier สวยๆ ที่เลือกไว้
             const suppSel = document.getElementById('supplierSelect');
             const formattedSupplier = suppSel.options[suppSel.selectedIndex].text;
 
@@ -189,8 +181,8 @@
                 data: {
                     workId: document.getElementById('workId').value,
                     workType: document.getElementById('workType').value,
-                    itemRef: document.getElementById('itemSelect').value, // ดึง value "[Code] Name"
-                    supplier: formattedSupplier, // ดึง text "[Code] Name"
+                    itemRef: document.getElementById('itemSelect').value,
+                    supplier: formattedSupplier,
                     targetLimit: document.getElementById('targetLimit').value,
                     batchCount: document.getElementById('batchCount').value,
                     kgPerBag: document.getElementById('kgPerBag').value,
