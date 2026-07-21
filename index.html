@@ -172,10 +172,15 @@
                 isCameraRunning = true;
                 await codeReader.decodeFromConstraints({ video: { facingMode: "environment" } }, 'videoElement', (result, err) => {
                     if (result) {
-                        const scannedText = result.getText();
+                        const scannedText = result.getText().trim();
                         const now = Date.now();
-                        if (scannedText !== lastScannedText || (now - lastScanTime) > 2000) {
-                            lastScannedText = scannedText; lastScanTime = now;
+                        
+                        // 🛡️ ป้องกันขยะ: บาร์โค้ดต้องมีความยาวอย่างน้อย 4 ตัวอักษร 
+                        // และหน่วงเวลาไม่ให้สแกนซ้ำรหัสเดิมภายใน 3 วินาที
+                        if (scannedText.length >= 4 && (scannedText !== lastScannedText || (now - lastScanTime) > 3000)) {
+                            lastScannedText = scannedText; 
+                            lastScanTime = now;
+                            
                             playBeep(); 
                             
                             const videoArea = document.getElementById('videoContainer');
@@ -187,7 +192,7 @@
                     }
                 });
             } catch (err) {
-                alert("ไม่สามารถเปิดกล้องได้ กรุณาอนุญาตให้ใช้งานกล้องครับ");
+                alert("ไม่สามารถเปิดกล้องได้");
                 stopLiveCamera();
             }
         }
