@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Create Work Order</title>
+    <title>Create Work Order & Register</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
@@ -11,14 +11,21 @@
         tailwind.config = {
             theme: {
                 extend: {
-                    colors: { primary: "#271310", "on-primary": "#ffffff", surface: "#f4faff", "on-surface": "#111d23", "on-surface-variant": "#504442", "surface-container-lowest": "#ffffff", "surface-container-low": "#e9f6fd", "outline-variant": "#d3c3c0", error: "#ba1a1a" },
+                    colors: { primary: "#271310", "on-primary": "#ffffff", "primary-container": "#3e2723", surface: "#f4faff", "on-surface": "#111d23", "on-surface-variant": "#504442", "surface-container-lowest": "#ffffff", "surface-container-low": "#e9f6fd", "outline-variant": "#d3c3c0", error: "#ba1a1a" },
                     fontFamily: { sans: ['Noto Sans Thai', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] }
                 }
             }
         }
     </script>
+    <style>
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        /* Animation สำหรับ Popup */
+        #registerModalContent { transition: transform 0.2s ease-out, opacity 0.2s ease-out; }
+        .modal-open { transform: scale(1) !important; opacity: 1 !important; }
+        .modal-closed { transform: scale(0.95); opacity: 0; }
+    </style>
 </head>
-<body class="bg-surface text-on-surface font-sans min-h-screen flex flex-col p-4 antialiased">
+<body class="bg-surface text-on-surface font-sans min-h-screen flex flex-col p-4 antialiased relative">
 
     <header class="flex items-center mb-6">
         <a href="admin_dashboard.html" class="mr-3 p-2 bg-surface-container-low rounded-full active:scale-95 transition-transform border border-outline-variant flex items-center justify-center text-on-surface-variant">
@@ -27,7 +34,8 @@
         <h1 class="text-2xl font-bold tracking-tight text-primary">สร้างใบงานใหม่</h1>
     </header>
 
-    <main class="w-full max-w-md mx-auto bg-surface-container-lowest p-6 rounded-2xl shadow-sm border border-outline-variant">
+    <!-- ส่วนของฟอร์มสร้างใบงานหลัก -->
+    <main class="w-full max-w-md mx-auto bg-surface-container-lowest p-6 rounded-2xl shadow-sm border border-outline-variant z-10">
         <form id="createWorkOrderForm" onsubmit="handleCreateWorkOrder(event)" class="flex flex-col gap-4">
             
             <div class="flex flex-col gap-1">
@@ -49,12 +57,16 @@
                 </div>
             </div>
 
-            <!-- 👇 ส่วนที่แก้ไขใหม่: Dropdown สำหรับ Supplier และ Item 👇 -->
+            <!-- 👇 ปุ่มเพิ่มใหม่ ถูกฝังไว้ตรงนี้ 👇 -->
             <div class="flex flex-col gap-1">
-                <label class="text-xs font-bold text-on-surface-variant uppercase">ผู้จัดจำหน่าย (Supplier)</label>
+                <div class="flex justify-between items-end mb-1">
+                    <label class="text-xs font-bold text-on-surface-variant uppercase">ผู้จัดจำหน่าย (Supplier)</label>
+                    <button type="button" onclick="openRegisterModal()" class="text-primary bg-surface-container-high border border-outline-variant hover:bg-outline-variant px-2 py-0.5 rounded text-[10px] font-bold flex items-center gap-1 transition-colors active:scale-95 shadow-sm">
+                        <span class="material-symbols-outlined text-[14px]">add</span> เพิ่มใหม่
+                    </button>
+                </div>
                 <select id="supplierSelect" onchange="updateItems()" required class="w-full px-3 py-3 bg-surface-container-lowest border border-outline-variant rounded-lg font-bold text-primary">
                     <option value="">-- เลือกซัพพลายเออร์ --</option>
-                    <!-- ตัวเลือกจะถูกสร้างโดย Javascript -->
                 </select>
             </div>
 
@@ -64,7 +76,6 @@
                     <option value="">-- กรุณาเลือกซัพพลายเออร์ก่อน --</option>
                 </select>
             </div>
-            <!-- 👆 สิ้นสุดส่วนที่แก้ไขใหม่ 👆 -->
 
             <div class="flex flex-col gap-1">
                 <label class="text-xs font-bold text-on-surface-variant uppercase">เป้าหมาย (Limit)</label>
@@ -82,23 +93,80 @@
                 </div>
             </div>
 
-            <button type="submit" id="btnSubmit" class="w-full bg-primary text-on-primary font-bold py-4 rounded-xl mt-4 shadow-sm active:scale-[0.98] transition-transform flex justify-center items-center gap-2">
+            <button type="submit" id="btnSubmitWO" class="w-full bg-primary text-on-primary font-bold py-4 rounded-xl mt-4 shadow-sm active:scale-[0.98] transition-transform flex justify-center items-center gap-2">
                 <span class="material-symbols-outlined">add_task</span> ยืนยันสร้างใบงาน
             </button>
         </form>
     </main>
 
+    <!-- 👇 ส่วนของ Modal หน้าต่างลงทะเบียน (ซ่อนไว้เป็นค่าเริ่มต้น) 👇 -->
+    <div id="registerModal" class="fixed inset-0 bg-on-surface/50 z-50 hidden flex-col justify-center items-center px-4 backdrop-blur-sm">
+        <div class="bg-surface w-full max-w-md rounded-2xl p-6 shadow-2xl modal-closed relative" id="registerModalContent">
+            
+            <button onclick="closeRegisterModal()" class="absolute top-4 right-4 text-on-surface-variant hover:text-error bg-surface-container-low p-1 rounded-full active:scale-90 transition-transform">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+            
+            <h3 class="text-lg font-bold text-primary mb-4 flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary">app_registration</span> เพิ่มสินค้าเข้าระบบ
+            </h3>
+
+            <form id="registerForm" onsubmit="handleRegister(event)" class="flex flex-col gap-4">
+                <div class="p-4 bg-surface-container-low rounded-xl border border-outline-variant flex flex-col gap-3">
+                    <div class="flex flex-col gap-1">
+                        <label class="text-[10px] font-bold text-on-surface-variant uppercase">ชื่อซัพพลายเออร์</label>
+                        <input type="text" id="suppName" required placeholder="เช่น บริษัท สยาม คอฟฟี่ เทรด จำกัด" class="w-full px-3 py-2 bg-surface-container-lowest border border-outline-variant rounded-lg font-bold text-primary text-sm">
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <label class="text-[10px] font-bold text-on-surface-variant uppercase">รหัสย่อ (Code)</label>
+                        <input type="text" id="suppCode" required placeholder="เช่น SC" class="w-full px-3 py-2 bg-surface-container-lowest border border-outline-variant rounded-lg font-bold text-primary uppercase text-sm">
+                    </div>
+                </div>
+
+                <div class="p-4 bg-surface-container-low rounded-xl border border-outline-variant flex flex-col gap-3">
+                    <div class="flex flex-col gap-1">
+                        <label class="text-[10px] font-bold text-on-surface-variant uppercase">ชื่อสินค้า / สารกาแฟ</label>
+                        <input type="text" id="itemName" required placeholder="เช่น ดอยช้าง Wash" class="w-full px-3 py-2 bg-surface-container-lowest border border-outline-variant rounded-lg font-bold text-primary text-sm">
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <label class="text-[10px] font-bold text-on-surface-variant uppercase">รหัสสินค้า</label>
+                        <input type="text" id="itemCode" required placeholder="เช่น PY" class="w-full px-3 py-2 bg-surface-container-lowest border border-outline-variant rounded-lg font-bold text-primary uppercase text-sm">
+                    </div>
+                </div>
+
+                <button type="submit" id="btnSubmitReg" class="w-full bg-primary text-on-primary font-bold py-3 rounded-xl mt-2 shadow-sm active:scale-[0.98] transition-transform flex justify-center items-center gap-2">
+                    <span class="material-symbols-outlined text-[20px]">save</span> บันทึกเข้าระบบ
+                </button>
+            </form>
+        </div>
+    </div>
+
     <script>
         const API_URL = "https://script.google.com/macros/s/AKfycbzxKRgC-DyvyuRWPP2ibCw64fENrVx7qF4WO6997w4oLFtLnM84z5LAbhghD8o6YKPl/exec";
-
-        let supplierDatabase = []; // เปลี่ยนเป็นตัวแปรว่าง เพื่อรอรับจาก Sheet
+        let supplierDatabase = []; 
 
         document.addEventListener("DOMContentLoaded", () => {
             loadNextWorkId();
-            loadSupplierData(); // เรียกฟังก์ชันดึงข้อมูลเมื่อเปิดหน้า
+            loadSupplierData(); 
         });
 
-        // 🚀 ฟังก์ชันดึงข้อมูลจาก Google Sheet
+        // ======= ระบบ Modal =======
+        function openRegisterModal() {
+            const modal = document.getElementById('registerModal');
+            const content = document.getElementById('registerModalContent');
+            modal.classList.remove('hidden'); modal.classList.add('flex');
+            // รอนิดนึงให้แสดงผลก่อนค่อยใส่ class ทำให้เกิดแอนิเมชันเด้ง
+            setTimeout(() => { content.classList.remove('modal-closed'); content.classList.add('modal-open'); }, 10);
+        }
+
+        function closeRegisterModal() {
+            const modal = document.getElementById('registerModal');
+            const content = document.getElementById('registerModalContent');
+            content.classList.remove('modal-open'); content.classList.add('modal-closed');
+            setTimeout(() => { modal.classList.add('hidden'); modal.classList.remove('flex'); }, 200);
+        }
+
+        // ======= ระบบโหลดข้อมูล Sheet =======
         function loadSupplierData() {
             const suppSel = document.getElementById('supplierSelect');
             suppSel.innerHTML = '<option value="">กำลังโหลดข้อมูล...</option>';
@@ -130,6 +198,9 @@
                 option.text = `[${supp.code}] ${supp.name}`;
                 suppSel.appendChild(option);
             });
+            // รีเซ็ต Item ทิ้งด้วย
+            document.getElementById('itemSelect').innerHTML = '<option value="">-- กรุณาเลือกซัพพลายเออร์ก่อน --</option>';
+            document.getElementById('itemSelect').disabled = true;
         }
 
         function updateItems() {
@@ -167,9 +238,50 @@
                 .catch(err => input.value = "Error");
         }
 
+        // ======= ระบบเพิ่มสินค้า (จาก Popup) =======
+        function handleRegister(e) {
+            e.preventDefault();
+            const btn = document.getElementById("btnSubmitReg");
+            btn.innerHTML = '<span class="material-symbols-outlined animate-spin">sync</span> กำลังบันทึก...';
+            btn.disabled = true;
+
+            const payload = {
+                action: "registerSupplierItem",
+                data: {
+                    supplierName: document.getElementById('suppName').value,
+                    supplierCode: document.getElementById('suppCode').value.toUpperCase(),
+                    itemName: document.getElementById('itemName').value,
+                    itemCode: document.getElementById('itemCode').value.toUpperCase()
+                }
+            };
+
+            fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify(payload)
+            })
+            .then(res => res.json())
+            .then(res => {
+                if (res.status === 'success') {
+                    alert(res.message);
+                    document.getElementById('registerForm').reset();
+                    closeRegisterModal();
+                    loadSupplierData(); // โหลด Dropdown ใหม่ทันที
+                } else {
+                    alert("เกิดข้อผิดพลาด: " + res.message);
+                }
+            })
+            .catch(err => alert("ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้"))
+            .finally(() => {
+                btn.innerHTML = '<span class="material-symbols-outlined text-[20px]">save</span> บันทึกเข้าระบบ';
+                btn.disabled = false;
+            });
+        }
+
+        // ======= ระบบสร้างใบงานหลัก =======
         function handleCreateWorkOrder(e) {
             e.preventDefault();
-            const btn = document.getElementById("btnSubmit");
+            const btn = document.getElementById("btnSubmitWO");
             btn.innerHTML = '<span class="material-symbols-outlined animate-spin">sync</span> กำลังบันทึก...';
             btn.disabled = true;
 
