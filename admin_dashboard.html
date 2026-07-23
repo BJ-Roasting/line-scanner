@@ -76,29 +76,6 @@
 
         <main class="p-4 w-full max-w-7xl mx-auto z-10 flex flex-col gap-6">
             
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div class="bg-surface-container-lowest p-4 rounded-2xl border border-outline-variant shadow-sm flex flex-col gap-1 justify-center relative overflow-hidden">
-                    <span class="material-symbols-outlined absolute right-[-10px] top-[-10px] text-5xl text-outline-variant opacity-20">assignment</span>
-                    <p class="text-[11px] font-bold text-on-surface-variant uppercase">ใบงานทั้งหมด</p>
-                    <h3 class="text-2xl font-bold text-primary font-mono" id="statTotal">-</h3>
-                </div>
-                <div class="bg-surface-container-lowest p-4 rounded-2xl border border-outline-variant shadow-sm flex flex-col gap-1 justify-center relative overflow-hidden">
-                    <span class="material-symbols-outlined absolute right-[-10px] top-[-10px] text-5xl text-outline-variant opacity-20">inventory_2</span>
-                    <p class="text-[11px] font-bold text-on-surface-variant uppercase">ประเภท INBOUND</p>
-                    <h3 class="text-2xl font-bold text-primary font-mono" id="statInbound">-</h3>
-                </div>
-                <div class="bg-surface-container-lowest p-4 rounded-2xl border border-outline-variant shadow-sm flex flex-col gap-1 justify-center relative overflow-hidden">
-                    <span class="material-symbols-outlined absolute right-[-10px] top-[-10px] text-5xl text-outline-variant opacity-20">local_fire_department</span>
-                    <p class="text-[11px] font-bold text-on-surface-variant uppercase">ประเภท ROAST</p>
-                    <h3 class="text-2xl font-bold text-primary font-mono" id="statRoast">-</h3>
-                </div>
-                <div class="bg-surface-container-lowest p-4 rounded-2xl border border-outline-variant shadow-sm flex flex-col gap-1 justify-center relative overflow-hidden">
-                    <span class="material-symbols-outlined absolute right-[-10px] top-[-10px] text-5xl text-error opacity-10">warning</span>
-                    <p class="text-[11px] font-bold text-error uppercase">สินค้ายังไม่ครบเป้า</p>
-                    <h3 class="text-2xl font-bold text-error font-mono" id="statPending">-</h3>
-                </div>
-            </div>
-
             <div>
                 <h2 class="text-sm font-bold text-on-surface-variant uppercase mb-3 flex items-center gap-1">
                     <span class="material-symbols-outlined text-[18px]">list_alt</span> ใบงานที่กำลังดำเนินการ
@@ -129,7 +106,6 @@
 
         document.addEventListener("DOMContentLoaded", loadWorkOrders);
 
-        // ระบบเปิด-ปิด Sidebar สำหรับมือถือ
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebarOverlay');
@@ -145,7 +121,6 @@
             }
         }
 
-        // ระบบดึงข้อมูลใบงานและสรุปยอด
         function loadWorkOrders() {
             const container = document.getElementById("woContainer");
             container.innerHTML = `
@@ -157,11 +132,6 @@
                 .then(res => res.json())
                 .then(res => {
                     if (res.status !== 'success' || !res.data || res.data.length === 0) {
-                        document.getElementById('statTotal').innerText = "0";
-                        document.getElementById('statInbound').innerText = "0";
-                        document.getElementById('statRoast').innerText = "0";
-                        document.getElementById('statPending').innerText = "0";
-                        
                         container.innerHTML = `
                             <div class="col-span-full text-center py-10 text-on-surface-variant font-bold bg-surface-container-lowest rounded-2xl border border-outline-variant shadow-sm flex flex-col items-center gap-2">
                                 <span class="material-symbols-outlined text-4xl opacity-50">inbox</span>
@@ -171,17 +141,8 @@
                     }
                     
                     container.innerHTML = '';
-                    let total = res.data.length;
-                    let inbound = 0;
-                    let roast = 0;
-                    let pending = 0;
 
                     res.data.forEach(wo => {
-                        // คำนวณสรุปยอด
-                        if (wo.type === 'INBOUND') inbound++;
-                        if (wo.type === 'ROAST') roast++;
-                        if (parseInt(wo.actual) < parseInt(wo.limit)) pending++;
-
                         let btnHtml = '';
                         if (wo.status === 'In-Progress' || wo.status === 'Re-opened') {
                             btnHtml = `<button onclick="cancelWorkOrder('${wo.woId}')" class="text-error bg-error-container hover:bg-error hover:text-on-primary px-3 py-1.5 rounded-lg text-[11px] font-bold transition-colors active:scale-95 shadow-sm flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">cancel</span> ยกเลิก</button>`;
@@ -214,12 +175,6 @@
                         </div>`;
                         container.innerHTML += card;
                     });
-
-                    // อัปเดตตัวเลขในกล่องสรุป
-                    document.getElementById('statTotal').innerText = total;
-                    document.getElementById('statInbound').innerText = inbound;
-                    document.getElementById('statRoast').innerText = roast;
-                    document.getElementById('statPending').innerText = pending;
                 })
                 .catch(err => {
                     container.innerHTML = `
