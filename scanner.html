@@ -12,7 +12,7 @@
         tailwind.config = {
             theme: {
                 extend: {
-                    colors: { primary: "#271310", "on-primary": "#ffffff", "surface": "#f4faff", "on-surface": "#111d23", "on-surface-variant": "#504442", "surface-container-lowest": "#ffffff", "surface-container-low": "#e9f6fd", "outline-variant": "#d3c3c0", error: "#ba1a1a", "error-container": "#ffdad6", "secondary-container": "#e1e1c9", "on-secondary-container": "#636451" },
+                    colors: { primary: "#271310", "on-primary": "#ffffff", "surface": "#f4faff", "on-surface": "#111d23", "on-surface-variant": "#504442", "surface-container-lowest": "#ffffff", "surface-container-low": "#e9f6fd", "outline-variant": "#d3c3c0", error: "#ba1a1a", "error-container": "#ffdad6" },
                     fontFamily: { sans: ['Noto Sans Thai', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] }
                 }
             }
@@ -20,8 +20,25 @@
     </script>
     <style>
         .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
-        #reader { width: 100%; border-radius: 12px; overflow: hidden; border: 2px solid var(--color-outline-variant); background: black; }
-        #reader video { object-fit: cover !important; width: 100% !important; }
+        #reader { width: 100%; border-radius: 12px; overflow: hidden; border: 1px solid var(--color-outline-variant); background: #fff; }
+        
+        /* ระบบเลื่อนซ้ายเพื่อลบ (Swipe to Delete) */
+        .swipe-container {
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            display: flex;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none;  /* IE 10+ */
+        }
+        .swipe-container::-webkit-scrollbar { display: none; /* Chrome/Safari */ }
+        .swipe-content {
+            min-width: 100%;
+            scroll-snap-align: start;
+        }
+        .swipe-action {
+            min-width: 80px;
+            scroll-snap-align: end;
+        }
     </style>
 </head>
 <body class="bg-surface text-on-surface font-sans min-h-screen flex flex-col antialiased">
@@ -30,41 +47,42 @@
         <a href="index.html" class="mr-3 p-1.5 rounded-full hover:bg-surface-container-low active:scale-90 transition-all text-on-surface-variant">
             <span class="material-symbols-outlined text-[24px]">arrow_back</span>
         </a>
-        <h1 class="text-lg font-bold tracking-tight text-primary flex-1 truncate" id="headerTitle">สแกนรับเข้า</h1>
+        <h1 class="text-lg font-bold tracking-tight text-primary flex-1 truncate">สแกนรับเข้า</h1>
     </header>
 
     <main class="p-4 flex flex-col gap-4 w-full max-w-lg mx-auto pb-24">
         
-        <div class="bg-surface-container-low p-3 rounded-xl border border-outline-variant flex justify-between items-center shadow-sm">
-            <span class="text-xs font-bold text-on-surface-variant uppercase">ใบงานปัจจุบัน:</span>
-            <span id="woDisplay" class="text-sm font-bold text-primary font-mono bg-surface-container-lowest px-2 py-1 rounded border border-outline-variant">ไม่ระบุใบงาน</span>
+        <div class="bg-surface-container-lowest p-3 rounded-xl border border-outline-variant flex justify-between items-center shadow-sm">
+            <span class="text-xs font-bold text-on-surface-variant">ใบงานปัจจุบัน:</span>
+            <div class="flex items-center gap-2">
+                <span id="woDisplay" class="text-sm font-bold text-primary font-mono bg-surface-container-low px-2 py-1 rounded border border-outline-variant">ไม่ระบุใบงาน</span>
+                <button class="text-on-surface-variant hover:text-primary active:scale-90 transition-colors">
+                    <span class="material-symbols-outlined text-[22px]">visibility</span>
+                </button>
+            </div>
         </div>
         
         <div class="grid grid-cols-2 gap-4">
-            <div class="bg-surface-container-lowest p-4 rounded-2xl border-2 border-outline-variant shadow-sm flex flex-col items-center justify-center gap-2 text-center h-28 relative overflow-hidden">
-                <div class="absolute left-0 top-0 w-full h-1 bg-primary/30"></div>
-                <span class="material-symbols-outlined text-outline-variant text-3xl absolute opacity-20 right-[-10px] bottom-[-10px]">location_on</span>
-                <span class="text-[10px] font-bold text-on-surface-variant uppercase z-10">พื้นที่ (Location)</span>
-                <span id="locDisplay" class="text-sm font-bold text-error z-10">รอการสแกน</span>
+            <div class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant flex flex-col items-center justify-center gap-2 text-center h-24 shadow-sm">
+                <span class="text-[10px] font-bold text-on-surface-variant uppercase">พื้นที่ (Location)</span>
+                <span id="locDisplay" class="text-sm font-bold text-error">รอการสแกน</span>
             </div>
             
-            <div class="bg-surface-container-lowest p-4 rounded-2xl border-2 border-outline-variant shadow-sm flex flex-col items-center justify-center gap-2 text-center h-28 relative overflow-hidden">
-                <div class="absolute left-0 top-0 w-full h-1 bg-primary/30"></div>
-                <span class="material-symbols-outlined text-outline-variant text-3xl absolute opacity-20 right-[-10px] bottom-[-10px]">qr_code_2</span>
-                <span class="text-[10px] font-bold text-on-surface-variant uppercase z-10">รหัสพาเลทล่าสุด</span>
-                <span id="itemDisplay" class="text-sm font-bold text-on-surface-variant z-10">-</span>
+            <div class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant flex flex-col items-center justify-center gap-2 text-center h-24 shadow-sm">
+                <span class="text-[10px] font-bold text-on-surface-variant uppercase">รหัสสินค้า</span>
+                <span id="itemDisplay" class="text-sm font-bold text-on-surface-variant">-</span>
             </div>
         </div>
 
-        <button id="toggleCameraBtn" onclick="toggleCamera()" class="w-full bg-secondary-container text-on-secondary-container font-bold py-3.5 rounded-xl shadow-sm active:scale-[0.98] transition-transform flex justify-center items-center gap-2 border border-outline-variant">
+        <button id="toggleCameraBtn" onclick="toggleCamera()" class="w-full bg-surface-container-lowest text-primary font-bold py-3 rounded-xl shadow-sm active:scale-[0.98] transition-transform flex justify-center items-center gap-2 border border-outline-variant">
             <span class="material-symbols-outlined" id="cameraIcon">photo_camera</span> 
             <span id="cameraBtnText">เปิดกล้องสแกน</span>
         </button>
 
-        <div id="reader" class="hidden shadow-md"></div>
+        <div id="reader" class="hidden shadow-sm"></div>
 
         <div class="mt-2">
-            <h3 class="text-sm font-bold text-on-surface-variant uppercase mb-3 flex items-center gap-1">
+            <h3 class="text-sm font-bold text-on-surface-variant mb-3 flex items-center gap-1">
                 <span class="material-symbols-outlined text-[18px]">inventory</span> สแกนแล้ว (<span id="scanCount">0</span>)
             </h3>
             <ul id="scannedList" class="flex flex-col gap-2">
@@ -81,7 +99,6 @@
     <script>
         const API_URL = "https://script.google.com/macros/s/AKfycbzxKRgC-DyvyuRWPP2ibCw64fENrVx7qF4WO6997w4oLFtLnM84z5LAbhghD8o6YKPl/exec";
         
-        // 💡 1. ดึงรหัสใบงานจาก URL มาเก็บไว้
         const urlParams = new URLSearchParams(window.location.search);
         const currentWoId = urlParams.get('wo') || "";
         
@@ -91,31 +108,24 @@
         let isCameraOpen = false;
 
         document.addEventListener("DOMContentLoaded", () => {
-            // โชว์รหัสใบงาน
             if(currentWoId) {
                 document.getElementById('woDisplay').innerText = currentWoId;
-                document.getElementById('headerTitle').innerText = "รับเข้า: " + currentWoId;
             }
         });
 
-        // 💡 2. ระบบเปิด-ปิดกล้องเอง
         function toggleCamera() {
             if (!html5QrCode) {
                 html5QrCode = new Html5Qrcode("reader");
             }
 
             if (isCameraOpen) {
-                // ถ้าเปิดอยู่ ให้ปิด
                 html5QrCode.stop().then(() => {
                     isCameraOpen = false;
                     document.getElementById('reader').classList.add('hidden');
                     document.getElementById('cameraBtnText').innerText = "เปิดกล้องสแกน";
                     document.getElementById('cameraIcon').innerText = "photo_camera";
-                    document.getElementById('toggleCameraBtn').classList.replace('bg-error-container', 'bg-secondary-container');
-                    document.getElementById('toggleCameraBtn').classList.replace('text-error', 'text-on-secondary-container');
                 }).catch(err => console.error(err));
             } else {
-                // ถ้าปิดอยู่ ให้เปิด
                 document.getElementById('reader').classList.remove('hidden');
                 html5QrCode.start(
                     { facingMode: "environment" },
@@ -126,20 +136,16 @@
                     isCameraOpen = true;
                     document.getElementById('cameraBtnText').innerText = "ปิดกล้อง";
                     document.getElementById('cameraIcon').innerText = "no_photography";
-                    document.getElementById('toggleCameraBtn').classList.replace('bg-secondary-container', 'bg-error-container');
-                    document.getElementById('toggleCameraBtn').classList.replace('text-on-secondary-container', 'text-error');
                 }).catch(err => {
                     alert("ไม่สามารถเปิดกล้องได้ กรุณาอนุญาตให้สิทธิ์เข้าถึงกล้อง");
                 });
             }
         }
 
-        // 💡 3. เมื่อสแกนติด
         function onScanSuccess(decodedText, decodedResult) {
             const hasLetters = /[a-zA-Z]/.test(decodedText);
 
             if (hasLetters) {
-                // เป็น Location
                 currentLocation = decodedText.toUpperCase();
                 const locEl = document.getElementById('locDisplay');
                 locEl.innerText = currentLocation;
@@ -148,22 +154,25 @@
                 
                 if(navigator.vibrate) navigator.vibrate(100); 
             } else {
-                // เป็นรหัสสินค้า (Item)
                 if (!currentLocation) {
-                    alert("⚠️ กรุณาสแกน QR พื้นที่ (Location) ลงกล่องซ้ายก่อนครับ!");
+                    alert("⚠️ กรุณาสแกน QR พื้นที่ (Location) ก่อนครับ!");
                     return;
                 }
                 
                 const exists = scannedItems.find(item => item.qrLabel === decodedText);
                 if (exists) return;
 
+                // เพิ่มเวลาที่สแกนเข้าไปด้วย (Timestamp)
+                const now = new Date();
+                const timeString = now.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
                 scannedItems.push({
                     qrLabel: decodedText,
                     location: currentLocation,
-                    actualWeight: 40
+                    actualWeight: 40,
+                    scanTime: timeString
                 });
 
-                // อัปเดตกล่องขวา
                 document.getElementById('itemDisplay').innerText = decodedText;
                 document.getElementById('itemDisplay').classList.replace('text-on-surface-variant', 'text-primary');
 
@@ -177,16 +186,24 @@
             list.innerHTML = '';
             
             scannedItems.forEach((item, index) => {
+                // สร้าง HTML แบบปัดซ้ายเพื่อลบ (Swipe to delete)
                 list.innerHTML += `
-                    <li class="bg-surface-container-lowest p-3 rounded-xl border border-outline-variant shadow-sm flex justify-between items-center relative overflow-hidden">
-                        <div class="absolute left-0 top-0 bottom-0 w-1 bg-primary/50"></div>
-                        <div class="pl-2">
-                            <p class="font-mono font-bold text-primary text-sm">${item.qrLabel}</p>
-                            <p class="text-[10px] font-bold text-on-surface-variant uppercase mt-0.5">พิกัด: <span class="text-primary">${item.location}</span></p>
+                    <li class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden">
+                        <div class="swipe-container">
+                            <div class="swipe-content p-3 flex justify-between items-center bg-surface-container-lowest">
+                                <div>
+                                    <p class="font-mono font-bold text-primary text-sm">${item.qrLabel}</p>
+                                    <p class="text-[10px] text-on-surface-variant mt-0.5">
+                                        <span class="font-bold">เวลา:</span> ${item.scanTime} | 
+                                        <span class="font-bold">พิกัด:</span> <span class="text-primary">${item.location}</span>
+                                    </p>
+                                </div>
+                                <span class="material-symbols-outlined text-outline-variant opacity-50 text-[16px]">swipe_left</span>
+                            </div>
+                            <button onclick="removeItem(${index})" class="swipe-action bg-error text-white flex justify-center items-center active:scale-95 transition-transform">
+                                <span class="material-symbols-outlined text-[24px]">delete</span>
+                            </button>
                         </div>
-                        <button onclick="removeItem(${index})" class="text-error bg-error-container hover:bg-error hover:text-on-primary p-2 rounded-lg active:scale-90 transition-colors">
-                            <span class="material-symbols-outlined text-[18px]">delete</span>
-                        </button>
                     </li>
                 `;
             });
@@ -217,12 +234,10 @@
             btn.innerHTML = '<span class="material-symbols-outlined animate-spin">sync</span> กำลังบันทึก...';
             btn.disabled = true;
 
-            // ปิดกล้องก่อนเซฟ
             if(isCameraOpen && html5QrCode) {
                 html5QrCode.stop().catch(err => console.error(err));
             }
 
-            // 💡 4. ส่งข้อมูลพร้อมรหัสใบงาน
             const payload = {
                 action: "syncWorkOrder",
                 workOrderId: currentWoId || "ไม่ระบุใบงาน", 
@@ -238,7 +253,7 @@
             .then(res => {
                 if (res.status === 'success') {
                     alert("✅ บันทึกข้อมูลเรียบร้อยแล้ว!");
-                    window.location.href = "index.html"; // กลับไปหน้าแรก
+                    window.location.href = "index.html"; 
                 } else {
                     alert("❌ เกิดข้อผิดพลาด: " + res.message);
                     btn.innerHTML = '<span class="material-symbols-outlined">cloud_upload</span> บันทึกข้อมูล';
