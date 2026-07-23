@@ -3,23 +3,16 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Inbound Scan - Roastery Ops</title>
+    <title>Scanner - Roastery Ops</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <script src="https://unpkg.com/@zxing/library@0.20.0/umd/index.min.js"></script>
-    
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <script src="https://unpkg.com/html5-qrcode"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    colors: {
-                        primary: "#271310", "on-primary": "#ffffff",
-                        surface: "#f4faff", "on-surface": "#111d23", "on-surface-variant": "#504442",
-                        "surface-container-lowest": "#ffffff", "surface-container-low": "#e9f6fd",
-                        "outline-variant": "#d3c3c0", "secondary-container": "#e1e1c9",
-                        error: "#ba1a1a"
-                    },
+                    colors: { primary: "#271310", "on-primary": "#ffffff", "surface": "#f4faff", "on-surface": "#111d23", "on-surface-variant": "#504442", "surface-container-lowest": "#ffffff", "surface-container-low": "#e9f6fd", "outline-variant": "#d3c3c0", error: "#ba1a1a", "error-container": "#ffdad6" },
                     fontFamily: { sans: ['Noto Sans Thai', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] }
                 }
             }
@@ -27,350 +20,178 @@
     </script>
     <style>
         .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
-        ::-webkit-scrollbar { display: none; }
-        .scan-flash { animation: flash 0.3s; }
-        @keyframes flash { 0% { background-color: rgba(76, 175, 80, 0.5); } 100% { background-color: transparent; } }
+        #reader { width: 100%; border-radius: 12px; overflow: hidden; border: 2px solid var(--color-outline-variant); background: white; }
+        #reader video { object-fit: cover; }
     </style>
 </head>
-<body class="bg-surface text-on-surface font-sans min-h-screen flex flex-col pb-24 antialiased selection:bg-primary selection:text-on-primary relative">
+<body class="bg-surface text-on-surface font-sans min-h-screen flex flex-col antialiased">
 
-    <header class="w-full top-0 sticky border-b border-outline-variant bg-surface flex items-center px-4 h-14 z-40">
-        <button onclick="window.history.back()" class="text-primary hover:bg-surface-container-low p-2 rounded-full -ml-2">
-            <span class="material-symbols-outlined">arrow_back</span>
-        </button>
-        <h1 id="headerTitle" class="text-lg font-bold text-primary flex-1 text-center pr-8">รับเข้า...</h1>
+    <header class="w-full top-0 sticky bg-surface flex items-center px-4 h-14 z-30 shadow-sm border-b border-outline-variant">
+        <a href="index.html" class="mr-3 p-1.5 rounded-full hover:bg-surface-container-low active:scale-90 transition-all text-on-surface-variant">
+            <span class="material-symbols-outlined text-[24px]">arrow_back</span>
+        </a>
+        <h1 class="text-lg font-bold tracking-tight text-primary flex-1 truncate" id="headerTitle">สแกนรับเข้า</h1>
     </header>
 
-    <main class="p-4 flex flex-col gap-4 z-10">
-        <section class="flex flex-col gap-2">
-            <div class="flex justify-between items-end">
-                <h3 class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">โหมดการสแกน</h3>
-                <span id="scanCounter" class="text-xs font-bold bg-secondary-container text-primary px-2 py-1 rounded">สแกนแล้ว: 0</span>
+    <main class="p-4 flex flex-col gap-4 w-full max-w-lg mx-auto pb-24">
+        
+        <div class="bg-surface-container-lowest p-4 rounded-2xl border-2 border-outline-variant shadow-sm flex flex-col gap-2 relative overflow-hidden">
+            <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-primary"></div>
+            <div class="flex justify-between items-center pl-2">
+                <span class="text-xs font-bold text-on-surface-variant uppercase">ใบงานที่กำลังทำ</span>
+                <span id="woDisplay" class="text-xs font-bold bg-surface-container-low text-primary px-2 py-1 rounded-md font-mono border border-outline-variant">ไม่ระบุใบงาน</span>
             </div>
-            
-            <div class="grid grid-cols-2 gap-2">
-                <div id="box-location" onclick="setScanMode('location')" class="border-2 border-primary bg-surface-container-low rounded-lg p-3 flex flex-col relative cursor-pointer transition-all">
-                    <span class="text-[10px] text-primary uppercase font-bold">Location</span>
-                    <span id="val-location" class="font-mono font-bold text-primary text-sm mt-1 truncate">-</span>
-                </div>
-                <div id="box-qr" onclick="setScanMode('qr')" class="border-2 border-outline-variant bg-surface-container-lowest rounded-lg p-3 flex flex-col relative cursor-pointer transition-all opacity-60">
-                    <span class="text-[10px] text-on-surface-variant uppercase font-bold">QR Code</span>
-                    <span id="val-qr" class="font-mono font-bold text-on-surface-variant text-sm mt-1 truncate">-</span>
-                </div>
-            </div>
-
-            <div id="videoContainer" class="hidden relative w-full bg-black rounded-lg overflow-hidden mt-2" style="aspect-ratio: 4/3;">
-                <video id="videoElement" class="w-full h-full object-cover"></video>
-                <div class="absolute inset-0 border-2 border-primary/50 pointer-events-none z-10 m-6 rounded-lg shadow-[0_0_0_4000px_rgba(0,0,0,0.5)]"></div>
-                <button onclick="stopLiveCamera()" class="absolute top-2 right-2 bg-error text-white px-3 py-1 rounded-lg text-sm font-bold z-20">ปิดกล้อง</button>
-            </div>
-
-            <button id="btnStartCamera" onclick="startLiveCamera()" class="w-full bg-primary text-on-primary font-bold py-3 rounded-lg flex items-center justify-center gap-2 mt-2">
-                <span class="material-symbols-outlined text-2xl">qr_code_scanner</span>
-                <span id="textScanMain">เปิดกล้องสแกนต่อเนื่อง</span>
-            </button>
-        </section>
-
-        <!-- รายการประวัติสแกน -->
-        <section class="mt-2">
-            <h3 class="text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">ประวัติการสแกน (ปัดซ้ายเพื่อลบ)</h3>
-            <div id="scanLogContainer" class="flex flex-col gap-2">
-                <div id="emptyLog" class="text-center py-6 text-on-surface-variant text-sm border rounded-lg bg-surface-container-lowest">ยังไม่มีข้อมูลการสแกน</div>
-            </div>
-        </section>
-    </main>
-
-    <!-- หน้าต่างม็อดดัลสำหรับแก้ไขข้อมูลกระสอบสินค้า -->
-    <div id="editItemModal" class="fixed inset-0 bg-black/50 z-50 hidden flex-col justify-end items-center px-2 pb-2">
-        <div class="bg-[#f4faff] w-full max-w-md rounded-2xl p-6 shadow-xl transform translate-y-full transition-transform duration-300" id="editItemModalContent">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-bold text-primary">แก้ไขข้อมูลรายการสแกน</h3>
-                <button onclick="closeEditItemModal()" class="text-on-surface-variant hover:text-error bg-surface-container-low p-1 rounded-full">
-                    <span class="material-symbols-outlined">close</span>
-                </button>
-            </div>
-            <input type="hidden" id="modalItemIndex">
-            <div class="flex flex-col gap-4">
-                <div class="flex flex-col gap-1">
-                    <label class="text-xs font-bold text-on-surface-variant uppercase">Location</label>
-                    <input type="text" id="modalLocation" class="w-full px-3 py-3 bg-surface-container-lowest border border-outline-variant rounded-lg text-primary font-bold focus:border-primary outline-none">
-                </div>
-                <div class="flex flex-col gap-1">
-                    <label class="text-xs font-bold text-on-surface-variant uppercase">QR Code / บาร์โค้ด</label>
-                    <input type="text" id="modalQrLabel" class="w-full px-3 py-3 bg-surface-container-lowest border border-outline-variant rounded-lg text-primary font-bold focus:border-primary outline-none">
-                </div>
-                <div class="flex flex-col gap-1">
-                    <label class="text-xs font-bold text-on-surface-variant uppercase">น้ำหนัก (กก.)</label>
-                    <input type="number" id="modalWeight" class="w-full px-3 py-3 bg-surface-container-lowest border border-outline-variant rounded-lg text-primary font-bold focus:border-primary outline-none">
-                </div>
-                <button onclick="saveEditedItem()" class="w-full bg-primary text-on-primary font-bold py-4 rounded-xl mt-2 shadow-sm flex justify-center items-center gap-2 active:scale-95 transition-transform">
-                    <span class="material-symbols-outlined">save</span> บันทึกการแก้ไข
-                </button>
+            <div class="flex justify-between items-center mt-2 border-t border-outline-variant/50 pt-2 pl-2">
+                <span class="text-[11px] font-bold text-on-surface-variant uppercase">พื้นที่จัดเก็บ (Location)</span>
+                <span id="locDisplay" class="text-sm font-bold text-error bg-error-container px-2 py-1 rounded-md">สแกน Location ก่อน</span>
             </div>
         </div>
-    </div>
 
-    <div class="fixed bottom-0 left-0 w-full p-4 bg-surface border-t z-40">
-        <button id="btnSync" onclick="handleSync()" class="w-full bg-primary text-on-primary text-lg font-bold py-4 rounded-xl flex justify-center items-center gap-2 shadow-md">
-            <span class="material-symbols-outlined">save</span> บันทึกข้อมูล (0)
+        <div id="reader" class="shadow-sm"></div>
+
+        <div>
+            <h3 class="text-sm font-bold text-on-surface-variant uppercase mb-2 flex items-center gap-1">
+                <span class="material-symbols-outlined text-[18px]">inventory</span> สแกนแล้ว (<span id="scanCount">0</span>)
+            </h3>
+            <ul id="scannedList" class="flex flex-col gap-2">
+                </ul>
+        </div>
+    </main>
+
+    <div class="fixed bottom-0 left-0 w-full bg-surface border-t border-outline-variant p-4 shadow-[0_-5px_15px_rgba(0,0,0,0.05)] z-40">
+        <button id="btnSave" onclick="saveData()" class="w-full bg-primary text-on-primary font-bold py-3.5 rounded-xl shadow-md active:scale-[0.98] transition-transform flex justify-center items-center gap-2 opacity-50 cursor-not-allowed" disabled>
+            <span class="material-symbols-outlined">cloud_upload</span> บันทึกข้อมูล (<span id="btnCount">0</span>)
         </button>
     </div>
 
     <script>
-        // 📌 อย่าลืมใส่ URL ของ Web App ตัวจริง (ที่ลงท้ายด้วย /exec) นะครับ
-        const GOOGLE_API_URL = "https://script.google.com/macros/s/AKfycbzxKRgC-DyvyuRWPP2ibCw64fENrVx7qF4WO6997w4oLFtLnM84z5LAbhghD8o6YKPl/exec"; 
+        const API_URL = "https://script.google.com/macros/s/AKfycbzxKRgC-DyvyuRWPP2ibCw64fENrVx7qF4WO6997w4oLFtLnM84z5LAbhghD8o6YKPl/exec";
+        
+        // 💡 1. โค้ดส่วนที่เพิ่มมาเพื่อจับรหัสใบงานจาก URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const currentWoId = urlParams.get('wo') || "";
+        
+        let currentLocation = "";
+        let scannedItems = [];
+        let html5QrcodeScanner;
 
-        let currentWoId = "";
-        let defaultKg = 40; // เพิ่มบรรทัดนี้
-        let activeScanMode = "location"; 
-        let scannedItems = []; 
-        let codeReader = new ZXing.BrowserMultiFormatReader();
-        let isCameraRunning = false;
-        let lastScannedText = "";
-        let lastScanTime = 0;
-
-        document.addEventListener("DOMContentLoaded", function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const woId = urlParams.get('woId');
-            const kgParam = urlParams.get('kg'); // อ่านค่าน้ำหนักจาก URL
+        document.addEventListener("DOMContentLoaded", () => {
+            // ถ้ามีรหัสใบงาน ให้แสดงบนหน้าจอ
+            if(currentWoId) {
+                document.getElementById('woDisplay').innerText = currentWoId;
+                document.getElementById('headerTitle').innerText = "รับเข้า: " + currentWoId;
+            }
             
-            if(kgParam && kgParam !== "undefined") {
-                defaultKg = parseInt(kgParam);
-            }
+            // เปิดกล้อง
+            html5QrcodeScanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: {width: 250, height: 250} }, false);
+            html5QrcodeScanner.render(onScanSuccess);
+        });
 
-            if(woId) {
-                currentWoId = woId;
-                document.getElementById('headerTitle').innerText = "รับเข้า: " + woId;
+        // 💡 2. ระบบแยกแยะ QR อัตโนมัติ (มีตัวอักษร = พื้นที่, ตัวเลขล้วน = สินค้า)
+        function onScanSuccess(decodedText, decodedResult) {
+            const hasLetters = /[a-zA-Z]/.test(decodedText);
+
+            if (hasLetters) {
+                // ถ้าสแกนเจอ Location ให้ล็อกค่าพื้นที่ไว้
+                currentLocation = decodedText.toUpperCase();
+                const locEl = document.getElementById('locDisplay');
+                locEl.innerText = currentLocation;
+                locEl.className = 'text-sm font-bold text-primary bg-surface-container-low border border-outline-variant px-2 py-1 rounded-md';
+                
+                if(navigator.vibrate) navigator.vibrate(100); // สั่นเตือนสั้นๆ 1 ที
             } else {
-                document.getElementById('headerTitle').innerText = "รับเข้า: แบบไม่อ้างอิงใบงาน";
-            }
-            renderLog();
-        });;
-
-        function playBeep() {
-            try {
-                const ctx = new (window.AudioContext || window.webkitAudioContext)();
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-                osc.connect(gain); gain.connect(ctx.destination);
-                osc.type = 'sine'; osc.frequency.setValueAtTime(800, ctx.currentTime);
-                gain.gain.setValueAtTime(0.1, ctx.currentTime);
-                osc.start(); osc.stop(ctx.currentTime + 0.1);
-            } catch(e) {}
-        }
-
-        function setScanMode(mode) {
-            activeScanMode = mode;
-            const boxLoc = document.getElementById('box-location');
-            const boxQr = document.getElementById('box-qr');
-            if(mode === 'location') {
-                boxLoc.className = "border-2 border-primary bg-surface-container-low rounded-lg p-3 flex flex-col relative cursor-pointer transition-all";
-                boxQr.className = "border-2 border-outline-variant bg-surface-container-lowest rounded-lg p-3 flex flex-col relative cursor-pointer transition-all opacity-60";
-            } else {
-                boxQr.className = "border-2 border-primary bg-surface-container-low rounded-lg p-3 flex flex-col relative cursor-pointer transition-all";
-                boxLoc.className = "border-2 border-outline-variant bg-surface-container-lowest rounded-lg p-3 flex flex-col relative cursor-pointer transition-all opacity-60";
-            }
-        }
-
-        async function startLiveCamera() {
-            document.getElementById('videoContainer').classList.remove('hidden');
-            document.getElementById('btnStartCamera').classList.add('hidden');
-            try {
-                isCameraRunning = true;
-                await codeReader.decodeFromConstraints({ video: { facingMode: "environment" } }, 'videoElement', (result, err) => {
-                    if (result) {
-                        const scannedText = result.getText().trim();
-                        const now = Date.now();
-                        
-                        // 🛡️ ป้องกันขยะ: บาร์โค้ดต้องมีความยาวอย่างน้อย 4 ตัวอักษร 
-                        // และหน่วงเวลาไม่ให้สแกนซ้ำรหัสเดิมภายใน 3 วินาที
-                        if (scannedText.length >= 4 && (scannedText !== lastScannedText || (now - lastScanTime) > 3000)) {
-                            lastScannedText = scannedText; 
-                            lastScanTime = now;
-                            
-                            playBeep(); 
-                            
-                            const videoArea = document.getElementById('videoContainer');
-                            videoArea.classList.add('scan-flash');
-                            setTimeout(() => videoArea.classList.remove('scan-flash'), 300);
-
-                            processScannedData(scannedText);
-                        }
-                    }
-                });
-            } catch (err) {
-                alert("ไม่สามารถเปิดกล้องได้");
-                stopLiveCamera();
-            }
-        }
-
-        function stopLiveCamera() {
-            codeReader.reset();
-            isCameraRunning = false;
-            document.getElementById('videoContainer').classList.add('hidden');
-            document.getElementById('btnStartCamera').classList.remove('hidden');
-        }
-
-        function processScannedData(scannedText) {
-            let timeStr = new Date().toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' });
-            if (activeScanMode === 'location') {
-                document.getElementById('val-location').innerText = scannedText;
-                setScanMode('qr'); 
-            } else {
-                let loc = document.getElementById('val-location').innerText;
-                if (loc === "-" || loc === "") {
-                    document.getElementById('val-location').innerText = scannedText;
-                    setScanMode('qr'); return;
+                // ถ้าสแกนเจอ Item
+                if (!currentLocation) {
+                    alert("⚠️ กรุณาสแกน QR พื้นที่จัดเก็บ (Location) ก่อนครับ!");
+                    return;
                 }
-                document.getElementById('val-qr').innerText = scannedText;
-                scannedItems.push({ qrLabel: scannedText, location: loc, actualWeight: defaultKg, time: timeStr });
-                updateUI(); 
-                renderLog();
+                
+                // กันสแกนซ้ำ
+                const exists = scannedItems.find(item => item.qrLabel === decodedText);
+                if (exists) return;
+
+                scannedItems.push({
+                    qrLabel: decodedText,
+                    location: currentLocation,
+                    actualWeight: 40 // ตั้งค่าน้ำหนักเริ่มต้น
+                });
+
+                if(navigator.vibrate) navigator.vibrate([100, 50, 100]); // สั่นเตือน 2 ที (สำเร็จ)
+                updateUI();
             }
         }
 
         function updateUI() {
-            document.getElementById('scanCounter').innerText = "สแกนแล้ว: " + scannedItems.length;
-            document.getElementById('btnSync').innerHTML = `<span class="material-symbols-outlined">save</span> บันทึกข้อมูล (${scannedItems.length})`;
-        }
+            const list = document.getElementById('scannedList');
+            list.innerHTML = '';
+            
+            scannedItems.forEach((item, index) => {
+                list.innerHTML += `
+                    <li class="bg-surface-container-lowest p-3 rounded-xl border border-outline-variant shadow-sm flex justify-between items-center relative overflow-hidden">
+                        <div class="absolute left-0 top-0 bottom-0 w-1 bg-primary/50"></div>
+                        <div class="pl-2">
+                            <p class="font-mono font-bold text-primary text-sm">${item.qrLabel}</p>
+                            <p class="text-[10px] font-bold text-on-surface-variant uppercase mt-0.5">พิกัด: <span class="text-primary">${item.location}</span></p>
+                        </div>
+                        <button onclick="removeItem(${index})" class="text-error bg-error-container hover:bg-error hover:text-on-primary p-2 rounded-lg active:scale-90 transition-colors">
+                            <span class="material-symbols-outlined text-[18px]">delete</span>
+                        </button>
+                    </li>
+                `;
+            });
 
-        // ==========================================
-        // 📱 ระบบลากซ้ายเพื่อลบ (Swipe to Delete)
-        // ==========================================
-        let startX = 0;
-        function touchStart(e) {
-            startX = e.touches[0].clientX;
-        }
-        function touchEnd(e, index, element) {
-            let endX = e.changedTouches[0].clientX;
-            // ปัดซ้ายเกิน 40px ให้เปิดปุ่มลบ
-            if (startX - endX > 40) { 
-                element.style.transform = "translateX(-75px)";
-            } 
-            // ปัดขวาเกิน 40px ให้ปิดปุ่มลบ
-            else if (endX - startX > 40) { 
-                element.style.transform = "translateX(0px)";
+            const count = scannedItems.length;
+            document.getElementById('scanCount').innerText = count;
+            document.getElementById('btnCount').innerText = count;
+
+            const btnSave = document.getElementById('btnSave');
+            if (count > 0) {
+                btnSave.disabled = false;
+                btnSave.classList.remove('opacity-50', 'cursor-not-allowed');
+            } else {
+                btnSave.disabled = true;
+                btnSave.classList.add('opacity-50', 'cursor-not-allowed');
             }
         }
 
-        function deleteItem(index) {
+        function removeItem(index) {
             scannedItems.splice(index, 1);
             updateUI();
-            renderLog();
         }
 
-        function renderLog() {
-            const container = document.getElementById('scanLogContainer');
-            container.innerHTML = '';
+        function saveData() {
+            if (scannedItems.length === 0) return;
             
-            if (scannedItems.length === 0) {
-                container.innerHTML = '<div id="emptyLog" class="text-center py-6 text-on-surface-variant text-sm border rounded-lg bg-surface-container-lowest">ยังไม่มีข้อมูลการสแกน</div>';
-                return;
-            }
-
-            scannedItems.forEach((item, index) => {
-                let logHtml = `
-                <div class="relative overflow-hidden w-full rounded-lg shadow-sm border border-outline-variant h-[74px]">
-                    <!-- แผงปุ่มลบสีแดงด้านหลัง -->
-                    <div class="absolute inset-0 bg-error flex justify-end items-center text-white z-0">
-                        <button onclick="deleteItem(${index})" class="flex flex-col items-center justify-center h-full w-[75px] bg-error active:bg-red-800 transition-colors">
-                            <span class="material-symbols-outlined text-xl">delete</span>
-                            <span class="text-[10px] font-bold">ลบ</span>
-                        </button>
-                    </div>
-                    <!-- เนื้อหาการ์ดด้านหน้า (คอยรับคำสั่งปัด) -->
-                    <div class="absolute inset-0 bg-surface-container-lowest border-l-4 border-primary p-3 flex justify-between items-center z-10 transition-transform duration-300 select-none"
-                         style="touch-action: pan-y;"
-                         ontouchstart="touchStart(event)"
-                         ontouchend="touchEnd(event, ${index}, this)">
-                        <div class="flex flex-col min-w-0 flex-1 pr-2">
-                            <span class="text-sm font-bold truncate text-primary">${item.qrLabel}</span>
-                            <span class="text-[10px] text-on-surface-variant truncate">Location: ${item.location} | น้ำหนัก: ${item.actualWeight} กก.</span>
-                        </div>
-                        <div class="flex items-center gap-2 shrink-0">
-                            <!-- ปุ่มลูกตา 👁️ ดู/แก้ไขข้อมูลกระสอบนี้ -->
-                            <button onclick="openEditItemModal(${index}, event)" class="text-on-surface-variant hover:text-primary p-1.5 bg-surface-container-low rounded-full border border-outline-variant flex items-center justify-center active:scale-90 transition-transform">
-                                <span class="material-symbols-outlined text-[16px]">visibility</span>
-                            </button>
-                            <span class="text-xs bg-surface-container-low px-2 py-1 rounded font-mono text-on-surface-variant">${item.time}</span>
-                        </div>
-                    </div>
-                </div>
-                `;
-                container.insertAdjacentHTML('beforeend', logHtml);
-            });
-        }
-
-        // ==========================================
-        // 👁️ ระบบหน้าต่างดู/แก้ไขข้อมูลสินค้าแต่ละชิ้น
-        // ==========================================
-        function openEditItemModal(index, event) {
-            if (event) event.stopPropagation(); 
-            const item = scannedItems[index];
-            document.getElementById('modalItemIndex').value = index;
-            document.getElementById('modalLocation').value = item.location;
-            document.getElementById('modalQrLabel').value = item.qrLabel;
-            document.getElementById('modalWeight').value = item.actualWeight;
-
-            const modal = document.getElementById('editItemModal');
-            const content = document.getElementById('editItemModalContent');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-            setTimeout(() => {
-                content.classList.remove('translate-y-full');
-                content.classList.add('translate-y-0');
-            }, 10);
-        }
-
-        function closeEditItemModal() {
-            const modal = document.getElementById('editItemModal');
-            const content = document.getElementById('editItemModalContent');
-            content.classList.remove('translate-y-0');
-            content.classList.add('translate-y-full');
-            setTimeout(() => {
-                modal.classList.add('hidden');
-                modal.classList.remove('flex');
-            }, 300);
-        }
-
-        function saveEditedItem() {
-            const index = document.getElementById('modalItemIndex').value;
-            scannedItems[index].location = document.getElementById('modalLocation').value;
-            scannedItems[index].qrLabel = document.getElementById('modalQrLabel').value;
-            scannedItems[index].actualWeight = parseInt(document.getElementById('modalWeight').value) || 0;
-
-            closeEditItemModal();
-            updateUI();
-            renderLog();
-        }
-
-        function handleSync() {
-            if (scannedItems.length === 0) return alert("กรุณาสแกนอย่างน้อย 1 รายการครับ");
-            if(isCameraRunning) stopLiveCamera();
-
-            const btn = document.getElementById("btnSync");
-            btn.innerHTML = '<span class="material-symbols-outlined animate-spin">sync</span> กำลังบันทึกข้อมูล...';
+            const btn = document.getElementById('btnSave');
+            btn.innerHTML = '<span class="material-symbols-outlined animate-spin">sync</span> กำลังบันทึก...';
             btn.disabled = true;
 
-            // 👇 เปลี่ยนโครงสร้าง payload ใหม่ให้มี action: "syncWorkOrder"
-            const payload = { 
-                action: "syncWorkOrder", 
-                data: { workOrderId: currentWoId, itemCode: "Brazil Santos", items: scannedItems }
+            // 💡 3. ส่งข้อมูลไปพร้อมรหัสใบงาน!
+            const payload = {
+                action: "syncWorkOrder",
+                workOrderId: currentWoId || "ไม่ระบุใบงาน", 
+                items: scannedItems
             };
 
-            fetch("https://script.google.com/macros/s/AKfycbzxKRgC-DyvyuRWPP2ibCw64fENrVx7qF4WO6997w4oLFtLnM84z5LAbhghD8o6YKPl/exec", {
+            fetch(API_URL, {
                 method: 'POST',
-                headers: { 'Content-Type': 'text/plain;charset=utf-8' }, 
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                 body: JSON.stringify(payload)
             })
             .then(res => res.json())
-            .then(data => {
-                alert(data.message || "บันทึกสำเร็จ!");
-                window.location.href = "index.html";  // กลับไปหน้าแรกแบบใหม่
+            .then(res => {
+                if (res.status === 'success') {
+                    alert("✅ บันทึกข้อมูลเรียบร้อยแล้ว!");
+                    window.location.href = "index.html"; // เด้งกลับหน้าแรกให้อัตโนมัติ
+                } else {
+                    alert("❌ เกิดข้อผิดพลาด: " + res.message);
+                    btn.innerHTML = '<span class="material-symbols-outlined">cloud_upload</span> บันทึกข้อมูล';
+                    btn.disabled = false;
+                }
             })
             .catch(err => {
-                alert("เกิดข้อผิดพลาดในการบันทึก");
-                btn.innerHTML = `<span class="material-symbols-outlined">save</span> บันทึกข้อมูล (${scannedItems.length})`;
+                alert("❌ ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้");
+                btn.innerHTML = '<span class="material-symbols-outlined">cloud_upload</span> บันทึกข้อมูล';
                 btn.disabled = false;
             });
         }
