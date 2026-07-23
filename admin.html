@@ -19,6 +19,7 @@
     </script>
     <style>
         .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        /* Animation สำหรับ Popup */
         #registerModalContent { transition: transform 0.2s ease-out, opacity 0.2s ease-out; }
         .modal-open { transform: scale(1) !important; opacity: 1 !important; }
         .modal-closed { transform: scale(0.95); opacity: 0; }
@@ -33,14 +34,16 @@
         <h1 class="text-2xl font-bold tracking-tight text-primary">สร้างใบงานใหม่</h1>
     </header>
 
+    <!-- ส่วนของฟอร์มสร้างใบงานหลัก -->
     <main class="w-full max-w-md mx-auto bg-surface-container-lowest p-6 rounded-2xl shadow-sm border border-outline-variant z-10">
         <form id="createWorkOrderForm" onsubmit="handleCreateWorkOrder(event)" class="flex flex-col gap-4">
             
+            <div class="flex flex-col gap-1">
+                <label class="text-xs font-bold text-on-surface-variant uppercase">รหัสใบงาน</label>
+                <input type="text" id="workId" readonly class="w-full px-3 py-2 bg-surface-container-low border border-outline-variant rounded-lg font-mono font-bold text-primary opacity-80 cursor-not-allowed">
+            </div>
+
             <div class="grid grid-cols-2 gap-4">
-                <div class="flex flex-col gap-1">
-                    <label class="text-xs font-bold text-on-surface-variant uppercase">รหัสเริ่มต้น</label>
-                    <input type="text" id="workId" readonly class="w-full px-3 py-3 bg-surface-container-low border border-outline-variant rounded-lg font-mono font-bold text-primary opacity-80 cursor-not-allowed">
-                </div>
                 <div class="flex flex-col gap-1">
                     <label class="text-xs font-bold text-on-surface-variant uppercase">ประเภทใบงาน</label>
                     <select id="workType" required class="w-full px-3 py-3 bg-surface-container-lowest border border-outline-variant rounded-lg font-bold text-primary">
@@ -48,8 +51,13 @@
                         <option value="ROAST">คั่วกาแฟ (Roast)</option>
                     </select>
                 </div>
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs font-bold text-on-surface-variant uppercase">จำนวนที่สร้างใบงาน</label>
+                    <input type="number" id="batchCount" value="1" min="1" max="50" required class="w-full px-3 py-3 bg-surface-container-lowest border border-outline-variant rounded-lg font-bold text-primary">
+                </div>
             </div>
 
+            <!-- 👇 ปุ่มเพิ่มใหม่ ถูกฝังไว้ตรงนี้ 👇 -->
             <div class="flex flex-col gap-1">
                 <div class="flex justify-between items-end mb-1">
                     <label class="text-xs font-bold text-on-surface-variant uppercase">ผู้จัดจำหน่าย (Supplier)</label>
@@ -69,33 +77,19 @@
                 </select>
             </div>
 
-            <div class="flex flex-col gap-1 border-2 border-outline-variant rounded-xl p-4 bg-surface-container-low">
-                <label class="text-xs font-bold text-primary uppercase text-center mb-2 flex items-center justify-center gap-1">
-                    <span class="material-symbols-outlined text-[16px]">calculate</span> เป้าหมายรับเข้า & คำนวณพาเลท
-                </label>
-                <div class="grid grid-cols-2 gap-4">
-                     <div class="flex flex-col gap-1">
-                        <label class="text-[10px] font-bold text-on-surface-variant uppercase">ยอดรวมทั้งหมด (กระสอบ)</label>
-                        <input type="number" id="totalBags" required min="1" oninput="calculateWOs()" placeholder="เช่น 200" class="w-full px-3 py-2 bg-surface-container-lowest border border-outline-variant rounded-lg font-bold text-primary text-sm text-center">
-                    </div>
-                    <div class="flex flex-col gap-1">
-                        <label class="text-[10px] font-bold text-on-surface-variant uppercase">กระสอบ / 1 พาเลท</label>
-                        <input type="number" id="bagsPerPallet" required min="1" value="20" oninput="calculateWOs()" class="w-full px-3 py-2 bg-surface-container-lowest border border-outline-variant rounded-lg font-bold text-primary text-sm text-center">
-                    </div>
-                </div>
-                 <div class="mt-3 pt-3 border-t border-outline-variant/50 text-center" id="calcResult">
-                    <p class="text-xs font-bold text-on-surface-variant">ระบบจะสร้างใบงานอัตโนมัติ: <span class="text-lg font-mono text-primary">0</span> ใบงาน</p>
-                 </div>
+            <div class="flex flex-col gap-1">
+                <label class="text-xs font-bold text-on-surface-variant uppercase">จำนวนพาเลท</label>
+                <input type="number" id="targetLimit" required min="1" class="w-full px-3 py-3 bg-surface-container-lowest border border-outline-variant rounded-lg font-bold text-primary">
             </div>
 
-            <div class="grid grid-cols-2 gap-4 mt-2">
+            <div class="grid grid-cols-2 gap-4">
                 <div class="flex flex-col gap-1">
-                    <label class="text-[10px] font-bold text-on-surface-variant uppercase">น้ำหนัก กิโล/กระสอบ</label>
-                    <input type="number" id="kgPerBag" value="40" class="w-full px-3 py-3 bg-surface-container-lowest border border-outline-variant rounded-lg font-bold text-primary text-sm">
+                    <label class="text-xs font-bold text-on-surface-variant uppercase">กิโล/กระสอบ</label>
+                    <input type="number" id="kgPerBag" value="40" class="w-full px-3 py-3 bg-surface-container-lowest border border-outline-variant rounded-lg font-bold text-primary">
                 </div>
                 <div class="flex flex-col gap-1">
-                    <label class="text-[10px] font-bold text-on-surface-variant uppercase">Lot Code (ถ้ามี)</label>
-                    <input type="text" id="lotCode" placeholder="ระบุเลข Lot" class="w-full px-3 py-3 bg-surface-container-lowest border border-outline-variant rounded-lg font-bold text-primary uppercase text-sm">
+                    <label class="text-xs font-bold text-on-surface-variant uppercase">Lot Code</label>
+                    <input type="text" id="lotCode" placeholder="ระบุเลข Lot (ถ้ามี)" class="w-full px-3 py-3 bg-surface-container-lowest border border-outline-variant rounded-lg font-bold text-primary uppercase">
                 </div>
             </div>
 
@@ -105,14 +99,18 @@
         </form>
     </main>
 
+    <!-- 👇 ส่วนของ Modal หน้าต่างลงทะเบียน (ซ่อนไว้เป็นค่าเริ่มต้น) 👇 -->
     <div id="registerModal" class="fixed inset-0 bg-on-surface/50 z-50 hidden flex-col justify-center items-center px-4 backdrop-blur-sm">
         <div class="bg-surface w-full max-w-md rounded-2xl p-6 shadow-2xl modal-closed relative" id="registerModalContent">
+            
             <button onclick="closeRegisterModal()" class="absolute top-4 right-4 text-on-surface-variant hover:text-error bg-surface-container-low p-1 rounded-full active:scale-90 transition-transform">
                 <span class="material-symbols-outlined">close</span>
             </button>
+            
             <h3 class="text-lg font-bold text-primary mb-4 flex items-center gap-2">
                 <span class="material-symbols-outlined text-primary">app_registration</span> เพิ่มสินค้าเข้าระบบ
             </h3>
+
             <form id="registerForm" onsubmit="handleRegister(event)" class="flex flex-col gap-4">
                 <div class="p-4 bg-surface-container-low rounded-xl border border-outline-variant flex flex-col gap-3">
                     <div class="flex flex-col gap-1">
@@ -124,6 +122,7 @@
                         <input type="text" id="suppCode" required placeholder="เช่น SC" class="w-full px-3 py-2 bg-surface-container-lowest border border-outline-variant rounded-lg font-bold text-primary uppercase text-sm">
                     </div>
                 </div>
+
                 <div class="p-4 bg-surface-container-low rounded-xl border border-outline-variant flex flex-col gap-3">
                     <div class="flex flex-col gap-1">
                         <label class="text-[10px] font-bold text-on-surface-variant uppercase">ชื่อสินค้า / สารกาแฟ</label>
@@ -134,6 +133,7 @@
                         <input type="text" id="itemCode" required placeholder="เช่น PY" class="w-full px-3 py-2 bg-surface-container-lowest border border-outline-variant rounded-lg font-bold text-primary uppercase text-sm">
                     </div>
                 </div>
+
                 <button type="submit" id="btnSubmitReg" class="w-full bg-primary text-on-primary font-bold py-3 rounded-xl mt-2 shadow-sm active:scale-[0.98] transition-transform flex justify-center items-center gap-2">
                     <span class="material-symbols-outlined text-[20px]">save</span> บันทึกเข้าระบบ
                 </button>
@@ -150,24 +150,7 @@
             loadSupplierData(); 
         });
 
-        // ======= ระบบคำนวณจำนวนใบงานอัตโนมัติ =======
-        function calculateWOs() {
-            const total = parseInt(document.getElementById('totalBags').value) || 0;
-            const perPallet = parseInt(document.getElementById('bagsPerPallet').value) || 1;
-            
-            if (total > 0 && perPallet > 0) {
-                const wos = Math.ceil(total / perPallet); // ปัดขึ้นถ้ามีเศษกระสอบ
-                document.getElementById('calcResult').innerHTML = `
-                    <p class="text-xs font-bold text-on-surface-variant">ระบบจะสร้างใบงานอัตโนมัติ: <span class="text-lg font-mono text-primary">${wos}</span> ใบงาน</p>
-                    <p class="text-[10px] text-primary mt-1">(เป้าหมายการสแกนใบงานละ ${perPallet} กระสอบ)</p>
-                `;
-            } else {
-                document.getElementById('calcResult').innerHTML = `
-                    <p class="text-xs font-bold text-on-surface-variant">ระบบจะสร้างใบงานอัตโนมัติ: <span class="text-lg font-mono text-primary">0</span> ใบงาน</p>
-                `;
-            }
-        }
-
+        // ======= ระบบ Modal =======
         function openRegisterModal() {
             const modal = document.getElementById('registerModal');
             const content = document.getElementById('registerModalContent');
@@ -182,6 +165,7 @@
             setTimeout(() => { modal.classList.add('hidden'); modal.classList.remove('flex'); }, 200);
         }
 
+        // ======= ระบบโหลดข้อมูล Sheet =======
         function loadSupplierData() {
             const suppSel = document.getElementById('supplierSelect');
             suppSel.innerHTML = '<option value="">กำลังโหลดข้อมูล...</option>';
@@ -252,6 +236,7 @@
                 .catch(err => input.value = "Error");
         }
 
+        // ======= ระบบเพิ่มสินค้า (จาก Popup) =======
         function handleRegister(e) {
             e.preventDefault();
             const btn = document.getElementById("btnSubmitReg");
@@ -279,7 +264,7 @@
                     alert(res.message);
                     document.getElementById('registerForm').reset();
                     closeRegisterModal();
-                    loadSupplierData(); 
+                    loadSupplierData(); // โหลด Dropdown ใหม่ทันที
                 } else {
                     alert("เกิดข้อผิดพลาด: " + res.message);
                 }
@@ -291,6 +276,7 @@
             });
         }
 
+        // ======= ระบบสร้างใบงานหลัก =======
         function handleCreateWorkOrder(e) {
             e.preventDefault();
             const btn = document.getElementById("btnSubmitWO");
@@ -300,11 +286,6 @@
             const suppSel = document.getElementById('supplierSelect');
             const formattedSupplier = suppSel.options[suppSel.selectedIndex].text;
 
-            // คำนวณเตรียมส่งไปหลังบ้าน
-            const total = parseInt(document.getElementById('totalBags').value) || 0;
-            const perPallet = parseInt(document.getElementById('bagsPerPallet').value) || 1;
-            const calculatedBatchCount = Math.ceil(total / perPallet); // จำนวนใบงานที่จะสร้าง
-
             const payload = {
                 action: "createNewWorkOrder",
                 data: {
@@ -312,8 +293,8 @@
                     workType: document.getElementById('workType').value,
                     itemRef: document.getElementById('itemSelect').value,
                     supplier: formattedSupplier,
-                    targetLimit: perPallet.toString(), // เป้าหมายสแกนต่อ 1 ใบงาน (เช่น 20)
-                    batchCount: calculatedBatchCount.toString(), // สร้างทั้งหมด X ใบงาน (เช่น 10)
+                    targetLimit: document.getElementById('targetLimit').value,
+                    batchCount: document.getElementById('batchCount').value,
                     kgPerBag: document.getElementById('kgPerBag').value,
                     lotCode: document.getElementById('lotCode').value
                 }
@@ -331,9 +312,6 @@
                     document.getElementById('createWorkOrderForm').reset();
                     document.getElementById('itemSelect').disabled = true;
                     document.getElementById('itemSelect').innerHTML = '<option value="">-- กรุณาเลือกซัพพลายเออร์ก่อน --</option>';
-                    document.getElementById('calcResult').innerHTML = `
-                        <p class="text-xs font-bold text-on-surface-variant">ระบบจะสร้างใบงานอัตโนมัติ: <span class="text-lg font-mono text-primary">0</span> ใบงาน</p>
-                    `;
                     loadNextWorkId(); 
                 } else {
                     alert("เกิดข้อผิดพลาด: " + res.message);
