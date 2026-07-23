@@ -27,10 +27,10 @@
             overflow-x: auto;
             scroll-snap-type: x mandatory;
             display: flex;
-            scrollbar-width: none; /* Firefox */
-            -ms-overflow-style: none;  /* IE 10+ */
+            scrollbar-width: none; 
+            -ms-overflow-style: none; 
         }
-        .swipe-container::-webkit-scrollbar { display: none; /* Chrome/Safari */ }
+        .swipe-container::-webkit-scrollbar { display: none; }
         .swipe-content {
             min-width: 100%;
             scroll-snap-align: start;
@@ -54,12 +54,7 @@
         
         <div class="bg-surface-container-lowest p-3 rounded-xl border border-outline-variant flex justify-between items-center shadow-sm">
             <span class="text-xs font-bold text-on-surface-variant">ใบงานปัจจุบัน:</span>
-            <div class="flex items-center gap-2">
-                <span id="woDisplay" class="text-sm font-bold text-primary font-mono bg-surface-container-low px-2 py-1 rounded border border-outline-variant">ไม่ระบุใบงาน</span>
-                <button class="text-on-surface-variant hover:text-primary active:scale-90 transition-colors">
-                    <span class="material-symbols-outlined text-[22px]">visibility</span>
-                </button>
-            </div>
+            <span id="woDisplay" class="text-sm font-bold text-primary font-mono bg-surface-container-low px-2 py-1 rounded border border-outline-variant">ไม่ระบุใบงาน</span>
         </div>
         
         <div class="grid grid-cols-2 gap-4">
@@ -162,7 +157,6 @@
                 const exists = scannedItems.find(item => item.qrLabel === decodedText);
                 if (exists) return;
 
-                // เพิ่มเวลาที่สแกนเข้าไปด้วย (Timestamp)
                 const now = new Date();
                 const timeString = now.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
@@ -186,7 +180,7 @@
             list.innerHTML = '';
             
             scannedItems.forEach((item, index) => {
-                // สร้าง HTML แบบปัดซ้ายเพื่อลบ (Swipe to delete)
+                // 👁️ เพิ่มปุ่มลูกตาเข้าไปในรายการสินค้าที่สแกนแล้ว
                 list.innerHTML += `
                     <li class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden">
                         <div class="swipe-container">
@@ -198,7 +192,12 @@
                                         <span class="font-bold">พิกัด:</span> <span class="text-primary">${item.location}</span>
                                     </p>
                                 </div>
-                                <span class="material-symbols-outlined text-outline-variant opacity-50 text-[16px]">swipe_left</span>
+                                <div class="flex items-center gap-2">
+                                    <button onclick="viewQrDetails('${item.qrLabel}')" class="text-on-surface-variant hover:text-primary p-1 active:scale-90 transition-colors">
+                                        <span class="material-symbols-outlined text-[22px]">visibility</span>
+                                    </button>
+                                    <span class="material-symbols-outlined text-outline-variant opacity-30 text-[18px]">swipe_left</span>
+                                </div>
                             </div>
                             <button onclick="removeItem(${index})" class="swipe-action bg-error text-white flex justify-center items-center active:scale-95 transition-transform">
                                 <span class="material-symbols-outlined text-[24px]">delete</span>
@@ -220,6 +219,11 @@
                 btnSave.disabled = true;
                 btnSave.classList.add('opacity-50', 'cursor-not-allowed');
             }
+        }
+
+        // ฟังก์ชันสำหรับกดดูลูกตาที่รายการสแกน (เตรียมไว้ผูกระบบหลังบ้าน)
+        function viewQrDetails(qrCode) {
+            alert("เตรียมดึงข้อมูลตรวจสอบ QR: " + qrCode);
         }
 
         function removeItem(index) {
