@@ -3,11 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>BJ Roaster - Minimal Style</title>
+  <title>BJ Roaster - Mobile App Style</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     ::-webkit-scrollbar { display: none; }
     body { -ms-overflow-style: none; scrollbar-width: none; }
+    /* เพิ่ม Safe Area สำหรับมือถือ */
+    .pb-safe { padding-bottom: env(safe-area-inset-bottom, 20px); }
   </style>
 </head>
 <body class="bg-gray-50 text-gray-900 font-sans antialiased selection:bg-blue-200">
@@ -34,155 +36,153 @@
     </div>
   </div>
 
-  <!-- 📱 & 💻 หน้า DASHBOARD (Responsive) -->
+  <!-- 📱 & 💻 หน้า DASHBOARD -->
   <div id="dashboard" class="hidden flex min-h-screen">
     
-    <!-- 💻 Sidebar สำหรับ Desktop -->
+    <!-- 💻 Sidebar (สำหรับ Desktop - ยังคงไว้เหมือนเดิม) -->
     <aside class="hidden md:flex flex-col w-64 fixed left-0 top-0 h-screen bg-white border-r border-gray-200 pt-10 pb-6 px-4 z-50 shadow-sm">
       <h2 class="text-2xl font-bold text-gray-900 mb-10 px-2">BJ Roaster</h2>
       <nav class="flex-1 space-y-2">
-        <a href="#" class="flex items-center gap-3 bg-gray-100 text-blue-600 px-4 py-3 rounded-xl font-bold">
-          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg>
-          หน้าแรก
-        </a>
-        <a href="inbound.html" class="flex items-center gap-3 text-gray-600 hover:bg-gray-50 px-4 py-3 rounded-xl font-bold transition">
-          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
-          รับสินค้า
-        </a>
-        <a href="wip.html" class="flex items-center gap-3 text-gray-600 hover:bg-gray-50 px-4 py-3 rounded-xl font-bold transition">
-          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.362 5.214A8.252 8.252 0 0112 21 8.25 8.25 0 016.038 7.048 8.287 8.287 0 009 9.6a8.983 8.983 0 013.361-6.867 8.21 8.21 0 003 2.48z" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 18a3.75 3.75 0 00.495-7.467 5.99 5.99 0 00-1.925 3.546 5.974 5.974 0 01-2.133-1A3.75 3.75 0 0012 18z" /></svg>
-          เบิกคั่ว (WIP)
-        </a>
-        
-        <!-- 👇 เพิ่มปุ่ม แผนการผลิต (Planner) ตรงนี้ 👇 -->
-        <a href="planner.html" class="flex items-center gap-3 text-gray-600 hover:bg-gray-50 px-4 py-3 rounded-xl font-bold transition">
-          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" /></svg>
-          แผนการผลิต
-        </a>
-        
-        <a href="inventory.html" class="flex items-center gap-3 text-gray-600 hover:bg-gray-50 px-4 py-3 rounded-xl font-bold transition">
-          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" /></svg>
-          สต๊อกสินค้า
-        </a>
-        <a href="item_master.html" class="flex items-center gap-3 text-gray-600 hover:bg-gray-50 px-4 py-3 rounded-xl font-bold transition">
-          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m3.75 9v6m3-3H9m1.5-12H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" /></svg>
-          ฐานข้อมูลสินค้า
-        </a>
+        <a href="#" class="flex items-center gap-3 bg-gray-100 text-blue-600 px-4 py-3 rounded-xl font-bold">🏠 หน้าแรก</a>
+        <a href="inbound.html" class="flex items-center gap-3 text-gray-600 hover:bg-gray-50 px-4 py-3 rounded-xl font-bold">📥 รับสินค้า</a>
+        <a href="wip.html" class="flex items-center gap-3 text-gray-600 hover:bg-gray-50 px-4 py-3 rounded-xl font-bold">🔥 เบิกคั่ว (WIP)</a>
+        <a href="planner.html" class="flex items-center gap-3 text-gray-600 hover:bg-gray-50 px-4 py-3 rounded-xl font-bold">📅 แผนการผลิต</a>
+        <a href="inventory.html" class="flex items-center gap-3 text-gray-600 hover:bg-gray-50 px-4 py-3 rounded-xl font-bold">📦 สต๊อกสินค้า</a>
+        <a href="item_master.html" class="flex items-center gap-3 text-gray-600 hover:bg-gray-50 px-4 py-3 rounded-xl font-bold">⚙️ ฐานข้อมูลสินค้า</a>
       </nav>
-      <button onclick="handleLogout()" class="mt-auto flex items-center gap-3 text-gray-500 hover:text-red-500 px-4 py-3 rounded-xl font-bold transition">
-        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" /></svg>
-        ออกจากระบบ
-      </button>
+      <button onclick="handleLogout()" class="mt-auto flex items-center gap-3 text-gray-500 hover:text-red-500 px-4 py-3 rounded-xl font-bold">🚪 ออกจากระบบ</button>
     </aside>
 
     <!-- พื้นที่แสดงผลหลัก -->
-    <main class="w-full md:ml-64 p-5 md:p-10 pb-24 md:pb-10 relative">
-      <!-- Header -->
-      <div class="flex justify-between items-end mb-8 sticky top-0 bg-gray-50/90 backdrop-blur-xl z-40 py-4 border-b border-gray-200 md:border-none md:bg-transparent">
-        <div>
-          <p id="current-date" class="text-gray-500 text-xs md:text-sm font-semibold uppercase tracking-wider mb-1"></p>
-          <h1 class="text-4xl md:text-5xl font-bold tracking-tight text-gray-900">วันนี้</h1>
+    <main class="w-full md:ml-64 p-5 md:p-10 pb-28 md:pb-10 relative">
+      
+      <!-- 🌟 Header แบบใหม่ (Profile ซ้าย, Logout ขวา) -->
+      <div class="flex justify-between items-center mb-8 sticky top-0 bg-gray-50/90 backdrop-blur-xl z-30 py-3 border-b border-gray-200 md:border-none md:bg-transparent px-1">
+        
+        <!-- ซ้าย: โปรไฟล์ (ซ้ายบน) -->
+        <div class="flex items-center gap-3 cursor-pointer">
+          <div class="w-10 h-10 md:w-12 md:h-12 bg-blue-100 rounded-full flex items-center justify-center border border-blue-200 shadow-sm">
+            <span id="profile-initial" class="text-lg md:text-xl font-bold text-blue-700">CM</span>
+          </div>
+          <!-- วันที่แสดงเฉพาะใน Desktop -->
+          <div class="hidden md:block">
+            <p id="current-date" class="text-gray-500 text-xs font-semibold uppercase tracking-wider mb-1"></p>
+            <h1 class="text-3xl font-bold tracking-tight text-gray-900">วันนี้</h1>
+          </div>
+          <!-- โชว์ชื่อแอปในมือถือ -->
+          <div class="md:hidden">
+            <h1 class="text-xl font-bold tracking-tight text-gray-900">BJ Roaster</h1>
+            <p class="text-gray-500 text-[10px]">Dashboard</p>
+          </div>
         </div>
-        <div class="w-10 h-10 md:w-12 md:h-12 bg-blue-100 rounded-full flex items-center justify-center border border-blue-200">
-          <span id="profile-initial" class="text-lg md:text-xl font-bold text-blue-700">CM</span>
-        </div>
+
+        <!-- ขวา: ออกจากระบบ (ขวาบน) สำหรับมือถือ -->
+        <button onclick="handleLogout()" class="md:hidden flex items-center justify-center w-10 h-10 bg-red-50 text-red-500 rounded-full border border-red-100 hover:bg-red-100 active:scale-95 transition">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" /></svg>
+        </button>
       </div>
 
-      <!-- Grid การ์ด -->
+      <!-- Grid การ์ด (เนื้อหาเดิม) -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
         
-        <!-- การ์ด 1: สีเขียว -->
-        <div class="relative h-96 md:h-80 rounded-[2rem] overflow-hidden shadow-lg bg-gradient-to-br from-green-50 to-emerald-200 border border-green-100 cursor-pointer transition transform hover:scale-[1.02]">
-          <div class="absolute top-0 left-0 p-6 w-full"><p class="text-emerald-700 text-sm font-semibold uppercase">ระบบคลังสินค้า</p><h2 class="text-3xl md:text-2xl font-bold text-gray-800 mt-1">รับสารกาแฟ<br>เข้าสต๊อก</h2></div>
-          <div class="absolute bottom-0 w-full bg-white/40 backdrop-blur-md border-t border-white/60 p-4 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-              <div class="w-12 h-12 bg-white/70 rounded-xl flex items-center justify-center shadow-sm text-gray-800"><svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg></div>
-              <div><p class="font-bold text-gray-800 text-sm">Inbound</p><p class="text-xs text-gray-600">สแกนรับของ & QC</p></div>
-            </div>
-            <button onclick="window.location.href='inbound.html'" class="bg-white text-blue-600 font-bold px-6 py-2 rounded-full text-sm hover:bg-gray-50 active:bg-gray-200 shadow-sm">เปิด</button>
-          </div>
+        <!-- การ์ด 1: Inbound -->
+        <div class="relative h-48 md:h-80 rounded-[2rem] overflow-hidden shadow-sm bg-gradient-to-br from-green-50 to-emerald-200 border border-green-100 cursor-pointer" onclick="window.location.href='inbound.html'">
+          <div class="absolute top-0 left-0 p-5 w-full"><p class="text-emerald-700 text-xs font-bold uppercase">คลังสินค้า</p><h2 class="text-2xl font-bold text-gray-800 mt-1">รับสารกาแฟ</h2></div>
+          <div class="absolute bottom-4 right-4 bg-white/70 backdrop-blur text-2xl w-12 h-12 flex items-center justify-center rounded-full shadow-sm">📥</div>
         </div>
 
-        <!-- การ์ด 2: สีส้ม -->
-        <div class="relative h-96 md:h-80 rounded-[2rem] overflow-hidden shadow-lg bg-gradient-to-br from-orange-50 to-amber-200 border border-orange-100 cursor-pointer transition transform hover:scale-[1.02]">
-          <div class="absolute top-0 left-0 p-6 w-full"><p class="text-amber-700 text-sm font-semibold uppercase">ระบบฝ่ายผลิต</p><h2 class="text-3xl md:text-2xl font-bold text-gray-800 mt-1">เบิกสารกาแฟ<br>ไปคั่ว (WIP)</h2></div>
-          <div class="absolute bottom-0 w-full bg-white/40 backdrop-blur-md border-t border-white/60 p-4 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-              <div class="w-12 h-12 bg-white/70 rounded-xl flex items-center justify-center shadow-sm text-gray-800"><svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.362 5.214A8.252 8.252 0 0112 21 8.25 8.25 0 016.038 7.048 8.287 8.287 0 009 9.6a8.983 8.983 0 013.361-6.867 8.21 8.21 0 003 2.48z" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 18a3.75 3.75 0 00.495-7.467 5.99 5.99 0 00-1.925 3.546 5.974 5.974 0 01-2.133-1A3.75 3.75 0 0012 18z" /></svg></div>
-              <div><p class="font-bold text-gray-800 text-sm">Issue WIP</p><p class="text-xs text-gray-600">ตัดสต๊อกเข้าเตาคั่ว</p></div>
-            </div>
-            <button onclick="window.location.href='wip.html'" class="bg-white text-blue-600 font-bold px-6 py-2 rounded-full text-sm hover:bg-gray-50 active:bg-gray-200 shadow-sm">เปิด</button>
-          </div>
+        <!-- การ์ด 2: WIP -->
+        <div class="relative h-48 md:h-80 rounded-[2rem] overflow-hidden shadow-sm bg-gradient-to-br from-orange-50 to-amber-200 border border-orange-100 cursor-pointer" onclick="window.location.href='wip.html'">
+          <div class="absolute top-0 left-0 p-5 w-full"><p class="text-amber-700 text-xs font-bold uppercase">ฝ่ายผลิต</p><h2 class="text-2xl font-bold text-gray-800 mt-1">เบิกคั่ว (WIP)</h2></div>
+          <div class="absolute bottom-4 right-4 bg-white/70 backdrop-blur text-2xl w-12 h-12 flex items-center justify-center rounded-full shadow-sm">🔥</div>
         </div>
 
-        <!-- การ์ด 3: สีฟ้า -->
-        <div class="relative h-96 md:h-80 rounded-[2rem] overflow-hidden shadow-lg bg-gradient-to-br from-blue-50 to-indigo-200 border border-blue-100 cursor-pointer transition transform hover:scale-[1.02]">
-          <div class="absolute top-0 left-0 p-6 w-full"><p class="text-indigo-700 text-sm font-semibold uppercase">ตรวจสอบข้อมูล</p><h2 class="text-3xl md:text-2xl font-bold text-gray-800 mt-1">รายการสต๊อก<br>สินค้าคงเหลือ</h2></div>
-          <div class="absolute bottom-0 w-full bg-white/40 backdrop-blur-md border-t border-white/60 p-4 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-              <div class="w-12 h-12 bg-white/70 rounded-xl flex items-center justify-center shadow-sm text-gray-800"><svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" /></svg></div>
-              <div><p class="font-bold text-gray-800 text-sm">Inventory</p><p class="text-xs text-gray-600">ดูยอดแบบ Real-time</p></div>
-            </div>
-            <button onclick="window.location.href='inventory.html'" class="bg-white text-blue-600 font-bold px-6 py-2 rounded-full text-sm hover:bg-gray-50 active:bg-gray-200 shadow-sm">เปิด</button>
-          </div>
+        <!-- การ์ด 3: Planner -->
+        <div class="relative h-48 md:h-80 rounded-[2rem] overflow-hidden shadow-sm bg-gradient-to-br from-yellow-50 to-yellow-200 border border-yellow-100 cursor-pointer" onclick="window.location.href='planner.html'">
+          <div class="absolute top-0 left-0 p-5 w-full"><p class="text-yellow-700 text-xs font-bold uppercase">วางแผน</p><h2 class="text-2xl font-bold text-gray-800 mt-1">แผนการผลิต</h2></div>
+          <div class="absolute bottom-4 right-4 bg-white/70 backdrop-blur text-2xl w-12 h-12 flex items-center justify-center rounded-full shadow-sm">📅</div>
         </div>
 
-        <!-- 🌟 การ์ด 4 (ใหม่): สีม่วง ฐานข้อมูลสินค้า -->
-        <div class="relative h-96 md:h-80 rounded-[2rem] overflow-hidden shadow-lg bg-gradient-to-br from-purple-50 to-fuchsia-200 border border-purple-100 cursor-pointer transition transform hover:scale-[1.02]">
-          <div class="absolute top-0 left-0 p-6 w-full"><p class="text-fuchsia-700 text-sm font-semibold uppercase">ตั้งค่าระบบ (Settings)</p><h2 class="text-3xl md:text-2xl font-bold text-gray-800 mt-1">ฐานข้อมูล<br>สารกาแฟ</h2></div>
-          <div class="absolute bottom-0 w-full bg-white/40 backdrop-blur-md border-t border-white/60 p-4 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-              <div class="w-12 h-12 bg-white/70 rounded-xl flex items-center justify-center shadow-sm text-gray-800">
-                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m3.75 9v6m3-3H9m1.5-12H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" /></svg>
-              </div>
-              <div><p class="font-bold text-gray-800 text-sm">Item Master</p><p class="text-xs text-gray-600">จัดการรหัสสินค้าใหม่</p></div>
-            </div>
-            <button onclick="window.location.href='item_master.html'" class="bg-white text-purple-600 font-bold px-6 py-2 rounded-full text-sm hover:bg-gray-50 active:bg-gray-200 shadow-sm">เปิด</button>
-          </div>
+        <!-- การ์ด 4: Inventory -->
+        <div class="relative h-48 md:h-80 rounded-[2rem] overflow-hidden shadow-sm bg-gradient-to-br from-blue-50 to-indigo-200 border border-blue-100 cursor-pointer" onclick="window.location.href='inventory.html'">
+          <div class="absolute top-0 left-0 p-5 w-full"><p class="text-indigo-700 text-xs font-bold uppercase">ตรวจสอบ</p><h2 class="text-2xl font-bold text-gray-800 mt-1">สต๊อกคงเหลือ</h2></div>
+          <div class="absolute bottom-4 right-4 bg-white/70 backdrop-blur text-2xl w-12 h-12 flex items-center justify-center rounded-full shadow-sm">📦</div>
         </div>
-        <!-- 👆 จบการ์ดที่ 4 (สีม่วง) -->
 
-        <!-- 👇 วางการ์ดที่ 5 (สีเหลือง Planner) ตรงนี้เลยครับ! 👇 -->
-        <div class="relative h-96 md:h-80 rounded-[2rem] overflow-hidden shadow-lg bg-gradient-to-br from-yellow-50 to-amber-200 border border-yellow-100 cursor-pointer transition transform hover:scale-[1.02]">
-          <div class="absolute top-0 left-0 p-6 w-full"><p class="text-amber-700 text-sm font-semibold uppercase">ระบบฝ่ายผลิต</p><h2 class="text-3xl md:text-2xl font-bold text-gray-800 mt-1">แผนการผลิต<br>(Planner)</h2></div>
-          <div class="absolute bottom-0 w-full bg-white/40 backdrop-blur-md border-t border-white/60 p-4 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-              <div class="w-12 h-12 bg-white/70 rounded-xl flex items-center justify-center shadow-sm text-gray-800">
-                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" /></svg>
-              </div>
-              <div><p class="font-bold text-gray-800 text-sm">Planner</p><p class="text-xs text-gray-600">จัดการออเดอร์คั่ว</p></div>
-            </div>
-            <button onclick="window.location.href='planner.html'" class="bg-white text-amber-600 font-bold px-6 py-2 rounded-full text-sm hover:bg-gray-50 active:bg-gray-200 shadow-sm">เปิด</button>
-          </div>
-        </div>
       </div>
-    </main> 
+    </main>
   </div>
 
-  <!-- 📱 Bottom Navigation (มือถือ) -->
-  <div id="bottom-nav" class="hidden fixed bottom-0 w-full bg-white/90 backdrop-blur-xl border-t border-gray-200 pb-safe z-50 md:hidden shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
-    <div class="flex justify-around items-center pt-2 pb-6 px-2">
-      <div class="flex flex-col items-center justify-center w-16 text-blue-600 cursor-pointer">
-        <svg class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg><span class="text-[10px] font-bold">หน้าแรก</span>
-      </div>
-      <div onclick="window.location.href='item_master.html'" class="flex flex-col items-center justify-center w-16 text-gray-400 hover:text-gray-800 cursor-pointer">
-        <svg class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m3.75 9v6m3-3H9m1.5-12H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" /></svg><span class="text-[10px] font-medium">ข้อมูลหลัก</span>
-      </div>
-      <div onclick="window.location.href='inventory.html'" class="flex flex-col items-center justify-center w-16 text-gray-400 hover:text-gray-800 cursor-pointer">
-        <svg class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" /></svg><span class="text-[10px] font-medium">สต๊อก</span>
-      </div>
-      <div onclick="handleLogout()" class="flex flex-col items-center justify-center w-16 text-gray-400 hover:text-red-500 cursor-pointer">
-        <svg class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" /></svg><span class="text-[10px] font-medium">ออก</span>
+  <!-- 🚀 Modal เลือกการ์ดทำงาน (Bottom Sheet) -->
+  <div id="work-modal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm transition-opacity">
+    <div class="absolute bottom-0 w-full bg-white rounded-t-3xl pb-safe">
+      <div class="p-6">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-xl font-bold text-gray-900">⚙️ เลือกเมนูทำงาน</h2>
+          <button onclick="toggleWorkMenu()" class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-gray-500 font-bold hover:bg-gray-200">✕</button>
+        </div>
+        
+        <!-- เมนูย่อยในหมวดทำงาน -->
+        <div class="grid grid-cols-3 gap-4">
+          <div onclick="window.location.href='inbound.html'" class="flex flex-col items-center gap-2 cursor-pointer p-3 rounded-2xl bg-gray-50 hover:bg-green-50 border border-gray-100 active:scale-95 transition">
+            <span class="text-3xl">📥</span><span class="text-xs font-bold text-gray-700">รับของ</span>
+          </div>
+          <div onclick="window.location.href='wip.html'" class="flex flex-col items-center gap-2 cursor-pointer p-3 rounded-2xl bg-gray-50 hover:bg-orange-50 border border-gray-100 active:scale-95 transition">
+            <span class="text-3xl">🔥</span><span class="text-xs font-bold text-gray-700">เบิกคั่ว</span>
+          </div>
+          <div onclick="window.location.href='planner.html'" class="flex flex-col items-center gap-2 cursor-pointer p-3 rounded-2xl bg-gray-50 hover:bg-yellow-50 border border-gray-100 active:scale-95 transition">
+            <span class="text-3xl">📅</span><span class="text-xs font-bold text-gray-700">แผนผลิต</span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
+  <!-- 📱 Bottom Navigation (ดีไซน์ใหม่) -->
+  <div id="bottom-nav" class="hidden fixed bottom-0 w-full bg-white/95 backdrop-blur-xl border-t border-gray-200 pb-safe z-40 md:hidden shadow-[0_-4px_10px_-1px_rgba(0,0,0,0.05)]">
+    <div class="flex justify-around items-center pt-3 pb-2 px-1">
+      
+      <!-- 1. หน้าแรก (Active) -->
+      <div class="flex flex-col items-center justify-center w-[20%] text-blue-600 cursor-pointer">
+        <svg class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg>
+        <span class="text-[10px] font-bold">หน้าแรก</span>
+      </div>
+      
+      <!-- 2. ทำงาน (กดแล้วเปิด Modal) -->
+      <div onclick="toggleWorkMenu()" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-gray-800 cursor-pointer">
+        <svg class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" /></svg>
+        <span class="text-[10px] font-medium">ทำงาน</span>
+      </div>
+
+      <!-- 3. รายงาน -->
+      <div onclick="alert('ระบบรายงานกำลังพัฒนาครับ 📊')" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-gray-800 cursor-pointer">
+        <svg class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" /></svg>
+        <span class="text-[10px] font-medium">รายงาน</span>
+      </div>
+
+      <!-- 4. สต๊อก -->
+      <div onclick="window.location.href='inventory.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-gray-800 cursor-pointer">
+        <svg class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" /></svg>
+        <span class="text-[10px] font-medium">สต๊อก</span>
+      </div>
+
+      <!-- 5. โปรไฟล์ -->
+      <div onclick="window.location.href='item_master.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-gray-800 cursor-pointer">
+        <svg class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg>
+        <span class="text-[10px] font-medium">โปรไฟล์</span>
+      </div>
+
+    </div>
+  </div>
+
   <script>
-    // ⚠️ อย่าลืมใส่ URL Web App ของคุณตรงนี้นะครับ
+    // ⚠️ นำ URL Web App ของคุณมาใส่ตรงนี้
     const API_URL = "https://script.google.com/macros/s/AKfycbxQywqP4da0BYdt_dHQtQl-kYlvGxmdJWNA59oqnZ_AM7SRyEESbMd73UD3Xx6VffQ/exec"; 
 
+    // แสดงวันที่
     const options = { weekday: 'long', day: 'numeric', month: 'long' };
-    document.getElementById('current-date').innerText = new Date().toLocaleDateString('th-TH', options);
+    const dateEl = document.getElementById('current-date');
+    if (dateEl) dateEl.innerText = new Date().toLocaleDateString('th-TH', options);
 
     window.onload = function() {
       if(localStorage.getItem('isLoggedIn') === 'true') showDashboard();
@@ -197,6 +197,12 @@
       
       let name = localStorage.getItem('name') || "US";
       document.getElementById('profile-initial').innerText = name.substring(0, 2).toUpperCase();
+    }
+
+    // ฟังก์ชันเปิด/ปิด Modal เมนูทำงาน
+    function toggleWorkMenu() {
+      const modal = document.getElementById('work-modal');
+      modal.classList.toggle('hidden');
     }
 
     async function handleLogin() {
