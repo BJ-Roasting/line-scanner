@@ -49,7 +49,7 @@
         // ส่งข้อมูลไปถาม Google Sheets ว่ารหัสผ่านถูกไหม
         const response = await fetch(API_URL, {
           method: "POST",
-          body: JSON.stringify({ username: user, password: pass }),
+          body: JSON.stringify({ action: 'login', username: user, password: pass }),
         });
         
         const result = await response.json();
