@@ -15,7 +15,7 @@
 
   <div class="flex min-h-screen">
     
-    <!-- 💻 Sidebar สำหรับ Desktop (ใช้ไอคอนลายเส้นทั้งหมด) -->
+    <!-- 💻 Sidebar สำหรับ Desktop -->
     <aside class="hidden md:flex flex-col w-64 fixed left-0 top-0 h-screen bg-white border-r border-gray-200 pt-10 pb-6 px-4 z-50 shadow-sm">
       <h2 class="text-2xl font-bold text-gray-900 mb-10 px-2">BJ Roaster</h2>
       
@@ -49,54 +49,46 @@
     </aside>
 
     <!-- 📱 พื้นที่แสดงผลฝั่งขวา -->
-    <main class="w-full md:ml-64 p-5 md:p-10 pb-28 md:pb-10 relative overflow-hidden">
+    <main class="w-full md:ml-64 p-5 md:p-10 pb-28 md:pb-10 relative overflow-hidden flex flex-col justify-center min-h-screen">
       
-      <!-- Header -->
-      <div class="flex justify-between items-center mb-6 sticky top-0 bg-gray-50/90 backdrop-blur-xl z-30 py-3 border-b border-gray-200 md:border-none md:bg-transparent px-1">
-        <div>
-          <h1 class="text-3xl font-bold tracking-tight text-gray-900">โหมดทำงาน</h1>
-          <p class="text-gray-500 text-sm mt-1">เลือกระบบที่คุณต้องการดำเนินการ</p>
-        </div>
-      </div>
-
-      <!-- 🌟 การ์ดสี่เหลี่ยมผืนผ้า แนวนอนแถวเดียว (ไม่มีไอคอน) -->
-      <div class="flex flex-row overflow-x-auto gap-4 pb-6 snap-x w-full">
+      <!-- 🌟 การ์ดสี่เหลี่ยมผืนผ้า แนวนอนแถวเดียว (ตัด Header ออก, ย่อขนาดลง, เพิ่ม pr-8 เพื่อไม่ให้โดนตัดขอบขวา) -->
+      <div class="flex flex-row overflow-x-auto gap-3 pb-6 pr-8 snap-x w-full items-center">
         
         <!-- 1. รับสินค้าเข้า (Inbound) -->
-        <div class="relative flex-none w-56 h-28 md:w-64 md:h-32 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-green-50 to-green-100 border border-green-200 cursor-pointer transition transform hover:scale-[1.02] snap-start flex flex-col justify-center px-6" onclick="window.location.href='inbound.html'">
-          <h2 class="text-lg md:text-xl font-bold text-green-800 leading-snug">รับสินค้าเข้า<br><span class="text-sm font-medium text-green-600">(สารกาแฟ)</span></h2>
+        <div class="relative flex-none w-40 h-24 md:w-52 md:h-28 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-green-50 to-green-100 border border-green-200 cursor-pointer transition transform hover:scale-[1.02] snap-start flex flex-col justify-center px-4" onclick="window.location.href='inbound.html'">
+          <h2 class="text-base md:text-lg font-bold text-green-800 leading-tight">รับสินค้าเข้า<br><span class="text-xs font-medium text-green-600">(สารกาแฟ)</span></h2>
         </div>
 
         <!-- 2. เบิกคั่ว (WIP) -->
-        <div class="relative flex-none w-56 h-28 md:w-64 md:h-32 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-orange-50 to-orange-100 border border-orange-200 cursor-pointer transition transform hover:scale-[1.02] snap-start flex flex-col justify-center px-6" onclick="window.location.href='wip.html'">
-          <h2 class="text-lg md:text-xl font-bold text-orange-800 leading-snug">เบิกคั่ว<br><span class="text-sm font-medium text-orange-600">(WIP)</span></h2>
+        <div class="relative flex-none w-40 h-24 md:w-52 md:h-28 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-orange-50 to-orange-100 border border-orange-200 cursor-pointer transition transform hover:scale-[1.02] snap-start flex flex-col justify-center px-4" onclick="window.location.href='wip.html'">
+          <h2 class="text-base md:text-lg font-bold text-orange-800 leading-tight">เบิกคั่ว<br><span class="text-xs font-medium text-orange-600">(WIP)</span></h2>
         </div>
 
         <!-- 3. บรรจุ -->
-        <div class="relative flex-none w-56 h-28 md:w-64 md:h-32 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-200 cursor-pointer transition transform hover:scale-[1.02] snap-start flex flex-col justify-center px-6" onclick="alert('กำลังพัฒนาระบบบรรจุ')">
-          <h2 class="text-lg md:text-xl font-bold text-purple-800 leading-snug">บรรจุสินค้า<br><span class="text-sm font-medium text-purple-600">(Packing)</span></h2>
+        <div class="relative flex-none w-40 h-24 md:w-52 md:h-28 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-200 cursor-pointer transition transform hover:scale-[1.02] snap-start flex flex-col justify-center px-4" onclick="alert('กำลังพัฒนาระบบบรรจุ')">
+          <h2 class="text-base md:text-lg font-bold text-purple-800 leading-tight">บรรจุสินค้า<br><span class="text-xs font-medium text-purple-600">(Packing)</span></h2>
         </div>
 
         <!-- 4. จัดส่ง -->
-        <div class="relative flex-none w-56 h-28 md:w-64 md:h-32 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-teal-50 to-teal-100 border border-teal-200 cursor-pointer transition transform hover:scale-[1.02] snap-start flex flex-col justify-center px-6" onclick="alert('กำลังพัฒนาระบบจัดส่ง')">
-          <h2 class="text-lg md:text-xl font-bold text-teal-800 leading-snug">จัดส่ง<br><span class="text-sm font-medium text-teal-600">(Shipping)</span></h2>
+        <div class="relative flex-none w-40 h-24 md:w-52 md:h-28 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-teal-50 to-teal-100 border border-teal-200 cursor-pointer transition transform hover:scale-[1.02] snap-start flex flex-col justify-center px-4" onclick="alert('กำลังพัฒนาระบบจัดส่ง')">
+          <h2 class="text-base md:text-lg font-bold text-teal-800 leading-tight">จัดส่ง<br><span class="text-xs font-medium text-teal-600">(Shipping)</span></h2>
         </div>
 
         <!-- 5. เพิ่มสินค้าเข้า (Item Master) -->
-        <div class="relative flex-none w-56 h-28 md:w-64 md:h-32 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-indigo-50 to-indigo-100 border border-indigo-200 cursor-pointer transition transform hover:scale-[1.02] snap-start flex flex-col justify-center px-6" onclick="window.location.href='item_master.html'">
-          <h2 class="text-lg md:text-xl font-bold text-indigo-800 leading-snug">เพิ่มข้อมูลใหม่<br><span class="text-sm font-medium text-indigo-600">(สาร, Sup)</span></h2>
+        <div class="relative flex-none w-40 h-24 md:w-52 md:h-28 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-indigo-50 to-indigo-100 border border-indigo-200 cursor-pointer transition transform hover:scale-[1.02] snap-start flex flex-col justify-center px-4" onclick="window.location.href='item_master.html'">
+          <h2 class="text-base md:text-lg font-bold text-indigo-800 leading-tight">เพิ่มข้อมูลใหม่<br><span class="text-xs font-medium text-indigo-600">(สาร, Sup)</span></h2>
         </div>
 
         <!-- 6. วางแผน (Planner) -->
-        <div class="relative flex-none w-56 h-28 md:w-64 md:h-32 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-yellow-50 to-yellow-100 border border-yellow-200 cursor-pointer transition transform hover:scale-[1.02] snap-start flex flex-col justify-center px-6" onclick="window.location.href='planner.html'">
-          <h2 class="text-lg md:text-xl font-bold text-yellow-800 leading-snug">วางแผน<br><span class="text-sm font-medium text-yellow-600">(ออเดอร์)</span></h2>
+        <div class="relative flex-none w-40 h-24 md:w-52 md:h-28 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-yellow-50 to-yellow-100 border border-yellow-200 cursor-pointer transition transform hover:scale-[1.02] snap-start flex flex-col justify-center px-4" onclick="window.location.href='planner.html'">
+          <h2 class="text-base md:text-lg font-bold text-yellow-800 leading-tight">วางแผน<br><span class="text-xs font-medium text-yellow-600">(ออเดอร์)</span></h2>
         </div>
 
       </div>
     </main>
   </div>
 
-  <!-- 📱 Bottom Navigation (สำหรับมือถือ - ไอคอนลายเส้นทั้งหมด) -->
+  <!-- 📱 Bottom Navigation -->
   <div id="bottom-nav" class="fixed bottom-0 w-full bg-white/95 backdrop-blur-xl border-t border-gray-200 pb-safe z-40 md:hidden shadow-[0_-4px_10px_-1px_rgba(0,0,0,0.05)]">
     <div class="flex justify-around items-center pt-3 pb-2 px-1">
       <div onclick="window.location.href='index.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-gray-800 cursor-pointer">
