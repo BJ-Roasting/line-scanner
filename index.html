@@ -3,72 +3,144 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BJ Roaster - Dashboard</title>
+  <title>BJ Roaster - WMS Dashboard</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+<body class="bg-gray-100 min-h-screen">
 
-  <!-- กล่อง Login -->
-  <div id="login-card" class="bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
-    <h1 class="text-2xl font-bold text-gray-800 text-center mb-6">ระบบจัดการโรงคั่วกาแฟ</h1>
-    
-    <div class="space-y-4">
-      <input type="text" id="username" class="w-full px-4 py-2 border rounded-lg focus:ring-amber-500" placeholder="รหัสพนักงาน (Username)">
-      <input type="password" id="password" class="w-full px-4 py-2 border rounded-lg focus:ring-amber-500" placeholder="รหัสผ่าน (Password)">
+  <!-- ================= ส่วนหน้าล็อกอิน ================= -->
+  <div id="login-container" class="flex items-center justify-center min-h-screen p-4">
+    <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-md border-t-4 border-amber-600">
+      <h1 class="text-2xl font-bold text-gray-800 text-center mb-6">☕ ระบบจัดการโรงคั่วกาแฟ</h1>
       
-      <div class="flex items-center">
-        <input type="checkbox" id="remember-me" class="w-4 h-4 text-amber-600 border-gray-300 rounded focus:ring-amber-500">
-        <label for="remember-me" class="ml-2 block text-sm text-gray-700">ล็อกอินอัตโนมัติในครั้งถัดไป</label>
+      <div class="space-y-4">
+        <input type="text" id="username" class="w-full px-4 py-3 border rounded-lg focus:ring-amber-500 bg-gray-50" placeholder="รหัสพนักงาน (Username)">
+        <input type="password" id="password" class="w-full px-4 py-3 border rounded-lg focus:ring-amber-500 bg-gray-50" placeholder="รหัสผ่าน (Password)">
+        
+        <div class="flex items-center">
+          <input type="checkbox" id="remember-me" class="w-4 h-4 text-amber-600 border-gray-300 rounded focus:ring-amber-500">
+          <label for="remember-me" class="ml-2 block text-sm text-gray-700">ล็อกอินอัตโนมัติในครั้งถัดไป</label>
+        </div>
+
+        <p id="error-msg" class="text-red-500 text-sm hidden font-bold text-center"></p>
+        
+        <button onclick="handleLogin()" id="login-btn" class="w-full bg-amber-600 text-white font-bold py-3 rounded-lg hover:bg-amber-700 shadow-md transition duration-200">
+          เข้าสู่ระบบ
+        </button>
       </div>
-
-      <p id="error-msg" class="text-red-500 text-sm hidden"></p>
-      
-      <button onclick="handleLogin()" id="login-btn" class="w-full bg-amber-600 text-white font-bold py-2 rounded-lg hover:bg-amber-700">
-        เข้าสู่ระบบ
-      </button>
     </div>
   </div>
 
-  <!-- หน้า Dashboard (หลังล็อกอินสำเร็จ) -->
-  <div id="dashboard" class="hidden text-center w-full max-w-md bg-white p-8 rounded-xl shadow-lg">
-    <h1 class="text-3xl font-bold text-gray-800 mb-2">ยินดีต้อนรับเข้าสู่กะทำงาน!</h1>
-    <h2 id="welcome-name" class="text-xl text-amber-600 font-semibold mb-4"></h2>
-    <p id="user-role" class="text-gray-500 mb-6"></p>
+  <!-- ================= ส่วนหน้า Dashboard ================= -->
+  <div id="dashboard-container" class="hidden p-4 md:p-8 max-w-7xl mx-auto">
     
-    <!-- กลุ่มปุ่มเมนูต่างๆ -->
-    <div class="space-y-3 mb-6">
-      <button onclick="window.location.href='inbound.html'" class="w-full bg-green-600 text-white font-bold py-3 rounded-lg hover:bg-green-700 shadow-md">
-        📥 รับสารกาแฟเข้าสต๊อก (Inbound)
-      </button>
-      
-      <button onclick="window.location.href='inventory.html'" class="w-full bg-blue-600 text-white font-bold py-3 rounded-lg hover:bg-blue-700 shadow-md">
-        📦 ดูสต๊อกสินค้า (Inventory)
-      </button>
-      
-      <button onclick="window.location.href='wip.html'" class="w-full bg-orange-500 text-white font-bold py-3 rounded-lg hover:bg-orange-600 shadow-md">
-        🔥 เบิกสารกาแฟไปคั่ว (WIP)
-      </button>
-      
-      <button onclick="window.location.href='location.html'" class="w-full bg-purple-600 text-white font-bold py-3 rounded-lg hover:bg-purple-700 shadow-md">
-        📍 จัดการจุดจัดเก็บ (Location Setup)
+    <!-- แถบหัวเว็บ (Header) -->
+    <div class="bg-white p-6 rounded-xl shadow-sm mb-6 flex flex-col md:flex-row justify-between items-center border-l-4 border-amber-500">
+      <div>
+        <h1 class="text-2xl font-bold text-gray-800">BJ Roaster Dashboard</h1>
+        <p class="text-gray-500 mt-1">ยินดีต้อนรับ, <span id="welcome-name" class="font-bold text-amber-600"></span> (<span id="user-role"></span>)</p>
+      </div>
+      <button onclick="handleLogout()" class="mt-4 md:mt-0 bg-red-50 text-red-600 border border-red-200 px-6 py-2 rounded-lg font-bold hover:bg-red-100 transition duration-200">
+        🚪 ออกจากระบบ
       </button>
     </div>
-    
-    <button onclick="handleLogout()" class="bg-gray-200 text-gray-700 px-4 py-2 rounded shadow hover:bg-gray-300 w-full font-bold">ออกจากระบบ</button>
+
+    <!-- เมนู 5 หมวดหมู่ (Grid Layout) -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+      <!-- 1. หมวดคลังสินค้า -->
+      <div class="bg-white p-5 rounded-xl shadow-sm border-t-4 border-green-500">
+        <h2 class="text-lg font-bold text-gray-800 mb-4 flex items-center">📦 1. ระบบคลังสินค้า</h2>
+        <div class="space-y-2">
+          <button onclick="window.location.href='inbound.html'" class="w-full text-left px-4 py-3 bg-green-50 text-green-700 rounded-lg hover:bg-green-100 font-semibold border border-green-100 shadow-sm">
+            📥 1.1 รับสารกาแฟ (Inbound)
+          </button>
+          <button onclick="window.location.href='inventory.html'" class="w-full text-left px-4 py-3 bg-green-50 text-green-700 rounded-lg hover:bg-green-100 font-semibold border border-green-100 shadow-sm">
+            🔍 1.2 ตรวจสอบสต๊อก (Inventory)
+          </button>
+          <button onclick="comingSoon()" class="w-full text-left px-4 py-3 bg-gray-50 text-gray-500 rounded-lg border border-gray-100 font-medium">
+            🔄 1.3 ย้ายจุดจัดเก็บ (Transfer)
+          </button>
+        </div>
+      </div>
+
+      <!-- 2. หมวดฝ่ายผลิต -->
+      <div class="bg-white p-5 rounded-xl shadow-sm border-t-4 border-orange-500">
+        <h2 class="text-lg font-bold text-gray-800 mb-4 flex items-center">🔥 2. ระบบฝ่ายผลิต</h2>
+        <div class="space-y-2">
+          <button onclick="window.location.href='wip.html'" class="w-full text-left px-4 py-3 bg-orange-50 text-orange-700 rounded-lg hover:bg-orange-100 font-semibold border border-orange-100 shadow-sm">
+            ✂️ 2.1 เบิกสารไปคั่ว (Issue WIP)
+          </button>
+          <button onclick="comingSoon()" class="w-full text-left px-4 py-3 bg-gray-50 text-gray-500 rounded-lg border border-gray-100 font-medium">
+            ✅ 2.2 รับเมล็ดคั่วสุก (FG)
+          </button>
+          <button onclick="comingSoon()" class="w-full text-left px-4 py-3 bg-gray-50 text-gray-500 rounded-lg border border-gray-100 font-medium">
+            🗑️ 2.3 บันทึกของเสีย (Waste)
+          </button>
+        </div>
+      </div>
+
+      <!-- 3. หมวดจัดส่ง -->
+      <div class="bg-white p-5 rounded-xl shadow-sm border-t-4 border-blue-500">
+        <h2 class="text-lg font-bold text-gray-800 mb-4 flex items-center">🚚 3. ระบบจัดส่ง</h2>
+        <div class="space-y-2">
+          <button onclick="comingSoon()" class="w-full text-left px-4 py-3 bg-gray-50 text-gray-500 rounded-lg border border-gray-100 font-medium">
+            🛍️ 3.1 จัดออเดอร์ (Pick & Pack)
+          </button>
+          <button onclick="comingSoon()" class="w-full text-left px-4 py-3 bg-gray-50 text-gray-500 rounded-lg border border-gray-100 font-medium">
+            📤 3.2 ส่งออกสินค้า (Dispatch)
+          </button>
+        </div>
+      </div>
+
+      <!-- 4. หมวดรายงาน -->
+      <div class="bg-white p-5 rounded-xl shadow-sm border-t-4 border-cyan-500 lg:col-span-2">
+        <h2 class="text-lg font-bold text-gray-800 mb-4 flex items-center">📊 4. รายงานและสถิติ</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+          <button onclick="comingSoon()" class="w-full text-left px-4 py-3 bg-gray-50 text-gray-500 rounded-lg border border-gray-100 font-medium">
+            📝 4.1 Movement Log
+          </button>
+          <button onclick="comingSoon()" class="w-full text-left px-4 py-3 bg-gray-50 text-gray-500 rounded-lg border border-gray-100 font-medium">
+            📉 4.2 สรุป Roast Loss
+          </button>
+          <button onclick="comingSoon()" class="w-full text-left px-4 py-3 bg-gray-50 text-gray-500 rounded-lg border border-gray-100 font-medium">
+            📅 4.3 สรุปสต๊อกรายวัน
+          </button>
+        </div>
+      </div>
+
+      <!-- 5. หมวดตั้งค่า -->
+      <div class="bg-white p-5 rounded-xl shadow-sm border-t-4 border-purple-500">
+        <h2 class="text-lg font-bold text-gray-800 mb-4 flex items-center">⚙️ 5. ตั้งค่าระบบ</h2>
+        <div class="space-y-2">
+          <button onclick="window.location.href='location.html'" class="w-full text-left px-4 py-3 bg-purple-50 text-purple-700 rounded-lg hover:bg-purple-100 font-semibold border border-purple-100 shadow-sm">
+            📍 5.1 จัดการจุดจัดเก็บ (Location)
+          </button>
+          <button onclick="comingSoon()" class="w-full text-left px-4 py-3 bg-gray-50 text-gray-500 rounded-lg border border-gray-100 font-medium">
+            📋 5.2 ฐานข้อมูลสินค้า (Item Master)
+          </button>
+        </div>
+      </div>
+
+    </div>
   </div>
 
   <script>
-    // ⚠️ อย่าลืม! นำ URL Web App ของคุณมาใส่ตรงนี้เหมือนเดิมครับ
+    // ⚠️ นำ URL Web App ของคุณมาใส่ตรงนี้เหมือนเดิมครับ
     const API_URL = "https://script.google.com/macros/s/AKfycbxQywqP4da0BYdt_dHQtQl-kYlvGxmdJWNA59oqnZ_AM7SRyEESbMd73UD3Xx6VffQ/exec"; 
 
     window.onload = function() {
       if(localStorage.getItem('isLoggedIn') === 'true') {
-        document.getElementById('login-card').classList.add('hidden');
-        document.getElementById('dashboard').classList.remove('hidden');
-        document.getElementById('welcome-name').innerText = "คุณ " + localStorage.getItem('name');
-        document.getElementById('user-role').innerText = "ตำแหน่ง: " + localStorage.getItem('role');
+        showDashboard();
       }
     };
+
+    function showDashboard() {
+      document.getElementById('login-container').classList.add('hidden');
+      document.getElementById('dashboard-container').classList.remove('hidden');
+      document.getElementById('welcome-name').innerText = localStorage.getItem('name');
+      document.getElementById('user-role').innerText = localStorage.getItem('role');
+    }
 
     async function handleLogin() {
       const user = document.getElementById('username').value;
@@ -77,10 +149,15 @@
       const btn = document.getElementById('login-btn');
       const errorMsg = document.getElementById('error-msg');
 
-      if(!user || !pass) return alert("กรุณากรอกข้อมูลให้ครบถ้วน");
+      if(!user || !pass) {
+        errorMsg.textContent = "กรุณากรอกรหัสพนักงานและรหัสผ่าน";
+        errorMsg.classList.remove('hidden');
+        return;
+      }
 
       btn.innerText = "กำลังตรวจสอบ...";
       btn.disabled = true;
+      errorMsg.classList.add('hidden');
 
       try {
         const response = await fetch(API_URL, {
@@ -91,21 +168,22 @@
         const result = await response.json();
 
         if(result.success) {
-          if(rememberMe) {
-            localStorage.setItem('isLoggedIn', 'true');
-            localStorage.setItem('name', result.name);
-            localStorage.setItem('role', result.role);
+          localStorage.setItem('isLoggedIn', 'true');
+          localStorage.setItem('name', result.name);
+          localStorage.setItem('role', result.role);
+          
+          if(!rememberMe) {
+            // ถ้าไม่กดจำรหัส ให้เคลียร์ค่าตอนปิดเบราว์เซอร์
+            sessionStorage.setItem('tempLogin', 'true'); 
           }
-          document.getElementById('login-card').classList.add('hidden');
-          document.getElementById('dashboard').classList.remove('hidden');
-          document.getElementById('welcome-name').innerText = "คุณ " + result.name;
-          document.getElementById('user-role').innerText = "ตำแหน่ง: " + result.role;
+          
+          showDashboard();
         } else {
           errorMsg.textContent = result.message;
           errorMsg.classList.remove('hidden');
         }
       } catch (error) {
-        errorMsg.textContent = "เชื่อมต่อฐานข้อมูลไม่ได้ ลองใหม่อีกครั้งครับ";
+        errorMsg.textContent = "เชื่อมต่อระบบไม่ได้ กรุณาลองใหม่อีกครั้ง";
         errorMsg.classList.remove('hidden');
       }
       
@@ -115,7 +193,13 @@
 
     function handleLogout() {
       localStorage.clear();
+      sessionStorage.clear();
       location.reload();
+    }
+
+    // ฟังก์ชันสำหรับปุ่มที่ยังสร้างไม่เสร็จ
+    function comingSoon() {
+      alert("🚧 เมนูนี้อยู่ในแผนการพัฒนาระบบ (Phase ถัดไป)");
     }
   </script>
 </body>
