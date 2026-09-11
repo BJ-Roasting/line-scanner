@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>BJ Roaster - รายงาน</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    ::-webkit-scrollbar { display: none; }
+    body { -ms-overflow-style: none; scrollbar-width: none; }
+    .pb-safe { padding-bottom: env(safe-area-inset-bottom, 20px); }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans antialiased">
+
+  <div class="flex min-h-screen">
+
+    <aside class="hidden md:flex flex-col w-64 fixed left-0 top-0 h-screen bg-white border-r border-gray-200 pt-10 pb-6 px-4 z-50 shadow-sm">
+      <h2 class="text-2xl font-bold text-gray-900 mb-10 px-2">BJ Roaster</h2>
+      <nav class="flex-1 space-y-2">
+        <a href="index.html" class="flex items-center gap-3 text-gray-700 hover:bg-gray-50 px-4 py-3 rounded-xl font-bold transition">
+          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg> หน้าแรก
+        </a>
+        <a href="work.html" class="flex items-center gap-3 text-gray-700 hover:bg-gray-50 px-4 py-3 rounded-xl font-bold transition">
+          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 011.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.56.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.893.149c-.425.07-.765.383-.93.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 01-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.397.165-.71.505-.78.929l-.15.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 01-.12-1.45l.527-.737c.25-.35.273-.806.108-1.204-.165-.397-.505-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.107-1.204l-.527-.738a1.125 1.125 0 01.12-1.45l.773-.773a1.125 1.125 0 011.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg> ทำงาน
+        </a>
+        <a href="report.html" class="flex items-center gap-3 bg-blue-50 text-blue-600 px-4 py-3 rounded-xl font-bold transition">
+          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" /></svg> รายงาน
+        </a>
+        <a href="stock.html" class="flex items-center gap-3 text-gray-700 hover:bg-gray-50 px-4 py-3 rounded-xl font-bold transition">
+          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" /></svg> สต๊อกสินค้า
+        </a>
+        <a href="profile.html" class="flex items-center gap-3 text-gray-700 hover:bg-gray-50 px-4 py-3 rounded-xl font-bold transition">
+          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg> โปรไฟล์
+        </a>
+      </nav>
+      <button onclick="handleLogout()" class="mt-8 flex items-center gap-3 text-gray-500 hover:text-red-500 px-4 py-3 rounded-xl font-bold transition"><svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" /></svg> ออกจากระบบ</button>
+    </aside>
+
+    <main class="w-full md:ml-64 relative overflow-hidden flex flex-col min-h-screen">
+      <div class="p-5 md:p-10 pb-28">
+        <div class="flex justify-between items-center mb-6">
+          <div>
+            <h1 class="text-2xl md:text-3xl font-bold text-gray-900">📊 รายงาน</h1>
+            <p class="text-gray-500 text-sm mt-1">ภาพรวมยอดการทำงานประจำวัน</p>
+          </div>
+        </div>
+
+        <!-- สรุปยอดวันนี้ -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm">
+            <p class="text-xs font-bold text-gray-400 mb-1">รับเข้าวันนี้</p>
+            <p class="text-2xl font-bold text-green-600" id="stat-inbound">-</p>
+            <p class="text-xs text-gray-400">kg</p>
+          </div>
+          <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm">
+            <p class="text-xs font-bold text-gray-400 mb-1">เบิกคั่ววันนี้</p>
+            <p class="text-2xl font-bold text-orange-500" id="stat-wip">-</p>
+            <p class="text-xs text-gray-400">kg</p>
+          </div>
+          <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm">
+            <p class="text-xs font-bold text-gray-400 mb-1">บรรจุวันนี้</p>
+            <p class="text-2xl font-bold text-purple-500" id="stat-packing">-</p>
+            <p class="text-xs text-gray-400">ชิ้น</p>
+          </div>
+          <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm">
+            <p class="text-xs font-bold text-gray-400 mb-1">จัดส่งวันนี้</p>
+            <p class="text-2xl font-bold text-teal-500" id="stat-shipping">-</p>
+            <p class="text-xs text-gray-400">ออเดอร์</p>
+          </div>
+        </div>
+
+        <!-- ตารางรายการล่าสุด -->
+        <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+          <div class="p-4 border-b border-gray-100 flex justify-between items-center">
+            <h2 class="font-bold text-gray-800">รายการล่าสุด</h2>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="min-w-full text-sm">
+              <thead class="bg-gray-50 text-gray-500">
+                <tr>
+                  <th class="py-2 px-4 text-left font-bold">วันที่/เวลา</th>
+                  <th class="py-2 px-4 text-left font-bold">ประเภท</th>
+                  <th class="py-2 px-4 text-left font-bold">รายการ</th>
+                  <th class="py-2 px-4 text-right font-bold">จำนวน</th>
+                  <th class="py-2 px-4 text-left font-bold">ผู้ทำรายการ</th>
+                </tr>
+              </thead>
+              <tbody id="report-table-body" class="text-gray-700">
+                <tr><td colspan="5" class="py-10 text-center text-gray-400">🚧 รอเชื่อมข้อมูลรายงาน (Backend ยังไม่มี action get_report)</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- 📱 Bottom Navigation (มือถือ) -->
+  <div class="fixed bottom-0 w-full bg-white/95 backdrop-blur-xl border-t border-gray-200 pb-safe z-50 md:hidden shadow-[0_-4px_10px_-1px_rgba(0,0,0,0.05)]">
+    <div class="flex justify-around items-center pt-3 pb-2 px-1">
+      <div onclick="window.location.href='index.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-gray-800 cursor-pointer"><svg class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg><span class="text-[10px] font-medium">หน้าแรก</span></div>
+      <div onclick="window.location.href='work.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-gray-800 cursor-pointer"><svg class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 011.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.56.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.893.149c-.425.07-.765.383-.93.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 01-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.397.165-.71.505-.78.929l-.15.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 01-.12-1.45l.527-.737c.25-.35.273-.806.108-1.204-.165-.397-.505-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.107-1.204l-.527-.738a1.125 1.125 0 01.12-1.45l.773-.773a1.125 1.125 0 011.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg><span class="text-[10px] font-medium">ทำงาน</span></div>
+      <div class="flex flex-col items-center justify-center w-[20%] text-blue-600 cursor-pointer"><svg class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" /></svg><span class="text-[10px] font-bold">รายงาน</span></div>
+      <div onclick="window.location.href='stock.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-gray-800 cursor-pointer"><svg class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" /></svg><span class="text-[10px] font-medium">สต๊อกสินค้า</span></div>
+      <div onclick="window.location.href='profile.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-gray-800 cursor-pointer"><svg class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg><span class="text-[10px] font-medium">โปรไฟล์</span></div>
+    </div>
+  </div>
+
+  <script>
+    function handleLogout() {
+      if(confirm("ต้องการออกจากระบบใช่หรือไม่?")) {
+        localStorage.clear();
+        window.location.href='index.html';
+      }
+    }
+
+    const API_URL = "https://script.google.com/macros/s/AKfycbxQywqP4da0BYdt_dHQtQl-kYlvGxmdJWNA59oqnZ_AM7SRyEESbMd73UD3Xx6VffQ/exec";
+
+    // 🚧 TODO: เมื่อฝั่ง Apps Script เพิ่ม action 'get_report' แล้ว ให้ดึงมาแสดงตรงนี้
+    async function loadReport() {
+      try {
+        const response = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'get_report' }) });
+        const result = await response.json();
+        if(result.success) {
+          document.getElementById('stat-inbound').innerText = result.data.inbound ?? 0;
+          document.getElementById('stat-wip').innerText = result.data.wip ?? 0;
+          document.getElementById('stat-packing').innerText = result.data.packing ?? 0;
+          document.getElementById('stat-shipping').innerText = result.data.shipping ?? 0;
+          // TODO: วนลูป result.data.recent มาสร้างแถวใน #report-table-body
+        }
+      } catch (e) {
+        console.log('ยังไม่ได้เชื่อมต่อระบบรายงาน (รอ backend)');
+      }
+    }
+    // window.onload = loadReport; // 👈 เปิดใช้งานเมื่อ backend พร้อม
+
+  </script>
+</body>
+</html>
