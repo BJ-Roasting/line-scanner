@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>เบิกสารกาแฟไปคั่ว (WIP)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-4">
+
+  <div class="max-w-md mx-auto bg-white p-6 rounded-xl shadow-md mt-4 border-t-4 border-amber-500">
+    <h1 class="text-2xl font-bold text-gray-800 text-center mb-4">🔥 เบิกสารกาแฟไปคั่ว</h1>
+    
+    <div class="bg-gray-50 p-3 rounded-lg border text-sm text-gray-600 mb-6">
+      <span class="font-bold">พนักงานหน้าเตา:</span> <span id="operator-name">กำลังโหลด...</span>
+    </div>
+
+    <div class="space-y-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-700">รหัสบาร์โค้ดสารกาแฟ (Barcode ID)</label>
+        <input type="text" id="barcode_id" class="w-full px-4 py-3 border rounded-lg focus:ring-amber-500 mt-1 text-lg font-bold text-center" placeholder="สแกนบาร์โค้ดที่นี่">
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">น้ำหนักที่เบิกไปใช้ (kg)</label>
+        <input type="number" id="used_weight" class="w-full px-4 py-3 border rounded-lg focus:ring-amber-500 mt-1 text-lg font-bold text-center text-amber-700" placeholder="0.00" step="0.01">
+      </div>
+
+      <p id="status-msg" class="text-sm text-center hidden font-bold"></p>
+      
+      <button onclick="issueStock()" id="save-btn" class="w-full bg-amber-600 text-white font-bold py-3 rounded-lg hover:bg-amber-700 shadow-lg text-lg mt-4">
+        ✂️ ตัดสต๊อกเบิกของ
+      </button>
+      
+      <button onclick="window.location.href='index.html'" class="w-full bg-gray-200 text-gray-700 font-bold py-2 rounded-lg mt-2">
+        กลับหน้าหลัก
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // ⚠️ นำ URL Web App ของคุณมาใส่ตรงนี้
+    const API_URL = "https://script.google.com/macros/s/AKfycbxQywqP4da0BYdt_dHQtQl-kYlvGxmdJWNA59oqnZ_AM7SRyEESbMd73UD3Xx6VffQ/exec"; 
+
+    document.getElementById('operator-name').innerText = localStorage.getItem('name') || "ไม่ระบุชื่อ";
+
+    async function issueStock() {
+      const barcode = document.getElementById('barcode_id').value;
+      const usedWeight = document.getElementById('used_weight').value;
+      
+      const btn = document.getElementById('save-btn');
+      const msg = document.getElementById('status-msg');
+
+      if(!barcode || !usedWeight) {
+        msg.textContent = "กรุณากรอกบาร์โค้ด และน้ำหนักที่เบิก";
+        msg.className = "text-sm text-center text-red-500 font-bold block";
+        return;
+      }
+
+      btn.innerText = "กำลังประมวลผล...";
+      btn.disabled = true;
+      msg.classList.add('hidden');
+
+      try {
+        const response = await fetch(API_URL, {
+          method: "POST",
+          body: JSON.stringify({
+            action: 'issue_wip',
+            barcode_id: barcode,
+            used_weight: usedWeight
+          }),
+        });
+        
+        const result = await response.json();
+
+        if(result.success) {
+          msg.textContent = result.message;
+          msg.className = "text-sm text-center text-green-600 font-bold block";
+          document.getElementById('barcode_id').value = '';
+          document.getElementById('used_weight').value = '';
+          document.getElementById('barcode_id').focus();
+        } else {
+          msg.textContent = result.message;
+          msg.className = "text-sm text-center text-red-500 font-bold block";
+        }
+      } catch (error) {
+        msg.textContent = "เชื่อมต่อระบบไม่ได้ กรุณาลองใหม่";
+        msg.className = "text-sm text-center text-red-500 font-bold block";
+      }
+      
+      btn.innerText = "✂️ ตัดสต๊อกเบิกของ";
+      btn.disabled = false;
+    }
+  </script>
+</body>
+</html>
