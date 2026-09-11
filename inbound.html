@@ -2,137 +2,159 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>รับสารกาแฟเข้า (Inbound)</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    ::-webkit-scrollbar { display: none; }
+    body { -ms-overflow-style: none; scrollbar-width: none; }
+    .pb-safe { padding-bottom: env(safe-area-inset-bottom, 20px); }
+  </style>
 </head>
-<body class="bg-gray-100 p-4">
+<body class="bg-gray-50 text-gray-900 font-sans antialiased">
 
-  <div class="max-w-md mx-auto bg-white p-6 rounded-xl shadow-md">
-    <h1 class="text-2xl font-bold text-gray-800 text-center mb-4">📥 รับสารกาแฟเข้าสต๊อก</h1>
+  <div class="flex min-h-screen">
     
-    <div class="bg-amber-50 p-3 rounded-lg border border-amber-200 text-sm text-amber-800 mb-6">
-      <span class="font-bold">ผู้ทำรายการ:</span> <span id="operator-name">กำลังโหลด...</span>
-    </div>
+    <!-- 💻 Sidebar สำหรับ Desktop -->
+    <aside class="hidden md:flex flex-col w-64 fixed left-0 top-0 h-screen bg-white border-r border-gray-200 pt-10 pb-6 px-4 z-50 shadow-sm">
+      <h2 class="text-2xl font-bold text-gray-900 mb-10 px-2">BJ Roaster</h2>
+      <nav class="flex-1 space-y-2">
+        <a href="index.html" class="flex items-center gap-3 text-gray-600 hover:bg-gray-50 px-4 py-3 rounded-xl font-bold transition">🏠 หน้าแรก</a>
+        <a href="#" class="flex items-center gap-3 bg-green-50 text-green-700 px-4 py-3 rounded-xl font-bold transition">📥 รับสินค้า</a>
+        <a href="wip.html" class="flex items-center gap-3 text-gray-600 hover:bg-gray-50 px-4 py-3 rounded-xl font-bold transition">🔥 เบิกคั่ว (WIP)</a>
+        <a href="planner.html" class="flex items-center gap-3 text-gray-600 hover:bg-gray-50 px-4 py-3 rounded-xl font-bold transition">📅 แผนการผลิต</a>
+        <a href="inventory.html" class="flex items-center gap-3 text-gray-600 hover:bg-gray-50 px-4 py-3 rounded-xl font-bold transition">📦 สต๊อกสินค้า</a>
+        <a href="item_master.html" class="flex items-center gap-3 text-gray-600 hover:bg-gray-50 px-4 py-3 rounded-xl font-bold transition">⚙️ ฐานข้อมูลสินค้า</a>
+      </nav>
+      <button onclick="handleLogout()" class="mt-auto flex items-center gap-3 text-gray-500 hover:text-red-500 px-4 py-3 rounded-xl font-bold transition">🚪 ออกจากระบบ</button>
+    </aside>
 
-    <div class="space-y-6">
+    <!-- 📱 พื้นที่แสดงผลหลัก -->
+    <main class="w-full md:ml-64 p-5 md:p-10 pb-28 md:pb-10 relative">
       
-      <!-- หมวด 1: ข้อมูลใบงาน (Workorder) -->
-      <div class="p-4 border rounded-lg bg-gray-50">
-        <h2 class="font-bold text-gray-700 mb-3 border-b pb-2">📄 ข้อมูลใบงาน (Workorder)</h2>
-        <div class="grid grid-cols-2 gap-3">
-          <div class="col-span-2">
-            <label class="block text-xs font-medium text-gray-600">รหัส Workorder</label>
-            <input type="text" id="wo_number" class="w-full px-3 py-2 border rounded focus:ring-green-500 mt-1" placeholder="ระบุรหัส WO">
-          </div>
-          <div>
-            <label class="block text-xs font-medium text-gray-600">ประเภทใบงาน</label>
-            <input type="text" id="wo_type" class="w-full px-3 py-2 border rounded focus:ring-green-500 mt-1">
-          </div>
-          <div>
-            <label class="block text-xs font-medium text-gray-600">จำนวนใบงาน</label>
-            <input type="number" id="wo_count" class="w-full px-3 py-2 border rounded focus:ring-green-500 mt-1">
-          </div>
+      <!-- Header -->
+      <div class="flex justify-between items-center mb-6 border-b border-gray-200 pb-4">
+        <div>
+          <h1 class="text-2xl md:text-3xl font-bold text-gray-900">📥 รับสารกาแฟเข้าสต๊อก</h1>
+          <p class="text-gray-500 text-sm mt-1">ผู้ทำรายการ: <span id="operator-name" class="font-bold text-blue-600">กำลังโหลด...</span></p>
         </div>
+        <!-- ปุ่มย้อนกลับสำหรับมือถือ -->
+        <button onclick="window.location.href='index.html'" class="md:hidden w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center text-gray-600 hover:bg-gray-200">
+          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" /></svg>
+        </button>
       </div>
 
-      <!-- หมวด 2: ข้อมูลสินค้า -->
-      <div class="p-4 border rounded-lg bg-gray-50">
-        <h2 class="font-bold text-gray-700 mb-3 border-b pb-2">📦 ข้อมูลสินค้า</h2>
-        <div class="space-y-3">
-          <div>
-            <label class="block text-xs font-medium text-gray-600">รหัสบาร์โค้ด (Barcode ID) *</label>
-            <input type="text" id="barcode_id" class="w-full px-3 py-2 border rounded focus:ring-green-500 mt-1" placeholder="สแกนบาร์โค้ด">
+      <!-- ฟอร์มกรอกข้อมูล -->
+      <div class="max-w-2xl bg-white p-6 rounded-2xl shadow-sm border border-gray-200 space-y-6">
+        
+        <!-- หมวด 1: ข้อมูลใบงาน -->
+        <div class="p-4 rounded-xl bg-gray-50 border border-gray-100">
+          <h2 class="font-bold text-gray-700 mb-3">📄 ข้อมูลใบงาน (Workorder)</h2>
+          <div class="grid grid-cols-2 gap-3">
+            <div class="col-span-2">
+              <label class="block text-xs font-bold text-gray-500">รหัส Workorder</label>
+              <input type="text" id="wo_number" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 mt-1" placeholder="ระบุรหัส WO">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-gray-500">ประเภทใบงาน</label>
+              <input type="text" id="wo_type" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 mt-1">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-gray-500">จำนวนใบงาน</label>
+              <input type="number" id="wo_count" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 mt-1">
+            </div>
           </div>
-          <div>
-            <label class="block text-xs font-medium text-gray-600">รายการสินค้า (Item Name) *</label>
-            <input type="text" id="item_name" class="w-full px-3 py-2 border rounded focus:ring-green-500 mt-1">
+        </div>
+
+        <!-- หมวด 2: ข้อมูลสินค้า -->
+        <div class="p-4 rounded-xl bg-gray-50 border border-gray-100">
+          <h2 class="font-bold text-gray-700 mb-3">📦 ข้อมูลสินค้า</h2>
+          <div class="space-y-3">
+            <div>
+              <label class="block text-xs font-bold text-gray-500">รหัสบาร์โค้ด (Barcode ID) *</label>
+              <input type="text" id="barcode_id" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 mt-1 font-bold text-blue-600" placeholder="สแกนบาร์โค้ด">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-gray-500">รายการสินค้า (Item Name) *</label>
+              <input type="text" id="item_name" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 mt-1">
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-bold text-gray-500">ผู้จัดจำหน่าย (Supplier)</label>
+                <input type="text" id="supplier" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 mt-1">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-gray-500">Lot Code (สร้างเอง)</label>
+                <input type="text" id="lot_code" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 mt-1">
+              </div>
+            </div>
           </div>
+        </div>
+
+        <!-- หมวด 3: ปริมาณ -->
+        <div class="p-4 rounded-xl bg-gray-50 border border-gray-100">
+          <h2 class="font-bold text-gray-700 mb-3">⚖️ ปริมาณและพื้นที่จัดเก็บ</h2>
           <div class="grid grid-cols-2 gap-3">
             <div>
-              <label class="block text-xs font-medium text-gray-600">ผู้จัดจำหน่าย (Supplier)</label>
-              <input type="text" id="supplier" class="w-full px-3 py-2 border rounded focus:ring-green-500 mt-1">
+              <label class="block text-xs font-bold text-gray-500">จำนวนพาเลท</label>
+              <input type="number" id="pallet_count" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 mt-1">
             </div>
             <div>
-              <label class="block text-xs font-medium text-gray-600">Lot Code (สร้างเอง)</label>
-              <input type="text" id="lot_code" class="w-full px-3 py-2 border rounded focus:ring-green-500 mt-1">
+              <label class="block text-xs font-bold text-gray-500">กิโล/กระสอบ</label>
+              <input type="number" id="kg_per_sack" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 mt-1" step="0.01">
+            </div>
+            <div class="col-span-2">
+              <label class="block text-xs font-bold text-gray-500">น้ำหนักรวมสุทธิ (kg) *</label>
+              <input type="number" id="weight" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 mt-1 text-xl font-bold text-green-700" placeholder="0.00">
+            </div>
+            <div class="col-span-2">
+              <label class="block text-xs font-bold text-gray-500">จุดจัดเก็บ (Location) *</label>
+              <input type="text" id="location" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 mt-1">
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- หมวด 3: ปริมาณและน้ำหนัก -->
-      <div class="p-4 border rounded-lg bg-gray-50">
-        <h2 class="font-bold text-gray-700 mb-3 border-b pb-2">⚖️ ปริมาณและพื้นที่จัดเก็บ</h2>
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="block text-xs font-medium text-gray-600">จำนวนพาเลท</label>
-            <input type="number" id="pallet_count" class="w-full px-3 py-2 border rounded focus:ring-green-500 mt-1">
-          </div>
-          <div>
-            <label class="block text-xs font-medium text-gray-600">กิโล/กระสอบ</label>
-            <input type="number" id="kg_per_sack" class="w-full px-3 py-2 border rounded focus:ring-green-500 mt-1" step="0.01">
-          </div>
-          <div class="col-span-2">
-            <label class="block text-xs font-medium text-gray-600">น้ำหนักรวมสุทธิ (kg) *</label>
-            <input type="number" id="weight" class="w-full px-3 py-2 border rounded focus:ring-green-500 mt-1 font-bold text-green-700" placeholder="0.00">
-          </div>
-          <div class="col-span-2">
-            <label class="block text-xs font-medium text-gray-600">จุดจัดเก็บ (Location) *</label>
-            <input type="text" id="location" class="w-full px-3 py-2 border rounded focus:ring-green-500 mt-1">
+        <!-- หมวด 4: QC -->
+        <div class="p-4 rounded-xl bg-blue-50 border border-blue-100">
+          <h2 class="font-bold text-blue-800 mb-3">🔬 โปรไฟล์ QC สารกาแฟ</h2>
+          <div class="grid grid-cols-3 gap-2 text-center items-center">
+            <div class="text-xs font-bold text-gray-500">ครั้งที่</div>
+            <div class="text-xs font-bold text-gray-500">ความชื้น (%)</div>
+            <div class="text-xs font-bold text-gray-500">Density</div>
+            <div class="text-sm font-medium">สุ่มที่ 1</div><input type="number" id="moisture1" class="w-full px-2 py-1 border rounded-lg" step="0.01"><input type="number" id="density1" class="w-full px-2 py-1 border rounded-lg" step="0.01">
+            <div class="text-sm font-medium">สุ่มที่ 2</div><input type="number" id="moisture2" class="w-full px-2 py-1 border rounded-lg" step="0.01"><input type="number" id="density2" class="w-full px-2 py-1 border rounded-lg" step="0.01">
+            <div class="text-sm font-medium">สุ่มที่ 3</div><input type="number" id="moisture3" class="w-full px-2 py-1 border rounded-lg" step="0.01"><input type="number" id="density3" class="w-full px-2 py-1 border rounded-lg" step="0.01">
           </div>
         </div>
+
+        <!-- ปุ่มบันทึก -->
+        <p id="status-msg" class="text-sm text-center hidden font-bold"></p>
+        <button onclick="saveInbound()" id="save-btn" class="w-full bg-green-600 text-white font-bold py-4 rounded-xl hover:bg-green-700 shadow-md text-lg active:scale-95 transition">
+          💾 บันทึกรับเข้าสต๊อก
+        </button>
+
       </div>
+    </main>
+  </div>
 
-      <!-- หมวด 4: QC โปรไฟล์ (Moisture & Density) -->
-      <div class="p-4 border rounded-lg bg-blue-50 border-blue-200">
-        <h2 class="font-bold text-blue-800 mb-3 border-b border-blue-200 pb-2">🔬 โปรไฟล์ QC สารกาแฟ</h2>
-        <div class="grid grid-cols-3 gap-2 text-center items-center">
-          <div class="text-xs font-bold text-gray-600">ครั้งที่</div>
-          <div class="text-xs font-bold text-gray-600">ความชื้น (%)</div>
-          <div class="text-xs font-bold text-gray-600">Density</div>
-          
-          <div class="text-sm font-medium">สุ่มที่ 1</div>
-          <input type="number" id="moisture1" class="w-full px-2 py-1 border rounded" step="0.01">
-          <input type="number" id="density1" class="w-full px-2 py-1 border rounded" step="0.01">
-
-          <div class="text-sm font-medium">สุ่มที่ 2</div>
-          <input type="number" id="moisture2" class="w-full px-2 py-1 border rounded" step="0.01">
-          <input type="number" id="density2" class="w-full px-2 py-1 border rounded" step="0.01">
-
-          <div class="text-sm font-medium">สุ่มที่ 3</div>
-          <input type="number" id="moisture3" class="w-full px-2 py-1 border rounded" step="0.01">
-          <input type="number" id="density3" class="w-full px-2 py-1 border rounded" step="0.01">
-        </div>
+  <!-- 📱 Bottom Navigation (มือถือ) -->
+  <div class="fixed bottom-0 w-full bg-white/95 backdrop-blur-xl border-t border-gray-200 pb-safe z-40 md:hidden shadow-[0_-4px_10px_-1px_rgba(0,0,0,0.05)]">
+    <div class="flex justify-around items-center pt-3 pb-2 px-1">
+      <div onclick="window.location.href='index.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-gray-800 cursor-pointer">
+        <svg class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg><span class="text-[10px] font-medium">หน้าแรก</span>
       </div>
-
-      <!-- หมวด 5: อื่นๆ -->
-      <div class="p-4 border rounded-lg bg-gray-50">
-        <div class="grid grid-cols-2 gap-3 mb-3">
-          <div>
-            <label class="block text-xs font-medium text-gray-600">ผู้ช่วย 1</label>
-            <input type="text" id="assistant1" class="w-full px-3 py-2 border rounded focus:ring-green-500 mt-1">
-          </div>
-          <div>
-            <label class="block text-xs font-medium text-gray-600">ผู้ช่วย 2</label>
-            <input type="text" id="assistant2" class="w-full px-3 py-2 border rounded focus:ring-green-500 mt-1">
-          </div>
-        </div>
-        <div>
-          <label class="block text-xs font-medium text-gray-600">Description (หมายเหตุ)</label>
-          <textarea id="description" rows="2" class="w-full px-3 py-2 border rounded focus:ring-green-500 mt-1"></textarea>
-        </div>
+      <div class="flex flex-col items-center justify-center w-[20%] text-green-600 cursor-pointer">
+        <svg class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg><span class="text-[10px] font-bold">รับของ</span>
       </div>
-
-      <!-- ปุ่มบันทึก -->
-      <p id="status-msg" class="text-sm text-center hidden font-bold"></p>
-      <button onclick="saveInbound()" id="save-btn" class="w-full bg-green-600 text-white font-bold py-3 rounded-lg hover:bg-green-700 shadow-lg text-lg">
-        💾 บันทึกรับเข้าสต๊อก
-      </button>
-      <button onclick="window.location.href='index.html'" class="w-full bg-gray-300 text-gray-800 font-bold py-2 rounded-lg">
-        กลับหน้าหลัก
-      </button>
-
+      <div onclick="alert('ระบบรายงานกำลังพัฒนาครับ 📊')" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-gray-800 cursor-pointer">
+        <svg class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" /></svg><span class="text-[10px] font-medium">รายงาน</span>
+      </div>
+      <div onclick="window.location.href='inventory.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-gray-800 cursor-pointer">
+        <svg class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" /></svg><span class="text-[10px] font-medium">สต๊อก</span>
+      </div>
+      <div onclick="window.location.href='item_master.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-gray-800 cursor-pointer">
+        <svg class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg><span class="text-[10px] font-medium">โปรไฟล์</span>
+      </div>
     </div>
   </div>
 
@@ -143,8 +165,14 @@
     let operatorName = localStorage.getItem('name') || "ไม่ระบุชื่อ";
     document.getElementById('operator-name').innerText = operatorName;
 
+    function handleLogout() {
+      if(confirm("ต้องการออกจากระบบใช่หรือไม่?")) {
+        localStorage.clear();
+        window.location.href='index.html';
+      }
+    }
+
     async function saveInbound() {
-      // ดึงค่าบังคับ
       const barcode = document.getElementById('barcode_id').value;
       const itemName = document.getElementById('item_name').value;
       const weight = document.getElementById('weight').value;
@@ -163,45 +191,26 @@
       btn.disabled = true;
       msg.classList.add('hidden');
 
-      // รวบรวมข้อมูลทั้งหมด
       const payload = {
         action: 'inbound',
-        barcode_id: barcode,
-        item_name: itemName,
-        weight: parseFloat(weight),
-        location: location,
-        wo_number: document.getElementById('wo_number').value,
-        wo_type: document.getElementById('wo_type').value,
-        wo_count: document.getElementById('wo_count').value,
-        supplier: document.getElementById('supplier').value,
-        lot_code: document.getElementById('lot_code').value,
-        pallet_count: document.getElementById('pallet_count').value,
-        kg_per_sack: document.getElementById('kg_per_sack').value,
-        moisture1: document.getElementById('moisture1').value,
-        density1: document.getElementById('density1').value,
-        moisture2: document.getElementById('moisture2').value,
-        density2: document.getElementById('density2').value,
-        moisture3: document.getElementById('moisture3').value,
-        density3: document.getElementById('density3').value,
-        operator: operatorName,
-        assistant1: document.getElementById('assistant1').value,
-        assistant2: document.getElementById('assistant2').value,
-        description: document.getElementById('description').value
+        barcode_id: barcode, item_name: itemName, weight: parseFloat(weight), location: location,
+        wo_number: document.getElementById('wo_number').value, wo_type: document.getElementById('wo_type').value,
+        wo_count: document.getElementById('wo_count').value, supplier: document.getElementById('supplier').value,
+        lot_code: document.getElementById('lot_code').value, pallet_count: document.getElementById('pallet_count').value,
+        kg_per_sack: document.getElementById('kg_per_sack').value, moisture1: document.getElementById('moisture1').value,
+        density1: document.getElementById('density1').value, moisture2: document.getElementById('moisture2').value,
+        density2: document.getElementById('density2').value, moisture3: document.getElementById('moisture3').value,
+        density3: document.getElementById('density3').value, operator: operatorName, description: ''
       };
 
       try {
-        const response = await fetch(API_URL, {
-          method: "POST",
-          body: JSON.stringify(payload),
-        });
-        
+        const response = await fetch(API_URL, { method: "POST", body: JSON.stringify(payload) });
         const result = await response.json();
 
         if(result.success) {
           msg.textContent = result.message;
           msg.className = "text-sm text-center text-green-600 font-bold block mt-2";
-          // ล้างฟอร์ม
-          document.querySelectorAll('input[type="text"], input[type="number"], textarea').forEach(el => el.value = '');
+          document.querySelectorAll('input[type="text"], input[type="number"]').forEach(el => el.value = '');
           window.scrollTo(0, 0);
           document.getElementById('wo_number').focus();
         } else {
@@ -212,7 +221,6 @@
         msg.textContent = "เชื่อมต่อระบบไม่ได้ กรุณาลองใหม่";
         msg.className = "text-sm text-center text-red-500 font-bold block mt-2";
       }
-      
       btn.innerText = "💾 บันทึกรับเข้าสต๊อก";
       btn.disabled = false;
     }
