@@ -117,23 +117,43 @@
 
     const API_URL = "https://script.google.com/macros/s/AKfycbxQywqP4da0BYdt_dHQtQl-kYlvGxmdJWNA59oqnZ_AM7SRyEESbMd73UD3Xx6VffQ/exec";
 
-    // 🚧 TODO: เมื่อฝั่ง Apps Script เพิ่ม action 'get_report' แล้ว ให้ดึงมาแสดงตรงนี้
+    window.addEventListener('DOMContentLoaded', loadReport);
+
+    const TYPE_LABEL = { Inbound: '🟢 รับเข้า', WIP: '🟠 เบิกคั่ว', Packing: '🟣 บรรจุ', Shipping: '🔵 จัดส่ง' };
+
     async function loadReport() {
+      const tbody = document.getElementById('report-table-body');
       try {
         const response = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'get_report' }) });
         const result = await response.json();
+
         if(result.success) {
-          document.getElementById('stat-inbound').innerText = result.data.inbound ?? 0;
-          document.getElementById('stat-wip').innerText = result.data.wip ?? 0;
-          document.getElementById('stat-packing').innerText = result.data.packing ?? 0;
-          document.getElementById('stat-shipping').innerText = result.data.shipping ?? 0;
-          // TODO: วนลูป result.data.recent มาสร้างแถวใน #report-table-body
+          const d = result.data;
+          document.getElementById('stat-inbound').innerText = (d.inbound ?? 0).toFixed(1);
+          document.getElementById('stat-wip').innerText = (d.wip ?? 0).toFixed(1);
+          document.getElementById('stat-packing').innerText = d.packing ?? 0;
+          document.getElementById('stat-shipping').innerText = d.shipping ?? 0;
+
+          if(d.recent && d.recent.length > 0) {
+            tbody.innerHTML = d.recent.map(r => `
+              <tr class="border-b border-gray-50 hover:bg-gray-50">
+                <td class="py-2 px-4 text-gray-500">${r.datetime}</td>
+                <td class="py-2 px-4 font-bold">${TYPE_LABEL[r.type] || r.type}</td>
+                <td class="py-2 px-4">${r.item_name || '-'}</td>
+                <td class="py-2 px-4 text-right font-bold">${r.qty} ${r.unit || ''}</td>
+                <td class="py-2 px-4 text-gray-500">${r.operator || '-'}</td>
+              </tr>
+            `).join('');
+          } else {
+            tbody.innerHTML = `<tr><td colspan="5" class="py-10 text-center text-gray-400">ยังไม่มีรายการวันนี้</td></tr>`;
+          }
+        } else {
+          tbody.innerHTML = `<tr><td colspan="5" class="py-10 text-center text-red-500">ดึงข้อมูลรายงานไม่สำเร็จ</td></tr>`;
         }
       } catch (e) {
-        console.log('ยังไม่ได้เชื่อมต่อระบบรายงาน (รอ backend)');
+        tbody.innerHTML = `<tr><td colspan="5" class="py-10 text-center text-red-500">เชื่อมต่อระบบไม่ได้</td></tr>`;
       }
     }
-    // window.onload = loadReport; // 👈 เปิดใช้งานเมื่อ backend พร้อม
 
   </script>
 </body>
