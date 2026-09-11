@@ -137,10 +137,10 @@
         const result = await response.json();
         
         if(result.success) {
-          const item = result.data.find(row => row.barcode === barcode);
+          const item = result.data.find(row => row.barcode_id === barcode && row.status !== 'Empty');
           if(item) {
-            document.getElementById('show-name').innerText = item.name;
-            document.getElementById('show-stock').innerText = item.weight;
+            document.getElementById('show-name').innerText = item.item_name;
+            document.getElementById('show-stock').innerText = item.weight_current;
             document.getElementById('item-info').classList.remove('hidden');
             document.getElementById('issue-qty').focus();
           } else {
@@ -172,7 +172,7 @@
       try {
         const response = await fetch(API_URL, {
           method: "POST",
-          body: JSON.stringify({ action: 'issue_wip', barcode_id: barcode, issue_qty: parseFloat(qty), operator: operatorName })
+          body: JSON.stringify({ action: 'issue_wip', barcode_id: barcode, used_weight: parseFloat(qty), operator: operatorName })
         });
         const result = await response.json();
 
