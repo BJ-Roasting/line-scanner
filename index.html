@@ -3,12 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>BJ Roaster - Mobile App Style</title>
+  <title>BJ Roaster - Smart WMS</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     ::-webkit-scrollbar { display: none; }
     body { -ms-overflow-style: none; scrollbar-width: none; }
-    /* เพิ่ม Safe Area สำหรับมือถือ */
     .pb-safe { padding-bottom: env(safe-area-inset-bottom, 20px); }
   </style>
 </head>
@@ -36,103 +35,102 @@
     </div>
   </div>
 
-  <!-- 📱 & 💻 หน้า DASHBOARD -->
+  <!-- 📱 & 💻 หน้า DASHBOARD หลัก -->
   <div id="dashboard" class="hidden flex min-h-screen">
     
-    <!-- 💻 Sidebar (สำหรับ Desktop - ยังคงไว้เหมือนเดิม) -->
-    <aside class="hidden md:flex flex-col w-64 fixed left-0 top-0 h-screen bg-white border-r border-gray-200 pt-10 pb-6 px-4 z-50 shadow-sm">
+    <!-- 💻 Sidebar (สำหรับ Desktop) -->
+    <aside class="hidden md:flex flex-col w-64 fixed left-0 top-0 h-screen bg-white border-r border-gray-200 pt-10 pb-6 px-4 z-40 shadow-sm">
       <h2 class="text-2xl font-bold text-gray-900 mb-10 px-2">BJ Roaster</h2>
       <nav class="flex-1 space-y-2">
-        <a href="#" class="flex items-center gap-3 bg-gray-100 text-blue-600 px-4 py-3 rounded-xl font-bold">🏠 หน้าแรก</a>
-        <a href="inbound.html" class="flex items-center gap-3 text-gray-600 hover:bg-gray-50 px-4 py-3 rounded-xl font-bold">📥 รับสินค้า</a>
-        <a href="wip.html" class="flex items-center gap-3 text-gray-600 hover:bg-gray-50 px-4 py-3 rounded-xl font-bold">🔥 เบิกคั่ว (WIP)</a>
-        <a href="planner.html" class="flex items-center gap-3 text-gray-600 hover:bg-gray-50 px-4 py-3 rounded-xl font-bold">📅 แผนการผลิต</a>
+        <a href="#" class="flex items-center gap-3 bg-gray-100 text-blue-600 px-4 py-3 rounded-xl font-bold">🏠 หน้าแรก (Dashboard)</a>
+        <button onclick="toggleWorkMenu()" class="w-full flex items-center gap-3 text-gray-600 hover:bg-gray-50 px-4 py-3 rounded-xl font-bold">⚙️ เมนูทำงาน</button>
+        <a href="#" onclick="alert('ระบบรายงานกำลังพัฒนา')" class="flex items-center gap-3 text-gray-600 hover:bg-gray-50 px-4 py-3 rounded-xl font-bold">📊 รายงานภาพรวม</a>
         <a href="inventory.html" class="flex items-center gap-3 text-gray-600 hover:bg-gray-50 px-4 py-3 rounded-xl font-bold">📦 สต๊อกสินค้า</a>
-        <a href="item_master.html" class="flex items-center gap-3 text-gray-600 hover:bg-gray-50 px-4 py-3 rounded-xl font-bold">⚙️ ฐานข้อมูลสินค้า</a>
+        <a href="#" onclick="alert('หน้าโปรไฟล์กำลังพัฒนา')" class="flex items-center gap-3 text-gray-600 hover:bg-gray-50 px-4 py-3 rounded-xl font-bold">👤 โปรไฟล์พนักงาน</a>
       </nav>
       <button onclick="handleLogout()" class="mt-auto flex items-center gap-3 text-gray-500 hover:text-red-500 px-4 py-3 rounded-xl font-bold">🚪 ออกจากระบบ</button>
     </aside>
 
-    <!-- พื้นที่แสดงผลหลัก -->
+    <!-- พื้นที่แสดงผลหลัก (Main Content) -->
     <main class="w-full md:ml-64 p-5 md:p-10 pb-28 md:pb-10 relative">
       
       <!-- 🌟 Header แบบใหม่ (Profile ซ้าย, Logout ขวา) -->
       <div class="flex justify-between items-center mb-8 sticky top-0 bg-gray-50/90 backdrop-blur-xl z-30 py-3 border-b border-gray-200 md:border-none md:bg-transparent px-1">
         
-        <!-- ซ้าย: โปรไฟล์ (ซ้ายบน) -->
-        <div class="flex items-center gap-3 cursor-pointer">
+        <!-- ซ้าย: โปรไฟล์ -->
+        <div class="flex items-center gap-3 cursor-pointer" onclick="alert('หน้าโปรไฟล์กำลังพัฒนา')">
           <div class="w-10 h-10 md:w-12 md:h-12 bg-blue-100 rounded-full flex items-center justify-center border border-blue-200 shadow-sm">
             <span id="profile-initial" class="text-lg md:text-xl font-bold text-blue-700">CM</span>
           </div>
-          <!-- วันที่แสดงเฉพาะใน Desktop -->
-          <div class="hidden md:block">
-            <p id="current-date" class="text-gray-500 text-xs font-semibold uppercase tracking-wider mb-1"></p>
-            <h1 class="text-3xl font-bold tracking-tight text-gray-900">วันนี้</h1>
-          </div>
-          <!-- โชว์ชื่อแอปในมือถือ -->
+          <!-- ชื่อแอปบนมือถือ -->
           <div class="md:hidden">
             <h1 class="text-xl font-bold tracking-tight text-gray-900">BJ Roaster</h1>
             <p class="text-gray-500 text-[10px]">Dashboard</p>
           </div>
+          <!-- วันที่แสดงบนคอม -->
+          <div class="hidden md:block">
+            <p id="current-date" class="text-gray-500 text-xs font-semibold uppercase tracking-wider mb-1"></p>
+            <h1 class="text-3xl font-bold tracking-tight text-gray-900">ภาพรวมระบบ</h1>
+          </div>
         </div>
 
-        <!-- ขวา: ออกจากระบบ (ขวาบน) สำหรับมือถือ -->
+        <!-- ขวา: ปุ่มออกจากระบบ (แสดงเฉพาะมือถือ) -->
         <button onclick="handleLogout()" class="md:hidden flex items-center justify-center w-10 h-10 bg-red-50 text-red-500 rounded-full border border-red-100 hover:bg-red-100 active:scale-95 transition">
           <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" /></svg>
         </button>
       </div>
 
-      <!-- Grid การ์ด (เนื้อหาเดิม) -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
-        
-        <!-- การ์ด 1: Inbound -->
-        <div class="relative h-48 md:h-80 rounded-[2rem] overflow-hidden shadow-sm bg-gradient-to-br from-green-50 to-emerald-200 border border-green-100 cursor-pointer" onclick="window.location.href='inbound.html'">
-          <div class="absolute top-0 left-0 p-5 w-full"><p class="text-emerald-700 text-xs font-bold uppercase">คลังสินค้า</p><h2 class="text-2xl font-bold text-gray-800 mt-1">รับสารกาแฟ</h2></div>
-          <div class="absolute bottom-4 right-4 bg-white/70 backdrop-blur text-2xl w-12 h-12 flex items-center justify-center rounded-full shadow-sm">📥</div>
-        </div>
-
-        <!-- การ์ด 2: WIP -->
-        <div class="relative h-48 md:h-80 rounded-[2rem] overflow-hidden shadow-sm bg-gradient-to-br from-orange-50 to-amber-200 border border-orange-100 cursor-pointer" onclick="window.location.href='wip.html'">
-          <div class="absolute top-0 left-0 p-5 w-full"><p class="text-amber-700 text-xs font-bold uppercase">ฝ่ายผลิต</p><h2 class="text-2xl font-bold text-gray-800 mt-1">เบิกคั่ว (WIP)</h2></div>
-          <div class="absolute bottom-4 right-4 bg-white/70 backdrop-blur text-2xl w-12 h-12 flex items-center justify-center rounded-full shadow-sm">🔥</div>
-        </div>
-
-        <!-- การ์ด 3: Planner -->
-        <div class="relative h-48 md:h-80 rounded-[2rem] overflow-hidden shadow-sm bg-gradient-to-br from-yellow-50 to-yellow-200 border border-yellow-100 cursor-pointer" onclick="window.location.href='planner.html'">
-          <div class="absolute top-0 left-0 p-5 w-full"><p class="text-yellow-700 text-xs font-bold uppercase">วางแผน</p><h2 class="text-2xl font-bold text-gray-800 mt-1">แผนการผลิต</h2></div>
-          <div class="absolute bottom-4 right-4 bg-white/70 backdrop-blur text-2xl w-12 h-12 flex items-center justify-center rounded-full shadow-sm">📅</div>
-        </div>
-
-        <!-- การ์ด 4: Inventory -->
-        <div class="relative h-48 md:h-80 rounded-[2rem] overflow-hidden shadow-sm bg-gradient-to-br from-blue-50 to-indigo-200 border border-blue-100 cursor-pointer" onclick="window.location.href='inventory.html'">
-          <div class="absolute top-0 left-0 p-5 w-full"><p class="text-indigo-700 text-xs font-bold uppercase">ตรวจสอบ</p><h2 class="text-2xl font-bold text-gray-800 mt-1">สต๊อกคงเหลือ</h2></div>
-          <div class="absolute bottom-4 right-4 bg-white/70 backdrop-blur text-2xl w-12 h-12 flex items-center justify-center rounded-full shadow-sm">📦</div>
-        </div>
-
+      <!-- พื้นที่รอใส่กราฟ Dashboard ในอนาคต -->
+      <div class="flex flex-col items-center justify-center h-96 border-2 border-dashed border-gray-300 rounded-3xl bg-gray-100/50 mt-4 text-center p-6">
+        <span class="text-6xl mb-4 grayscale opacity-40">📊</span>
+        <h2 class="text-xl font-bold text-gray-500">Dashboard (รอการพัฒนา)</h2>
+        <p class="text-sm text-gray-400 mt-2 max-w-sm">พื้นที่นี้จะถูกใช้แสดงรายงานภาพรวม เช่น กราฟสรุปยอดคั่ว, จำนวนสต๊อกคงเหลือ, และอัตราของเสีย</p>
       </div>
+
     </main>
   </div>
 
-  <!-- 🚀 Modal เลือกการ์ดทำงาน (Bottom Sheet) -->
-  <div id="work-modal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm transition-opacity">
-    <div class="absolute bottom-0 w-full bg-white rounded-t-3xl pb-safe">
+  <!-- 🚀 Modal เลือกการ์ดทำงาน (Bottom Sheet / Popup) -->
+  <div id="work-modal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm transition-opacity flex items-end md:items-center justify-center">
+    <!-- กล่องเมนู -->
+    <div class="w-full md:w-[600px] bg-white rounded-t-3xl md:rounded-3xl pb-safe md:pb-6 relative animate-[slideUp_0.3s_ease-out]">
       <div class="p-6">
         <div class="flex justify-between items-center mb-6">
           <h2 class="text-xl font-bold text-gray-900">⚙️ เลือกเมนูทำงาน</h2>
           <button onclick="toggleWorkMenu()" class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-gray-500 font-bold hover:bg-gray-200">✕</button>
         </div>
         
-        <!-- เมนูย่อยในหมวดทำงาน -->
-        <div class="grid grid-cols-3 gap-4">
-          <div onclick="window.location.href='inbound.html'" class="flex flex-col items-center gap-2 cursor-pointer p-3 rounded-2xl bg-gray-50 hover:bg-green-50 border border-gray-100 active:scale-95 transition">
-            <span class="text-3xl">📥</span><span class="text-xs font-bold text-gray-700">รับของ</span>
+        <!-- Grid เมนูย่อย 7 ฟังก์ชัน -->
+        <div class="grid grid-cols-3 md:grid-cols-4 gap-3 md:gap-4">
+          
+          <div onclick="window.location.href='planner.html'" class="flex flex-col items-center gap-2 cursor-pointer p-4 rounded-2xl bg-gray-50 hover:bg-yellow-50 border border-gray-100 active:scale-95 transition shadow-sm">
+            <span class="text-3xl">📅</span><span class="text-xs font-bold text-gray-700 text-center">แผนการผลิต</span>
           </div>
-          <div onclick="window.location.href='wip.html'" class="flex flex-col items-center gap-2 cursor-pointer p-3 rounded-2xl bg-gray-50 hover:bg-orange-50 border border-gray-100 active:scale-95 transition">
-            <span class="text-3xl">🔥</span><span class="text-xs font-bold text-gray-700">เบิกคั่ว</span>
+          
+          <div onclick="window.location.href='inbound.html'" class="flex flex-col items-center gap-2 cursor-pointer p-4 rounded-2xl bg-gray-50 hover:bg-green-50 border border-gray-100 active:scale-95 transition shadow-sm">
+            <span class="text-3xl">📥</span><span class="text-xs font-bold text-gray-700 text-center">รับสาร</span>
           </div>
-          <div onclick="window.location.href='planner.html'" class="flex flex-col items-center gap-2 cursor-pointer p-3 rounded-2xl bg-gray-50 hover:bg-yellow-50 border border-gray-100 active:scale-95 transition">
-            <span class="text-3xl">📅</span><span class="text-xs font-bold text-gray-700">แผนผลิต</span>
+          
+          <div onclick="window.location.href='wip.html'" class="flex flex-col items-center gap-2 cursor-pointer p-4 rounded-2xl bg-gray-50 hover:bg-orange-50 border border-gray-100 active:scale-95 transition shadow-sm">
+            <span class="text-3xl">🔥</span><span class="text-xs font-bold text-gray-700 text-center">เบิกคั่ว</span>
           </div>
+
+          <div onclick="alert('รอสร้างหน้า บรรจุ (Packing)')" class="flex flex-col items-center gap-2 cursor-pointer p-4 rounded-2xl bg-gray-50 hover:bg-pink-50 border border-gray-100 active:scale-95 transition shadow-sm">
+            <span class="text-3xl">🛍️</span><span class="text-xs font-bold text-gray-700 text-center">บรรจุ</span>
+          </div>
+
+          <div onclick="alert('รอสร้างหน้า จัดส่ง (Dispatch)')" class="flex flex-col items-center gap-2 cursor-pointer p-4 rounded-2xl bg-gray-50 hover:bg-blue-50 border border-gray-100 active:scale-95 transition shadow-sm">
+            <span class="text-3xl">🚚</span><span class="text-xs font-bold text-gray-700 text-center">จัดส่ง</span>
+          </div>
+
+          <div onclick="window.location.href='item_master.html'" class="flex flex-col items-center gap-2 cursor-pointer p-4 rounded-2xl bg-gray-50 hover:bg-purple-50 border border-gray-100 active:scale-95 transition shadow-sm">
+            <span class="text-3xl">☕</span><span class="text-xs font-bold text-gray-700 text-center">ข้อมูลกาแฟ</span>
+          </div>
+
+          <div onclick="alert('รอสร้างหน้า ฐานข้อมูลลูกค้า')" class="flex flex-col items-center gap-2 cursor-pointer p-4 rounded-2xl bg-gray-50 hover:bg-teal-50 border border-gray-100 active:scale-95 transition shadow-sm">
+            <span class="text-3xl">👥</span><span class="text-xs font-bold text-gray-700 text-center">ข้อมูลลูกค้า</span>
+          </div>
+
         </div>
       </div>
     </div>
@@ -148,10 +146,12 @@
         <span class="text-[10px] font-bold">หน้าแรก</span>
       </div>
       
-      <!-- 2. ทำงาน (กดแล้วเปิด Modal) -->
-      <div onclick="toggleWorkMenu()" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-gray-800 cursor-pointer">
-        <svg class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" /></svg>
-        <span class="text-[10px] font-medium">ทำงาน</span>
+      <!-- 2. ทำงาน (ปุ่ม Action หลัก) -->
+      <div onclick="toggleWorkMenu()" class="flex flex-col items-center justify-center w-[20%] text-gray-500 hover:text-gray-900 cursor-pointer relative">
+        <div class="absolute -top-6 bg-blue-600 text-white rounded-full p-3 shadow-lg border-4 border-white transition transform active:scale-95">
+          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
+        </div>
+        <span class="text-[10px] font-bold mt-6">ทำงาน</span>
       </div>
 
       <!-- 3. รายงาน -->
@@ -167,7 +167,7 @@
       </div>
 
       <!-- 5. โปรไฟล์ -->
-      <div onclick="window.location.href='item_master.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-gray-800 cursor-pointer">
+      <div onclick="alert('หน้าโปรไฟล์กำลังพัฒนา 👤')" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-gray-800 cursor-pointer">
         <svg class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg>
         <span class="text-[10px] font-medium">โปรไฟล์</span>
       </div>
@@ -175,11 +175,17 @@
     </div>
   </div>
 
+  <style>
+    @keyframes slideUp {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+  </style>
+
   <script>
-    // ⚠️ นำ URL Web App ของคุณมาใส่ตรงนี้
+    // ⚠️ นำ URL Web App ของคุณมาใส่ตรงนี้เหมือนเดิมครับ
     const API_URL = "https://script.google.com/macros/s/AKfycbxQywqP4da0BYdt_dHQtQl-kYlvGxmdJWNA59oqnZ_AM7SRyEESbMd73UD3Xx6VffQ/exec"; 
 
-    // แสดงวันที่
     const options = { weekday: 'long', day: 'numeric', month: 'long' };
     const dateEl = document.getElementById('current-date');
     if (dateEl) dateEl.innerText = new Date().toLocaleDateString('th-TH', options);
