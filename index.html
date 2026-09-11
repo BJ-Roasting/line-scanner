@@ -15,7 +15,15 @@
     <div class="space-y-4">
       <input type="text" id="username" class="w-full px-4 py-2 border rounded-lg focus:ring-amber-500" placeholder="รหัสพนักงาน (Username)">
       <input type="password" id="password" class="w-full px-4 py-2 border rounded-lg focus:ring-amber-500" placeholder="รหัสผ่าน (Password)">
+      
+      <!-- เพิ่มช่องติ๊กเลือกล็อกอินอัตโนมัติ -->
+      <div class="flex items-center">
+        <input type="checkbox" id="remember-me" class="w-4 h-4 text-amber-600 border-gray-300 rounded focus:ring-amber-500">
+        <label for="remember-me" class="ml-2 block text-sm text-gray-700">ล็อกอินอัตโนมัติในครั้งถัดไป</label>
+      </div>
+
       <p id="error-msg" class="text-red-500 text-sm hidden"></p>
+      
       <button onclick="handleLogin()" id="login-btn" class="w-full bg-amber-600 text-white font-bold py-2 rounded-lg hover:bg-amber-700">
         เข้าสู่ระบบ
       </button>
@@ -27,16 +35,34 @@
     <h1 class="text-3xl font-bold text-gray-800 mb-2">ยินดีต้อนรับเข้าสู่กะทำงาน!</h1>
     <h2 id="welcome-name" class="text-xl text-amber-600 font-semibold mb-4"></h2>
     <p id="user-role" class="text-gray-500 mb-6"></p>
-    <button onclick="location.reload()" class="bg-gray-200 text-gray-700 px-4 py-2 rounded shadow hover:bg-gray-300">ออกจากระบบ</button>
+    
+    <!-- ปุ่มไปหน้ารับสารกาแฟ (Inbound) -->
+    <button onclick="window.location.href='inbound.html'" class="w-full bg-green-600 text-white font-bold py-3 rounded-lg hover:bg-green-700 shadow-md mb-4">
+      📥 รับสารกาแฟเข้าสต๊อก (Inbound)
+    </button>
+    
+    <!-- อัปเดตปุ่มออกจากระบบให้ล้างค่าการจำรหัส -->
+    <button onclick="handleLogout()" class="bg-gray-200 text-gray-700 px-4 py-2 rounded shadow hover:bg-gray-300 w-full">ออกจากระบบ</button>
   </div>
 
   <script>
-    // เอา URL ที่ได้จากขั้นตอนที่ 2 มาวางในเครื่องหมายคำพูดด้านล่างนี้ครับ!
+    // ⚠️ นำ URL Web App ของคุณมาใส่ตรงนี้
     const API_URL = "https://script.google.com/macros/s/AKfycbxQywqP4da0BYdt_dHQtQl-kYlvGxmdJWNA59oqnZ_AM7SRyEESbMd73UD3Xx6VffQ/exec"; 
+
+    // เช็กสถานะตอนเปิดหน้าเว็บ ว่าเคยเลือกล็อกอินอัตโนมัติไว้ไหม
+    window.onload = function() {
+      if(localStorage.getItem('isLoggedIn') === 'true') {
+        document.getElementById('login-card').classList.add('hidden');
+        document.getElementById('dashboard').classList.remove('hidden');
+        document.getElementById('welcome-name').innerText = "คุณ " + localStorage.getItem('name');
+        document.getElementById('user-role').innerText = "ตำแหน่ง: " + localStorage.getItem('role');
+      }
+    };
 
     async function handleLogin() {
       const user = document.getElementById('username').value;
       const pass = document.getElementById('password').value;
+      const rememberMe = document.getElementById('remember-me').checked;
       const btn = document.getElementById('login-btn');
       const errorMsg = document.getElementById('error-msg');
 
@@ -46,7 +72,6 @@
       btn.disabled = true;
 
       try {
-        // ส่งข้อมูลไปถาม Google Sheets ว่ารหัสผ่านถูกไหม
         const response = await fetch(API_URL, {
           method: "POST",
           body: JSON.stringify({ action: 'login', username: user, password: pass }),
@@ -55,13 +80,18 @@
         const result = await response.json();
 
         if(result.success) {
-          // ล็อกอินผ่าน
+          // หากติ๊กล็อกอินอัตโนมัติ ให้บันทึกข้อมูลลงเครื่อง
+          if(rememberMe) {
+            localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('name', result.name);
+            localStorage.setItem('role', result.role);
+          }
+
           document.getElementById('login-card').classList.add('hidden');
           document.getElementById('dashboard').classList.remove('hidden');
           document.getElementById('welcome-name').innerText = "คุณ " + result.name;
           document.getElementById('user-role').innerText = "ตำแหน่ง: " + result.role;
         } else {
-          // ล็อกอินไม่ผ่าน
           errorMsg.textContent = result.message;
           errorMsg.classList.remove('hidden');
         }
@@ -72,6 +102,12 @@
       
       btn.innerText = "เข้าสู่ระบบ";
       btn.disabled = false;
+    }
+
+    // ฟังก์ชันออกจากระบบ (ล้างข้อมูลที่จำไว้แล้วรีเฟรชหน้า)
+    function handleLogout() {
+      localStorage.clear();
+      location.reload();
     }
   </script>
 </body>
