@@ -6,7 +6,6 @@
   <title>BJ Roaster - ทำงาน (Work)</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* ซ่อนแถบ Scrollbar แต่ยังเลื่อนซ้ายขวาได้ */
     ::-webkit-scrollbar { display: none; }
     body { -ms-overflow-style: none; scrollbar-width: none; }
     .pb-safe { padding-bottom: env(safe-area-inset-bottom, 20px); }
@@ -16,30 +15,36 @@
 
   <div class="flex min-h-screen">
     
-    <!-- 💻 Sidebar สำหรับ Desktop -->
+    <!-- 💻 Sidebar สำหรับ Desktop (ใช้ไอคอนลายเส้นทั้งหมด) -->
     <aside class="hidden md:flex flex-col w-64 fixed left-0 top-0 h-screen bg-white border-r border-gray-200 pt-10 pb-6 px-4 z-50 shadow-sm">
       <h2 class="text-2xl font-bold text-gray-900 mb-10 px-2">BJ Roaster</h2>
       
       <nav class="flex-1 space-y-2">
         <a href="index.html" class="flex items-center gap-3 text-gray-700 hover:bg-gray-50 px-4 py-3 rounded-xl font-bold transition">
-          🏠 หน้าแรก
+          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg>
+          หน้าแรก
         </a>
         <a href="work.html" class="flex items-center gap-3 bg-blue-50 text-blue-600 px-4 py-3 rounded-xl font-bold transition">
-          ⚙️ ทำงาน
+          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 011.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.56.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.893.149c-.425.07-.765.383-.93.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 01-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.397.165-.71.505-.78.929l-.15.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 01-.12-1.45l.527-.737c.25-.35.273-.806.108-1.204-.165-.397-.505-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.107-1.204l-.527-.738a1.125 1.125 0 01.12-1.45l.773-.773a1.125 1.125 0 011.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+          ทำงาน
         </a>
         <a href="report.html" class="flex items-center gap-3 text-gray-700 hover:bg-gray-50 px-4 py-3 rounded-xl font-bold transition">
-          📊 รายงาน
+          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" /></svg>
+          รายงาน
         </a>
         <a href="stock.html" class="flex items-center gap-3 text-gray-700 hover:bg-gray-50 px-4 py-3 rounded-xl font-bold transition">
-          📦 สต๊อกสินค้า
+          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" /></svg>
+          สต๊อกสินค้า
         </a>
         <a href="profile.html" class="flex items-center gap-3 text-gray-700 hover:bg-gray-50 px-4 py-3 rounded-xl font-bold transition">
-          👤 โปรไฟล์
+          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg>
+          โปรไฟล์
         </a>
       </nav>
 
       <button onclick="handleLogout()" class="mt-8 flex items-center gap-3 text-gray-500 hover:text-red-500 px-4 py-3 rounded-xl font-bold transition">
-        🚪 ออกจากระบบ
+        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" /></svg>
+        ออกจากระบบ
       </button>
     </aside>
 
@@ -49,72 +54,71 @@
       <!-- Header -->
       <div class="flex justify-between items-center mb-6 sticky top-0 bg-gray-50/90 backdrop-blur-xl z-30 py-3 border-b border-gray-200 md:border-none md:bg-transparent px-1">
         <div>
-          <h1 class="text-3xl font-bold tracking-tight text-gray-900">⚙️ โหมดทำงาน</h1>
+          <h1 class="text-3xl font-bold tracking-tight text-gray-900">โหมดทำงาน</h1>
           <p class="text-gray-500 text-sm mt-1">เลือกระบบที่คุณต้องการดำเนินการ</p>
         </div>
       </div>
 
-      <!-- 🌟 การ์ดแนวนอนแถวเดียว (Horizontal Scroll) -->
+      <!-- 🌟 การ์ดสี่เหลี่ยมผืนผ้า แนวนอนแถวเดียว (ไม่มีไอคอน) -->
       <div class="flex flex-row overflow-x-auto gap-4 pb-6 snap-x w-full">
         
         <!-- 1. รับสินค้าเข้า (Inbound) -->
-        <div class="relative flex-none w-36 h-36 md:w-44 md:h-44 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-green-50 to-green-200 border border-green-100 cursor-pointer transition transform hover:scale-[1.02] snap-start" onclick="window.location.href='inbound.html'">
-          <div class="absolute top-0 left-0 p-4 w-full"><h2 class="text-sm md:text-base font-bold text-gray-800 leading-snug">รับสินค้าเข้า<br>(สารกาแฟ)</h2></div>
-          <div class="absolute bottom-3 right-3 bg-white/70 backdrop-blur text-xl md:text-2xl w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full shadow-sm">📥</div>
+        <div class="relative flex-none w-56 h-28 md:w-64 md:h-32 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-green-50 to-green-100 border border-green-200 cursor-pointer transition transform hover:scale-[1.02] snap-start flex flex-col justify-center px-6" onclick="window.location.href='inbound.html'">
+          <h2 class="text-lg md:text-xl font-bold text-green-800 leading-snug">รับสินค้าเข้า<br><span class="text-sm font-medium text-green-600">(สารกาแฟ)</span></h2>
         </div>
 
         <!-- 2. เบิกคั่ว (WIP) -->
-        <div class="relative flex-none w-36 h-36 md:w-44 md:h-44 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-orange-50 to-orange-200 border border-orange-100 cursor-pointer transition transform hover:scale-[1.02] snap-start" onclick="window.location.href='wip.html'">
-          <div class="absolute top-0 left-0 p-4 w-full"><h2 class="text-sm md:text-base font-bold text-gray-800 leading-snug">เบิกคั่ว<br>(WIP)</h2></div>
-          <div class="absolute bottom-3 right-3 bg-white/70 backdrop-blur text-xl md:text-2xl w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full shadow-sm">🔥</div>
+        <div class="relative flex-none w-56 h-28 md:w-64 md:h-32 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-orange-50 to-orange-100 border border-orange-200 cursor-pointer transition transform hover:scale-[1.02] snap-start flex flex-col justify-center px-6" onclick="window.location.href='wip.html'">
+          <h2 class="text-lg md:text-xl font-bold text-orange-800 leading-snug">เบิกคั่ว<br><span class="text-sm font-medium text-orange-600">(WIP)</span></h2>
         </div>
 
         <!-- 3. บรรจุ -->
-        <div class="relative flex-none w-36 h-36 md:w-44 md:h-44 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-purple-50 to-purple-200 border border-purple-100 cursor-pointer transition transform hover:scale-[1.02] snap-start" onclick="alert('กำลังพัฒนาระบบบรรจุ')">
-          <div class="absolute top-0 left-0 p-4 w-full"><h2 class="text-sm md:text-base font-bold text-gray-800 leading-snug">บรรจุสินค้า<br>(Packing)</h2></div>
-          <div class="absolute bottom-3 right-3 bg-white/70 backdrop-blur text-xl md:text-2xl w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full shadow-sm">🛍️</div>
+        <div class="relative flex-none w-56 h-28 md:w-64 md:h-32 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-200 cursor-pointer transition transform hover:scale-[1.02] snap-start flex flex-col justify-center px-6" onclick="alert('กำลังพัฒนาระบบบรรจุ')">
+          <h2 class="text-lg md:text-xl font-bold text-purple-800 leading-snug">บรรจุสินค้า<br><span class="text-sm font-medium text-purple-600">(Packing)</span></h2>
         </div>
 
         <!-- 4. จัดส่ง -->
-        <div class="relative flex-none w-36 h-36 md:w-44 md:h-44 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-teal-50 to-teal-200 border border-teal-100 cursor-pointer transition transform hover:scale-[1.02] snap-start" onclick="alert('กำลังพัฒนาระบบจัดส่ง')">
-          <div class="absolute top-0 left-0 p-4 w-full"><h2 class="text-sm md:text-base font-bold text-gray-800 leading-snug">จัดส่ง<br>(Shipping)</h2></div>
-          <div class="absolute bottom-3 right-3 bg-white/70 backdrop-blur text-xl md:text-2xl w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full shadow-sm">🚚</div>
+        <div class="relative flex-none w-56 h-28 md:w-64 md:h-32 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-teal-50 to-teal-100 border border-teal-200 cursor-pointer transition transform hover:scale-[1.02] snap-start flex flex-col justify-center px-6" onclick="alert('กำลังพัฒนาระบบจัดส่ง')">
+          <h2 class="text-lg md:text-xl font-bold text-teal-800 leading-snug">จัดส่ง<br><span class="text-sm font-medium text-teal-600">(Shipping)</span></h2>
         </div>
 
         <!-- 5. เพิ่มสินค้าเข้า (Item Master) -->
-        <div class="relative flex-none w-36 h-36 md:w-44 md:h-44 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-indigo-50 to-indigo-200 border border-indigo-100 cursor-pointer transition transform hover:scale-[1.02] snap-start" onclick="window.location.href='item_master.html'">
-          <div class="absolute top-0 left-0 p-4 w-full"><h2 class="text-sm md:text-base font-bold text-gray-800 leading-snug">เพิ่มข้อมูลใหม่<br>(สาร, Sup)</h2></div>
-          <div class="absolute bottom-3 right-3 bg-white/70 backdrop-blur text-xl md:text-2xl w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full shadow-sm">➕</div>
+        <div class="relative flex-none w-56 h-28 md:w-64 md:h-32 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-indigo-50 to-indigo-100 border border-indigo-200 cursor-pointer transition transform hover:scale-[1.02] snap-start flex flex-col justify-center px-6" onclick="window.location.href='item_master.html'">
+          <h2 class="text-lg md:text-xl font-bold text-indigo-800 leading-snug">เพิ่มข้อมูลใหม่<br><span class="text-sm font-medium text-indigo-600">(สาร, Sup)</span></h2>
         </div>
 
         <!-- 6. วางแผน (Planner) -->
-        <div class="relative flex-none w-36 h-36 md:w-44 md:h-44 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-yellow-50 to-yellow-200 border border-yellow-100 cursor-pointer transition transform hover:scale-[1.02] snap-start" onclick="window.location.href='planner.html'">
-          <div class="absolute top-0 left-0 p-4 w-full"><h2 class="text-sm md:text-base font-bold text-gray-800 leading-snug">วางแผน<br>(ออเดอร์)</h2></div>
-          <div class="absolute bottom-3 right-3 bg-white/70 backdrop-blur text-xl md:text-2xl w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full shadow-sm">📅</div>
+        <div class="relative flex-none w-56 h-28 md:w-64 md:h-32 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-yellow-50 to-yellow-100 border border-yellow-200 cursor-pointer transition transform hover:scale-[1.02] snap-start flex flex-col justify-center px-6" onclick="window.location.href='planner.html'">
+          <h2 class="text-lg md:text-xl font-bold text-yellow-800 leading-snug">วางแผน<br><span class="text-sm font-medium text-yellow-600">(ออเดอร์)</span></h2>
         </div>
 
       </div>
     </main>
   </div>
 
-  <!-- 📱 Bottom Navigation (สำหรับมือถือ) -->
+  <!-- 📱 Bottom Navigation (สำหรับมือถือ - ไอคอนลายเส้นทั้งหมด) -->
   <div id="bottom-nav" class="fixed bottom-0 w-full bg-white/95 backdrop-blur-xl border-t border-gray-200 pb-safe z-40 md:hidden shadow-[0_-4px_10px_-1px_rgba(0,0,0,0.05)]">
     <div class="flex justify-around items-center pt-3 pb-2 px-1">
       <div onclick="window.location.href='index.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-gray-800 cursor-pointer">
-        <span class="text-2xl mb-1 grayscale opacity-70">🏠</span><span class="text-[10px] font-medium">หน้าแรก</span>
+        <svg class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg>
+        <span class="text-[10px] font-medium">หน้าแรก</span>
       </div>
-      <!-- ปุ่มทำงาน (Active) -->
+      <!-- 🌟 ปุ่มทำงาน (Active) -->
       <div class="flex flex-col items-center justify-center w-[20%] text-blue-600 cursor-pointer">
-        <span class="text-2xl mb-1">⚙️</span><span class="text-[10px] font-bold">ทำงาน</span>
+        <svg class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 011.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.56.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.893.149c-.425.07-.765.383-.93.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 01-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.397.165-.71.505-.78.929l-.15.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 01-.12-1.45l.527-.737c.25-.35.273-.806.108-1.204-.165-.397-.505-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.107-1.204l-.527-.738a1.125 1.125 0 01.12-1.45l.773-.773a1.125 1.125 0 011.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+        <span class="text-[10px] font-bold">ทำงาน</span>
       </div>
       <div onclick="window.location.href='report.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-gray-800 cursor-pointer">
-        <span class="text-2xl mb-1 grayscale opacity-70">📊</span><span class="text-[10px] font-medium">รายงาน</span>
+        <svg class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" /></svg>
+        <span class="text-[10px] font-medium">รายงาน</span>
       </div>
       <div onclick="window.location.href='stock.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-gray-800 cursor-pointer">
-        <span class="text-2xl mb-1 grayscale opacity-70">📦</span><span class="text-[10px] font-medium">สต๊อก</span>
+        <svg class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" /></svg>
+        <span class="text-[10px] font-medium">สต๊อก</span>
       </div>
       <div onclick="window.location.href='profile.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-gray-800 cursor-pointer">
-        <span class="text-2xl mb-1 grayscale opacity-70">👤</span><span class="text-[10px] font-medium">โปรไฟล์</span>
+        <svg class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg>
+        <span class="text-[10px] font-medium">โปรไฟล์</span>
       </div>
     </div>
   </div>
