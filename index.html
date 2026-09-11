@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BJ Roaster</title>
+  <title>BJ Roaster - Dashboard</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
@@ -16,7 +16,6 @@
       <input type="text" id="username" class="w-full px-4 py-2 border rounded-lg focus:ring-amber-500" placeholder="รหัสพนักงาน (Username)">
       <input type="password" id="password" class="w-full px-4 py-2 border rounded-lg focus:ring-amber-500" placeholder="รหัสผ่าน (Password)">
       
-      <!-- เพิ่มช่องติ๊กเลือกล็อกอินอัตโนมัติ -->
       <div class="flex items-center">
         <input type="checkbox" id="remember-me" class="w-4 h-4 text-amber-600 border-gray-300 rounded focus:ring-amber-500">
         <label for="remember-me" class="ml-2 block text-sm text-gray-700">ล็อกอินอัตโนมัติในครั้งถัดไป</label>
@@ -31,25 +30,37 @@
   </div>
 
   <!-- หน้า Dashboard (หลังล็อกอินสำเร็จ) -->
-  <div id="dashboard" class="hidden text-center">
+  <div id="dashboard" class="hidden text-center w-full max-w-md bg-white p-8 rounded-xl shadow-lg">
     <h1 class="text-3xl font-bold text-gray-800 mb-2">ยินดีต้อนรับเข้าสู่กะทำงาน!</h1>
     <h2 id="welcome-name" class="text-xl text-amber-600 font-semibold mb-4"></h2>
     <p id="user-role" class="text-gray-500 mb-6"></p>
     
-    <!-- ปุ่มไปหน้ารับสารกาแฟ (Inbound) -->
-    <button onclick="window.location.href='inbound.html'" class="w-full bg-green-600 text-white font-bold py-3 rounded-lg hover:bg-green-700 shadow-md mb-4">
-      📥 รับสารกาแฟเข้าสต๊อก (Inbound)
-    </button>
+    <!-- กลุ่มปุ่มเมนูต่างๆ -->
+    <div class="space-y-3 mb-6">
+      <button onclick="window.location.href='inbound.html'" class="w-full bg-green-600 text-white font-bold py-3 rounded-lg hover:bg-green-700 shadow-md">
+        📥 รับสารกาแฟเข้าสต๊อก (Inbound)
+      </button>
+      
+      <button onclick="window.location.href='inventory.html'" class="w-full bg-blue-600 text-white font-bold py-3 rounded-lg hover:bg-blue-700 shadow-md">
+        📦 ดูสต๊อกสินค้า (Inventory)
+      </button>
+      
+      <button onclick="window.location.href='wip.html'" class="w-full bg-orange-500 text-white font-bold py-3 rounded-lg hover:bg-orange-600 shadow-md">
+        🔥 เบิกสารกาแฟไปคั่ว (WIP)
+      </button>
+      
+      <button onclick="window.location.href='location.html'" class="w-full bg-purple-600 text-white font-bold py-3 rounded-lg hover:bg-purple-700 shadow-md">
+        📍 จัดการจุดจัดเก็บ (Location Setup)
+      </button>
+    </div>
     
-    <!-- อัปเดตปุ่มออกจากระบบให้ล้างค่าการจำรหัส -->
-    <button onclick="handleLogout()" class="bg-gray-200 text-gray-700 px-4 py-2 rounded shadow hover:bg-gray-300 w-full">ออกจากระบบ</button>
+    <button onclick="handleLogout()" class="bg-gray-200 text-gray-700 px-4 py-2 rounded shadow hover:bg-gray-300 w-full font-bold">ออกจากระบบ</button>
   </div>
 
   <script>
-    // ⚠️ นำ URL Web App ของคุณมาใส่ตรงนี้
+    // ⚠️ อย่าลืม! นำ URL Web App ของคุณมาใส่ตรงนี้เหมือนเดิมครับ
     const API_URL = "https://script.google.com/macros/s/AKfycbxQywqP4da0BYdt_dHQtQl-kYlvGxmdJWNA59oqnZ_AM7SRyEESbMd73UD3Xx6VffQ/exec"; 
 
-    // เช็กสถานะตอนเปิดหน้าเว็บ ว่าเคยเลือกล็อกอินอัตโนมัติไว้ไหม
     window.onload = function() {
       if(localStorage.getItem('isLoggedIn') === 'true') {
         document.getElementById('login-card').classList.add('hidden');
@@ -80,13 +91,11 @@
         const result = await response.json();
 
         if(result.success) {
-          // หากติ๊กล็อกอินอัตโนมัติ ให้บันทึกข้อมูลลงเครื่อง
           if(rememberMe) {
             localStorage.setItem('isLoggedIn', 'true');
             localStorage.setItem('name', result.name);
             localStorage.setItem('role', result.role);
           }
-
           document.getElementById('login-card').classList.add('hidden');
           document.getElementById('dashboard').classList.remove('hidden');
           document.getElementById('welcome-name').innerText = "คุณ " + result.name;
@@ -104,7 +113,6 @@
       btn.disabled = false;
     }
 
-    // ฟังก์ชันออกจากระบบ (ล้างข้อมูลที่จำไว้แล้วรีเฟรชหน้า)
     function handleLogout() {
       localStorage.clear();
       location.reload();
