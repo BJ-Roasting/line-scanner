@@ -136,7 +136,7 @@
     </div>
   </div>
 
-  <!-- 📱 Bottom Navigation (ดีไซน์ใหม่) -->
+  <!-- 📱 Bottom Navigation (ดีไซน์เรียบแบน ไม่มีปุ่มลอย) -->
   <div id="bottom-nav" class="hidden fixed bottom-0 w-full bg-white/95 backdrop-blur-xl border-t border-gray-200 pb-safe z-40 md:hidden shadow-[0_-4px_10px_-1px_rgba(0,0,0,0.05)]">
     <div class="flex justify-around items-center pt-3 pb-2 px-1">
       
@@ -146,12 +146,10 @@
         <span class="text-[10px] font-bold">หน้าแรก</span>
       </div>
       
-      <!-- 2. ทำงาน (ปุ่ม Action หลัก) -->
-      <div onclick="toggleWorkMenu()" class="flex flex-col items-center justify-center w-[20%] text-gray-500 hover:text-gray-900 cursor-pointer relative">
-        <div class="absolute -top-6 bg-blue-600 text-white rounded-full p-3 shadow-lg border-4 border-white transition transform active:scale-95">
-          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
-        </div>
-        <span class="text-[10px] font-bold mt-6">ทำงาน</span>
+      <!-- 2. ทำงาน (ปุ่มปกติ ไม่ลอย) -->
+      <div onclick="toggleWorkMenu()" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-gray-800 cursor-pointer">
+        <svg class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" /></svg>
+        <span class="text-[10px] font-medium">ทำงาน</span>
       </div>
 
       <!-- 3. รายงาน -->
@@ -167,7 +165,7 @@
       </div>
 
       <!-- 5. โปรไฟล์ -->
-      <div onclick="alert('หน้าโปรไฟล์กำลังพัฒนา 👤')" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-gray-800 cursor-pointer">
+      <div onclick="window.location.href='item_master.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-gray-800 cursor-pointer">
         <svg class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg>
         <span class="text-[10px] font-medium">โปรไฟล์</span>
       </div>
