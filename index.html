@@ -2,122 +2,136 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BJ Roaster - WMS Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>BJ Roaster - App Store Style</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* ซ่อน Scrollbar ให้ดูเหมือนแอปมือถือมากขึ้น */
+    ::-webkit-scrollbar { display: none; }
+    body { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
 </head>
-<body class="bg-gray-100 min-h-screen">
+<body class="bg-black text-white font-sans antialiased pb-24 selection:bg-blue-500">
 
-  <!-- ================= ส่วนหน้าล็อกอิน ================= -->
-  <div id="login-container" class="flex items-center justify-center min-h-screen p-4">
-    <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-md border-t-4 border-amber-600">
-      <h1 class="text-2xl font-bold text-gray-800 text-center mb-6">☕ ระบบจัดการโรงคั่วกาแฟ</h1>
+  <!-- =============================== -->
+  <!-- 🔒 หน้า LOGIN (ดีไซน์เรียบหรู) -->
+  <!-- =============================== -->
+  <div id="login-card" class="min-h-screen flex flex-col justify-center items-center p-6 bg-[#121212]">
+    <div class="w-full max-w-sm">
+      <h1 class="text-4xl font-bold text-center mb-2">BJ Roaster</h1>
+      <p class="text-gray-400 text-center mb-8">ลงชื่อเข้าใช้ระบบจัดการโรงคั่ว</p>
       
-      <div class="space-y-4">
-        <input type="text" id="username" class="w-full px-4 py-3 border rounded-lg focus:ring-amber-500 bg-gray-50" placeholder="รหัสพนักงาน (Username)">
-        <input type="password" id="password" class="w-full px-4 py-3 border rounded-lg focus:ring-amber-500 bg-gray-50" placeholder="รหัสผ่าน (Password)">
+      <div class="space-y-4 bg-[#1C1C1E] p-6 rounded-2xl border border-gray-800">
+        <input type="text" id="username" class="w-full px-4 py-3 bg-[#2C2C2E] text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-500" placeholder="รหัสพนักงาน (Username)">
+        <input type="password" id="password" class="w-full px-4 py-3 bg-[#2C2C2E] text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-500" placeholder="รหัสผ่าน (Password)">
         
-        <div class="flex items-center">
-          <input type="checkbox" id="remember-me" class="w-4 h-4 text-amber-600 border-gray-300 rounded focus:ring-amber-500">
-          <label for="remember-me" class="ml-2 block text-sm text-gray-700">ล็อกอินอัตโนมัติในครั้งถัดไป</label>
+        <div class="flex items-center mt-2">
+          <input type="checkbox" id="remember-me" class="w-5 h-5 accent-blue-500 rounded bg-[#2C2C2E] border-none">
+          <label for="remember-me" class="ml-2 text-sm text-gray-300">ล็อกอินอัตโนมัติ</label>
         </div>
 
-        <p id="error-msg" class="text-red-500 text-sm hidden font-bold text-center"></p>
+        <p id="error-msg" class="text-red-400 text-sm hidden text-center"></p>
         
-        <button onclick="handleLogin()" id="login-btn" class="w-full bg-amber-600 text-white font-bold py-3 rounded-lg hover:bg-amber-700 shadow-md transition duration-200">
+        <button onclick="handleLogin()" id="login-btn" class="w-full bg-blue-600 text-white font-bold py-3 rounded-xl hover:bg-blue-700 transition active:scale-95">
           เข้าสู่ระบบ
         </button>
       </div>
     </div>
   </div>
 
-  <!-- ================= ส่วนหน้า Dashboard ================= -->
-  <div id="dashboard-container" class="hidden p-4 md:p-8 max-w-7xl mx-auto">
+  <!-- =============================== -->
+  <!-- 📱 หน้า DASHBOARD (สไตล์ App Store) -->
+  <!-- =============================== -->
+  <div id="dashboard" class="hidden max-w-md mx-auto relative">
     
-    <!-- แถบหัวเว็บ (Header) -->
-    <div class="bg-white p-6 rounded-xl shadow-sm mb-6 flex flex-col md:flex-row justify-between items-center border-l-4 border-amber-500">
+    <!-- Header (เหมือนแท็บ "วันนี้") -->
+    <div class="px-5 pt-12 pb-4 flex justify-between items-end sticky top-0 bg-black/80 backdrop-blur-xl z-40 border-b border-gray-800">
       <div>
-        <h1 class="text-2xl font-bold text-gray-800">BJ Roaster Dashboard</h1>
-        <p class="text-gray-500 mt-1">ยินดีต้อนรับ, <span id="welcome-name" class="font-bold text-amber-600"></span> (<span id="user-role"></span>)</p>
+        <p id="current-date" class="text-gray-400 text-xs font-semibold uppercase tracking-wider mb-1"></p>
+        <h1 class="text-4xl font-bold tracking-tight">วันนี้</h1>
       </div>
-      <button onclick="handleLogout()" class="mt-4 md:mt-0 bg-red-50 text-red-600 border border-red-200 px-6 py-2 rounded-lg font-bold hover:bg-red-100 transition duration-200">
-        🚪 ออกจากระบบ
-      </button>
+      <!-- โปรไฟล์มุมขวา -->
+      <div onclick="handleLogout()" class="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center cursor-pointer hover:bg-gray-600" title="ออกจากระบบ">
+        <span id="profile-initial" class="text-lg font-semibold text-blue-100">CM</span>
+      </div>
     </div>
 
-    <!-- เมนู 5 หมวดหมู่ (Grid Layout) -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <!-- Content / Cards -->
+    <div class="px-5 pt-4 space-y-6">
 
-      <!-- 1. หมวดคลังสินค้า -->
-      <div class="bg-white p-5 rounded-xl shadow-sm border-t-4 border-green-500">
-        <h2 class="text-lg font-bold text-gray-800 mb-4 flex items-center">📦 1. ระบบคลังสินค้า</h2>
-        <div class="space-y-2">
-          <button onclick="window.location.href='inbound.html'" class="w-full text-left px-4 py-3 bg-green-50 text-green-700 rounded-lg hover:bg-green-100 font-semibold border border-green-100 shadow-sm">
-            📥 1.1 รับสารกาแฟ (Inbound)
-          </button>
-          <button onclick="window.location.href='inventory.html'" class="w-full text-left px-4 py-3 bg-green-50 text-green-700 rounded-lg hover:bg-green-100 font-semibold border border-green-100 shadow-sm">
-            🔍 1.2 ตรวจสอบสต๊อก (Inventory)
-          </button>
-          <button onclick="comingSoon()" class="w-full text-left px-4 py-3 bg-gray-50 text-gray-500 rounded-lg border border-gray-100 font-medium">
-            🔄 1.3 ย้ายจุดจัดเก็บ (Transfer)
+      <!-- 🟢 การ์ด 1: Inbound (คลังสินค้า) -->
+      <div class="relative w-full h-96 rounded-[2rem] overflow-hidden shadow-2xl bg-gradient-to-br from-green-400 via-teal-500 to-green-700 cursor-pointer transition transform hover:scale-[1.02]">
+        <div class="absolute top-0 left-0 p-6 w-full">
+          <p class="text-green-100 text-sm font-semibold uppercase opacity-90 drop-shadow-md">ระบบคลังสินค้า</p>
+          <h2 class="text-3xl font-bold text-white mt-1 leading-tight drop-shadow-lg">รับสารกาแฟ<br>เข้าสต๊อก</h2>
+        </div>
+        <!-- แถบเบลอด้านล่าง (เหมือนปุ่ม Get ในแอปสโตร์) -->
+        <div class="absolute bottom-0 w-full bg-black/20 backdrop-blur-md border-t border-white/20 p-4 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center text-2xl">📥</div>
+            <div>
+              <p class="font-bold text-white text-sm">Inbound</p>
+              <p class="text-xs text-gray-200">สแกนรับของ & QC</p>
+            </div>
+          </div>
+          <button onclick="window.location.href='inbound.html'" class="bg-gray-100 text-blue-600 font-bold px-6 py-2 rounded-full text-sm hover:bg-white active:bg-gray-300">
+            เปิด
           </button>
         </div>
       </div>
 
-      <!-- 2. หมวดฝ่ายผลิต -->
-      <div class="bg-white p-5 rounded-xl shadow-sm border-t-4 border-orange-500">
-        <h2 class="text-lg font-bold text-gray-800 mb-4 flex items-center">🔥 2. ระบบฝ่ายผลิต</h2>
-        <div class="space-y-2">
-          <button onclick="window.location.href='wip.html'" class="w-full text-left px-4 py-3 bg-orange-50 text-orange-700 rounded-lg hover:bg-orange-100 font-semibold border border-orange-100 shadow-sm">
-            ✂️ 2.1 เบิกสารไปคั่ว (Issue WIP)
-          </button>
-          <button onclick="comingSoon()" class="w-full text-left px-4 py-3 bg-gray-50 text-gray-500 rounded-lg border border-gray-100 font-medium">
-            ✅ 2.2 รับเมล็ดคั่วสุก (FG)
-          </button>
-          <button onclick="comingSoon()" class="w-full text-left px-4 py-3 bg-gray-50 text-gray-500 rounded-lg border border-gray-100 font-medium">
-            🗑️ 2.3 บันทึกของเสีย (Waste)
+      <!-- 🟠 การ์ด 2: WIP (ฝ่ายผลิต) -->
+      <div class="relative w-full h-96 rounded-[2rem] overflow-hidden shadow-2xl bg-gradient-to-br from-orange-400 via-red-500 to-pink-600 cursor-pointer transition transform hover:scale-[1.02]">
+        <div class="absolute top-0 left-0 p-6 w-full">
+          <p class="text-orange-100 text-sm font-semibold uppercase opacity-90 drop-shadow-md">ระบบฝ่ายผลิต</p>
+          <h2 class="text-3xl font-bold text-white mt-1 leading-tight drop-shadow-lg">เบิกสารกาแฟ<br>ไปคั่ว (WIP)</h2>
+        </div>
+        <div class="absolute bottom-0 w-full bg-black/20 backdrop-blur-md border-t border-white/20 p-4 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center text-2xl">🔥</div>
+            <div>
+              <p class="font-bold text-white text-sm">Issue WIP</p>
+              <p class="text-xs text-gray-200">ตัดสต๊อกเข้าเตาคั่ว</p>
+            </div>
+          </div>
+          <button onclick="window.location.href='wip.html'" class="bg-gray-100 text-blue-600 font-bold px-6 py-2 rounded-full text-sm hover:bg-white active:bg-gray-300">
+            เปิด
           </button>
         </div>
       </div>
 
-      <!-- 3. หมวดจัดส่ง -->
-      <div class="bg-white p-5 rounded-xl shadow-sm border-t-4 border-blue-500">
-        <h2 class="text-lg font-bold text-gray-800 mb-4 flex items-center">🚚 3. ระบบจัดส่ง</h2>
-        <div class="space-y-2">
-          <button onclick="comingSoon()" class="w-full text-left px-4 py-3 bg-gray-50 text-gray-500 rounded-lg border border-gray-100 font-medium">
-            🛍️ 3.1 จัดออเดอร์ (Pick & Pack)
-          </button>
-          <button onclick="comingSoon()" class="w-full text-left px-4 py-3 bg-gray-50 text-gray-500 rounded-lg border border-gray-100 font-medium">
-            📤 3.2 ส่งออกสินค้า (Dispatch)
+      <!-- 🔵 การ์ด 3: Inventory (ตรวจสอบสต๊อก) -->
+      <div class="relative w-full h-96 rounded-[2rem] overflow-hidden shadow-2xl bg-gradient-to-br from-blue-500 via-indigo-600 to-purple-800 cursor-pointer transition transform hover:scale-[1.02]">
+        <div class="absolute top-0 left-0 p-6 w-full">
+          <p class="text-blue-200 text-sm font-semibold uppercase opacity-90 drop-shadow-md">ตรวจสอบข้อมูล</p>
+          <h2 class="text-3xl font-bold text-white mt-1 leading-tight drop-shadow-lg">รายการสต๊อก<br>สินค้าคงเหลือ</h2>
+        </div>
+        <div class="absolute bottom-0 w-full bg-black/20 backdrop-blur-md border-t border-white/20 p-4 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center text-2xl">📦</div>
+            <div>
+              <p class="font-bold text-white text-sm">Inventory</p>
+              <p class="text-xs text-gray-200">ดูยอดแบบ Real-time</p>
+            </div>
+          </div>
+          <button onclick="window.location.href='inventory.html'" class="bg-gray-100 text-blue-600 font-bold px-6 py-2 rounded-full text-sm hover:bg-white active:bg-gray-300">
+            เปิด
           </button>
         </div>
       </div>
 
-      <!-- 4. หมวดรายงาน -->
-      <div class="bg-white p-5 rounded-xl shadow-sm border-t-4 border-cyan-500 lg:col-span-2">
-        <h2 class="text-lg font-bold text-gray-800 mb-4 flex items-center">📊 4. รายงานและสถิติ</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
-          <button onclick="comingSoon()" class="w-full text-left px-4 py-3 bg-gray-50 text-gray-500 rounded-lg border border-gray-100 font-medium">
-            📝 4.1 Movement Log
-          </button>
-          <button onclick="comingSoon()" class="w-full text-left px-4 py-3 bg-gray-50 text-gray-500 rounded-lg border border-gray-100 font-medium">
-            📉 4.2 สรุป Roast Loss
-          </button>
-          <button onclick="comingSoon()" class="w-full text-left px-4 py-3 bg-gray-50 text-gray-500 rounded-lg border border-gray-100 font-medium">
-            📅 4.3 สรุปสต๊อกรายวัน
-          </button>
+      <!-- ⚙️ การ์ด 4: Settings (ตั้งค่า) -->
+      <div class="relative w-full h-48 rounded-[2rem] overflow-hidden shadow-2xl bg-[#1C1C1E] border border-gray-800 cursor-pointer mb-8">
+        <div class="absolute top-0 left-0 p-6 w-full flex justify-between items-start">
+          <div>
+            <p class="text-gray-400 text-sm font-semibold uppercase">ตั้งค่าระบบ</p>
+            <h2 class="text-2xl font-bold text-white mt-1">จัดการจุดจัดเก็บ</h2>
+          </div>
+          <div class="text-4xl">📍</div>
         </div>
-      </div>
-
-      <!-- 5. หมวดตั้งค่า -->
-      <div class="bg-white p-5 rounded-xl shadow-sm border-t-4 border-purple-500">
-        <h2 class="text-lg font-bold text-gray-800 mb-4 flex items-center">⚙️ 5. ตั้งค่าระบบ</h2>
-        <div class="space-y-2">
-          <button onclick="window.location.href='location.html'" class="w-full text-left px-4 py-3 bg-purple-50 text-purple-700 rounded-lg hover:bg-purple-100 font-semibold border border-purple-100 shadow-sm">
-            📍 5.1 จัดการจุดจัดเก็บ (Location)
-          </button>
-          <button onclick="comingSoon()" class="w-full text-left px-4 py-3 bg-gray-50 text-gray-500 rounded-lg border border-gray-100 font-medium">
-            📋 5.2 ฐานข้อมูลสินค้า (Item Master)
+        <div class="absolute bottom-4 left-6">
+          <button onclick="window.location.href='location.html'" class="bg-[#2C2C2E] text-blue-500 font-bold px-5 py-2 rounded-full text-sm hover:bg-gray-600">
+            เปิดการตั้งค่า
           </button>
         </div>
       </div>
@@ -125,9 +139,36 @@
     </div>
   </div>
 
+  <!-- =============================== -->
+  <!-- 🔘 Bottom Navigation Bar -->
+  <!-- =============================== -->
+  <div id="bottom-nav" class="hidden fixed bottom-0 w-full bg-[#121212]/80 backdrop-blur-xl border-t border-[#2C2C2E] pb-safe z-50">
+    <div class="max-w-md mx-auto flex justify-around items-center pt-2 pb-6 px-2">
+      <!-- Tab 1 -->
+      <div class="flex flex-col items-center justify-center w-16 text-blue-500 cursor-pointer">
+        <svg class="w-6 h-6 mb-1" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3z"/></svg>
+        <span class="text-[10px] font-medium">วันนี้</span>
+      </div>
+      <!-- Tab 2 -->
+      <div onclick="window.location.href='inbound.html'" class="flex flex-col items-center justify-center w-16 text-gray-500 hover:text-gray-300 cursor-pointer">
+        <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+        <span class="text-[10px] font-medium">แอป</span>
+      </div>
+      <!-- Tab 3 -->
+      <div onclick="window.location.href='inventory.html'" class="flex flex-col items-center justify-center w-16 text-gray-500 hover:text-gray-300 cursor-pointer">
+        <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        <span class="text-[10px] font-medium">ค้นหา</span>
+      </div>
+    </div>
+  </div>
+
   <script>
-    // ⚠️ นำ URL Web App ของคุณมาใส่ตรงนี้เหมือนเดิมครับ
+    // ⚠️ นำ URL Web App ของคุณมาใส่ตรงนี้
     const API_URL = "https://script.google.com/macros/s/AKfycbxQywqP4da0BYdt_dHQtQl-kYlvGxmdJWNA59oqnZ_AM7SRyEESbMd73UD3Xx6VffQ/exec"; 
+
+    // เซ็ตวันที่ภาษาไทย (อ้างอิงจากรูปตัวอย่างของ Apple)
+    const options = { weekday: 'long', day: 'numeric', month: 'long' };
+    document.getElementById('current-date').innerText = new Date().toLocaleDateString('th-TH', options);
 
     window.onload = function() {
       if(localStorage.getItem('isLoggedIn') === 'true') {
@@ -136,10 +177,13 @@
     };
 
     function showDashboard() {
-      document.getElementById('login-container').classList.add('hidden');
-      document.getElementById('dashboard-container').classList.remove('hidden');
-      document.getElementById('welcome-name').innerText = localStorage.getItem('name');
-      document.getElementById('user-role').innerText = localStorage.getItem('role');
+      document.getElementById('login-card').classList.add('hidden');
+      document.getElementById('dashboard').classList.remove('hidden');
+      document.getElementById('bottom-nav').classList.remove('hidden');
+      
+      // เอาตัวอักษร 2 ตัวแรกของชื่อมาทำโปรไฟล์มุมขวาบน
+      let name = localStorage.getItem('name') || "User";
+      document.getElementById('profile-initial').innerText = name.substring(0, 2).toUpperCase();
     }
 
     async function handleLogin() {
@@ -149,41 +193,34 @@
       const btn = document.getElementById('login-btn');
       const errorMsg = document.getElementById('error-msg');
 
-      if(!user || !pass) {
-        errorMsg.textContent = "กรุณากรอกรหัสพนักงานและรหัสผ่าน";
-        errorMsg.classList.remove('hidden');
-        return;
-      }
+      if(!user || !pass) return alert("กรุณากรอกข้อมูลให้ครบถ้วน");
 
       btn.innerText = "กำลังตรวจสอบ...";
       btn.disabled = true;
-      errorMsg.classList.add('hidden');
 
       try {
         const response = await fetch(API_URL, {
           method: "POST",
           body: JSON.stringify({ action: 'login', username: user, password: pass }),
         });
-        
         const result = await response.json();
 
         if(result.success) {
-          localStorage.setItem('isLoggedIn', 'true');
-          localStorage.setItem('name', result.name);
-          localStorage.setItem('role', result.role);
-          
-          if(!rememberMe) {
-            // ถ้าไม่กดจำรหัส ให้เคลียร์ค่าตอนปิดเบราว์เซอร์
-            sessionStorage.setItem('tempLogin', 'true'); 
+          if(rememberMe) {
+            localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('name', result.name);
+            localStorage.setItem('role', result.role);
+          } else {
+            // จำแค่ชั่วคราวถ้าไม่ได้ติ๊ก
+            localStorage.setItem('name', result.name);
           }
-          
           showDashboard();
         } else {
           errorMsg.textContent = result.message;
           errorMsg.classList.remove('hidden');
         }
       } catch (error) {
-        errorMsg.textContent = "เชื่อมต่อระบบไม่ได้ กรุณาลองใหม่อีกครั้ง";
+        errorMsg.textContent = "เชื่อมต่อฐานข้อมูลไม่ได้";
         errorMsg.classList.remove('hidden');
       }
       
@@ -192,14 +229,10 @@
     }
 
     function handleLogout() {
-      localStorage.clear();
-      sessionStorage.clear();
-      location.reload();
-    }
-
-    // ฟังก์ชันสำหรับปุ่มที่ยังสร้างไม่เสร็จ
-    function comingSoon() {
-      alert("🚧 เมนูนี้อยู่ในแผนการพัฒนาระบบ (Phase ถัดไป)");
+      if(confirm("ต้องการออกจากระบบใช่หรือไม่?")) {
+        localStorage.clear();
+        location.reload();
+      }
     }
   </script>
 </body>
