@@ -43,18 +43,61 @@
   <!-- =========================== -->
   <div id="dashboard" class="hidden flex min-h-screen">
     
-    <!-- 💻 Sidebar สำหรับ Desktop -->
-    <aside class="hidden md:flex flex-col w-64 fixed left-0 top-0 h-screen bg-white border-r border-gray-200 pt-10 pb-6 px-4 z-50 shadow-sm">
+    <!-- 💻 Sidebar สำหรับ Desktop (ตามโครงสร้าง Map) -->
+    <aside class="hidden md:flex flex-col w-64 fixed left-0 top-0 h-screen bg-white border-r border-gray-200 pt-10 pb-6 px-4 z-50 shadow-sm overflow-y-auto">
       <h2 class="text-2xl font-bold text-gray-900 mb-10 px-2">BJ Roaster</h2>
+      
       <nav class="flex-1 space-y-2">
-        <a href="#" class="flex items-center gap-3 bg-gray-100 text-blue-600 px-4 py-3 rounded-xl font-bold">🏠 หน้าแรก</a>
-        <a href="inbound.html" class="flex items-center gap-3 text-gray-600 hover:bg-gray-50 px-4 py-3 rounded-xl font-bold transition">📥 รับสินค้า</a>
-        <a href="wip.html" class="flex items-center gap-3 text-gray-600 hover:bg-gray-50 px-4 py-3 rounded-xl font-bold transition">🔥 เบิกคั่ว (WIP)</a>
-        <a href="planner.html" class="flex items-center gap-3 text-gray-600 hover:bg-gray-50 px-4 py-3 rounded-xl font-bold transition">📅 แผนการผลิต</a>
-        <a href="inventory.html" class="flex items-center gap-3 text-gray-600 hover:bg-gray-50 px-4 py-3 rounded-xl font-bold transition">📦 สต๊อกสินค้า</a>
-        <a href="item_master.html" class="flex items-center gap-3 text-gray-600 hover:bg-gray-50 px-4 py-3 rounded-xl font-bold transition">⚙️ ฐานข้อมูลสินค้า</a>
+        <!-- 1. หน้าแรก -->
+        <a href="index.html" class="flex items-center gap-3 bg-blue-50 text-blue-600 px-4 py-3 rounded-xl font-bold transition">
+          🏠 หน้าแรก
+        </a>
+
+        <!-- 2. ทำงาน (มีเมนูย่อย) -->
+        <details class="group">
+          <summary class="flex items-center justify-between gap-3 text-gray-700 hover:bg-gray-50 px-4 py-3 rounded-xl font-bold cursor-pointer list-none transition">
+            <div class="flex items-center gap-3">⚙️ ทำงาน</div>
+            <span class="transition group-open:rotate-180">▾</span>
+          </summary>
+          <div class="pl-11 pr-4 py-2 space-y-3 text-sm mt-1">
+            <a href="inbound.html" class="block text-gray-600 hover:text-blue-600">รับสินค้าเข้า(สาร)</a>
+            <a href="wip.html" class="block text-gray-600 hover:text-blue-600">เบิกคั่ว</a>
+            <a href="#" class="block text-gray-600 hover:text-blue-600">บรรจุ</a>
+            <a href="#" class="block text-gray-600 hover:text-blue-600">จัดส่ง</a>
+            <a href="item_master.html" class="block text-gray-600 hover:text-blue-600">เพิ่มสินค้าเข้า(ข้อมูลสาร,sup)</a>
+            <a href="planner.html" class="block text-gray-600 hover:text-blue-600">วางแผน(ออเดอร์ลูกค้า)</a>
+          </div>
+        </details>
+
+        <!-- 3. รายงาน -->
+        <a href="#" class="flex items-center gap-3 text-gray-700 hover:bg-gray-50 px-4 py-3 rounded-xl font-bold transition">
+          📊 รายงาน
+        </a>
+
+        <!-- 4. สต๊อกสินค้า (มีเมนูย่อย) -->
+        <details class="group">
+          <summary class="flex items-center justify-between gap-3 text-gray-700 hover:bg-gray-50 px-4 py-3 rounded-xl font-bold cursor-pointer list-none transition">
+            <div class="flex items-center gap-3">📦 สต๊อกสินค้า</div>
+            <span class="transition group-open:rotate-180">▾</span>
+          </summary>
+          <div class="pl-11 pr-4 py-2 space-y-3 text-sm mt-1">
+            <a href="inventory.html" class="block text-gray-600 hover:text-blue-600">สารเมล็ด</a>
+            <a href="#" class="block text-gray-600 hover:text-blue-600">สารร่อน</a>
+            <a href="#" class="block text-gray-600 hover:text-blue-600">สารคั่วแล้วพร้อมบรรจุ</a>
+            <a href="#" class="block text-gray-600 hover:text-blue-600">สารบรรจุพร้อมขาย</a>
+            <a href="#" class="block text-gray-600 hover:text-blue-600">Defect</a>
+          </div>
+        </details>
+
+        <!-- 5. โปรไฟล์ -->
+        <a href="#" class="flex items-center gap-3 text-gray-700 hover:bg-gray-50 px-4 py-3 rounded-xl font-bold transition">
+          👤 โปรไฟล์
+        </a>
       </nav>
-      <button onclick="handleLogout()" class="mt-auto flex items-center gap-3 text-gray-500 hover:text-red-500 px-4 py-3 rounded-xl font-bold transition">🚪 ออกจากระบบ</button>
+
+      <button onclick="handleLogout()" class="mt-8 flex items-center gap-3 text-gray-500 hover:text-red-500 px-4 py-3 rounded-xl font-bold transition">
+        🚪 ออกจากระบบ
+      </button>
     </aside>
 
     <!-- 📱 พื้นที่แสดงผลหลัก (Grid Cards) -->
