@@ -2,8 +2,8 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>จัดการฐานข้อมูลสารกาแฟ</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BJ Roaster - ฐานข้อมูลสารกาแฟ</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     ::-webkit-scrollbar { display: none; }
@@ -14,214 +14,58 @@
 
   <div class="flex min-h-screen">
     
-    <!-- 💻 Sidebar สำหรับ Desktop -->
-    <aside class="hidden md:flex flex-col w-64 fixed left-0 top-0 h-screen bg-white border-r border-gray-200 pt-10 pb-6 px-4 z-50 shadow-sm">
+    <!-- 💻 Sidebar หลัก -->
+    <aside class="flex flex-col w-64 fixed left-0 top-0 h-screen bg-white border-r border-gray-200 pt-10 pb-6 px-4 z-50 shadow-sm">
       <h2 class="text-2xl font-bold text-gray-900 mb-10 px-2">BJ Roaster</h2>
       <nav class="flex-1 space-y-2">
-        <a href="index.html" class="flex items-center gap-3 text-gray-600 hover:bg-gray-50 px-4 py-3 rounded-xl font-bold transition">
-          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg>หน้าแรก
+        <a href="index.html" class="flex items-center gap-3 text-gray-700 hover:bg-gray-50 px-4 py-3 rounded-xl font-bold transition">
+          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg> หน้าแรก
         </a>
-        <a href="#" class="flex items-center gap-3 bg-blue-50 text-blue-600 px-4 py-3 rounded-xl font-bold transition">
-          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m3.75 9v6m3-3H9m1.5-12H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" /></svg>ฐานข้อมูลสินค้า
+        <a href="work.html" class="flex items-center gap-3 bg-blue-50 text-blue-600 px-4 py-3 rounded-xl font-bold transition">
+          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 011.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.56.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.893.149c-.425.07-.765.383-.93.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 01-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.397.165-.71.505-.78.929l-.15.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 01-.12-1.45l.527-.737c.25-.35.273-.806.108-1.204-.165-.397-.505-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.107-1.204l-.527-.738a1.125 1.125 0 01.12-1.45l.773-.773a1.125 1.125 0 011.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg> ทำงาน
         </a>
+        <!-- (ปุ่มรายงาน สต๊อก โปรไฟล์ เหมือนหน้าอื่นๆ) -->
+        <a href="report.html" class="flex items-center gap-3 text-gray-700 hover:bg-gray-50 px-4 py-3 rounded-xl font-bold transition"><svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" /></svg> รายงาน</a>
+        <a href="stock.html" class="flex items-center gap-3 text-gray-700 hover:bg-gray-50 px-4 py-3 rounded-xl font-bold transition"><svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" /></svg> สต๊อกสินค้า</a>
+        <a href="profile.html" class="flex items-center gap-3 text-gray-700 hover:bg-gray-50 px-4 py-3 rounded-xl font-bold transition"><svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg> โปรไฟล์</a>
       </nav>
+      <button onclick="handleLogout()" class="mt-8 flex items-center gap-3 text-gray-500 hover:text-red-500 px-4 py-3 rounded-xl font-bold transition"><svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" /></svg> ออกจากระบบ</button>
     </aside>
 
-    <!-- พื้นที่หลัก -->
-    <main class="w-full md:ml-64 p-5 md:p-10 pb-24 relative">
-      <div class="mb-6">
-        <h1 class="text-3xl font-bold text-gray-900">☕ ฐานข้อมูลสารกาแฟ</h1>
-        <p class="text-gray-500">ลงทะเบียน แก้ไข หรือลบ รายการสารกาแฟ</p>
-      </div>
+    <main class="w-full ml-64 relative overflow-hidden flex flex-col min-h-screen">
+      
+      <!-- 🌟 ล็อกแถบการ์ดแนวนอนไว้ด้านบนสุด -->
+      <div class="sticky top-0 z-40 bg-gray-50/95 backdrop-blur-xl pt-6 pb-4 border-b border-gray-200">
+        <div class="flex flex-row overflow-x-auto gap-3 px-10 pr-10 snap-x w-full items-center">
+          <!-- 1-4 INACTIVE -->
+          <div class="relative flex-none w-48 h-28 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-green-50 to-green-100 border border-green-200 cursor-pointer hover:bg-green-100 transition px-4 flex flex-col justify-center opacity-70 hover:opacity-100" onclick="window.location.href='inbound.html'"><h2 class="text-lg font-bold text-green-800 leading-tight">รับสินค้าเข้า<br><span class="text-xs font-medium text-green-600">(สารกาแฟ)</span></h2></div>
+          <div class="relative flex-none w-48 h-28 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-orange-50 to-orange-100 border border-orange-200 cursor-pointer hover:bg-orange-100 transition px-4 flex flex-col justify-center opacity-70 hover:opacity-100" onclick="window.location.href='wip.html'"><h2 class="text-lg font-bold text-orange-800 leading-tight">เบิกคั่ว<br><span class="text-xs font-medium text-orange-600">(WIP)</span></h2></div>
+          <div class="relative flex-none w-48 h-28 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-200 cursor-pointer hover:bg-purple-100 transition px-4 flex flex-col justify-center opacity-70 hover:opacity-100" onclick="window.location.href='packing.html'"><h2 class="text-lg font-bold text-purple-800 leading-tight">บรรจุสินค้า<br><span class="text-xs font-medium text-purple-600">(Packing)</span></h2></div>
+          <div class="relative flex-none w-48 h-28 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-teal-50 to-teal-100 border border-teal-200 cursor-pointer hover:bg-teal-100 transition px-4 flex flex-col justify-center opacity-70 hover:opacity-100" onclick="window.location.href='shipping.html'"><h2 class="text-lg font-bold text-teal-800 leading-tight">จัดส่ง<br><span class="text-xs font-medium text-teal-600">(Shipping)</span></h2></div>
+          
+          <!-- 5. เพิ่มข้อมูลใหม่ (ACTIVE 🌟 สีน้ำเงินเข้ม) -->
+          <div class="relative flex-none w-48 h-28 rounded-2xl overflow-hidden shadow-md bg-gradient-to-br from-indigo-400 to-indigo-500 border border-indigo-500 cursor-default flex flex-col justify-center px-4 transform scale-105">
+            <h2 class="text-lg font-bold text-white leading-tight">เพิ่มข้อมูลใหม่<br><span class="text-xs font-medium text-indigo-100">(สาร, Sup)</span></h2>
+          </div>
 
-      <!-- ฟอร์มเพิ่ม/แก้ไข -->
-      <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm mb-8">
-        <h2 id="form-title" class="font-bold text-blue-600 mb-4 text-lg">➕ เพิ่มรายการใหม่</h2>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <div>
-            <label class="block text-xs font-bold text-gray-600 mb-1">รหัสสินค้า (Item Code) *</label>
-            <input type="text" id="item_code" class="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="เช่น BRA-001">
-          </div>
-          <div class="lg:col-span-2">
-            <label class="block text-xs font-bold text-gray-600 mb-1">ชื่อสารกาแฟ (Item Name) *</label>
-            <input type="text" id="item_name" class="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="เช่น Brazil Santos NY2">
-          </div>
-          <div>
-            <label class="block text-xs font-bold text-gray-600 mb-1">แหล่งปลูก (Origin)</label>
-            <input type="text" id="origin" class="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="ประเทศ/ภูมิภาค">
-          </div>
-          <div>
-            <label class="block text-xs font-bold text-gray-600 mb-1">ซัพพลายเออร์ (Supplier)</label>
-            <input type="text" id="supplier" class="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="ชื่อคนขาย">
-          </div>
-          <div>
-            <label class="block text-xs font-bold text-gray-600 mb-1">โปรเซส (Process)</label>
-            <select id="process" class="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
-              <option value="">- เลือกโปรเซส -</option>
-              <option value="Washed">Washed</option>
-              <option value="Natural">Natural</option>
-              <option value="Honey">Honey</option>
-              <option value="Anaerobic">Anaerobic</option>
-              <option value="Other">อื่นๆ</option>
-            </select>
-          </div>
-        </div>
-
-        <p id="msg" class="text-sm font-bold mt-4 hidden"></p>
-        
-        <div class="mt-5 flex gap-3">
-          <button onclick="saveItem()" id="save-btn" class="bg-blue-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-blue-700 shadow-sm">บันทึกข้อมูล</button>
-          <button onclick="cancelEdit()" id="cancel-btn" class="hidden bg-gray-200 text-gray-700 font-bold py-2 px-6 rounded-lg hover:bg-gray-300">ยกเลิก</button>
+          <!-- 6 INACTIVE -->
+          <div class="relative flex-none w-48 h-28 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-yellow-50 to-yellow-100 border border-yellow-200 cursor-pointer hover:bg-yellow-100 transition px-4 flex flex-col justify-center opacity-70 hover:opacity-100" onclick="window.location.href='planner.html'"><h2 class="text-lg font-bold text-yellow-800 leading-tight">วางแผน<br><span class="text-xs font-medium text-yellow-600">(ออเดอร์)</span></h2></div>
         </div>
       </div>
 
-      <!-- ตารางแสดงข้อมูล -->
-      <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
-        <div class="overflow-x-auto">
-          <table class="min-w-full text-left border-collapse">
-            <thead class="bg-gray-100 text-gray-600 text-sm">
-              <tr>
-                <th class="py-3 px-4 border-b font-bold">รหัสสินค้า</th>
-                <th class="py-3 px-4 border-b font-bold">ชื่อสารกาแฟ</th>
-                <th class="py-3 px-4 border-b font-bold">แหล่งปลูก</th>
-                <th class="py-3 px-4 border-b font-bold">ซัพพลายเออร์</th>
-                <th class="py-3 px-4 border-b font-bold text-center">จัดการ</th>
-              </tr>
-            </thead>
-            <tbody id="table-body" class="text-gray-700 text-sm">
-              <tr><td colspan="5" class="py-8 text-center text-gray-400">กำลังโหลดข้อมูล...</td></tr>
-            </tbody>
-          </table>
-        </div>
+      <!-- 👇 พื้นที่ทำงาน (นำฟอร์มจากไฟล์ Item Master เดิมมาวางตรงนี้ได้เลย) 👇 -->
+      <div class="p-10 pb-20">
+         <!-- วางฟอร์ม "ฐานข้อมูลสารกาแฟ" ของคุณที่นี่ -->
       </div>
     </main>
   </div>
 
-  <!-- 📱 Bottom Navigation (มือถือ) -->
-  <div class="fixed bottom-0 w-full bg-white/90 backdrop-blur-xl border-t border-gray-200 pb-safe z-50 md:hidden">
-    <div class="flex justify-around items-center pt-2 pb-6 px-2">
-      <div onclick="window.location.href='index.html'" class="flex flex-col items-center justify-center w-16 text-gray-400 cursor-pointer hover:text-gray-600">
-        <svg class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg><span class="text-[10px] font-medium">หน้าแรก</span>
-      </div>
-      <div class="flex flex-col items-center justify-center w-16 text-blue-600 cursor-pointer">
-        <svg class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m3.75 9v6m3-3H9m1.5-12H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" /></svg><span class="text-[10px] font-bold">ข้อมูลหลัก</span>
-      </div>
-    </div>
-  </div>
-
   <script>
-    // ⚠️ นำ URL Web App ของคุณมาใส่ตรงนี้
-    const API_URL = "https://script.google.com/macros/s/AKfycbxQywqP4da0BYdt_dHQtQl-kYlvGxmdJWNA59oqnZ_AM7SRyEESbMd73UD3Xx6VffQ/exec"; 
-
-    let isEditing = false;
-
-    window.onload = loadItems;
-
-    async function loadItems() {
-      try {
-        const response = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'get_items' }) });
-        const result = await response.json();
-        const tbody = document.getElementById('table-body');
-        tbody.innerHTML = '';
-        
-        if(result.success && result.data.length > 0) {
-          result.data.forEach(item => {
-            tbody.innerHTML += `
-              <tr class="border-b hover:bg-gray-50">
-                <td class="py-3 px-4 font-bold text-blue-600">${item.code}</td>
-                <td class="py-3 px-4 font-medium">${item.name}</td>
-                <td class="py-3 px-4">${item.origin || '-'}</td>
-                <td class="py-3 px-4">${item.supplier || '-'}</td>
-                <td class="py-3 px-4 text-center">
-                  <button onclick="editMode('${item.code}', '${item.name}', '${item.origin}', '${item.supplier}', '${item.process}')" class="text-amber-500 hover:text-amber-700 font-bold px-2">✏️ แก้ไข</button>
-                  <button onclick="deleteItem('${item.code}')" class="text-red-500 hover:text-red-700 font-bold px-2">🗑️ ลบ</button>
-                </td>
-              </tr>
-            `;
-          });
-        } else {
-          tbody.innerHTML = `<tr><td colspan="5" class="py-8 text-center text-gray-500">ยังไม่มีข้อมูลสินค้า</td></tr>`;
-        }
-      } catch (e) {
-        document.getElementById('table-body').innerHTML = `<tr><td colspan="5" class="py-8 text-center text-red-500">เชื่อมต่อระบบไม่ได้</td></tr>`;
+    function handleLogout() {
+      if(confirm("ต้องการออกจากระบบใช่หรือไม่?")) {
+        localStorage.clear();
+        window.location.href='index.html';
       }
-    }
-
-    async function saveItem() {
-      const code = document.getElementById('item_code').value.trim();
-      const name = document.getElementById('item_name').value.trim();
-      const origin = document.getElementById('origin').value;
-      const supplier = document.getElementById('supplier').value;
-      const process = document.getElementById('process').value;
-      const msg = document.getElementById('msg');
-      
-      if(!code || !name) return alert("กรุณากรอกรหัสและชื่อสินค้า");
-      
-      document.getElementById('save-btn').innerText = "กำลังบันทึก...";
-      msg.classList.add('hidden');
-      
-      const actionType = isEditing ? 'edit_item' : 'add_item';
-      
-      const res = await fetch(API_URL, {
-        method: "POST",
-        body: JSON.stringify({ action: actionType, code: code, name: name, origin: origin, supplier: supplier, process: process })
-      });
-      const data = await res.json();
-      
-      msg.textContent = data.message;
-      msg.className = data.success ? "text-sm text-green-600 mt-4 font-bold block" : "text-sm text-red-500 mt-4 font-bold block";
-      
-      if(data.success) {
-        cancelEdit(); // ล้างฟอร์ม
-        loadItems();  // โหลดตารางใหม่
-      }
-      document.getElementById('save-btn').innerText = "บันทึกข้อมูล";
-    }
-
-    function editMode(code, name, origin, supplier, process) {
-      isEditing = true;
-      document.getElementById('form-title').innerText = "✏️ แก้ไขข้อมูล";
-      document.getElementById('form-title').className = "font-bold text-amber-600 mb-4 text-lg";
-      document.getElementById('save-btn').innerText = "อัปเดตข้อมูล";
-      document.getElementById('save-btn').className = "bg-amber-500 text-white font-bold py-2 px-6 rounded-lg hover:bg-amber-600 shadow-sm";
-      document.getElementById('cancel-btn').classList.remove('hidden');
-      
-      // ล็อกรหัสสินค้า ห้ามแก้รหัส
-      document.getElementById('item_code').value = code;
-      document.getElementById('item_code').disabled = true;
-      document.getElementById('item_code').className = "w-full px-4 py-2 bg-gray-200 border border-gray-300 rounded-lg text-gray-500 cursor-not-allowed";
-      
-      document.getElementById('item_name').value = name;
-      document.getElementById('origin').value = origin;
-      document.getElementById('supplier').value = supplier;
-      document.getElementById('process').value = process;
-      window.scrollTo(0, 0);
-    }
-
-    function cancelEdit() {
-      isEditing = false;
-      document.getElementById('form-title').innerText = "➕ เพิ่มรายการใหม่";
-      document.getElementById('form-title').className = "font-bold text-blue-600 mb-4 text-lg";
-      document.getElementById('save-btn').innerText = "บันทึกข้อมูล";
-      document.getElementById('save-btn').className = "bg-blue-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-blue-700 shadow-sm";
-      document.getElementById('cancel-btn').classList.add('hidden');
-      document.getElementById('msg').classList.add('hidden');
-      
-      document.getElementById('item_code').disabled = false;
-      document.getElementById('item_code').className = "w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500";
-      
-      document.querySelectorAll('input[type="text"], select').forEach(el => el.value = '');
-    }
-
-    async function deleteItem(code) {
-      if(!confirm(`ต้องการลบรหัส ${code} ใช่หรือไม่?`)) return;
-      
-      const res = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'delete_item', code: code }) });
-      const data = await res.json();
-      
-      if(data.success) loadItems();
-      else alert(data.message);
     }
   </script>
 </body>
