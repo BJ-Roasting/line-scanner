@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>วางแผนการผลิต (Planner)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans antialiased p-4 md:p-8">
+
+  <div class="max-w-5xl mx-auto bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-gray-200 mt-4">
+    <div class="flex justify-between items-center mb-6 border-b border-gray-100 pb-4">
+      <div>
+        <h1 class="text-2xl font-bold text-gray-900">📅 แผนการคั่วกาแฟ (Planner)</h1>
+        <p class="text-gray-500 text-sm mt-1">จัดการออเดอร์และเป้าหมายการผลิตประจำวัน</p>
+      </div>
+      <button onclick="window.location.href='index.html'" class="bg-gray-100 text-gray-600 px-4 py-2 rounded-lg font-bold hover:bg-gray-200">กลับหน้าหลัก</button>
+    </div>
+
+    <!-- ฟอร์มเพิ่มแผน -->
+    <div class="bg-amber-50 p-4 md:p-6 rounded-xl border border-amber-100 mb-8">
+      <h2 class="font-bold text-amber-700 mb-4 text-lg">➕ เพิ่มออเดอร์ใหม่</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+        <div><label class="block text-xs font-bold text-gray-600 mb-1">วันที่คั่ว</label><input type="date" id="date" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500"></div>
+        <div><label class="block text-xs font-bold text-gray-600 mb-1">เลขออเดอร์</label><input type="text" id="order" placeholder="เช่น PO-001" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500"></div>
+        <div><label class="block text-xs font-bold text-gray-600 mb-1">ชื่อลูกค้า</label><input type="text" id="customer" placeholder="ชื่อร้าน/ลูกค้า" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500"></div>
+        <div><label class="block text-xs font-bold text-gray-600 mb-1">สินค้าที่คั่ว</label><input type="text" id="item" placeholder="สูตร/เมล็ด" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500"></div>
+        <div><label class="block text-xs font-bold text-gray-600 mb-1">จำนวน (kg)</label><input type="number" id="qty" placeholder="0.00" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500"></div>
+      </div>
+      <p id="msg" class="text-sm font-bold mt-4 hidden"></p>
+      <button onclick="savePlan()" id="save-btn" class="mt-4 bg-amber-500 text-white font-bold py-2 px-6 rounded-lg hover:bg-amber-600 w-full md:w-auto shadow-sm">บันทึกแผนงาน</button>
+    </div>
+
+    <!-- ตารางแสดงแผน -->
+    <div class="overflow-x-auto rounded-xl border border-gray-200">
+      <table class="min-w-full text-left bg-white">
+        <thead class="bg-gray-100 text-gray-600 text-sm">
+          <tr>
+            <th class="py-3 px-4 font-bold border-b">วันที่</th>
+            <th class="py-3 px-4 font-bold border-b">ออเดอร์</th>
+            <th class="py-3 px-4 font-bold border-b">ลูกค้า</th>
+            <th class="py-3 px-4 font-bold border-b">รายการ</th>
+            <th class="py-3 px-4 font-bold border-b text-right">จำนวน</th>
+            <th class="py-3 px-4 font-bold border-b text-center">สถานะ</th>
+            <th class="py-3 px-4 font-bold border-b text-center">จัดการ</th>
+          </tr>
+        </thead>
+        <tbody id="table-body" class="text-gray-700 text-sm">
+          <tr><td colspan="7" class="py-8 text-center text-gray-400">กำลังโหลดข้อมูล...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    // ⚠️ นำ URL Web App ของคุณมาใส่ตรงนี้
+    const API_URL = "https://script.google.com/macros/s/AKfycbxQywqP4da0BYdt_dHQtQl-kYlvGxmdJWNA59oqnZ_AM7SRyEESbMd73UD3Xx6VffQ/exec"; 
+
+    window.onload = loadPlans;
+
+    async function loadPlans() {
+      try {
+        const response = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'get_plans' }) });
+        const result = await response.json();
+        const tbody = document.getElementById('table-body');
+        tbody.innerHTML = '';
+        
+        if(result.success && result.data.length > 0) {
+          result.data.forEach(p => {
+            let statusBadge = p.status === 'Done' ? '<span class="bg-green-100 text-green-700 px-2 py-1 rounded text-xs font-bold">✅ เสร็จสิ้น</span>' : '<span class="bg-amber-100 text-amber-700 px-2 py-1 rounded text-xs font-bold">⏳ รอดำเนินการ</span>';
+            let actionBtn = p.status === 'Done' 
+              ? `<button onclick="deletePlan('${p.id}')" class="text-red-500 hover:text-red-700 font-bold px-2">🗑️ ลบ</button>`
+              : `<button onclick="updateStatus('${p.id}', 'Done')" class="text-green-600 hover:text-green-800 font-bold px-2 mr-2">✔️ ปิดงาน</button><button onclick="deletePlan('${p.id}')" class="text-red-500 hover:text-red-700 font-bold px-2">🗑️ ลบ</button>`;
+
+            tbody.innerHTML += `
+              <tr class="border-b hover:bg-gray-50">
+                <td class="py-3 px-4 whitespace-nowrap">${p.date}</td>
+                <td class="py-3 px-4 font-bold">${p.order}</td>
+                <td class="py-3 px-4">${p.customer}</td>
+                <td class="py-3 px-4">${p.item}</td>
+                <td class="py-3 px-4 text-right font-bold text-amber-600">${p.qty}</td>
+                <td class="py-3 px-4 text-center">${statusBadge}</td>
+                <td class="py-3 px-4 text-center">${actionBtn}</td>
+              </tr>
+            `;
+          });
+        } else {
+          tbody.innerHTML = `<tr><td colspan="7" class="py-8 text-center text-gray-500">ยังไม่มีแผนการผลิต</td></tr>`;
+        }
+      } catch (e) {
+        document.getElementById('table-body').innerHTML = `<tr><td colspan="7" class="py-8 text-center text-red-500">เชื่อมต่อระบบไม่ได้</td></tr>`;
+      }
+    }
+
+    async function savePlan() {
+      const date = document.getElementById('date').value;
+      const order = document.getElementById('order').value;
+      const customer = document.getElementById('customer').value;
+      const item = document.getElementById('item').value;
+      const qty = document.getElementById('qty').value;
+      const msg = document.getElementById('msg');
+      
+      if(!date || !item || !qty) return alert("กรุณากรอก วันที่, รายการ และจำนวนให้ครบถ้วน");
+      
+      document.getElementById('save-btn').innerText = "กำลังบันทึก...";
+      msg.classList.add('hidden');
+      
+      const res = await fetch(API_URL, {
+        method: "POST",
+        body: JSON.stringify({ action: 'add_plan', date, order, customer, item, qty })
+      });
+      const data = await res.json();
+      
+      msg.textContent = data.message;
+      msg.className = data.success ? "text-sm text-green-600 mt-4 font-bold block" : "text-sm text-red-500 mt-4 font-bold block";
+      
+      if(data.success) {
+        document.querySelectorAll('input').forEach(el => el.value = '');
+        loadPlans();
+      }
+      document.getElementById('save-btn').innerText = "บันทึกแผนงาน";
+    }
+
+    async function updateStatus(id, newStatus) {
+      if(!confirm(`ยืนยันการปิดงานออเดอร์นี้?`)) return;
+      const res = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'update_plan_status', id: id, status: newStatus }) });
+      const data = await res.json();
+      if(data.success) loadPlans();
+    }
+
+    async function deletePlan(id) {
+      if(!confirm(`ต้องการลบรายการนี้ใช่หรือไม่?`)) return;
+      const res = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'delete_plan', id: id }) });
+      const data = await res.json();
+      if(data.success) loadPlans();
+    }
+  </script>
+</body>
+</html>
