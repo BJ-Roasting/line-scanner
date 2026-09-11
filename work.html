@@ -6,6 +6,7 @@
   <title>BJ Roaster - ทำงาน (Work)</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
+    /* ซ่อนแถบ Scrollbar แต่ยังเลื่อนซ้ายขวาได้ */
     ::-webkit-scrollbar { display: none; }
     body { -ms-overflow-style: none; scrollbar-width: none; }
     .pb-safe { padding-bottom: env(safe-area-inset-bottom, 20px); }
@@ -15,7 +16,7 @@
 
   <div class="flex min-h-screen">
     
-    <!-- 💻 Sidebar (เมนู "ทำงาน" จะเป็นสีฟ้า เพื่อบอกว่าอยู่หน้านี้) -->
+    <!-- 💻 Sidebar สำหรับ Desktop -->
     <aside class="hidden md:flex flex-col w-64 fixed left-0 top-0 h-screen bg-white border-r border-gray-200 pt-10 pb-6 px-4 z-50 shadow-sm">
       <h2 class="text-2xl font-bold text-gray-900 mb-10 px-2">BJ Roaster</h2>
       
@@ -23,7 +24,6 @@
         <a href="index.html" class="flex items-center gap-3 text-gray-700 hover:bg-gray-50 px-4 py-3 rounded-xl font-bold transition">
           🏠 หน้าแรก
         </a>
-        <!-- 🌟 ปุ่มทำงาน (Active) -->
         <a href="work.html" class="flex items-center gap-3 bg-blue-50 text-blue-600 px-4 py-3 rounded-xl font-bold transition">
           ⚙️ ทำงาน
         </a>
@@ -43,67 +43,67 @@
       </button>
     </aside>
 
-    <!-- 📱 พื้นที่แสดงผลฝั่งขวา (การ์ด 6 ใบ) -->
-    <main class="w-full md:ml-64 p-5 md:p-10 pb-28 md:pb-10 relative">
+    <!-- 📱 พื้นที่แสดงผลฝั่งขวา -->
+    <main class="w-full md:ml-64 p-5 md:p-10 pb-28 md:pb-10 relative overflow-hidden">
       
       <!-- Header -->
-      <div class="flex justify-between items-center mb-8 sticky top-0 bg-gray-50/90 backdrop-blur-xl z-30 py-3 border-b border-gray-200 md:border-none md:bg-transparent px-1">
+      <div class="flex justify-between items-center mb-6 sticky top-0 bg-gray-50/90 backdrop-blur-xl z-30 py-3 border-b border-gray-200 md:border-none md:bg-transparent px-1">
         <div>
           <h1 class="text-3xl font-bold tracking-tight text-gray-900">⚙️ โหมดทำงาน</h1>
           <p class="text-gray-500 text-sm mt-1">เลือกระบบที่คุณต้องการดำเนินการ</p>
         </div>
       </div>
 
-      <!-- Grid การ์ด 6 ใบ (ตาม Map) -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+      <!-- 🌟 การ์ดแนวนอนแถวเดียว (Horizontal Scroll) -->
+      <div class="flex flex-row overflow-x-auto gap-4 pb-6 snap-x w-full">
         
         <!-- 1. รับสินค้าเข้า (Inbound) -->
-        <div class="relative h-40 md:h-56 rounded-3xl overflow-hidden shadow-sm bg-gradient-to-br from-green-50 to-green-200 border border-green-100 cursor-pointer transition transform hover:scale-[1.02]" onclick="window.location.href='inbound.html'">
-          <div class="absolute top-0 left-0 p-5 w-full"><h2 class="text-xl md:text-2xl font-bold text-gray-800 mt-1">รับสินค้าเข้า<br>(สารกาแฟ)</h2></div>
-          <div class="absolute bottom-4 right-4 bg-white/70 backdrop-blur text-2xl w-12 h-12 flex items-center justify-center rounded-full shadow-sm">📥</div>
+        <div class="relative flex-none w-36 h-36 md:w-44 md:h-44 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-green-50 to-green-200 border border-green-100 cursor-pointer transition transform hover:scale-[1.02] snap-start" onclick="window.location.href='inbound.html'">
+          <div class="absolute top-0 left-0 p-4 w-full"><h2 class="text-sm md:text-base font-bold text-gray-800 leading-snug">รับสินค้าเข้า<br>(สารกาแฟ)</h2></div>
+          <div class="absolute bottom-3 right-3 bg-white/70 backdrop-blur text-xl md:text-2xl w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full shadow-sm">📥</div>
         </div>
 
         <!-- 2. เบิกคั่ว (WIP) -->
-        <div class="relative h-40 md:h-56 rounded-3xl overflow-hidden shadow-sm bg-gradient-to-br from-orange-50 to-orange-200 border border-orange-100 cursor-pointer transition transform hover:scale-[1.02]" onclick="window.location.href='wip.html'">
-          <div class="absolute top-0 left-0 p-5 w-full"><h2 class="text-xl md:text-2xl font-bold text-gray-800 mt-1">เบิกคั่ว<br>(WIP)</h2></div>
-          <div class="absolute bottom-4 right-4 bg-white/70 backdrop-blur text-2xl w-12 h-12 flex items-center justify-center rounded-full shadow-sm">🔥</div>
+        <div class="relative flex-none w-36 h-36 md:w-44 md:h-44 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-orange-50 to-orange-200 border border-orange-100 cursor-pointer transition transform hover:scale-[1.02] snap-start" onclick="window.location.href='wip.html'">
+          <div class="absolute top-0 left-0 p-4 w-full"><h2 class="text-sm md:text-base font-bold text-gray-800 leading-snug">เบิกคั่ว<br>(WIP)</h2></div>
+          <div class="absolute bottom-3 right-3 bg-white/70 backdrop-blur text-xl md:text-2xl w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full shadow-sm">🔥</div>
         </div>
 
         <!-- 3. บรรจุ -->
-        <div class="relative h-40 md:h-56 rounded-3xl overflow-hidden shadow-sm bg-gradient-to-br from-purple-50 to-purple-200 border border-purple-100 cursor-pointer transition transform hover:scale-[1.02]" onclick="alert('กำลังพัฒนาระบบบรรจุ')">
-          <div class="absolute top-0 left-0 p-5 w-full"><h2 class="text-xl md:text-2xl font-bold text-gray-800 mt-1">บรรจุสินค้า<br>(Packing)</h2></div>
-          <div class="absolute bottom-4 right-4 bg-white/70 backdrop-blur text-2xl w-12 h-12 flex items-center justify-center rounded-full shadow-sm">🛍️</div>
+        <div class="relative flex-none w-36 h-36 md:w-44 md:h-44 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-purple-50 to-purple-200 border border-purple-100 cursor-pointer transition transform hover:scale-[1.02] snap-start" onclick="alert('กำลังพัฒนาระบบบรรจุ')">
+          <div class="absolute top-0 left-0 p-4 w-full"><h2 class="text-sm md:text-base font-bold text-gray-800 leading-snug">บรรจุสินค้า<br>(Packing)</h2></div>
+          <div class="absolute bottom-3 right-3 bg-white/70 backdrop-blur text-xl md:text-2xl w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full shadow-sm">🛍️</div>
         </div>
 
         <!-- 4. จัดส่ง -->
-        <div class="relative h-40 md:h-56 rounded-3xl overflow-hidden shadow-sm bg-gradient-to-br from-teal-50 to-teal-200 border border-teal-100 cursor-pointer transition transform hover:scale-[1.02]" onclick="alert('กำลังพัฒนาระบบจัดส่ง')">
-          <div class="absolute top-0 left-0 p-5 w-full"><h2 class="text-xl md:text-2xl font-bold text-gray-800 mt-1">จัดส่ง<br>(Shipping)</h2></div>
-          <div class="absolute bottom-4 right-4 bg-white/70 backdrop-blur text-2xl w-12 h-12 flex items-center justify-center rounded-full shadow-sm">🚚</div>
+        <div class="relative flex-none w-36 h-36 md:w-44 md:h-44 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-teal-50 to-teal-200 border border-teal-100 cursor-pointer transition transform hover:scale-[1.02] snap-start" onclick="alert('กำลังพัฒนาระบบจัดส่ง')">
+          <div class="absolute top-0 left-0 p-4 w-full"><h2 class="text-sm md:text-base font-bold text-gray-800 leading-snug">จัดส่ง<br>(Shipping)</h2></div>
+          <div class="absolute bottom-3 right-3 bg-white/70 backdrop-blur text-xl md:text-2xl w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full shadow-sm">🚚</div>
         </div>
 
         <!-- 5. เพิ่มสินค้าเข้า (Item Master) -->
-        <div class="relative h-40 md:h-56 rounded-3xl overflow-hidden shadow-sm bg-gradient-to-br from-indigo-50 to-indigo-200 border border-indigo-100 cursor-pointer transition transform hover:scale-[1.02]" onclick="window.location.href='item_master.html'">
-          <div class="absolute top-0 left-0 p-5 w-full"><h2 class="text-xl md:text-2xl font-bold text-gray-800 mt-1">เพิ่มข้อมูลใหม่<br>(สาร, Sup)</h2></div>
-          <div class="absolute bottom-4 right-4 bg-white/70 backdrop-blur text-2xl w-12 h-12 flex items-center justify-center rounded-full shadow-sm">➕</div>
+        <div class="relative flex-none w-36 h-36 md:w-44 md:h-44 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-indigo-50 to-indigo-200 border border-indigo-100 cursor-pointer transition transform hover:scale-[1.02] snap-start" onclick="window.location.href='item_master.html'">
+          <div class="absolute top-0 left-0 p-4 w-full"><h2 class="text-sm md:text-base font-bold text-gray-800 leading-snug">เพิ่มข้อมูลใหม่<br>(สาร, Sup)</h2></div>
+          <div class="absolute bottom-3 right-3 bg-white/70 backdrop-blur text-xl md:text-2xl w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full shadow-sm">➕</div>
         </div>
 
         <!-- 6. วางแผน (Planner) -->
-        <div class="relative h-40 md:h-56 rounded-3xl overflow-hidden shadow-sm bg-gradient-to-br from-yellow-50 to-yellow-200 border border-yellow-100 cursor-pointer transition transform hover:scale-[1.02]" onclick="window.location.href='planner.html'">
-          <div class="absolute top-0 left-0 p-5 w-full"><h2 class="text-xl md:text-2xl font-bold text-gray-800 mt-1">วางแผน<br>(ออเดอร์)</h2></div>
-          <div class="absolute bottom-4 right-4 bg-white/70 backdrop-blur text-2xl w-12 h-12 flex items-center justify-center rounded-full shadow-sm">📅</div>
+        <div class="relative flex-none w-36 h-36 md:w-44 md:h-44 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-yellow-50 to-yellow-200 border border-yellow-100 cursor-pointer transition transform hover:scale-[1.02] snap-start" onclick="window.location.href='planner.html'">
+          <div class="absolute top-0 left-0 p-4 w-full"><h2 class="text-sm md:text-base font-bold text-gray-800 leading-snug">วางแผน<br>(ออเดอร์)</h2></div>
+          <div class="absolute bottom-3 right-3 bg-white/70 backdrop-blur text-xl md:text-2xl w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full shadow-sm">📅</div>
         </div>
 
       </div>
     </main>
   </div>
 
-  <!-- 📱 Bottom Navigation (สำหรับมือถือ - ปุ่มทำงาน Active) -->
+  <!-- 📱 Bottom Navigation (สำหรับมือถือ) -->
   <div id="bottom-nav" class="fixed bottom-0 w-full bg-white/95 backdrop-blur-xl border-t border-gray-200 pb-safe z-40 md:hidden shadow-[0_-4px_10px_-1px_rgba(0,0,0,0.05)]">
     <div class="flex justify-around items-center pt-3 pb-2 px-1">
       <div onclick="window.location.href='index.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-gray-800 cursor-pointer">
         <span class="text-2xl mb-1 grayscale opacity-70">🏠</span><span class="text-[10px] font-medium">หน้าแรก</span>
       </div>
-      <!-- 🌟 ปุ่มทำงาน (Active) -->
+      <!-- ปุ่มทำงาน (Active) -->
       <div class="flex flex-col items-center justify-center w-[20%] text-blue-600 cursor-pointer">
         <span class="text-2xl mb-1">⚙️</span><span class="text-[10px] font-bold">ทำงาน</span>
       </div>
