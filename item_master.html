@@ -54,7 +54,7 @@
   <div class="flex min-h-screen">
     
     <!-- 💻 Sidebar Desktop -->
-    <aside class="hidden md:flex flex-col w-64 fixed left-0 top-0 h-screen bg-white border-r border-gray-200 pt-10 pb-6 px-4 z-50 shadow-sm no-print">
+    <aside class="hidden md:flex flex-col w-64 fixed left-0 top-0 h-screen bg-white border-r border-gray-200 pt-10 pb-6 px-4 z-40 shadow-sm no-print">
       <h2 class="text-2xl font-bold text-gray-900 mb-10 px-2">BJ Roaster</h2>
       <nav class="flex-1 space-y-2">
         <a href="index.html" class="flex items-center gap-3 text-gray-700 hover:bg-gray-50 px-4 py-3 rounded-xl font-bold transition">
@@ -74,7 +74,7 @@
     <main class="w-full md:ml-64 relative overflow-hidden flex flex-col min-h-screen">
       
       <!-- 🌟 แถบการ์ดบน -->
-      <div class="sticky top-0 z-40 bg-gray-50/95 backdrop-blur-xl pt-6 pb-4 border-b border-gray-200 no-print">
+      <div class="sticky top-0 z-30 bg-gray-50/95 backdrop-blur-xl pt-6 pb-4 border-b border-gray-200 no-print">
         <div class="flex flex-row overflow-x-auto gap-3 px-5 md:px-10 pr-10 snap-x w-full items-center">
           <div class="relative flex-none w-40 h-24 md:w-48 md:h-28 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-yellow-50 to-yellow-100 border border-yellow-200 cursor-pointer hover:bg-yellow-100 transition px-4 flex flex-col justify-center opacity-70 hover:opacity-100" onclick="window.location.href='planner.html'"><h2 class="text-base md:text-lg font-bold text-yellow-800 leading-tight">วางแผน<br><span class="text-xs font-medium text-yellow-600">(ออเดอร์)</span></h2></div>
           <div class="relative flex-none w-40 h-24 md:w-48 md:h-28 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-orange-50 to-orange-100 border border-orange-200 cursor-pointer hover:bg-orange-100 transition px-4 flex flex-col justify-center opacity-70 hover:opacity-100" onclick="window.location.href='wip.html'"><h2 class="text-base md:text-lg font-bold text-orange-800 leading-tight">เบิกคั่ว<br><span class="text-xs font-medium text-orange-600">(WIP)</span></h2></div>
@@ -95,10 +95,10 @@
         
         <!-- แถบเลือกโหมด 4 แท็บ -->
         <div class="grid grid-cols-2 md:grid-cols-4 gap-2 max-w-4xl no-print">
-          <button id="btn-tab-qr" onclick="switchSection('qr')" class="py-3 px-2 font-bold rounded-xl bg-indigo-600 text-white shadow-sm text-sm">🖨️ 1. สร้าง QR Code</button>
-          <button id="btn-tab-cust" onclick="switchSection('cust')" class="py-3 px-2 font-bold rounded-xl bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 text-sm">👥 2. ข้อมูลลูกค้า</button>
-          <button id="btn-tab-bean" onclick="switchSection('bean')" class="py-3 px-2 font-bold rounded-xl bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 text-sm">☕ 3. ข้อมูลสารกาแฟ</button>
-          <button id="btn-tab-inv" onclick="switchSection('inv')" class="py-3 px-2 font-bold rounded-xl bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 text-sm">📦 4. จัดการสต๊อก (แก้ไข/ลบ)</button>
+          <button type="button" id="btn-tab-qr" onclick="switchSection('qr')" class="py-3 px-2 font-bold rounded-xl bg-indigo-600 text-white shadow-sm text-sm">🖨️ 1. สร้าง QR Code</button>
+          <button type="button" id="btn-tab-cust" onclick="switchSection('cust')" class="py-3 px-2 font-bold rounded-xl bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 text-sm">👥 2. ข้อมูลลูกค้า</button>
+          <button type="button" id="btn-tab-bean" onclick="switchSection('bean')" class="py-3 px-2 font-bold rounded-xl bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 text-sm">☕ 3. ข้อมูลสารกาแฟ</button>
+          <button type="button" id="btn-tab-inv" onclick="switchSection('inv')" class="py-3 px-2 font-bold rounded-xl bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 text-sm">📦 4. จัดการสต๊อก (แก้ไข/ลบ)</button>
         </div>
 
         <!-- ============================================== -->
@@ -111,7 +111,7 @@
                 <h2 class="text-lg font-bold text-gray-800">🖨️ เครื่องพิมพ์สร้าง QR Code (Pallet & Lot Bean)</h2>
                 <p class="text-xs text-gray-500 mt-1">สร้าง QR Code แปะพาเลท หรือกระสอบสินค้าล่วงหน้า</p>
               </div>
-              <button onclick="window.print()" class="bg-gray-800 hover:bg-gray-900 text-white text-xs font-bold px-4 py-2.5 rounded-xl flex items-center gap-2 shadow-sm transition active:scale-95">
+              <button type="button" onclick="window.print()" class="bg-gray-800 hover:bg-gray-900 text-white text-xs font-bold px-4 py-2.5 rounded-xl flex items-center gap-2 shadow-sm transition active:scale-95">
                 🖨️ สั่งพิมพ์ออกเครื่องพิมพ์
               </button>
             </div>
@@ -140,7 +140,7 @@
               </div>
             </div>
 
-            <button onclick="generateBatchQR()" id="btn-gen-qr" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl transition shadow-md">
+            <button type="button" onclick="generateBatchQR()" id="btn-gen-qr" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl transition shadow-md">
               ⚡ สร้างและอัปเดตตัวอย่าง QR Code
             </button>
           </div>
@@ -177,13 +177,13 @@
                 <input type="text" id="cust_address" placeholder="เช่น สาขาสุขุมวิท กรุงเทพฯ" class="w-full px-3 py-2 border rounded-xl">
               </div>
             </div>
-            <button onclick="saveCustomer()" id="save-cust-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl transition">💾 บันทึกข้อมูลลูกค้า</button>
+            <button type="button" onclick="saveCustomer()" id="save-cust-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl transition">💾 บันทึกข้อมูลลูกค้า</button>
           </div>
 
           <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
             <div class="p-4 border-b flex justify-between items-center bg-gray-50">
               <h3 class="font-bold text-gray-800">รายชื่อลูกค้าทั้งหมด</h3>
-              <button onclick="loadCustomers()" class="text-xs bg-gray-200 hover:bg-gray-300 font-bold px-3 py-1.5 rounded-lg">รีเฟรช</button>
+              <button type="button" onclick="loadCustomers()" class="text-xs bg-gray-200 hover:bg-gray-300 font-bold px-3 py-1.5 rounded-lg">รีเฟรช</button>
             </div>
             <div class="overflow-x-auto">
               <table class="min-w-full text-sm">
@@ -270,14 +270,14 @@
               </div>
             </div>
 
-            <button onclick="saveBeanMaster()" id="save-bean-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl transition shadow-md">💾 บันทึกข้อมูลสารกาแฟ</button>
+            <button type="button" onclick="saveBeanMaster()" id="save-bean-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl transition shadow-md">💾 บันทึกข้อมูลสารกาแฟ</button>
           </div>
 
           <!-- ตารางสารกาแฟ -->
           <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
             <div class="p-4 border-b flex justify-between items-center bg-gray-50">
               <h3 class="font-bold text-gray-800">📋 รายการสารกาแฟทั้งหมดในระบบ</h3>
-              <button onclick="loadBeans()" class="text-xs bg-gray-200 hover:bg-gray-300 font-bold px-3 py-1.5 rounded-lg">รีเฟรช</button>
+              <button type="button" onclick="loadBeans()" class="text-xs bg-gray-200 hover:bg-gray-300 font-bold px-3 py-1.5 rounded-lg">รีเฟรช</button>
             </div>
             <div class="overflow-x-auto">
               <table class="min-w-full text-sm">
@@ -337,12 +337,12 @@
     </main>
   </div>
 
-  <!-- 🛑 MODAL แก้ไขสต๊อก -->
-  <div id="edit-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 no-print">
+  <!-- 🛑 MODAL แก้ไขสต๊อก (ใส่ style="display: none;" ปลดล็อกแผ่นบังหน้าจอ 100%) -->
+  <div id="edit-modal" style="display: none;" onclick="if(event.target === this) closeEditModal()" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 items-center justify-center p-4 no-print">
     <div class="bg-white max-w-md w-full p-6 rounded-2xl shadow-2xl border border-gray-100 space-y-4">
       <div class="flex justify-between items-center border-b pb-3">
         <h3 class="font-bold text-gray-800 text-lg">✏️ แก้ไขข้อมูลสต๊อก</h3>
-        <button onclick="closeEditModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
+        <button type="button" onclick="closeEditModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
       </div>
       <div class="space-y-3">
         <div>
@@ -370,8 +370,8 @@
         </div>
       </div>
       <div class="flex gap-2 pt-2">
-        <button onclick="closeEditModal()" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-2.5 rounded-xl">ยกเลิก</button>
-        <button onclick="submitEditInventory()" id="save-edit-btn" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl">💾 บันทึกการแก้ไข</button>
+        <button type="button" onclick="closeEditModal()" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-2.5 rounded-xl">ยกเลิก</button>
+        <button type="button" onclick="submitEditInventory()" id="save-edit-btn" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl">💾 บันทึกการแก้ไข</button>
       </div>
     </div>
   </div>
@@ -389,18 +389,21 @@
 
     function switchSection(sec) {
       ['qr', 'cust', 'bean', 'inv'].forEach(s => {
-        document.getElementById(`sec-${s}`).classList.add('hidden');
-        document.getElementById(`btn-tab-${s}`).className = "py-3 px-2 font-bold rounded-xl bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 text-sm";
+        const el = document.getElementById(`sec-${s}`);
+        const btn = document.getElementById(`btn-tab-${s}`);
+        if(el) el.classList.add('hidden');
+        if(btn) btn.className = "py-3 px-2 font-bold rounded-xl bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 text-sm";
       });
-      document.getElementById(`sec-${sec}`).classList.remove('hidden');
-      document.getElementById(`btn-tab-${sec}`).className = "py-3 px-2 font-bold rounded-xl bg-indigo-600 text-white shadow-sm text-sm";
+      const activeEl = document.getElementById(`sec-${sec}`);
+      const activeBtn = document.getElementById(`btn-tab-${sec}`);
+      if(activeEl) activeEl.classList.remove('hidden');
+      if(activeBtn) activeBtn.className = "py-3 px-2 font-bold rounded-xl bg-indigo-600 text-white shadow-sm text-sm";
 
       if(sec === 'bean') loadBeans();
       if(sec === 'cust') loadCustomers();
       if(sec === 'inv') loadInventoryForEdit();
     }
 
-    // 🌟 โหลดหน้าเว็บเร็วทันที ไม่รันคำสั่งหนักๆ ขวางไว้
     window.onload = function() {
       autoFillQRPrefix();
     };
@@ -429,7 +432,6 @@
     }
 
     function generateBatchQR() {
-      // ตรวจสอบความพร้อมของไลบรารี QRCode ป้องกันระบบค้าง
       if (typeof QRCode === 'undefined') {
         alert("กำลังโหลดระบบสร้าง QR Code กรุณารอสักครู่แล้วกดใหม่อีกครั้งครับ");
         return;
@@ -635,8 +637,8 @@
           <td class="py-2.5 px-4 text-center font-bold text-gray-600">${item.location}</td>
           <td class="py-2.5 px-4 text-center"><span class="px-2 py-0.5 rounded text-xs font-bold ${item.status === 'Active' ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-600'}">${item.status}</span></td>
           <td class="py-2.5 px-4 text-center space-x-1">
-            <button onclick="openEditModal('${item.barcode_id}')" class="bg-blue-50 text-blue-600 hover:bg-blue-100 px-2.5 py-1 rounded-lg text-xs font-bold transition">✏️ แก้ไข</button>
-            <button onclick="deleteInventoryItem('${item.barcode_id}')" class="bg-red-50 text-red-600 hover:bg-red-100 px-2.5 py-1 rounded-lg text-xs font-bold transition">🗑️ ลบ</button>
+            <button type="button" onclick="openEditModal('${item.barcode_id}')" class="bg-blue-50 text-blue-600 hover:bg-blue-100 px-2.5 py-1 rounded-lg text-xs font-bold transition">✏️ แก้ไข</button>
+            <button type="button" onclick="deleteInventoryItem('${item.barcode_id}')" class="bg-red-50 text-red-600 hover:bg-red-100 px-2.5 py-1 rounded-lg text-xs font-bold transition">🗑️ ลบ</button>
           </td>
         </tr>
       `).join('');
@@ -651,6 +653,7 @@
       renderInventoryTable(filtered);
     }
 
+    // 🌟 เปิด Modal ด้วยการสั่ง style.display = 'flex' ปลอดภัย 100%
     function openEditModal(barcode) {
       const item = rawInventory.find(i => String(i.barcode_id) === String(barcode));
       if(!item) return;
@@ -658,4 +661,61 @@
       document.getElementById('edit_name').value = item.item_name;
       document.getElementById('edit_weight').value = item.weight_current;
       document.getElementById('edit_location').value = item.location;
-      document.getElementById('edit_status').value
+      document.getElementById('edit_status').value = item.status;
+      
+      const modal = document.getElementById('edit-modal');
+      modal.style.display = 'flex';
+    }
+
+    // 🌟 ปิด Modal ด้วยการสั่ง style.display = 'none' ไม่บังจอเด็ดขาด
+    function closeEditModal() {
+      const modal = document.getElementById('edit-modal');
+      modal.style.display = 'none';
+    }
+
+    async function submitEditInventory() {
+      const barcode = document.getElementById('edit_barcode').value;
+      const weight = document.getElementById('edit_weight').value;
+      const loc = document.getElementById('edit_location').value;
+      const status = document.getElementById('edit_status').value;
+
+      const btn = document.getElementById('save-edit-btn');
+      btn.innerText = "กำลังบันทึก...";
+      btn.disabled = true;
+
+      try {
+        const res = await fetch(API_URL, {
+          method: "POST",
+          body: JSON.stringify({ action: 'update_inventory', barcode_id: barcode, new_weight: weight, new_location: loc, new_status: status })
+        });
+        const result = await res.json();
+        alert(result.message);
+        if(result.success) {
+          closeEditModal();
+          loadInventoryForEdit();
+        }
+      } catch (e) {
+        alert("แก้ไขไม่สำเร็จ");
+      } finally {
+        btn.innerText = "💾 บันทึกการแก้ไข";
+        btn.disabled = false;
+      }
+    }
+
+    async function deleteInventoryItem(barcode) {
+      if(!confirm(`⚠️ ต้องการลบรายการ [${barcode}] ออกจากระบบสต๊อกใช่หรือไม่?`)) return;
+      try {
+        const res = await fetch(API_URL, {
+          method: "POST",
+          body: JSON.stringify({ action: 'delete_inventory', barcode_id: barcode })
+        });
+        const result = await res.json();
+        alert(result.message);
+        if(result.success) loadInventoryForEdit();
+      } catch (e) {
+        alert("ลบไม่สำเร็จ");
+      }
+    }
+  </script>
+</body>
+</html>
