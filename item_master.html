@@ -73,7 +73,7 @@
     <!-- 💻 พื้นที่แสดงผลฝั่งขวา -->
     <main class="w-full md:ml-64 relative overflow-hidden flex flex-col min-h-screen">
       
-      <!-- 🌟 แถบการ์ดบน (การ์ดที่ 6 ชี้ไป inbound.html) -->
+      <!-- 🌟 แถบการ์ดบน -->
       <div class="sticky top-0 z-40 bg-gray-50/95 backdrop-blur-xl pt-6 pb-4 border-b border-gray-200 no-print">
         <div class="flex flex-row overflow-x-auto gap-3 px-5 md:px-10 pr-10 snap-x w-full items-center">
           <div class="relative flex-none w-40 h-24 md:w-48 md:h-28 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-yellow-50 to-yellow-100 border border-yellow-200 cursor-pointer hover:bg-yellow-100 transition px-4 flex flex-col justify-center opacity-70 hover:opacity-100" onclick="window.location.href='planner.html'"><h2 class="text-base md:text-lg font-bold text-yellow-800 leading-tight">วางแผน<br><span class="text-xs font-medium text-yellow-600">(ออเดอร์)</span></h2></div>
@@ -140,7 +140,7 @@
               </div>
             </div>
 
-            <button onclick="generateBatchQR()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl transition shadow-md">
+            <button onclick="generateBatchQR()" id="btn-gen-qr" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl transition shadow-md">
               ⚡ สร้างและอัปเดตตัวอย่าง QR Code
             </button>
           </div>
@@ -148,6 +148,7 @@
           <div id="qr-print-area" class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
             <h3 class="text-sm font-bold text-gray-400 mb-4 uppercase tracking-wider no-print">ตัวอย่างสติ๊กเกอร์ QR Code พร้อมพิมพ์</h3>
             <div id="qr-gallery" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 text-center">
+              <p class="col-span-full py-8 text-gray-400 text-sm">กดปุ่ม "สร้างและอัปเดตตัวอย่าง QR Code" ด้านบนเพื่อดูตัวอย่าง</p>
             </div>
           </div>
         </div>
@@ -272,7 +273,7 @@
             <button onclick="saveBeanMaster()" id="save-bean-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl transition shadow-md">💾 บันทึกข้อมูลสารกาแฟ</button>
           </div>
 
-          <!-- ตารางสารกาแฟ (แสดงแยกฝั่ง ERP และ หน้างาน) -->
+          <!-- ตารางสารกาแฟ -->
           <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
             <div class="p-4 border-b flex justify-between items-center bg-gray-50">
               <h3 class="font-bold text-gray-800">📋 รายการสารกาแฟทั้งหมดในระบบ</h3>
@@ -292,7 +293,7 @@
                   </tr>
                 </thead>
                 <tbody id="bean-table-body" class="text-gray-700">
-                  <tr><td colspan="7" class="py-6 text-center text-gray-400">กำลังโหลดข้อมูล...</td></tr>
+                  <tr><td colspan="7" class="py-6 text-center text-gray-400">ยังไม่มีข้อมูลในตาราง</td></tr>
                 </tbody>
               </table>
             </div>
@@ -325,7 +326,7 @@
                   </tr>
                 </thead>
                 <tbody id="inventory-edit-body" class="text-gray-700">
-                  <tr><td colspan="6" class="py-6 text-center text-gray-400">กำลังโหลดสต๊อก...</td></tr>
+                  <tr><td colspan="6" class="py-6 text-center text-gray-400">ไม่มีข้อมูลสต๊อก</td></tr>
                 </tbody>
               </table>
             </div>
@@ -399,9 +400,9 @@
       if(sec === 'inv') loadInventoryForEdit();
     }
 
+    // 🌟 โหลดหน้าเว็บเร็วทันที ไม่รันคำสั่งหนักๆ ขวางไว้
     window.onload = function() {
       autoFillQRPrefix();
-      generateBatchQR();
     };
 
     // ===================================
@@ -428,6 +429,12 @@
     }
 
     function generateBatchQR() {
+      // ตรวจสอบความพร้อมของไลบรารี QRCode ป้องกันระบบค้าง
+      if (typeof QRCode === 'undefined') {
+        alert("กำลังโหลดระบบสร้าง QR Code กรุณารอสักครู่แล้วกดใหม่อีกครั้งครับ");
+        return;
+      }
+
       const prefix = document.getElementById('qr_prefix').value.trim();
       const count = parseInt(document.getElementById('qr_count').value) || 1;
       const subText = document.getElementById('qr_subtext').value.trim() || 'BJ Roaster System';
@@ -465,7 +472,7 @@
       try {
         const res = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'get_customers' }) });
         const result = await res.json();
-        if(result.success && result.data.length > 0) {
+        if(result.success && result.data && result.data.length > 0) {
           tbody.innerHTML = result.data.map(c => `
             <tr class="border-b border-gray-100 hover:bg-gray-50">
               <td class="py-2.5 px-4 font-bold text-indigo-600">${c.customer_code}</td>
@@ -510,9 +517,10 @@
         }
       } catch (e) {
         alert("บันทึกไม่สำเร็จ");
+      } finally {
+        btn.innerText = "💾 บันทึกข้อมูลลูกค้า";
+        btn.disabled = false;
       }
-      btn.innerText = "💾 บันทึกข้อมูลลูกค้า";
-      btn.disabled = false;
     }
 
     // ========================================================
@@ -524,7 +532,7 @@
       try {
         const res = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'get_items' }) });
         const result = await res.json();
-        if(result.success && result.data.length > 0) {
+        if(result.success && result.data && result.data.length > 0) {
           tbody.innerHTML = result.data.map(i => `
             <tr class="border-b border-gray-100 hover:bg-gray-50">
               <td class="py-2.5 px-4 font-bold text-blue-700 bg-blue-50/30">${i.product_code || '-'}</td>
@@ -591,10 +599,63 @@
         }
       } catch (e) {
         alert("บันทึกไม่สำเร็จ");
+      } finally {
+        btn.innerText = "💾 บันทึกข้อมูลสารกาแฟ";
+        btn.disabled = false;
       }
-      btn.innerText = "💾 บันทึกข้อมูลสารกาแฟ";
-      btn.disabled = false;
     }
 
     // ===================================
-    // 📦 4. จัดการสต๊
+    // 📦 4. จัดการสต๊อก (แก้ไข / ลบ)
+    // ===================================
+    async function loadInventoryForEdit() {
+      const tbody = document.getElementById('inventory-edit-body');
+      tbody.innerHTML = `<tr><td colspan="6" class="py-6 text-center text-gray-400">กำลังโหลดสต๊อก...</td></tr>`;
+      try {
+        const res = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'get_inventory' }) });
+        const result = await res.json();
+        if(result.success && result.data && result.data.length > 0) {
+          rawInventory = result.data;
+          renderInventoryTable(rawInventory);
+        } else {
+          tbody.innerHTML = `<tr><td colspan="6" class="py-6 text-center text-gray-400">ไม่มีข้อมูลสต๊อก</td></tr>`;
+        }
+      } catch (e) {
+        tbody.innerHTML = `<tr><td colspan="6" class="py-6 text-center text-red-500">เชื่อมต่อไม่ได้</td></tr>`;
+      }
+    }
+
+    function renderInventoryTable(data) {
+      const tbody = document.getElementById('inventory-edit-body');
+      tbody.innerHTML = data.map(item => `
+        <tr class="border-b border-gray-100 hover:bg-gray-50">
+          <td class="py-2.5 px-4 font-bold text-blue-600">${item.barcode_id}</td>
+          <td class="py-2.5 px-4 font-medium">${item.item_name}</td>
+          <td class="py-2.5 px-4 text-right font-bold text-green-700">${item.weight_current} ${item.unit || 'kg'}</td>
+          <td class="py-2.5 px-4 text-center font-bold text-gray-600">${item.location}</td>
+          <td class="py-2.5 px-4 text-center"><span class="px-2 py-0.5 rounded text-xs font-bold ${item.status === 'Active' ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-600'}">${item.status}</span></td>
+          <td class="py-2.5 px-4 text-center space-x-1">
+            <button onclick="openEditModal('${item.barcode_id}')" class="bg-blue-50 text-blue-600 hover:bg-blue-100 px-2.5 py-1 rounded-lg text-xs font-bold transition">✏️ แก้ไข</button>
+            <button onclick="deleteInventoryItem('${item.barcode_id}')" class="bg-red-50 text-red-600 hover:bg-red-100 px-2.5 py-1 rounded-lg text-xs font-bold transition">🗑️ ลบ</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function filterInventoryTable() {
+      const q = document.getElementById('inv-search').value.toLowerCase();
+      const filtered = rawInventory.filter(i => 
+        String(i.barcode_id).toLowerCase().includes(q) || 
+        String(i.item_name).toLowerCase().includes(q)
+      );
+      renderInventoryTable(filtered);
+    }
+
+    function openEditModal(barcode) {
+      const item = rawInventory.find(i => String(i.barcode_id) === String(barcode));
+      if(!item) return;
+      document.getElementById('edit_barcode').value = item.barcode_id;
+      document.getElementById('edit_name').value = item.item_name;
+      document.getElementById('edit_weight').value = item.weight_current;
+      document.getElementById('edit_location').value = item.location;
+      document.getElementById('edit_status').value
