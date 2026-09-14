@@ -42,10 +42,10 @@
         <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
           <div>
             <h1 class="text-2xl md:text-3xl font-bold text-gray-900">📦 Dashboard ภาพรวมสต๊อกสินค้า</h1>
-            <p class="text-gray-500 text-sm mt-1">ติดตามยอดสารกาแฟ เมล็ดกาแฟคั่ว และสถานะชั้นวาง Rack ในโรงคั่ว</p>
+            <p class="text-gray-500 text-sm mt-1">ติดตามยอดสารกาแฟ และสถานะชั้นวาง Rack I (BJI01A - BJI05M)</p>
           </div>
           <div class="flex gap-2">
-            <button onclick="window.location.href='location.html'" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-4 py-2.5 rounded-xl text-sm shadow-sm transition flex items-center gap-2">📍 ตั้งค่า Rack (13x5)</button>
+            <button onclick="window.location.href='location.html'" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-4 py-2.5 rounded-xl text-sm shadow-sm transition flex items-center gap-2">📍 ผัง Rack I (65 ช่อง)</button>
             <button onclick="window.location.href='item_master.html'" class="bg-white border border-gray-200 text-gray-700 font-bold px-4 py-2.5 rounded-xl text-sm hover:bg-gray-50 transition">➕ เพิ่มข้อมูลใหม่</button>
           </div>
         </div>
@@ -63,9 +63,9 @@
             <p class="text-xs text-gray-400 mt-1">ถุง / แพ็คเกจ</p>
           </div>
           <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm">
-            <p class="text-xs font-bold text-gray-400 mb-1">Rack ที่มีสินค้า (สถานะ In)</p>
+            <p class="text-xs font-bold text-gray-400 mb-1">ช่องที่มีสินค้า (สถานะ In)</p>
             <p class="text-3xl font-bold text-blue-600" id="stat-rack-in">0</p>
-            <p class="text-xs text-gray-400 mt-1">จุดจัดเก็บ (Locations)</p>
+            <p class="text-xs text-gray-400 mt-1">จากทั้งหมด 65 ช่อง</p>
           </div>
           <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm">
             <p class="text-xs font-bold text-gray-400 mb-1">พื้นที่ผลิต & จัดส่ง (WIP / Out)</p>
@@ -74,12 +74,12 @@
           </div>
         </div>
 
-        <!-- 🏢 ผังจำลองโกดัง (Visual Rack Map 13 ช่อง x 5 ชั้น) -->
+        <!-- 🏢 ผังจำลอง Rack I (13 ช่อง A-M x 5 ชั้น 01-05) -->
         <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm space-y-4">
           <div class="flex flex-col md:flex-row justify-between md:items-center gap-2 border-b pb-3">
             <div>
-              <h2 class="text-lg font-bold text-gray-900 flex items-center gap-2">🏢 แผนผังชั้นวาง Rack (13 ช่อง x 5 ชั้น)</h2>
-              <p class="text-xs text-gray-500">จำลองช่องวางสินค้าในคลัง (ชั้น 5 ด้านบนสุด ➔ ชั้น 1 ด้านล่างสุด)</p>
+              <h2 class="text-lg font-bold text-gray-900 flex items-center gap-2">🏢 แผนผังชั้นวาง Rack I (BJI01A - BJI05M)</h2>
+              <p class="text-xs text-gray-500">13 ช่องแนวขวาง (A ถึง M) | 5 ชั้นแนวตั้ง (ชั้น 05 ด้านบน ➔ ชั้น 01 ด้านล่าง)</p>
             </div>
             <!-- Legend สีสถานะ -->
             <div class="flex flex-wrap gap-3 text-xs font-bold">
@@ -87,14 +87,14 @@
               <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-orange-400 inline-block"></span> Working</span>
               <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-purple-500 inline-block"></span> Packing</span>
               <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-teal-500 inline-block"></span> Out</span>
-              <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-gray-200 inline-block"></span> ว่าง</span>
+              <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-gray-100 border border-gray-300 inline-block"></span> ว่าง</span>
             </div>
           </div>
 
-          <!-- ตารางผัง 13 คอลัมน์ (มี Scrollbar แนวนอนสำหรับจอมือถือ) -->
+          <!-- ตารางผัง 13 ช่อง x 5 ชั้น -->
           <div class="overflow-x-auto pb-2">
-            <div id="rack-grid" class="min-w-[750px] space-y-2">
-              <p class="text-center py-8 text-gray-400 text-sm">กำลังโหลดแผนผังคลังสินค้า...</p>
+            <div id="rack-grid" class="min-w-[850px] space-y-2">
+              <p class="text-center py-8 text-gray-400 text-sm">กำลังโหลดแผนผัง Rack I...</p>
             </div>
           </div>
         </div>
@@ -103,7 +103,7 @@
         <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden space-y-4 p-6">
           <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 border-b pb-4">
             <h2 class="text-lg font-bold text-gray-900">📦 รายการสินค้าคงเหลือในสต๊อก</h2>
-            <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="🔍 ค้นหาบาร์โค้ด หรือชื่อสินค้า..." class="px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm w-full md:w-72 focus:ring-2 focus:ring-blue-500">
+            <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="🔍 ค้นหาบาร์โค้ด, ชื่อสินค้า หรือ Location (เช่น BJI02B)..." class="px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm w-full md:w-80 focus:ring-2 focus:ring-blue-500">
           </div>
 
           <div class="overflow-x-auto">
@@ -131,6 +131,7 @@
 
   <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbxQywqP4da0BYdt_dHQtQl-kYlvGxmdJWNA59oqnZ_AM7SRyEESbMd73UD3Xx6VffQ/exec";
+    const BAYS = ['A','B','C','D','E','F','G','H','I','J','K','L','M'];
     let inventoryData = [];
     let locationsData = [];
 
@@ -173,70 +174,71 @@
     }
 
     function updateDashboardStats() {
-      // 1. สารกาแฟคงเหลือ
       const greenBeans = inventoryData
         .filter(i => (i.category === 'Green Bean' || !i.category) && i.status === 'Active')
         .reduce((sum, item) => sum + (parseFloat(item.weight_current) || 0), 0);
       document.getElementById('stat-green').innerText = greenBeans.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-      // 2. กาแฟคั่ว/สำเร็จรูป
       const roasted = inventoryData
         .filter(i => i.category === 'Finished Goods' && i.status === 'Active')
         .reduce((sum, item) => sum + (parseFloat(item.weight_current) || 0), 0);
       document.getElementById('stat-roasted').innerText = roasted.toLocaleString('th-TH');
 
-      // 3. Rack In
       const rackIn = locationsData.filter(l => l.status === 'In').length;
       document.getElementById('stat-rack-in').innerText = rackIn;
 
-      // 4. Rack Working / Other
       const rackOther = locationsData.filter(l => l.status === 'Working' || l.status === 'Packing' || l.status === 'Out').length;
       document.getElementById('stat-rack-work').innerText = rackOther;
     }
 
-    // วาดผังจำลอง Rack 13 ช่อง x 5 ชั้น
+    // วาดผังจำลอง Rack I: BJI01A ถึง BJI05M
     function renderVisualRackMap(locs) {
       const container = document.getElementById('rack-grid');
       container.innerHTML = '';
 
-      // สีประจำสถานะ
       const COLOR_MAP = {
-        'In': 'bg-blue-500 text-white',
-        'Working': 'bg-orange-400 text-white',
-        'Packing': 'bg-purple-500 text-white',
-        'Out': 'bg-teal-500 text-white',
-        'Empty': 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+        'In': 'bg-blue-500 text-white shadow-sm',
+        'Working': 'bg-orange-400 text-white shadow-sm',
+        'Packing': 'bg-purple-500 text-white shadow-sm',
+        'Out': 'bg-teal-500 text-white shadow-sm',
+        'Empty': 'bg-gray-100 text-gray-500 border border-gray-200 hover:bg-gray-200'
       };
 
-      // วาดแถวจาก ชั้น 5 ลงมา ชั้น 1
+      // หัวคอลัมน์ชื่อช่อง A ถึง M
+      const colHeader = document.createElement('div');
+      colHeader.className = "flex items-center gap-1.5 mb-1";
+      colHeader.innerHTML = `<div class="w-14 text-center font-bold text-xs text-gray-400">ชั้น / ช่อง</div>` +
+        BAYS.map(b => `<div class="flex-1 text-center font-bold text-xs text-indigo-900 bg-indigo-50 py-1 rounded">${b}</div>`).join('');
+      container.appendChild(colHeader);
+
+      // วาดแถวจาก ชั้น 05 (บนสุด) ลงมา ชั้น 01 (ล่างสุด)
       for(let level = 5; level >= 1; level--) {
+        const levelStr = String(level).padStart(2, '0');
         const row = document.createElement('div');
         row.className = "flex items-center gap-1.5";
 
         // ป้ายบอกชั้น
         const label = document.createElement('div');
-        label.className = "w-12 text-xs font-bold text-gray-400 text-right pr-2";
-        label.innerText = `ชั้น ${level}`;
+        label.className = "w-14 text-xs font-bold text-gray-600 text-right pr-2";
+        label.innerText = `ชั้น ${levelStr}`;
         row.appendChild(label);
 
-        // วาด 13 ช่อง
-        for(let bay = 1; bay <= 13; bay++) {
-          const bayStr = String(bay).padStart(2, '0');
-          const locName = `R${bayStr}-L${level}`;
+        // วาด 13 ช่อง (A ถึง M)
+        BAYS.forEach(bay => {
+          const locName = `BJI${levelStr}${bay}`;
           
-          // ค้นหาว่าใน Location นี้มีข้อมูลไหม
           const loc = locs.find(l => l.name === locName);
           const status = loc ? loc.status : 'Empty';
           const colorClass = COLOR_MAP[status] || COLOR_MAP['Empty'];
 
           const cell = document.createElement('div');
-          cell.className = `flex-1 py-2 text-center rounded-lg text-xs font-bold cursor-pointer transition shadow-sm ${colorClass}`;
-          cell.innerText = `C${bay}`;
-          cell.title = `ช่อง: ${locName} | สถานะ: ${status}`;
-          cell.onclick = () => alert(`📍 จุดจัดเก็บ: ${locName}\nสถานะ: ${status}`);
+          cell.className = `flex-1 py-2.5 text-center rounded-lg text-[11px] font-bold cursor-pointer transition ${colorClass}`;
+          cell.innerText = `${bay}`;
+          cell.title = `รหัสช่อง: ${locName} | สถานะ: ${status}`;
+          cell.onclick = () => alert(`📍 รหัสจุดจัดเก็บ: ${locName}\n🏢 คลัง BJ | Rack I | ชั้น ${levelStr} | ช่อง ${bay}\nสถานะ: ${status}`);
 
           row.appendChild(cell);
-        }
+        });
         container.appendChild(row);
       }
     }
@@ -259,7 +261,7 @@
           <td class="py-2.5 px-4 font-medium">${item.item_name}</td>
           <td class="py-2.5 px-4 text-center text-gray-500">${item.category || '-'}</td>
           <td class="py-2.5 px-4 text-right font-bold text-green-700">${item.weight_current} ${item.unit || 'kg'}</td>
-          <td class="py-2.5 px-4 text-center font-bold text-gray-700">${item.location}</td>
+          <td class="py-2.5 px-4 text-center font-bold text-indigo-700">${item.location}</td>
           <td class="py-2.5 px-4 text-center">${statusBadge}</td>
         `;
         tbody.appendChild(tr);
