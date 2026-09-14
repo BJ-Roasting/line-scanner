@@ -12,13 +12,10 @@
     body { -ms-overflow-style: none; scrollbar-width: none; }
     .pb-safe { padding-bottom: env(safe-area-inset-bottom, 20px); }
 
-    /* 🖨️ ระบบควบคุมการพิมพ์หลายหน้า (Multi-Page Print Engine) */
     @media print {
-      /* ซ่อนส่วนที่ไม่เกี่ยวข้องกับการพิมพ์ทั้งหมด */
       aside, #bottom-nav, .no-print, .sticky, #edit-modal, nav, button {
         display: none !important;
       }
-      /* ปลดล็อกความสูงและ overflow ให้ไหลข้ามหลายหน้าได้ */
       html, body, main, #sec-qr, #qr-print-area {
         overflow: visible !important;
         height: auto !important;
@@ -36,13 +33,11 @@
       #qr-print-area h3 {
         display: none !important;
       }
-      /* จัดสติ๊กเกอร์เป็นตารางพิมพ์ 3 คอลัมน์ต่อแถว (เหมาะกับกระดาษ A4) */
       #qr-gallery {
         display: grid !important;
         grid-template-columns: repeat(3, 1fr) !important;
         gap: 16px !important;
       }
-      /* ป้องกันไม่ให้การ์ดสติ๊กเกอร์ถูกตัดขาดครึ่งหน้าระหว่างรอยต่อหน้ากระดาษ */
       .qr-card-item {
         page-break-inside: avoid !important;
         break-inside: avoid !important;
@@ -121,7 +116,6 @@
               </button>
             </div>
 
-            <!-- ฟอร์มกำหนดค่า QR Code (มีช่องพิมพ์ข้อความใต้ QR แล้ว) -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
               <div>
                 <label class="block text-xs font-bold text-gray-500 mb-1">ประเภท QR Code</label>
@@ -140,7 +134,6 @@
                 <label class="block text-xs font-bold text-gray-500 mb-1">จำนวนที่สร้าง (ใบ)</label>
                 <input type="number" id="qr_count" value="10" min="1" max="100" class="w-full px-3 py-2 border rounded-xl font-bold text-sm">
               </div>
-              <!-- 🌟 ช่องกำหนดข้อความใต้ QR Code 🌟 -->
               <div>
                 <label class="block text-xs font-bold text-gray-500 mb-1">ข้อความใต้ QR Code</label>
                 <input type="text" id="qr_subtext" value="พาเลทจัดเก็บสารกาแฟ" placeholder="เช่น สารกาแฟ Lot 2025" class="w-full px-3 py-2 border rounded-xl font-medium text-gray-700 text-sm">
@@ -152,11 +145,9 @@
             </button>
           </div>
 
-          <!-- พื้นที่แสดงสติ๊กเกอร์ QR Code สำหรับปริ้นท์ (รองรับหลายหน้า) -->
           <div id="qr-print-area" class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
             <h3 class="text-sm font-bold text-gray-400 mb-4 uppercase tracking-wider no-print">ตัวอย่างสติ๊กเกอร์ QR Code พร้อมพิมพ์</h3>
             <div id="qr-gallery" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 text-center">
-              <!-- QR Code แต่ละใบจะถูกสร้างลงที่นี่ -->
             </div>
           </div>
         </div>
@@ -188,7 +179,6 @@
             <button onclick="saveCustomer()" id="save-cust-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl transition">💾 บันทึกข้อมูลลูกค้า</button>
           </div>
 
-          <!-- ตารางรายชื่อลูกค้า -->
           <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
             <div class="p-4 border-b flex justify-between items-center bg-gray-50">
               <h3 class="font-bold text-gray-800">รายชื่อลูกค้าทั้งหมด</h3>
@@ -213,41 +203,61 @@
         </div>
 
         <!-- ============================================== -->
-        <!-- ☕ ส่วนที่ 3: เพิ่มข้อมูลสารกาแฟ -->
+        <!-- ☕ ส่วนที่ 3: เพิ่มข้อมูลสารกาแฟ (ปรับครบ 6 ฟิลด์) -->
         <!-- ============================================== -->
         <div id="sec-bean" class="hidden space-y-6 max-w-4xl no-print">
           <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 space-y-4">
             <h2 class="text-lg font-bold text-gray-800 border-b pb-3">☕ บันทึกสารกาแฟใหม่ (Item Master)</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              
+              <!-- 1. Product Code -->
               <div>
-                <label class="block text-xs font-bold text-gray-500 mb-1">รหัสสินค้า (Item Code) *</label>
-                <input type="text" id="item_code" placeholder="เช่น GBN-BRA-001" class="w-full px-3 py-2 border rounded-xl font-bold text-indigo-600">
+                <label class="block text-xs font-bold text-gray-500 mb-1">Product Code (รหัสสินค้า) *</label>
+                <input type="text" id="prod_code" placeholder="เช่น GBN-BRA-001" class="w-full px-3 py-2 border rounded-xl font-bold text-indigo-600 uppercase">
               </div>
+
+              <!-- 2. Product Name -->
               <div>
-                <label class="block text-xs font-bold text-gray-500 mb-1">ชื่อสารกาแฟ (Item Name) *</label>
-                <input type="text" id="item_name" placeholder="เช่น Brazil Cerrado Dulce" class="w-full px-3 py-2 border rounded-xl">
+                <label class="block text-xs font-bold text-gray-500 mb-1">Product Name (ชื่อสินค้า / สารกาแฟ) *</label>
+                <input type="text" id="prod_name" placeholder="เช่น Brazil Cerrado Dulce" class="w-full px-3 py-2 border rounded-xl font-medium">
               </div>
+
+              <!-- 3. Supplier Code -->
               <div>
-                <label class="block text-xs font-bold text-gray-500 mb-1">หมวดหมู่</label>
-                <select id="item_category" class="w-full px-3 py-2 border rounded-xl bg-white">
-                  <option value="Green Bean">Green Bean (สารกาแฟ)</option>
-                  <option value="Packaging">Packaging (บรรจุภัณฑ์)</option>
-                  <option value="Other">อื่น ๆ</option>
-                </select>
+                <label class="block text-xs font-bold text-gray-500 mb-1">Supplier Code (รหัสผู้จัดจำหน่าย)</label>
+                <input type="text" id="sup_code" placeholder="เช่น SUP-001" class="w-full px-3 py-2 border rounded-xl uppercase">
               </div>
+
+              <!-- 4. Supplier Name -->
               <div>
-                <label class="block text-xs font-bold text-gray-500 mb-1">หน่วยนับ</label>
-                <input type="text" id="item_unit" value="kg" class="w-full px-3 py-2 border rounded-xl">
+                <label class="block text-xs font-bold text-gray-500 mb-1">Supplier Name (ชื่อผู้จัดจำหน่าย / ไร่)</label>
+                <input type="text" id="sup_name" placeholder="เช่น ไร่กาแฟดอยช้าง / InterAmerican" class="w-full px-3 py-2 border rounded-xl">
               </div>
-              <div class="md:col-span-2">
-                <label class="block text-xs font-bold text-gray-500 mb-1">รายละเอียดสายพันธุ์ / Process</label>
-                <input type="text" id="item_desc" placeholder="เช่น Bourbon, Natural Process, Screen 17/18" class="w-full px-3 py-2 border rounded-xl">
+
+              <!-- 5. Product unit -->
+              <div>
+                <label class="block text-xs font-bold text-gray-500 mb-1">Product Unit (หน่วยนับสินค้า) *</label>
+                <input type="text" id="prod_unit" value="kg" placeholder="เช่น kg, กระสอบ, ถุง" class="w-full px-3 py-2 border rounded-xl font-medium">
               </div>
+
+              <!-- 6. Process -->
+              <div>
+                <label class="block text-xs font-bold text-gray-500 mb-1">Process (กระบวนการแปรรูป)</label>
+                <input type="text" id="prod_process" list="process-list" placeholder="เลือกหรือพิมพ์ เช่น Washed, Natural" class="w-full px-3 py-2 border rounded-xl">
+                <datalist id="process-list">
+                  <option value="Washed">
+                  <option value="Natural">
+                  <option value="Honey">
+                  <option value="Anaerobic">
+                  <option value="Wet-Hulled">
+                </datalist>
+              </div>
+
             </div>
-            <button onclick="saveBeanMaster()" id="save-bean-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl transition">💾 บันทึกสารกาแฟ</button>
+            <button onclick="saveBeanMaster()" id="save-bean-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl transition shadow-sm">💾 บันทึกข้อมูลสารกาแฟ</button>
           </div>
 
-          <!-- ตารางสารกาแฟ -->
+          <!-- ตารางสารกาแฟ (แสดงครบ 6 ฟิลด์) -->
           <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
             <div class="p-4 border-b flex justify-between items-center bg-gray-50">
               <h3 class="font-bold text-gray-800">📋 รายการสารกาแฟทั้งหมดในระบบ</h3>
@@ -257,14 +267,15 @@
               <table class="min-w-full text-sm">
                 <thead class="bg-gray-100 text-gray-600">
                   <tr>
-                    <th class="py-2.5 px-4 text-left font-bold">รหัสสินค้า</th>
-                    <th class="py-2.5 px-4 text-left font-bold">ชื่อสารกาแฟ</th>
-                    <th class="py-2.5 px-4 text-center font-bold">หมวดหมู่</th>
-                    <th class="py-2.5 px-4 text-center font-bold">หน่วย</th>
+                    <th class="py-2.5 px-4 text-left font-bold">Product Code</th>
+                    <th class="py-2.5 px-4 text-left font-bold">Product Name</th>
+                    <th class="py-2.5 px-4 text-left font-bold">Supplier</th>
+                    <th class="py-2.5 px-4 text-center font-bold">Unit</th>
+                    <th class="py-2.5 px-4 text-center font-bold">Process</th>
                   </tr>
                 </thead>
                 <tbody id="bean-table-body" class="text-gray-700">
-                  <tr><td colspan="4" class="py-6 text-center text-gray-400">กำลังโหลดข้อมูล...</td></tr>
+                  <tr><td colspan="5" class="py-6 text-center text-gray-400">กำลังโหลดข้อมูล...</td></tr>
                 </tbody>
               </table>
             </div>
@@ -391,8 +402,8 @@
         prefixInput.value = "LOT-";
         subInput.value = "สารกาแฟนำเข้าสต๊อก";
       } else if(type === 'RACK') {
-        prefixInput.value = "RACK-";
-        subInput.value = "จุดจัดเก็บคลังสินค้า";
+        prefixInput.value = "BJI";
+        subInput.value = "จุดจัดเก็บคลัง BJ Rack I";
       } else {
         prefixInput.value = "";
         subInput.value = "BJ Roaster System";
@@ -488,39 +499,41 @@
     }
 
     // ===================================
-    // ☕ 3. ข้อมูลสารกาแฟ (Item Master)
+    // ☕ 3. ข้อมูลสารกาแฟ (6 ฟิลด์ใหม่)
     // ===================================
     async function loadBeans() {
       const tbody = document.getElementById('bean-table-body');
-      tbody.innerHTML = `<tr><td colspan="4" class="py-6 text-center text-gray-400">กำลังโหลด...</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-gray-400">กำลังโหลด...</td></tr>`;
       try {
         const res = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'get_items' }) });
         const result = await res.json();
         if(result.success && result.data.length > 0) {
           tbody.innerHTML = result.data.map(i => `
             <tr class="border-b border-gray-100 hover:bg-gray-50">
-              <td class="py-2.5 px-4 font-bold text-indigo-600">${i.item_code}</td>
-              <td class="py-2.5 px-4 font-medium">${i.item_name}</td>
-              <td class="py-2.5 px-4 text-center text-gray-500">${i.category || '-'}</td>
-              <td class="py-2.5 px-4 text-center font-bold">${i.unit || 'kg'}</td>
+              <td class="py-2.5 px-4 font-bold text-indigo-600">${i.product_code || i.item_code}</td>
+              <td class="py-2.5 px-4 font-medium text-gray-900">${i.product_name || i.item_name}</td>
+              <td class="py-2.5 px-4 text-gray-600">${i.supplier_name || i.supplier_code ? `${i.supplier_name} <span class="text-xs text-gray-400">(${i.supplier_code})</span>` : '-'}</td>
+              <td class="py-2.5 px-4 text-center font-bold text-gray-700">${i.product_unit || i.unit || 'kg'}</td>
+              <td class="py-2.5 px-4 text-center"><span class="bg-indigo-50 text-indigo-700 font-bold px-2 py-0.5 rounded text-xs">${i.process || '-'}</span></td>
             </tr>
           `).join('');
         } else {
-          tbody.innerHTML = `<tr><td colspan="4" class="py-6 text-center text-gray-400">ยังไม่มีข้อมูลสารกาแฟ</td></tr>`;
+          tbody.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-gray-400">ยังไม่มีข้อมูลสารกาแฟ</td></tr>`;
         }
       } catch (e) {
-        tbody.innerHTML = `<tr><td colspan="4" class="py-6 text-center text-red-500">เชื่อมต่อไม่ได้</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-red-500">เชื่อมต่อไม่ได้</td></tr>`;
       }
     }
 
     async function saveBeanMaster() {
-      const code = document.getElementById('item_code').value.trim();
-      const name = document.getElementById('item_name').value.trim();
-      const cat = document.getElementById('item_category').value;
-      const unit = document.getElementById('item_unit').value.trim();
-      const desc = document.getElementById('item_desc').value.trim();
+      const prodCode = document.getElementById('prod_code').value.trim().toUpperCase();
+      const prodName = document.getElementById('prod_name').value.trim();
+      const supCode = document.getElementById('sup_code').value.trim().toUpperCase();
+      const supName = document.getElementById('sup_name').value.trim();
+      const prodUnit = document.getElementById('prod_unit').value.trim();
+      const prodProcess = document.getElementById('prod_process').value.trim();
 
-      if(!code || !name) return alert("กรุณากรอกรหัสและชื่อสินค้า");
+      if(!prodCode || !prodName) return alert("กรุณาระบุ Product Code และ Product Name");
 
       const btn = document.getElementById('save-bean-btn');
       btn.innerText = "กำลังบันทึก...";
@@ -529,20 +542,30 @@
       try {
         const res = await fetch(API_URL, {
           method: "POST",
-          body: JSON.stringify({ action: 'add_item', item_code: code, item_name: name, category: cat, unit: unit, description: desc })
+          body: JSON.stringify({
+            action: 'add_item',
+            product_code: prodCode,
+            product_name: prodName,
+            supplier_code: supCode,
+            supplier_name: supName,
+            product_unit: prodUnit,
+            process: prodProcess
+          })
         });
         const d = await res.json();
         alert(d.message);
         if(d.success) {
-          document.getElementById('item_code').value = '';
-          document.getElementById('item_name').value = '';
-          document.getElementById('item_desc').value = '';
+          document.getElementById('prod_code').value = '';
+          document.getElementById('prod_name').value = '';
+          document.getElementById('sup_code').value = '';
+          document.getElementById('sup_name').value = '';
+          document.getElementById('prod_process').value = '';
           loadBeans();
         }
       } catch (e) {
         alert("บันทึกไม่สำเร็จ");
       }
-      btn.innerText = "💾 บันทึกสารกาแฟ";
+      btn.innerText = "💾 บันทึกข้อมูลสารกาแฟ";
       btn.disabled = false;
     }
 
