@@ -11,10 +11,46 @@
     ::-webkit-scrollbar { display: none; }
     body { -ms-overflow-style: none; scrollbar-width: none; }
     .pb-safe { padding-bottom: env(safe-area-inset-bottom, 20px); }
+
+    /* 🖨️ ระบบควบคุมการพิมพ์หลายหน้า (Multi-Page Print Engine) */
     @media print {
-      body * { visibility: hidden; }
-      #qr-print-area, #qr-print-area * { visibility: visible; }
-      #qr-print-area { position: absolute; left: 0; top: 0; width: 100%; }
+      /* ซ่อนส่วนที่ไม่เกี่ยวข้องกับการพิมพ์ทั้งหมด */
+      aside, #bottom-nav, .no-print, .sticky, #edit-modal, nav, button {
+        display: none !important;
+      }
+      /* ปลดล็อกความสูงและ overflow ให้ไหลข้ามหลายหน้าได้ */
+      html, body, main, #sec-qr, #qr-print-area {
+        overflow: visible !important;
+        height: auto !important;
+        min-height: auto !important;
+        position: static !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: white !important;
+      }
+      #qr-print-area {
+        border: none !important;
+        box-shadow: none !important;
+        width: 100% !important;
+      }
+      #qr-print-area h3 {
+        display: none !important;
+      }
+      /* จัดสติ๊กเกอร์เป็นตารางพิมพ์ 3 คอลัมน์ต่อแถว (เหมาะกับกระดาษ A4) */
+      #qr-gallery {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 16px !important;
+      }
+      /* ป้องกันไม่ให้การ์ดสติ๊กเกอร์ถูกตัดขาดครึ่งหน้าระหว่างรอยต่อหน้ากระดาษ */
+      .qr-card-item {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        border: 1px dashed #666 !important;
+        border-radius: 8px !important;
+        padding: 12px !important;
+        box-shadow: none !important;
+      }
     }
   </style>
 </head>
@@ -22,8 +58,8 @@
 
   <div class="flex min-h-screen">
     
-    <!-- 💻 Sidebar Desktop (ไอคอนเส้นเรียบ SVG) -->
-    <aside class="hidden md:flex flex-col w-64 fixed left-0 top-0 h-screen bg-white border-r border-gray-200 pt-10 pb-6 px-4 z-50 shadow-sm">
+    <!-- 💻 Sidebar Desktop -->
+    <aside class="hidden md:flex flex-col w-64 fixed left-0 top-0 h-screen bg-white border-r border-gray-200 pt-10 pb-6 px-4 z-50 shadow-sm no-print">
       <h2 class="text-2xl font-bold text-gray-900 mb-10 px-2">BJ Roaster</h2>
       <nav class="flex-1 space-y-2">
         <a href="index.html" class="flex items-center gap-3 text-gray-700 hover:bg-gray-50 px-4 py-3 rounded-xl font-bold transition">
@@ -43,7 +79,7 @@
     <main class="w-full md:ml-64 relative overflow-hidden flex flex-col min-h-screen">
       
       <!-- 🌟 แถบการ์ดบน (การ์ดที่ 6 ชี้ไป inbound.html) -->
-      <div class="sticky top-0 z-40 bg-gray-50/95 backdrop-blur-xl pt-6 pb-4 border-b border-gray-200">
+      <div class="sticky top-0 z-40 bg-gray-50/95 backdrop-blur-xl pt-6 pb-4 border-b border-gray-200 no-print">
         <div class="flex flex-row overflow-x-auto gap-3 px-5 md:px-10 pr-10 snap-x w-full items-center">
           <div class="relative flex-none w-40 h-24 md:w-48 md:h-28 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-yellow-50 to-yellow-100 border border-yellow-200 cursor-pointer hover:bg-yellow-100 transition px-4 flex flex-col justify-center opacity-70 hover:opacity-100" onclick="window.location.href='planner.html'"><h2 class="text-base md:text-lg font-bold text-yellow-800 leading-tight">วางแผน<br><span class="text-xs font-medium text-yellow-600">(ออเดอร์)</span></h2></div>
           <div class="relative flex-none w-40 h-24 md:w-48 md:h-28 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-orange-50 to-orange-100 border border-orange-200 cursor-pointer hover:bg-orange-100 transition px-4 flex flex-col justify-center opacity-70 hover:opacity-100" onclick="window.location.href='wip.html'"><h2 class="text-base md:text-lg font-bold text-orange-800 leading-tight">เบิกคั่ว<br><span class="text-xs font-medium text-orange-600">(WIP)</span></h2></div>
@@ -59,11 +95,11 @@
         </div>
       </div>
 
-      <!-- 👇 แท็บเมนูย่อย 4 ส่วนหลัก (เรียงลำดับใหม่) 👇 -->
+      <!-- 👇 แท็บเมนูย่อย 4 ส่วนหลัก 👇 -->
       <div class="p-5 md:p-10 pb-28 space-y-6">
         
-        <!-- แถบเลือกโหมด 4 แท็บ เรียงตามที่คุณต้องการ -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-2 max-w-4xl">
+        <!-- แถบเลือกโหมด 4 แท็บ -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-2 max-w-4xl no-print">
           <button id="btn-tab-qr" onclick="switchSection('qr')" class="py-3 px-2 font-bold rounded-xl bg-indigo-600 text-white shadow-sm text-sm">🖨️ 1. สร้าง QR Code</button>
           <button id="btn-tab-cust" onclick="switchSection('cust')" class="py-3 px-2 font-bold rounded-xl bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 text-sm">👥 2. ข้อมูลลูกค้า</button>
           <button id="btn-tab-bean" onclick="switchSection('bean')" class="py-3 px-2 font-bold rounded-xl bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 text-sm">☕ 3. ข้อมูลสารกาแฟ</button>
@@ -74,22 +110,22 @@
         <!-- 🖨️ ส่วนที่ 1: ระบบสร้าง QR Code (Pallet / Lot) -->
         <!-- ============================================== -->
         <div id="sec-qr" class="space-y-6 max-w-4xl">
-          <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 space-y-4">
+          <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 space-y-4 no-print">
             <div class="border-b pb-3 flex justify-between items-center">
               <div>
                 <h2 class="text-lg font-bold text-gray-800">🖨️ เครื่องพิมพ์สร้าง QR Code (Pallet & Lot Bean)</h2>
                 <p class="text-xs text-gray-500 mt-1">สร้าง QR Code แปะพาเลท หรือกระสอบสินค้าล่วงหน้า</p>
               </div>
-              <button onclick="window.print()" class="bg-gray-800 hover:bg-gray-900 text-white text-xs font-bold px-4 py-2 rounded-xl flex items-center gap-2">
-                🖨️ พิมพ์ออกเครื่องพิมพ์
+              <button onclick="window.print()" class="bg-gray-800 hover:bg-gray-900 text-white text-xs font-bold px-4 py-2.5 rounded-xl flex items-center gap-2 shadow-sm transition active:scale-95">
+                🖨️ สั่งพิมพ์ออกเครื่องพิมพ์
               </button>
             </div>
 
-            <!-- ฟอร์มสร้าง QR Code -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <!-- ฟอร์มกำหนดค่า QR Code (มีช่องพิมพ์ข้อความใต้ QR แล้ว) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
               <div>
                 <label class="block text-xs font-bold text-gray-500 mb-1">ประเภท QR Code</label>
-                <select id="qr_type" onchange="autoFillQRPrefix()" class="w-full px-3 py-2 border rounded-xl bg-white font-bold">
+                <select id="qr_type" onchange="autoFillQRPrefix()" class="w-full px-3 py-2 border rounded-xl bg-white font-bold text-sm">
                   <option value="PALLET">QR แปะพาเลท (Pallet No.)</option>
                   <option value="LOT">QR ข้อมูลสาร (Lot Bean)</option>
                   <option value="RACK">QR จุดเก็บ (Rack Location)</option>
@@ -97,25 +133,30 @@
                 </select>
               </div>
               <div>
-                <label class="block text-xs font-bold text-gray-500 mb-1">คำนำหน้า (Prefix)</label>
-                <input type="text" id="qr_prefix" value="PAL-" class="w-full px-3 py-2 border rounded-xl font-bold text-indigo-600">
+                <label class="block text-xs font-bold text-gray-500 mb-1">คำนำหน้ารหัส (Prefix)</label>
+                <input type="text" id="qr_prefix" value="PAL-" class="w-full px-3 py-2 border rounded-xl font-bold text-indigo-600 text-sm">
               </div>
               <div>
-                <label class="block text-xs font-bold text-gray-500 mb-1">จำนวนที่ต้องการสร้าง (ใบ)</label>
-                <input type="number" id="qr_count" value="10" min="1" max="50" class="w-full px-3 py-2 border rounded-xl font-bold">
+                <label class="block text-xs font-bold text-gray-500 mb-1">จำนวนที่สร้าง (ใบ)</label>
+                <input type="number" id="qr_count" value="10" min="1" max="100" class="w-full px-3 py-2 border rounded-xl font-bold text-sm">
+              </div>
+              <!-- 🌟 ช่องกำหนดข้อความใต้ QR Code 🌟 -->
+              <div>
+                <label class="block text-xs font-bold text-gray-500 mb-1">ข้อความใต้ QR Code</label>
+                <input type="text" id="qr_subtext" value="พาเลทจัดเก็บสารกาแฟ" placeholder="เช่น สารกาแฟ Lot 2025" class="w-full px-3 py-2 border rounded-xl font-medium text-gray-700 text-sm">
               </div>
             </div>
 
-            <button onclick="generateBatchQR()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl transition">
-              ⚡ สร้างและแสดงตัวอย่าง QR Code
+            <button onclick="generateBatchQR()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl transition shadow-md">
+              ⚡ สร้างและอัปเดตตัวอย่าง QR Code
             </button>
           </div>
 
-          <!-- พื้นที่แสดง QR Code สำหรับปริ้นท์ -->
+          <!-- พื้นที่แสดงสติ๊กเกอร์ QR Code สำหรับปริ้นท์ (รองรับหลายหน้า) -->
           <div id="qr-print-area" class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-            <h3 class="text-sm font-bold text-gray-400 mb-4 uppercase tracking-wider">ตัวอย่างสติ๊กเกอร์ QR Code พร้อมพิมพ์</h3>
-            <div id="qr-gallery" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 text-center">
-              <p class="col-span-full py-8 text-gray-400">กดปุ่ม "สร้างและแสดงตัวอย่าง" ด้านบนเพื่อดูตัวอย่าง QR Code</p>
+            <h3 class="text-sm font-bold text-gray-400 mb-4 uppercase tracking-wider no-print">ตัวอย่างสติ๊กเกอร์ QR Code พร้อมพิมพ์</h3>
+            <div id="qr-gallery" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 text-center">
+              <!-- QR Code แต่ละใบจะถูกสร้างลงที่นี่ -->
             </div>
           </div>
         </div>
@@ -123,7 +164,7 @@
         <!-- ============================================== -->
         <!-- 👥 ส่วนที่ 2: ข้อมูลลูกค้า (Customer Master) -->
         <!-- ============================================== -->
-        <div id="sec-cust" class="hidden space-y-6 max-w-4xl">
+        <div id="sec-cust" class="hidden space-y-6 max-w-4xl no-print">
           <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 space-y-4">
             <h2 class="text-lg font-bold text-gray-800 border-b pb-3">👥 บันทึกข้อมูลลูกค้า / ร้านกาแฟ (Customer Master)</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -174,7 +215,7 @@
         <!-- ============================================== -->
         <!-- ☕ ส่วนที่ 3: เพิ่มข้อมูลสารกาแฟ -->
         <!-- ============================================== -->
-        <div id="sec-bean" class="hidden space-y-6 max-w-4xl">
+        <div id="sec-bean" class="hidden space-y-6 max-w-4xl no-print">
           <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 space-y-4">
             <h2 class="text-lg font-bold text-gray-800 border-b pb-3">☕ บันทึกสารกาแฟใหม่ (Item Master)</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -233,7 +274,7 @@
         <!-- ============================================== -->
         <!-- 📦 ส่วนที่ 4: จัดการสต๊อก (แก้ไข / ลบ ข้อมูล) -->
         <!-- ============================================== -->
-        <div id="sec-inv" class="hidden space-y-6 max-w-5xl">
+        <div id="sec-inv" class="hidden space-y-6 max-w-5xl no-print">
           <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 space-y-4">
             <div class="flex flex-col md:flex-row justify-between md:items-center gap-3 border-b pb-4">
               <div>
@@ -267,8 +308,8 @@
     </main>
   </div>
 
-  <!-- 🛑 MODAL หน้าต่างแก้ไขสต๊อกสินค้า -->
-  <div id="edit-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+  <!-- 🛑 MODAL แก้ไขสต๊อก -->
+  <div id="edit-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 no-print">
     <div class="bg-white max-w-md w-full p-6 rounded-2xl shadow-2xl border border-gray-100 space-y-4">
       <div class="flex justify-between items-center border-b pb-3">
         <h3 class="font-bold text-gray-800 text-lg">✏️ แก้ไขข้อมูลสต๊อก</h3>
@@ -317,7 +358,6 @@
       }
     }
 
-    // ฟังก์ชันสลับแท็บตามลำดับใหม่
     function switchSection(sec) {
       ['qr', 'cust', 'bean', 'inv'].forEach(s => {
         document.getElementById(`sec-${s}`).classList.add('hidden');
@@ -333,7 +373,7 @@
 
     window.onload = function() {
       autoFillQRPrefix();
-      generateBatchQR(); // แสดงตัวอย่างเริ่มต้นทันที
+      generateBatchQR();
     };
 
     // ===================================
@@ -342,15 +382,27 @@
     function autoFillQRPrefix() {
       const type = document.getElementById('qr_type').value;
       const prefixInput = document.getElementById('qr_prefix');
-      if(type === 'PALLET') prefixInput.value = "PAL-";
-      else if(type === 'LOT') prefixInput.value = "LOT-";
-      else if(type === 'RACK') prefixInput.value = "RACK-";
-      else prefixInput.value = "";
+      const subInput = document.getElementById('qr_subtext');
+      
+      if(type === 'PALLET') {
+        prefixInput.value = "PAL-";
+        subInput.value = "พาเลทจัดเก็บสารกาแฟ";
+      } else if(type === 'LOT') {
+        prefixInput.value = "LOT-";
+        subInput.value = "สารกาแฟนำเข้าสต๊อก";
+      } else if(type === 'RACK') {
+        prefixInput.value = "RACK-";
+        subInput.value = "จุดจัดเก็บคลังสินค้า";
+      } else {
+        prefixInput.value = "";
+        subInput.value = "BJ Roaster System";
+      }
     }
 
     function generateBatchQR() {
       const prefix = document.getElementById('qr_prefix').value.trim();
       const count = parseInt(document.getElementById('qr_count').value) || 1;
+      const subText = document.getElementById('qr_subtext').value.trim() || 'BJ Roaster System';
       const gallery = document.getElementById('qr-gallery');
       gallery.innerHTML = '';
 
@@ -359,11 +411,11 @@
         const codeText = `${prefix}${numStr}`;
 
         const card = document.createElement('div');
-        card.className = "p-4 bg-white border-2 border-dashed border-gray-300 rounded-xl flex flex-col items-center justify-center space-y-2";
+        card.className = "qr-card-item p-4 bg-white border-2 border-dashed border-gray-300 rounded-xl flex flex-col items-center justify-center space-y-2";
         card.innerHTML = `
-          <div id="qrcode-${i}" class="p-2 bg-white rounded-lg shadow-sm"></div>
-          <p class="font-bold text-sm text-gray-900 tracking-wider">${codeText}</p>
-          <span class="text-[10px] text-gray-400">BJ Roaster System</span>
+          <div id="qrcode-${i}" class="p-1.5 bg-white rounded-lg"></div>
+          <p class="font-bold text-base text-gray-900 tracking-wider">${codeText}</p>
+          <span class="text-xs text-gray-600 font-medium px-2 py-0.5 bg-gray-100 rounded-md inline-block max-w-full truncate">${subText}</span>
         `;
         gallery.appendChild(card);
 
