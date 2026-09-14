@@ -13,7 +13,7 @@
     .pb-safe { padding-bottom: env(safe-area-inset-bottom, 20px); }
 
     @media print {
-      aside, #bottom-nav, .no-print, .sticky, #edit-modal, nav, button {
+      aside, #bottom-nav, .no-print, .sticky, #edit-bean-modal, #edit-cust-modal, nav, button {
         display: none !important;
       }
       html, body, main, #sec-qr, #qr-print-area {
@@ -73,7 +73,7 @@
     <!-- 💻 พื้นที่แสดงผลฝั่งขวา -->
     <main class="w-full md:ml-64 relative overflow-hidden flex flex-col min-h-screen">
       
-      <!-- 🌟 แถบการ์ดบน -->
+      <!-- 🌟 แถบการ์ดบน (การ์ดที่ 6 ชี้ไป inbound.html) -->
       <div class="sticky top-0 z-30 bg-gray-50/95 backdrop-blur-xl pt-6 pb-4 border-b border-gray-200 no-print">
         <div class="flex flex-row overflow-x-auto gap-3 px-5 md:px-10 pr-10 snap-x w-full items-center">
           <div class="relative flex-none w-40 h-24 md:w-48 md:h-28 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-yellow-50 to-yellow-100 border border-yellow-200 cursor-pointer hover:bg-yellow-100 transition px-4 flex flex-col justify-center opacity-70 hover:opacity-100" onclick="window.location.href='planner.html'"><h2 class="text-base md:text-lg font-bold text-yellow-800 leading-tight">วางแผน<br><span class="text-xs font-medium text-yellow-600">(ออเดอร์)</span></h2></div>
@@ -90,15 +90,14 @@
         </div>
       </div>
 
-      <!-- 👇 แท็บเมนูย่อย 4 ส่วนหลัก 👇 -->
+      <!-- 👇 แท็บเมนูย่อย 3 ส่วนหลัก (ตามที่คุณต้องการ) 👇 -->
       <div class="p-5 md:p-10 pb-28 space-y-6">
         
-        <!-- แถบเลือกโหมด 4 แท็บ -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-2 max-w-4xl no-print">
-          <button type="button" id="btn-tab-qr" onclick="switchSection('qr')" class="py-3 px-2 font-bold rounded-xl bg-indigo-600 text-white shadow-sm text-sm">🖨️ 1. สร้าง QR Code</button>
-          <button type="button" id="btn-tab-cust" onclick="switchSection('cust')" class="py-3 px-2 font-bold rounded-xl bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 text-sm">👥 2. ข้อมูลลูกค้า</button>
-          <button type="button" id="btn-tab-bean" onclick="switchSection('bean')" class="py-3 px-2 font-bold rounded-xl bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 text-sm">☕ 3. ข้อมูลสารกาแฟ</button>
-          <button type="button" id="btn-tab-inv" onclick="switchSection('inv')" class="py-3 px-2 font-bold rounded-xl bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 text-sm">📦 4. จัดการสต๊อก (แก้ไข/ลบ)</button>
+        <!-- แถบเลือกโหมด 3 แท็บ -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 max-w-4xl no-print">
+          <button type="button" id="btn-tab-qr" onclick="switchSection('qr')" class="py-3 px-4 font-bold rounded-xl bg-indigo-600 text-white shadow-sm text-sm">🖨️ 1. สร้าง QR Code</button>
+          <button type="button" id="btn-tab-cust" onclick="switchSection('cust')" class="py-3 px-4 font-bold rounded-xl bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 text-sm">👥 2. ข้อมูลลูกค้า</button>
+          <button type="button" id="btn-tab-bean" onclick="switchSection('bean')" class="py-3 px-4 font-bold rounded-xl bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 text-sm">☕ 3. ข้อมูลสารกาแฟ</button>
         </div>
 
         <!-- ============================================== -->
@@ -154,15 +153,15 @@
         </div>
 
         <!-- ============================================== -->
-        <!-- 👥 ส่วนที่ 2: ข้อมูลลูกค้า (Customer Master) -->
+        <!-- 👥 ส่วนที่ 2: ข้อมูลลูกค้า (มีปุ่ม แก้ไข / ลบ) -->
         <!-- ============================================== -->
-        <div id="sec-cust" class="hidden space-y-6 max-w-4xl no-print">
+        <div id="sec-cust" class="hidden space-y-6 max-w-5xl no-print">
           <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 space-y-4">
             <h2 class="text-lg font-bold text-gray-800 border-b pb-3">👥 บันทึกข้อมูลลูกค้า / ร้านกาแฟ (Customer Master)</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label class="block text-xs font-bold text-gray-500 mb-1">รหัสลูกค้า (Customer Code)</label>
-                <input type="text" id="cust_code" placeholder="เช่น CUST-001" class="w-full px-3 py-2 border rounded-xl font-bold text-indigo-600">
+                <label class="block text-xs font-bold text-gray-500 mb-1">รหัสลูกค้า (Customer Code) *</label>
+                <input type="text" id="cust_code" placeholder="เช่น CUST-001" class="w-full px-3 py-2 border rounded-xl font-bold text-indigo-600 uppercase">
               </div>
               <div>
                 <label class="block text-xs font-bold text-gray-500 mb-1">ชื่อลูกค้า / ร้านกาแฟ *</label>
@@ -177,12 +176,13 @@
                 <input type="text" id="cust_address" placeholder="เช่น สาขาสุขุมวิท กรุงเทพฯ" class="w-full px-3 py-2 border rounded-xl">
               </div>
             </div>
-            <button type="button" onclick="saveCustomer()" id="save-cust-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl transition">💾 บันทึกข้อมูลลูกค้า</button>
+            <button type="button" onclick="saveCustomer()" id="save-cust-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl transition shadow-sm">💾 บันทึกข้อมูลลูกค้า</button>
           </div>
 
+          <!-- ตารางรายชื่อลูกค้า (มีปุ่ม แก้ไข / ลบ) -->
           <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
             <div class="p-4 border-b flex justify-between items-center bg-gray-50">
-              <h3 class="font-bold text-gray-800">รายชื่อลูกค้าทั้งหมด</h3>
+              <h3 class="font-bold text-gray-800">📋 รายชื่อลูกค้าทั้งหมด</h3>
               <button type="button" onclick="loadCustomers()" class="text-xs bg-gray-200 hover:bg-gray-300 font-bold px-3 py-1.5 rounded-lg">รีเฟรช</button>
             </div>
             <div class="overflow-x-auto">
@@ -193,10 +193,11 @@
                     <th class="py-2.5 px-4 text-left font-bold">ชื่อลูกค้า / ร้าน</th>
                     <th class="py-2.5 px-4 text-center font-bold">เบอร์โทร</th>
                     <th class="py-2.5 px-4 text-left font-bold">ที่อยู่</th>
+                    <th class="py-2.5 px-4 text-center font-bold">จัดการ</th>
                   </tr>
                 </thead>
                 <tbody id="cust-table-body" class="text-gray-700">
-                  <tr><td colspan="4" class="py-6 text-center text-gray-400">กำลังโหลดข้อมูล...</td></tr>
+                  <tr><td colspan="5" class="py-6 text-center text-gray-400">กำลังโหลดข้อมูล...</td></tr>
                 </tbody>
               </table>
             </div>
@@ -204,9 +205,9 @@
         </div>
 
         <!-- ======================================================== -->
-        <!-- ☕ ส่วนที่ 3: เพิ่มข้อมูลสารกาแฟ (แยกฝั่ง ERP และ หน้างาน) -->
+        <!-- ☕ ส่วนที่ 3: ข้อมูลสารกาแฟ (มีปุ่ม แก้ไข / ลบ) -->
         <!-- ======================================================== -->
-        <div id="sec-bean" class="hidden space-y-6 max-w-4xl no-print">
+        <div id="sec-bean" class="hidden space-y-6 max-w-5xl no-print">
           <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 space-y-5">
             <div class="border-b pb-3">
               <h2 class="text-lg font-bold text-gray-800">☕ บันทึกสารกาแฟใหม่ (Item Master)</h2>
@@ -273,7 +274,7 @@
             <button type="button" onclick="saveBeanMaster()" id="save-bean-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl transition shadow-md">💾 บันทึกข้อมูลสารกาแฟ</button>
           </div>
 
-          <!-- ตารางสารกาแฟ -->
+          <!-- ตารางสารกาแฟ (มีปุ่ม แก้ไข / ลบ) -->
           <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
             <div class="p-4 border-b flex justify-between items-center bg-gray-50">
               <h3 class="font-bold text-gray-800">📋 รายการสารกาแฟทั้งหมดในระบบ</h3>
@@ -290,43 +291,11 @@
                     <th class="py-2.5 px-4 text-left font-bold">Supplier</th>
                     <th class="py-2.5 px-4 text-center font-bold">Unit</th>
                     <th class="py-2.5 px-4 text-center font-bold">Process</th>
-                  </tr>
-                </thead>
-                <tbody id="bean-table-body" class="text-gray-700">
-                  <tr><td colspan="7" class="py-6 text-center text-gray-400">ยังไม่มีข้อมูลในตาราง</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        <!-- ============================================== -->
-        <!-- 📦 ส่วนที่ 4: จัดการสต๊อก (แก้ไข / ลบ ข้อมูล) -->
-        <!-- ============================================== -->
-        <div id="sec-inv" class="hidden space-y-6 max-w-5xl no-print">
-          <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 space-y-4">
-            <div class="flex flex-col md:flex-row justify-between md:items-center gap-3 border-b pb-4">
-              <div>
-                <h2 class="text-lg font-bold text-gray-800">📦 จัดการสต๊อกคงคลัง (แก้ไข / ลบ)</h2>
-                <p class="text-xs text-gray-500 mt-1">สามารถแก้ไขจำนวนคงเหลือ จุดเก็บ หรือลบรายการที่คีย์ผิดพลาดได้</p>
-              </div>
-              <input type="text" id="inv-search" onkeyup="filterInventoryTable()" placeholder="🔍 ค้นหาบาร์โค้ด หรือชื่อสินค้า..." class="px-3 py-2 border rounded-xl text-sm w-full md:w-64">
-            </div>
-
-            <div class="overflow-x-auto">
-              <table class="min-w-full text-sm">
-                <thead class="bg-gray-100 text-gray-600">
-                  <tr>
-                    <th class="py-2.5 px-4 text-left font-bold">บาร์โค้ด / พาเลท</th>
-                    <th class="py-2.5 px-4 text-left font-bold">ชื่อสินค้า</th>
-                    <th class="py-2.5 px-4 text-right font-bold">คงเหลือ</th>
-                    <th class="py-2.5 px-4 text-center font-bold">Location</th>
-                    <th class="py-2.5 px-4 text-center font-bold">สถานะ</th>
                     <th class="py-2.5 px-4 text-center font-bold">จัดการ</th>
                   </tr>
                 </thead>
-                <tbody id="inventory-edit-body" class="text-gray-700">
-                  <tr><td colspan="6" class="py-6 text-center text-gray-400">ไม่มีข้อมูลสต๊อก</td></tr>
+                <tbody id="bean-table-body" class="text-gray-700">
+                  <tr><td colspan="8" class="py-6 text-center text-gray-400">กำลังโหลดข้อมูล...</td></tr>
                 </tbody>
               </table>
             </div>
@@ -337,48 +306,90 @@
     </main>
   </div>
 
-  <!-- 🛑 MODAL แก้ไขสต๊อก (ใส่ style="display: none;" ปลดล็อกแผ่นบังหน้าจอ 100%) -->
-  <div id="edit-modal" style="display: none;" onclick="if(event.target === this) closeEditModal()" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 items-center justify-center p-4 no-print">
-    <div class="bg-white max-w-md w-full p-6 rounded-2xl shadow-2xl border border-gray-100 space-y-4">
+  <!-- 🛑 MODAL 1: แก้ไขข้อมูลสารกาแฟ (Edit Bean Modal) -->
+  <div id="edit-bean-modal" style="display: none;" onclick="if(event.target === this) closeEditBeanModal()" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 items-center justify-center p-4 no-print">
+    <div class="bg-white max-w-lg w-full p-6 rounded-2xl shadow-2xl border border-gray-100 space-y-4">
       <div class="flex justify-between items-center border-b pb-3">
-        <h3 class="font-bold text-gray-800 text-lg">✏️ แก้ไขข้อมูลสต๊อก</h3>
-        <button type="button" onclick="closeEditModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
+        <h3 class="font-bold text-gray-800 text-lg">✏️ แก้ไขข้อมูลสารกาแฟ</h3>
+        <button type="button" onclick="closeEditBeanModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
       </div>
-      <div class="space-y-3">
+      <div class="grid grid-cols-2 gap-3">
         <div>
-          <label class="block text-xs font-bold text-gray-500 mb-1">รหัสบาร์โค้ด</label>
-          <input type="text" id="edit_barcode" class="w-full px-3 py-2 bg-gray-100 border rounded-xl font-bold text-gray-600" readonly>
+          <label class="block text-xs font-bold text-gray-500 mb-1">Product_Code (ERP)</label>
+          <input type="text" id="edit_prod_code" class="w-full px-3 py-2 bg-gray-100 border rounded-xl font-bold text-blue-700" readonly>
         </div>
         <div>
-          <label class="block text-xs font-bold text-gray-500 mb-1">ชื่อสินค้า</label>
-          <input type="text" id="edit_name" class="w-full px-3 py-2 bg-gray-100 border rounded-xl text-gray-600" readonly>
+          <label class="block text-xs font-bold text-gray-500 mb-1">Product_Name (ERP)</label>
+          <input type="text" id="edit_prod_name" class="w-full px-3 py-2 border rounded-xl">
         </div>
         <div>
-          <label class="block text-xs font-bold text-gray-500 mb-1">น้ำหนักคงเหลือใหม่ (kg)</label>
-          <input type="number" id="edit_weight" step="0.01" class="w-full px-3 py-2 border rounded-xl font-bold text-green-600">
+          <label class="block text-xs font-bold text-amber-800 mb-1">Bean_Code (หน้างาน)</label>
+          <input type="text" id="edit_bean_code" class="w-full px-3 py-2 bg-gray-100 border rounded-xl font-bold text-amber-900" readonly>
         </div>
         <div>
-          <label class="block text-xs font-bold text-gray-500 mb-1">จุดจัดเก็บ (Location)</label>
-          <input type="text" id="edit_location" class="w-full px-3 py-2 border rounded-xl">
+          <label class="block text-xs font-bold text-amber-800 mb-1">Bean_Name (หน้างาน)</label>
+          <input type="text" id="edit_bean_name" class="w-full px-3 py-2 border rounded-xl font-bold text-amber-900">
         </div>
         <div>
-          <label class="block text-xs font-bold text-gray-500 mb-1">สถานะ</label>
-          <select id="edit_status" class="w-full px-3 py-2 border rounded-xl bg-white font-bold">
-            <option value="Active">Active</option>
-            <option value="Empty">Empty (สินค้าหมด)</option>
-          </select>
+          <label class="block text-xs font-bold text-gray-500 mb-1">Supplier_Code</label>
+          <input type="text" id="edit_sup_code" class="w-full px-3 py-2 border rounded-xl">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-gray-500 mb-1">Supplier_Name</label>
+          <input type="text" id="edit_sup_name" class="w-full px-3 py-2 border rounded-xl">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-gray-500 mb-1">Unit</label>
+          <input type="text" id="edit_prod_unit" class="w-full px-3 py-2 border rounded-xl">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-gray-500 mb-1">Process</label>
+          <input type="text" id="edit_prod_process" class="w-full px-3 py-2 border rounded-xl">
         </div>
       </div>
       <div class="flex gap-2 pt-2">
-        <button type="button" onclick="closeEditModal()" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-2.5 rounded-xl">ยกเลิก</button>
-        <button type="button" onclick="submitEditInventory()" id="save-edit-btn" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl">💾 บันทึกการแก้ไข</button>
+        <button type="button" onclick="closeEditBeanModal()" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-2.5 rounded-xl">ยกเลิก</button>
+        <button type="button" onclick="submitEditBean()" id="save-edit-bean-btn" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl">💾 บันทึกการแก้ไข</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🛑 MODAL 2: แก้ไขข้อมูลลูกค้า (Edit Customer Modal) -->
+  <div id="edit-cust-modal" style="display: none;" onclick="if(event.target === this) closeEditCustModal()" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 items-center justify-center p-4 no-print">
+    <div class="bg-white max-w-md w-full p-6 rounded-2xl shadow-2xl border border-gray-100 space-y-4">
+      <div class="flex justify-between items-center border-b pb-3">
+        <h3 class="font-bold text-gray-800 text-lg">✏️ แก้ไขข้อมูลลูกค้า</h3>
+        <button type="button" onclick="closeEditCustModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
+      </div>
+      <div class="space-y-3">
+        <div>
+          <label class="block text-xs font-bold text-gray-500 mb-1">รหัสลูกค้า</label>
+          <input type="text" id="edit_cust_code" class="w-full px-3 py-2 bg-gray-100 border rounded-xl font-bold text-indigo-700" readonly>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-gray-500 mb-1">ชื่อลูกค้า / ร้านกาแฟ</label>
+          <input type="text" id="edit_cust_name" class="w-full px-3 py-2 border rounded-xl font-medium">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-gray-500 mb-1">เบอร์โทรศัพท์</label>
+          <input type="text" id="edit_cust_phone" class="w-full px-3 py-2 border rounded-xl">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-gray-500 mb-1">ที่อยู่จัดส่ง</label>
+          <input type="text" id="edit_cust_address" class="w-full px-3 py-2 border rounded-xl">
+        </div>
+      </div>
+      <div class="flex gap-2 pt-2">
+        <button type="button" onclick="closeEditCustModal()" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-2.5 rounded-xl">ยกเลิก</button>
+        <button type="button" onclick="submitEditCust()" id="save-edit-cust-btn" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl">💾 บันทึกการแก้ไข</button>
       </div>
     </div>
   </div>
 
   <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbxQywqP4da0BYdt_dHQtQl-kYlvGxmdJWNA59oqnZ_AM7SRyEESbMd73UD3Xx6VffQ/exec";
-    let rawInventory = [];
+    let allBeans = [];
+    let allCustomers = [];
 
     function handleLogout() {
       if(confirm("ต้องการออกจากระบบใช่หรือไม่?")) {
@@ -387,21 +398,21 @@
       }
     }
 
+    // สลับ 3 แท็บหลัก
     function switchSection(sec) {
-      ['qr', 'cust', 'bean', 'inv'].forEach(s => {
+      ['qr', 'cust', 'bean'].forEach(s => {
         const el = document.getElementById(`sec-${s}`);
         const btn = document.getElementById(`btn-tab-${s}`);
         if(el) el.classList.add('hidden');
-        if(btn) btn.className = "py-3 px-2 font-bold rounded-xl bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 text-sm";
+        if(btn) btn.className = "py-3 px-4 font-bold rounded-xl bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 text-sm";
       });
       const activeEl = document.getElementById(`sec-${sec}`);
       const activeBtn = document.getElementById(`btn-tab-${sec}`);
       if(activeEl) activeEl.classList.remove('hidden');
-      if(activeBtn) activeBtn.className = "py-3 px-2 font-bold rounded-xl bg-indigo-600 text-white shadow-sm text-sm";
+      if(activeBtn) activeBtn.className = "py-3 px-4 font-bold rounded-xl bg-indigo-600 text-white shadow-sm text-sm";
 
       if(sec === 'bean') loadBeans();
       if(sec === 'cust') loadCustomers();
-      if(sec === 'inv') loadInventoryForEdit();
     }
 
     window.onload = function() {
@@ -409,7 +420,7 @@
     };
 
     // ===================================
-    // 🖨️ 1. ระบบสร้าง QR Code (Pallet/Lot)
+    // 🖨️ 1. ระบบสร้าง QR Code
     // ===================================
     function autoFillQRPrefix() {
       const type = document.getElementById('qr_type').value;
@@ -466,28 +477,33 @@
     }
 
     // ===================================
-    // 👥 2. ข้อมูลลูกค้า (Customer Master)
+    // 👥 2. ข้อมูลลูกค้า (เพิ่ม, แก้ไข, ลบ)
     // ===================================
     async function loadCustomers() {
       const tbody = document.getElementById('cust-table-body');
-      tbody.innerHTML = `<tr><td colspan="4" class="py-6 text-center text-gray-400">กำลังโหลด...</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-gray-400">กำลังโหลด...</td></tr>`;
       try {
         const res = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'get_customers' }) });
         const result = await res.json();
         if(result.success && result.data && result.data.length > 0) {
-          tbody.innerHTML = result.data.map(c => `
+          allCustomers = result.data;
+          tbody.innerHTML = allCustomers.map(c => `
             <tr class="border-b border-gray-100 hover:bg-gray-50">
               <td class="py-2.5 px-4 font-bold text-indigo-600">${c.customer_code}</td>
               <td class="py-2.5 px-4 font-medium">${c.customer_name}</td>
               <td class="py-2.5 px-4 text-center">${c.phone || '-'}</td>
               <td class="py-2.5 px-4 text-gray-500">${c.address || '-'}</td>
+              <td class="py-2.5 px-4 text-center space-x-1">
+                <button type="button" onclick="openEditCustModal('${c.customer_code}')" class="bg-blue-50 text-blue-600 hover:bg-blue-100 px-2.5 py-1 rounded-lg text-xs font-bold transition">✏️ แก้ไข</button>
+                <button type="button" onclick="deleteCustomerItem('${c.customer_code}')" class="bg-red-50 text-red-600 hover:bg-red-100 px-2.5 py-1 rounded-lg text-xs font-bold transition">🗑️ ลบ</button>
+              </td>
             </tr>
           `).join('');
         } else {
-          tbody.innerHTML = `<tr><td colspan="4" class="py-6 text-center text-gray-400">ยังไม่มีข้อมูลลูกค้า</td></tr>`;
+          tbody.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-gray-400">ยังไม่มีข้อมูลลูกค้า</td></tr>`;
         }
       } catch (e) {
-        tbody.innerHTML = `<tr><td colspan="4" class="py-6 text-center text-red-500">เชื่อมต่อไม่ได้</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-red-500">เชื่อมต่อไม่ได้</td></tr>`;
       }
     }
 
@@ -497,7 +513,7 @@
       const phone = document.getElementById('cust_phone').value.trim();
       const addr = document.getElementById('cust_address').value.trim();
 
-      if(!name) return alert("กรุณากรอกชื่อลูกค้า/ร้านกาแฟ");
+      if(!code || !name) return alert("กรุณากรอกรหัสและชื่อลูกค้า");
 
       const btn = document.getElementById('save-cust-btn');
       btn.innerText = "กำลังบันทึก...";
@@ -525,17 +541,78 @@
       }
     }
 
+    function openEditCustModal(code) {
+      const c = allCustomers.find(item => item.customer_code === code);
+      if(!c) return;
+      document.getElementById('edit_cust_code').value = c.customer_code;
+      document.getElementById('edit_cust_name').value = c.customer_name;
+      document.getElementById('edit_cust_phone').value = c.phone || '';
+      document.getElementById('edit_cust_address').value = c.address || '';
+      document.getElementById('edit-cust-modal').style.display = 'flex';
+    }
+
+    function closeEditCustModal() {
+      document.getElementById('edit-cust-modal').style.display = 'none';
+    }
+
+    async function submitEditCust() {
+      const code = document.getElementById('edit_cust_code').value;
+      const name = document.getElementById('edit_cust_name').value.trim();
+      const phone = document.getElementById('edit_cust_phone').value.trim();
+      const addr = document.getElementById('edit_cust_address').value.trim();
+
+      if(!name) return alert("กรุณาระบุชื่อลูกค้า");
+
+      const btn = document.getElementById('save-edit-cust-btn');
+      btn.innerText = "กำลังบันทึก...";
+      btn.disabled = true;
+
+      try {
+        const res = await fetch(API_URL, {
+          method: "POST",
+          body: JSON.stringify({ action: 'update_customer', customer_code: code, customer_name: name, phone: phone, address: addr })
+        });
+        const d = await res.json();
+        alert(d.message);
+        if(d.success) {
+          closeEditCustModal();
+          loadCustomers();
+        }
+      } catch (e) {
+        alert("แก้ไขไม่สำเร็จ");
+      } finally {
+        btn.innerText = "💾 บันทึกการแก้ไข";
+        btn.disabled = false;
+      }
+    }
+
+    async function deleteCustomerItem(code) {
+      if(!confirm(`⚠️ ต้องการลบข้อมูลลูกค้า [${code}] ใช่หรือไม่?`)) return;
+      try {
+        const res = await fetch(API_URL, {
+          method: "POST",
+          body: JSON.stringify({ action: 'delete_customer', customer_code: code })
+        });
+        const d = await res.json();
+        alert(d.message);
+        if(d.success) loadCustomers();
+      } catch (e) {
+        alert("ลบไม่สำเร็จ");
+      }
+    }
+
     // ========================================================
-    // ☕ 3. ข้อมูลสารกาแฟ (แยกฝั่ง ERP และ หน้างาน ชัดเจน)
+    // ☕ 3. ข้อมูลสารกาแฟ (เพิ่ม, แก้ไข, ลบ)
     // ========================================================
     async function loadBeans() {
       const tbody = document.getElementById('bean-table-body');
-      tbody.innerHTML = `<tr><td colspan="7" class="py-6 text-center text-gray-400">กำลังโหลด...</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="8" class="py-6 text-center text-gray-400">กำลังโหลด...</td></tr>`;
       try {
         const res = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'get_items' }) });
         const result = await res.json();
         if(result.success && result.data && result.data.length > 0) {
-          tbody.innerHTML = result.data.map(i => `
+          allBeans = result.data;
+          tbody.innerHTML = allBeans.map(i => `
             <tr class="border-b border-gray-100 hover:bg-gray-50">
               <td class="py-2.5 px-4 font-bold text-blue-700 bg-blue-50/30">${i.product_code || '-'}</td>
               <td class="py-2.5 px-4 font-medium text-gray-800 bg-blue-50/30">${i.product_name || '-'}</td>
@@ -544,13 +621,17 @@
               <td class="py-2.5 px-4 text-gray-600">${i.supplier_name || i.supplier_code ? `${i.supplier_name} <span class="text-xs text-gray-400">(${i.supplier_code})</span>` : '-'}</td>
               <td class="py-2.5 px-4 text-center font-bold text-gray-700">${i.product_unit || 'kg'}</td>
               <td class="py-2.5 px-4 text-center"><span class="bg-indigo-50 text-indigo-700 font-bold px-2 py-0.5 rounded text-xs">${i.process || '-'}</span></td>
+              <td class="py-2.5 px-4 text-center space-x-1">
+                <button type="button" onclick="openEditBeanModal('${i.bean_code}')" class="bg-blue-50 text-blue-600 hover:bg-blue-100 px-2.5 py-1 rounded-lg text-xs font-bold transition">✏️ แก้ไข</button>
+                <button type="button" onclick="deleteBeanItem('${i.bean_code}')" class="bg-red-50 text-red-600 hover:bg-red-100 px-2.5 py-1 rounded-lg text-xs font-bold transition">🗑️ ลบ</button>
+              </td>
             </tr>
           `).join('');
         } else {
-          tbody.innerHTML = `<tr><td colspan="7" class="py-6 text-center text-gray-400">ยังไม่มีข้อมูลสารกาแฟ</td></tr>`;
+          tbody.innerHTML = `<tr><td colspan="8" class="py-6 text-center text-gray-400">ยังไม่มีข้อมูลสารกาแฟ</td></tr>`;
         }
       } catch (e) {
-        tbody.innerHTML = `<tr><td colspan="7" class="py-6 text-center text-red-500">เชื่อมต่อไม่ได้</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="8" class="py-6 text-center text-red-500">เชื่อมต่อไม่ได้</td></tr>`;
       }
     }
 
@@ -607,92 +688,60 @@
       }
     }
 
-    // ===================================
-    // 📦 4. จัดการสต๊อก (แก้ไข / ลบ)
-    // ===================================
-    async function loadInventoryForEdit() {
-      const tbody = document.getElementById('inventory-edit-body');
-      tbody.innerHTML = `<tr><td colspan="6" class="py-6 text-center text-gray-400">กำลังโหลดสต๊อก...</td></tr>`;
-      try {
-        const res = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'get_inventory' }) });
-        const result = await res.json();
-        if(result.success && result.data && result.data.length > 0) {
-          rawInventory = result.data;
-          renderInventoryTable(rawInventory);
-        } else {
-          tbody.innerHTML = `<tr><td colspan="6" class="py-6 text-center text-gray-400">ไม่มีข้อมูลสต๊อก</td></tr>`;
-        }
-      } catch (e) {
-        tbody.innerHTML = `<tr><td colspan="6" class="py-6 text-center text-red-500">เชื่อมต่อไม่ได้</td></tr>`;
-      }
+    function openEditBeanModal(beanCode) {
+      const b = allBeans.find(item => item.bean_code === beanCode);
+      if(!b) return;
+      document.getElementById('edit_prod_code').value = b.product_code || '';
+      document.getElementById('edit_prod_name').value = b.product_name || '';
+      document.getElementById('edit_bean_code').value = b.bean_code || '';
+      document.getElementById('edit_bean_name').value = b.bean_name || '';
+      document.getElementById('edit_sup_code').value = b.supplier_code || '';
+      document.getElementById('edit_sup_name').value = b.supplier_name || '';
+      document.getElementById('edit_prod_unit').value = b.product_unit || 'kg';
+      document.getElementById('edit_prod_process').value = b.process || '';
+      document.getElementById('edit-bean-modal').style.display = 'flex';
     }
 
-    function renderInventoryTable(data) {
-      const tbody = document.getElementById('inventory-edit-body');
-      tbody.innerHTML = data.map(item => `
-        <tr class="border-b border-gray-100 hover:bg-gray-50">
-          <td class="py-2.5 px-4 font-bold text-blue-600">${item.barcode_id}</td>
-          <td class="py-2.5 px-4 font-medium">${item.item_name}</td>
-          <td class="py-2.5 px-4 text-right font-bold text-green-700">${item.weight_current} ${item.unit || 'kg'}</td>
-          <td class="py-2.5 px-4 text-center font-bold text-gray-600">${item.location}</td>
-          <td class="py-2.5 px-4 text-center"><span class="px-2 py-0.5 rounded text-xs font-bold ${item.status === 'Active' ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-600'}">${item.status}</span></td>
-          <td class="py-2.5 px-4 text-center space-x-1">
-            <button type="button" onclick="openEditModal('${item.barcode_id}')" class="bg-blue-50 text-blue-600 hover:bg-blue-100 px-2.5 py-1 rounded-lg text-xs font-bold transition">✏️ แก้ไข</button>
-            <button type="button" onclick="deleteInventoryItem('${item.barcode_id}')" class="bg-red-50 text-red-600 hover:bg-red-100 px-2.5 py-1 rounded-lg text-xs font-bold transition">🗑️ ลบ</button>
-          </td>
-        </tr>
-      `).join('');
+    function closeEditBeanModal() {
+      document.getElementById('edit-bean-modal').style.display = 'none';
     }
 
-    function filterInventoryTable() {
-      const q = document.getElementById('inv-search').value.toLowerCase();
-      const filtered = rawInventory.filter(i => 
-        String(i.barcode_id).toLowerCase().includes(q) || 
-        String(i.item_name).toLowerCase().includes(q)
-      );
-      renderInventoryTable(filtered);
-    }
+    async function submitEditBean() {
+      const prodCode = document.getElementById('edit_prod_code').value;
+      const prodName = document.getElementById('edit_prod_name').value.trim();
+      const beanCode = document.getElementById('edit_bean_code').value;
+      const beanName = document.getElementById('edit_bean_name').value.trim();
+      const supCode = document.getElementById('edit_sup_code').value.trim();
+      const supName = document.getElementById('edit_sup_name').value.trim();
+      const prodUnit = document.getElementById('edit_prod_unit').value.trim();
+      const prodProcess = document.getElementById('edit_prod_process').value.trim();
 
-    // 🌟 เปิด Modal ด้วยการสั่ง style.display = 'flex' ปลอดภัย 100%
-    function openEditModal(barcode) {
-      const item = rawInventory.find(i => String(i.barcode_id) === String(barcode));
-      if(!item) return;
-      document.getElementById('edit_barcode').value = item.barcode_id;
-      document.getElementById('edit_name').value = item.item_name;
-      document.getElementById('edit_weight').value = item.weight_current;
-      document.getElementById('edit_location').value = item.location;
-      document.getElementById('edit_status').value = item.status;
-      
-      const modal = document.getElementById('edit-modal');
-      modal.style.display = 'flex';
-    }
+      if(!prodName || !beanName) return alert("กรุณาระบุชื่อสินค้าและชื่อเรียกสาร");
 
-    // 🌟 ปิด Modal ด้วยการสั่ง style.display = 'none' ไม่บังจอเด็ดขาด
-    function closeEditModal() {
-      const modal = document.getElementById('edit-modal');
-      modal.style.display = 'none';
-    }
-
-    async function submitEditInventory() {
-      const barcode = document.getElementById('edit_barcode').value;
-      const weight = document.getElementById('edit_weight').value;
-      const loc = document.getElementById('edit_location').value;
-      const status = document.getElementById('edit_status').value;
-
-      const btn = document.getElementById('save-edit-btn');
+      const btn = document.getElementById('save-edit-bean-btn');
       btn.innerText = "กำลังบันทึก...";
       btn.disabled = true;
 
       try {
         const res = await fetch(API_URL, {
           method: "POST",
-          body: JSON.stringify({ action: 'update_inventory', barcode_id: barcode, new_weight: weight, new_location: loc, new_status: status })
+          body: JSON.stringify({
+            action: 'update_item',
+            product_code: prodCode,
+            product_name: prodName,
+            bean_code: beanCode,
+            bean_name: beanName,
+            supplier_code: supCode,
+            supplier_name: supName,
+            product_unit: prodUnit,
+            process: prodProcess
+          })
         });
-        const result = await res.json();
-        alert(result.message);
-        if(result.success) {
-          closeEditModal();
-          loadInventoryForEdit();
+        const d = await res.json();
+        alert(d.message);
+        if(d.success) {
+          closeEditBeanModal();
+          loadBeans();
         }
       } catch (e) {
         alert("แก้ไขไม่สำเร็จ");
@@ -702,16 +751,16 @@
       }
     }
 
-    async function deleteInventoryItem(barcode) {
-      if(!confirm(`⚠️ ต้องการลบรายการ [${barcode}] ออกจากระบบสต๊อกใช่หรือไม่?`)) return;
+    async function deleteBeanItem(beanCode) {
+      if(!confirm(`⚠️ ต้องการลบข้อมูลสารกาแฟรหัส [${beanCode}] ใช่หรือไม่?`)) return;
       try {
         const res = await fetch(API_URL, {
           method: "POST",
-          body: JSON.stringify({ action: 'delete_inventory', barcode_id: barcode })
+          body: JSON.stringify({ action: 'delete_item', bean_code: beanCode })
         });
-        const result = await res.json();
-        alert(result.message);
-        if(result.success) loadInventoryForEdit();
+        const d = await res.json();
+        alert(d.message);
+        if(d.success) loadBeans();
       } catch (e) {
         alert("ลบไม่สำเร็จ");
       }
