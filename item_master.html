@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>BJ Roaster - เพิ่มข้อมูลใหม่ & จัดการระบบ</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- ไลบรารีสร้าง QR Code ฝั่งเบราว์เซอร์ -->
+  <!-- ไลบรารีสร้าง QR Code -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
     ::-webkit-scrollbar { display: none; }
@@ -22,7 +22,7 @@
 
   <div class="flex min-h-screen">
     
-    <!-- 💻 Sidebar Desktop -->
+    <!-- 💻 Sidebar Desktop (ไอคอนเส้นเรียบ SVG) -->
     <aside class="hidden md:flex flex-col w-64 fixed left-0 top-0 h-screen bg-white border-r border-gray-200 pt-10 pb-6 px-4 z-50 shadow-sm">
       <h2 class="text-2xl font-bold text-gray-900 mb-10 px-2">BJ Roaster</h2>
       <nav class="flex-1 space-y-2">
@@ -42,7 +42,7 @@
     <!-- 💻 พื้นที่แสดงผลฝั่งขวา -->
     <main class="w-full md:ml-64 relative overflow-hidden flex flex-col min-h-screen">
       
-      <!-- 🌟 ล็อกแถบการ์ดกระบวนการทำงานไว้ด้านบนสุด -->
+      <!-- 🌟 แถบการ์ดบน (การ์ดที่ 6 ชี้ไป inbound.html) -->
       <div class="sticky top-0 z-40 bg-gray-50/95 backdrop-blur-xl pt-6 pb-4 border-b border-gray-200">
         <div class="flex flex-row overflow-x-auto gap-3 px-5 md:px-10 pr-10 snap-x w-full items-center">
           <div class="relative flex-none w-40 h-24 md:w-48 md:h-28 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-yellow-50 to-yellow-100 border border-yellow-200 cursor-pointer hover:bg-yellow-100 transition px-4 flex flex-col justify-center opacity-70 hover:opacity-100" onclick="window.location.href='planner.html'"><h2 class="text-base md:text-lg font-bold text-yellow-800 leading-tight">วางแผน<br><span class="text-xs font-medium text-yellow-600">(ออเดอร์)</span></h2></div>
@@ -52,28 +52,129 @@
 
           <!-- 5. เพิ่มข้อมูลใหม่ (ACTIVE 🌟) -->
           <div class="relative flex-none w-40 h-24 md:w-48 md:h-28 rounded-2xl overflow-hidden shadow-md bg-gradient-to-br from-indigo-500 to-indigo-600 border border-indigo-600 cursor-default flex flex-col justify-center px-4 transform scale-105">
-            <h2 class="text-base md:text-lg font-bold text-white leading-tight">เพิ่มข้อมูลใหม่<br><span class="text-xs font-medium text-indigo-100">(สาร, QR, สต๊อก)</span></h2>
+            <h2 class="text-base md:text-lg font-bold text-white leading-tight">เพิ่มข้อมูลใหม่<br><span class="text-xs font-medium text-indigo-100">(QR, ลูกค้า, สาร)</span></h2>
           </div>
 
           <div class="relative flex-none w-40 h-24 md:w-48 md:h-28 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-green-50 to-green-100 border border-green-200 cursor-pointer hover:bg-green-100 transition px-4 flex flex-col justify-center opacity-70 hover:opacity-100" onclick="window.location.href='inbound.html'"><h2 class="text-base md:text-lg font-bold text-green-800 leading-tight">รับสินค้าเข้า<br><span class="text-xs font-medium text-green-600">(สารกาแฟ)</span></h2></div>
         </div>
       </div>
 
-      <!-- 👇 แท็บเมนูย่อย 4 ส่วนหลัก 👇 -->
+      <!-- 👇 แท็บเมนูย่อย 4 ส่วนหลัก (เรียงลำดับใหม่) 👇 -->
       <div class="p-5 md:p-10 pb-28 space-y-6">
         
-        <!-- แถบเลือกโหมด 4 แท็บ -->
+        <!-- แถบเลือกโหมด 4 แท็บ เรียงตามที่คุณต้องการ -->
         <div class="grid grid-cols-2 md:grid-cols-4 gap-2 max-w-4xl">
-          <button id="btn-tab-bean" onclick="switchSection('bean')" class="py-3 px-2 font-bold rounded-xl bg-indigo-600 text-white shadow-sm text-sm">☕ 1. ข้อมูลสารกาแฟ</button>
-          <button id="btn-tab-qr" onclick="switchSection('qr')" class="py-3 px-2 font-bold rounded-xl bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 text-sm">🖨️ 2. สร้าง QR Code</button>
-          <button id="btn-tab-cust" onclick="switchSection('cust')" class="py-3 px-2 font-bold rounded-xl bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 text-sm">👥 3. ข้อมูลลูกค้า</button>
+          <button id="btn-tab-qr" onclick="switchSection('qr')" class="py-3 px-2 font-bold rounded-xl bg-indigo-600 text-white shadow-sm text-sm">🖨️ 1. สร้าง QR Code</button>
+          <button id="btn-tab-cust" onclick="switchSection('cust')" class="py-3 px-2 font-bold rounded-xl bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 text-sm">👥 2. ข้อมูลลูกค้า</button>
+          <button id="btn-tab-bean" onclick="switchSection('bean')" class="py-3 px-2 font-bold rounded-xl bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 text-sm">☕ 3. ข้อมูลสารกาแฟ</button>
           <button id="btn-tab-inv" onclick="switchSection('inv')" class="py-3 px-2 font-bold rounded-xl bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 text-sm">📦 4. จัดการสต๊อก (แก้ไข/ลบ)</button>
         </div>
 
         <!-- ============================================== -->
-        <!-- ☕ ส่วนที่ 1: เพิ่มข้อมูลสารกาแฟ -->
+        <!-- 🖨️ ส่วนที่ 1: ระบบสร้าง QR Code (Pallet / Lot) -->
         <!-- ============================================== -->
-        <div id="sec-bean" class="space-y-6 max-w-4xl">
+        <div id="sec-qr" class="space-y-6 max-w-4xl">
+          <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 space-y-4">
+            <div class="border-b pb-3 flex justify-between items-center">
+              <div>
+                <h2 class="text-lg font-bold text-gray-800">🖨️ เครื่องพิมพ์สร้าง QR Code (Pallet & Lot Bean)</h2>
+                <p class="text-xs text-gray-500 mt-1">สร้าง QR Code แปะพาเลท หรือกระสอบสินค้าล่วงหน้า</p>
+              </div>
+              <button onclick="window.print()" class="bg-gray-800 hover:bg-gray-900 text-white text-xs font-bold px-4 py-2 rounded-xl flex items-center gap-2">
+                🖨️ พิมพ์ออกเครื่องพิมพ์
+              </button>
+            </div>
+
+            <!-- ฟอร์มสร้าง QR Code -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <div>
+                <label class="block text-xs font-bold text-gray-500 mb-1">ประเภท QR Code</label>
+                <select id="qr_type" onchange="autoFillQRPrefix()" class="w-full px-3 py-2 border rounded-xl bg-white font-bold">
+                  <option value="PALLET">QR แปะพาเลท (Pallet No.)</option>
+                  <option value="LOT">QR ข้อมูลสาร (Lot Bean)</option>
+                  <option value="RACK">QR จุดเก็บ (Rack Location)</option>
+                  <option value="CUSTOM">QR กำหนดเอง</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-gray-500 mb-1">คำนำหน้า (Prefix)</label>
+                <input type="text" id="qr_prefix" value="PAL-" class="w-full px-3 py-2 border rounded-xl font-bold text-indigo-600">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-gray-500 mb-1">จำนวนที่ต้องการสร้าง (ใบ)</label>
+                <input type="number" id="qr_count" value="10" min="1" max="50" class="w-full px-3 py-2 border rounded-xl font-bold">
+              </div>
+            </div>
+
+            <button onclick="generateBatchQR()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl transition">
+              ⚡ สร้างและแสดงตัวอย่าง QR Code
+            </button>
+          </div>
+
+          <!-- พื้นที่แสดง QR Code สำหรับปริ้นท์ -->
+          <div id="qr-print-area" class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+            <h3 class="text-sm font-bold text-gray-400 mb-4 uppercase tracking-wider">ตัวอย่างสติ๊กเกอร์ QR Code พร้อมพิมพ์</h3>
+            <div id="qr-gallery" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 text-center">
+              <p class="col-span-full py-8 text-gray-400">กดปุ่ม "สร้างและแสดงตัวอย่าง" ด้านบนเพื่อดูตัวอย่าง QR Code</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- 👥 ส่วนที่ 2: ข้อมูลลูกค้า (Customer Master) -->
+        <!-- ============================================== -->
+        <div id="sec-cust" class="hidden space-y-6 max-w-4xl">
+          <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 space-y-4">
+            <h2 class="text-lg font-bold text-gray-800 border-b pb-3">👥 บันทึกข้อมูลลูกค้า / ร้านกาแฟ (Customer Master)</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-bold text-gray-500 mb-1">รหัสลูกค้า (Customer Code)</label>
+                <input type="text" id="cust_code" placeholder="เช่น CUST-001" class="w-full px-3 py-2 border rounded-xl font-bold text-indigo-600">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-gray-500 mb-1">ชื่อลูกค้า / ร้านกาแฟ *</label>
+                <input type="text" id="cust_name" placeholder="เช่น โรงคั่วกาแฟ คาเฟ่ อารีย์" class="w-full px-3 py-2 border rounded-xl">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-gray-500 mb-1">เบอร์โทรศัพท์ติดต่อ</label>
+                <input type="text" id="cust_phone" placeholder="08x-xxx-xxxx" class="w-full px-3 py-2 border rounded-xl">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-gray-500 mb-1">ที่อยู่จัดส่ง / สาขา</label>
+                <input type="text" id="cust_address" placeholder="เช่น สาขาสุขุมวิท กรุงเทพฯ" class="w-full px-3 py-2 border rounded-xl">
+              </div>
+            </div>
+            <button onclick="saveCustomer()" id="save-cust-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl transition">💾 บันทึกข้อมูลลูกค้า</button>
+          </div>
+
+          <!-- ตารางรายชื่อลูกค้า -->
+          <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+            <div class="p-4 border-b flex justify-between items-center bg-gray-50">
+              <h3 class="font-bold text-gray-800">รายชื่อลูกค้าทั้งหมด</h3>
+              <button onclick="loadCustomers()" class="text-xs bg-gray-200 hover:bg-gray-300 font-bold px-3 py-1.5 rounded-lg">รีเฟรช</button>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="min-w-full text-sm">
+                <thead class="bg-gray-100 text-gray-600">
+                  <tr>
+                    <th class="py-2.5 px-4 text-left font-bold">รหัส</th>
+                    <th class="py-2.5 px-4 text-left font-bold">ชื่อลูกค้า / ร้าน</th>
+                    <th class="py-2.5 px-4 text-center font-bold">เบอร์โทร</th>
+                    <th class="py-2.5 px-4 text-left font-bold">ที่อยู่</th>
+                  </tr>
+                </thead>
+                <tbody id="cust-table-body" class="text-gray-700">
+                  <tr><td colspan="4" class="py-6 text-center text-gray-400">กำลังโหลดข้อมูล...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- ☕ ส่วนที่ 3: เพิ่มข้อมูลสารกาแฟ -->
+        <!-- ============================================== -->
+        <div id="sec-bean" class="hidden space-y-6 max-w-4xl">
           <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 space-y-4">
             <h2 class="text-lg font-bold text-gray-800 border-b pb-3">☕ บันทึกสารกาแฟใหม่ (Item Master)</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -122,107 +223,6 @@
                   </tr>
                 </thead>
                 <tbody id="bean-table-body" class="text-gray-700">
-                  <tr><td colspan="4" class="py-6 text-center text-gray-400">กำลังโหลดข้อมูล...</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        <!-- ============================================== -->
-        <!-- 🖨️ ส่วนที่ 2: ระบบสร้าง QR Code (Pallet / Lot) -->
-        <!-- ============================================== -->
-        <div id="sec-qr" class="hidden space-y-6 max-w-4xl">
-          <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 space-y-4">
-            <div class="border-b pb-3 flex justify-between items-center">
-              <div>
-                <h2 class="text-lg font-bold text-gray-800">🖨️ เครื่องพิมพ์สร้าง QR Code (Pallet & Lot Bean)</h2>
-                <p class="text-xs text-gray-500 mt-1">สร้าง QR Code แปะพาเลท หรือกระสอบสินค้าล่วงหน้า</p>
-              </div>
-              <button onclick="window.print()" class="bg-gray-800 hover:bg-gray-900 text-white text-xs font-bold px-4 py-2 rounded-xl flex items-center gap-2">
-                🖨️ พิมพ์ออกเครื่องพิมพ์
-              </button>
-            </div>
-
-            <!-- ฟอร์มสร้าง QR Code -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-              <div>
-                <label class="block text-xs font-bold text-gray-500 mb-1">ประเภท QR Code</label>
-                <select id="qr_type" onchange="autoFillQRPrefix()" class="w-full px-3 py-2 border rounded-xl bg-white font-bold">
-                  <option value="PALLET">QR แปะพาเลท (Pallet No.)</option>
-                  <option value="LOT">QR ข้อมูลสาร (Lot Bean)</option>
-                  <option value="RACK">QR จุดเก็บ (Rack Location)</option>
-                  <option value="CUSTOM">QR กำหนดเอง</option>
-                </select>
-              </div>
-              <div>
-                <label class="block text-xs font-bold text-gray-500 mb-1">คำนำหน้า (Prefix)</label>
-                <input type="text" id="qr_prefix" value="PAL-" class="w-full px-3 py-2 border rounded-xl font-bold text-indigo-600">
-              </div>
-              <div>
-                <label class="block text-xs font-bold text-gray-500 mb-1">จำนวนที่ต้องการสร้าง (ใบ)</label>
-                <input type="number" id="qr_count" value="10" min="1" max="50" class="w-full px-3 py-2 border rounded-xl font-bold">
-              </div>
-            </div>
-
-            <button onclick="generateBatchQR()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl transition">
-              ⚡ สร้างและแสดงตัวอย่าง QR Code
-            </button>
-          </div>
-
-          <!-- พื้นที่แสดง QR Code สำหรับปริ้นท์ -->
-          <div id="qr-print-area" class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-            <h3 class="text-sm font-bold text-gray-400 mb-4 uppercase tracking-wider">ตัวอย่างสติ๊กเกอร์ QR Code พร้อมพิมพ์</h3>
-            <div id="qr-gallery" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 text-center">
-              <p class="col-span-full py-8 text-gray-400">กดปุ่มสร้างเพื่อดูตัวอย่าง QR Code</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- ============================================== -->
-        <!-- 👥 ส่วนที่ 3: ข้อมูลลูกค้า (Customer Master) -->
-        <!-- ============================================== -->
-        <div id="sec-cust" class="hidden space-y-6 max-w-4xl">
-          <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 space-y-4">
-            <h2 class="text-lg font-bold text-gray-800 border-b pb-3">👥 บันทึกข้อมูลลูกค้า / ร้านกาแฟ (Customer Master)</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label class="block text-xs font-bold text-gray-500 mb-1">รหัสลูกค้า (Customer Code)</label>
-                <input type="text" id="cust_code" placeholder="เช่น CUST-001" class="w-full px-3 py-2 border rounded-xl font-bold text-indigo-600">
-              </div>
-              <div>
-                <label class="block text-xs font-bold text-gray-500 mb-1">ชื่อลูกค้า / ร้านกาแฟ *</label>
-                <input type="text" id="cust_name" placeholder="เช่น โรงคั่วกาแฟ คาเฟ่ อารีย์" class="w-full px-3 py-2 border rounded-xl">
-              </div>
-              <div>
-                <label class="block text-xs font-bold text-gray-500 mb-1">เบอร์โทรศัพท์ติดต่อ</label>
-                <input type="text" id="cust_phone" placeholder="08x-xxx-xxxx" class="w-full px-3 py-2 border rounded-xl">
-              </div>
-              <div>
-                <label class="block text-xs font-bold text-gray-500 mb-1">ที่อยู่จัดส่ง / สาขา</label>
-                <input type="text" id="cust_address" placeholder="เช่น สาขาสุขุมวิท กรุงเทพฯ" class="w-full px-3 py-2 border rounded-xl">
-              </div>
-            </div>
-            <button onclick="saveCustomer()" id="save-cust-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl transition">💾 บันทึกข้อมูลลูกค้า</button>
-          </div>
-
-          <!-- ตารางรายชื่อลูกค้า -->
-          <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
-            <div class="p-4 border-b flex justify-between items-center bg-gray-50">
-              <h3 class="font-bold text-gray-800">รายชื่อลูกค้าทั้งหมด</h3>
-              <button onclick="loadCustomers()" class="text-xs bg-gray-200 hover:bg-gray-300 font-bold px-3 py-1.5 rounded-lg">รีเฟรช</button>
-            </div>
-            <div class="overflow-x-auto">
-              <table class="min-w-full text-sm">
-                <thead class="bg-gray-100 text-gray-600">
-                  <tr>
-                    <th class="py-2.5 px-4 text-left font-bold">รหัส</th>
-                    <th class="py-2.5 px-4 text-left font-bold">ชื่อลูกค้า / ร้าน</th>
-                    <th class="py-2.5 px-4 text-center font-bold">เบอร์โทร</th>
-                    <th class="py-2.5 px-4 text-left font-bold">ที่อยู่</th>
-                  </tr>
-                </thead>
-                <tbody id="cust-table-body" class="text-gray-700">
                   <tr><td colspan="4" class="py-6 text-center text-gray-400">กำลังโหลดข้อมูล...</td></tr>
                 </tbody>
               </table>
@@ -317,9 +317,9 @@
       }
     }
 
-    // ฟังก์ชันสลับแท็บ
+    // ฟังก์ชันสลับแท็บตามลำดับใหม่
     function switchSection(sec) {
-      ['bean', 'qr', 'cust', 'inv'].forEach(s => {
+      ['qr', 'cust', 'bean', 'inv'].forEach(s => {
         document.getElementById(`sec-${s}`).classList.add('hidden');
         document.getElementById(`btn-tab-${s}`).className = "py-3 px-2 font-bold rounded-xl bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 text-sm";
       });
@@ -332,71 +332,12 @@
     }
 
     window.onload = function() {
-      loadBeans();
       autoFillQRPrefix();
+      generateBatchQR(); // แสดงตัวอย่างเริ่มต้นทันที
     };
 
     // ===================================
-    // ☕ 1. ข้อมูลสารกาแฟ (Item Master)
-    // ===================================
-    async function loadBeans() {
-      const tbody = document.getElementById('bean-table-body');
-      tbody.innerHTML = `<tr><td colspan="4" class="py-6 text-center text-gray-400">กำลังโหลด...</td></tr>`;
-      try {
-        const res = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'get_items' }) });
-        const result = await res.json();
-        if(result.success && result.data.length > 0) {
-          tbody.innerHTML = result.data.map(i => `
-            <tr class="border-b border-gray-100 hover:bg-gray-50">
-              <td class="py-2.5 px-4 font-bold text-indigo-600">${i.item_code}</td>
-              <td class="py-2.5 px-4 font-medium">${i.item_name}</td>
-              <td class="py-2.5 px-4 text-center text-gray-500">${i.category || '-'}</td>
-              <td class="py-2.5 px-4 text-center font-bold">${i.unit || 'kg'}</td>
-            </tr>
-          `).join('');
-        } else {
-          tbody.innerHTML = `<tr><td colspan="4" class="py-6 text-center text-gray-400">ยังไม่มีข้อมูลสารกาแฟ</td></tr>`;
-        }
-      } catch (e) {
-        tbody.innerHTML = `<tr><td colspan="4" class="py-6 text-center text-red-500">เชื่อมต่อไม่ได้</td></tr>`;
-      }
-    }
-
-    async function saveBeanMaster() {
-      const code = document.getElementById('item_code').value.trim();
-      const name = document.getElementById('item_name').value.trim();
-      const cat = document.getElementById('item_category').value;
-      const unit = document.getElementById('item_unit').value.trim();
-      const desc = document.getElementById('item_desc').value.trim();
-
-      if(!code || !name) return alert("กรุณากรอกรหัสและชื่อสินค้า");
-
-      const btn = document.getElementById('save-bean-btn');
-      btn.innerText = "กำลังบันทึก...";
-      btn.disabled = true;
-
-      try {
-        const res = await fetch(API_URL, {
-          method: "POST",
-          body: JSON.stringify({ action: 'add_item', item_code: code, item_name: name, category: cat, unit: unit, description: desc })
-        });
-        const d = await res.json();
-        alert(d.message);
-        if(d.success) {
-          document.getElementById('item_code').value = '';
-          document.getElementById('item_name').value = '';
-          document.getElementById('item_desc').value = '';
-          loadBeans();
-        }
-      } catch (e) {
-        alert("บันทึกไม่สำเร็จ");
-      }
-      btn.innerText = "💾 บันทึกสารกาแฟ";
-      btn.disabled = false;
-    }
-
-    // ===================================
-    // 🖨️ 2. ระบบสร้าง QR Code (Pallet/Lot)
+    // 🖨️ 1. ระบบสร้าง QR Code (Pallet/Lot)
     // ===================================
     function autoFillQRPrefix() {
       const type = document.getElementById('qr_type').value;
@@ -436,7 +377,7 @@
     }
 
     // ===================================
-    // 👥 3. ข้อมูลลูกค้า (Customer Master)
+    // 👥 2. ข้อมูลลูกค้า (Customer Master)
     // ===================================
     async function loadCustomers() {
       const tbody = document.getElementById('cust-table-body');
@@ -491,6 +432,65 @@
         alert("บันทึกไม่สำเร็จ");
       }
       btn.innerText = "💾 บันทึกข้อมูลลูกค้า";
+      btn.disabled = false;
+    }
+
+    // ===================================
+    // ☕ 3. ข้อมูลสารกาแฟ (Item Master)
+    // ===================================
+    async function loadBeans() {
+      const tbody = document.getElementById('bean-table-body');
+      tbody.innerHTML = `<tr><td colspan="4" class="py-6 text-center text-gray-400">กำลังโหลด...</td></tr>`;
+      try {
+        const res = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'get_items' }) });
+        const result = await res.json();
+        if(result.success && result.data.length > 0) {
+          tbody.innerHTML = result.data.map(i => `
+            <tr class="border-b border-gray-100 hover:bg-gray-50">
+              <td class="py-2.5 px-4 font-bold text-indigo-600">${i.item_code}</td>
+              <td class="py-2.5 px-4 font-medium">${i.item_name}</td>
+              <td class="py-2.5 px-4 text-center text-gray-500">${i.category || '-'}</td>
+              <td class="py-2.5 px-4 text-center font-bold">${i.unit || 'kg'}</td>
+            </tr>
+          `).join('');
+        } else {
+          tbody.innerHTML = `<tr><td colspan="4" class="py-6 text-center text-gray-400">ยังไม่มีข้อมูลสารกาแฟ</td></tr>`;
+        }
+      } catch (e) {
+        tbody.innerHTML = `<tr><td colspan="4" class="py-6 text-center text-red-500">เชื่อมต่อไม่ได้</td></tr>`;
+      }
+    }
+
+    async function saveBeanMaster() {
+      const code = document.getElementById('item_code').value.trim();
+      const name = document.getElementById('item_name').value.trim();
+      const cat = document.getElementById('item_category').value;
+      const unit = document.getElementById('item_unit').value.trim();
+      const desc = document.getElementById('item_desc').value.trim();
+
+      if(!code || !name) return alert("กรุณากรอกรหัสและชื่อสินค้า");
+
+      const btn = document.getElementById('save-bean-btn');
+      btn.innerText = "กำลังบันทึก...";
+      btn.disabled = true;
+
+      try {
+        const res = await fetch(API_URL, {
+          method: "POST",
+          body: JSON.stringify({ action: 'add_item', item_code: code, item_name: name, category: cat, unit: unit, description: desc })
+        });
+        const d = await res.json();
+        alert(d.message);
+        if(d.success) {
+          document.getElementById('item_code').value = '';
+          document.getElementById('item_name').value = '';
+          document.getElementById('item_desc').value = '';
+          loadBeans();
+        }
+      } catch (e) {
+        alert("บันทึกไม่สำเร็จ");
+      }
+      btn.innerText = "💾 บันทึกสารกาแฟ";
       btn.disabled = false;
     }
 
