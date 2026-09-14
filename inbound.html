@@ -12,29 +12,53 @@
     body { -ms-overflow-style: none; scrollbar-width: none; }
     .pb-safe { padding-bottom: env(safe-area-inset-bottom, 20px); }
 
-    /* 🖨️ ระบบพิมพ์ใบปะหน้าพาเลท (1 ใบต่อ 1 แผ่น หรือตามขนาดพิมพ์) */
+    /* 🖨️ ระบบควบคุมการพิมพ์ A4 แนวนอน (A4 Landscape Engine) */
+    @page {
+      size: A4 landscape;
+      margin: 8mm;
+    }
+
     @media print {
-      aside, #bottom-nav, .no-print, .sticky, nav, button {
+      /* ซ่อนส่วนแอปทั้งหมด ยกเว้นกล่องพิมพ์ */
+      aside, #bottom-nav, .no-print, .sticky, nav, header, button {
         display: none !important;
       }
-      html, body, main, #print-pallet-area {
+      html, body, main, #preview-modal, #print-pallet-area {
         overflow: visible !important;
         height: auto !important;
+        min-height: auto !important;
         background: white !important;
         padding: 0 !important;
         margin: 0 !important;
+        position: static !important;
       }
-      #print-pallet-area {
+      #preview-modal {
         display: block !important;
-        visibility: visible !important;
+        position: static !important;
+        background: transparent !important;
+        padding: 0 !important;
       }
-      .pallet-tag-card {
+      #preview-header-bar {
+        display: none !important;
+      }
+      /* ขนาด A4 แนวนอน (297mm x 210mm ลบ margin 8mm เหลือประมาณ 280mm x 194mm) */
+      .a4-landscape-page {
+        width: 280mm !important;
+        height: 192mm !important;
         page-break-after: always !important;
         break-after: page !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
         border: 2px solid #000 !important;
-        margin-bottom: 20px !important;
-        padding: 24px !important;
+        margin: 0 auto 10mm auto !important;
+        padding: 16px 20px !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
         background: white !important;
+        box-sizing: border-box !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: space-between !important;
       }
     }
   </style>
@@ -79,7 +103,7 @@
         </div>
       </div>
 
-      <!-- 👇 แท็บย่อย: สร้างใบงาน / คิวสแกนตรวจรับ / ส่งคืน 👇 -->
+      <!-- 👇 แท็บย่อย: ออกใบงาน / คิวสแกนตรวจรับ / ส่งคืน 👇 -->
       <div class="p-5 md:p-10 pb-28 space-y-6">
         
         <div class="grid grid-cols-1 md:grid-cols-3 gap-3 max-w-4xl no-print">
@@ -91,14 +115,14 @@
         </div>
 
         <!-- ========================================================================= -->
-        <!-- 📥 โซนที่ 1: ฟอร์มออกใบงานรับเข้า + เจน QR Lot & QR Pallet พร้อมพิมพ์ -->
+        <!-- 📥 โซนที่ 1: ฟอร์มออกใบงานรับเข้า -->
         <!-- ========================================================================= -->
         <div id="zone-create" class="space-y-6 max-w-4xl">
           <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 space-y-5 no-print">
             <div class="flex justify-between items-center border-b pb-3">
               <div>
-                <h2 class="text-lg font-bold text-gray-800">📄 สร้างใบงานรับสารกาแฟ & พิมพ์ใบติดพาเลท</h2>
-                <p class="text-xs text-gray-500 mt-0.5">ระบบจะสร้าง QR Code Lot และ QR Code Pallet แยกตามจำนวนพาเลทพร้อมพิมพ์</p>
+                <h2 class="text-lg font-bold text-gray-800">📄 สร้างใบงานรับสารกาแฟ & พิมพ์ใบติดพาเลท (A4 แนวนอน)</h2>
+                <p class="text-xs text-gray-500 mt-0.5">ระบบจะรันรหัส Lot, พาเลท 1-10 พร้อมเปิดหน้าต่างพรีวิวก่อนสั่งพิมพ์</p>
               </div>
               <span class="text-xs text-gray-400">ผู้ทำรายการ: <b id="operator-name" class="text-blue-600 font-bold">Admin</b></span>
             </div>
@@ -138,7 +162,7 @@
               <p class="text-xs font-bold text-amber-900 uppercase">🏷️ รหัส Lot & จำนวนพาเลทที่จะพิมพ์ใบปะหน้า</p>
               <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                 <div>
-                  <label class="block text-xs font-bold text-gray-600 mb-1">Lot Code (สร้าง QR กลางประจำล็อต) *</label>
+                  <label class="block text-xs font-bold text-gray-600 mb-1">Lot Code (รันอัตโนมัติ) *</label>
                   <input type="text" id="lot_code" class="w-full px-3 py-2 bg-white border border-amber-300 rounded-xl font-bold text-amber-900" readonly>
                 </div>
                 <div>
@@ -178,33 +202,17 @@
               </div>
             </div>
 
-            <button type="button" onclick="createInboundWOAndTags()" id="btn-save-wo" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3.5 rounded-xl shadow-md transition text-base">
-              🚀 1. บันทึกใบงาน & สร้างใบปะหน้าพาเลท
+            <!-- ปุ่มเปิดพรีวิว A4 แนวนอน -->
+            <button type="button" onclick="createInboundWOAndPreview()" id="btn-save-wo" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 rounded-xl shadow-md transition text-base flex items-center justify-center gap-2 active:scale-95">
+              <span>👁️ บันทึกใบงาน & พรีวิวใบปะหน้าพาเลท (A4 แนวนอน)</span>
             </button>
-          </div>
-
-          <!-- 🖨️ พื้นที่แสดงใบปะหน้าพาเลท พร้อมปุ่มสั่งพิมพ์ (Print Preview) -->
-          <div id="print-pallet-area" class="space-y-6 hidden">
-            <div class="flex justify-between items-center bg-white p-4 rounded-xl border no-print">
-              <div>
-                <h3 class="font-bold text-gray-900">🖨️ ตัวอย่างใบปะหน้าพาเลทพร้อมพิมพ์</h3>
-                <p class="text-xs text-gray-500">สร้างเรียบร้อยตามจำนวนพาเลท สามารถกดสั่งพิมพ์เพื่อนำไปติดที่พาเลทได้เลย</p>
-              </div>
-              <button type="button" onclick="window.print()" class="bg-gray-900 hover:bg-black text-white font-bold px-5 py-2.5 rounded-xl text-sm shadow-md transition flex items-center gap-2">
-                🖨️ สั่งพิมพ์ใบติดพาเลททั้งหมด
-              </button>
-            </div>
-
-            <!-- กล่องแสดงใบปะหน้าพาเลทที่จะถูกวนซ้ำตามจำนวนพาเลท -->
-            <div id="pallet-tags-container" class="space-y-6">
-            </div>
           </div>
         </div>
 
         <!-- ========================================================================= -->
-        <!-- 📱 โซนที่ 2: คิวรอตรวจรับจริงที่พาเลท (ยิง Pallet + Lot + ระบุจำนวนจริง) -->
+        <!-- 📱 โซนที่ 2: คิวรอตรวจรับจริงที่พาเลท (ยิงขึ้น Rack) -->
         <!-- ========================================================================= -->
-        <div id="zone-queue" class="hidden max-w-4xl space-y-4">
+        <div id="zone-queue" class="hidden max-w-4xl space-y-4 no-print">
           <div class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm flex justify-between items-center">
             <div>
               <h2 class="font-bold text-gray-800 text-lg">📱 คิวงานรอตรวจรับจริงที่พาเลท & ยิงขึ้น Rack</h2>
@@ -220,7 +228,7 @@
         <!-- ============================================== -->
         <!-- ↩️ โซนที่ 3: ส่งคืนสินค้า (Return / Reject) -->
         <!-- ============================================== -->
-        <div id="zone-return" class="hidden max-w-3xl bg-white p-8 rounded-2xl border border-gray-200 shadow-sm text-center space-y-3">
+        <div id="zone-return" class="hidden max-w-3xl bg-white p-8 rounded-2xl border border-gray-200 shadow-sm text-center space-y-3 no-print">
           <div class="text-4xl">↩️</div>
           <h2 class="text-xl font-bold text-gray-800">ระบบส่งคืนสินค้า (Return & Reject Management)</h2>
           <p class="text-sm text-gray-400 max-w-md mx-auto">ฟังก์ชันสำหรับบันทึกรายการสารกาแฟที่ไม่ได้คุณภาพและส่งคืน Supplier อยู่ระหว่างการเตรียมโครงสร้างเพื่อพัฒนาต่อในอนาคต</p>
@@ -230,8 +238,38 @@
     </main>
   </div>
 
+  <!-- ========================================================================= -->
+  <!-- 👁️ MODAL พรีวิวก่อนพิมพ์ A4 แนวนอน (Full-screen Preview Modal) -->
+  <!-- ========================================================================= -->
+  <div id="preview-modal" style="display: none;" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex-col overflow-y-auto p-4 md:p-8">
+    
+    <!-- แถบควบคุมบนหน้าต่างพรีวิว (ซ่อนอัตโนมัติตอนกดพิมพ์) -->
+    <div id="preview-header-bar" class="max-w-[280mm] w-full mx-auto bg-gray-900 text-white p-4 rounded-2xl mb-6 shadow-2xl flex flex-col md:flex-row justify-between items-center gap-3 no-print sticky top-2 z-50 border border-gray-700">
+      <div class="flex items-center gap-3">
+        <span class="text-2xl">📄</span>
+        <div>
+          <h3 class="font-bold text-base">พรีวิวใบปะหน้าพาเลท (A4 แนวนอน)</h3>
+          <p class="text-xs text-gray-400">ตรวจสอบความถูกต้องก่อนสั่งพิมพ์ (รวมทั้งหมด <span id="preview-total-count" class="text-green-400 font-bold">1</span> ใบ)</p>
+        </div>
+      </div>
+      <div class="flex gap-2 w-full md:w-auto">
+        <button type="button" onclick="window.print()" class="flex-1 md:flex-initial bg-green-500 hover:bg-green-600 text-gray-900 font-black px-6 py-2.5 rounded-xl text-sm shadow-lg transition flex items-center justify-center gap-2 active:scale-95">
+          🖨️ ยืนยันสั่งพิมพ์ A4 แนวนอน
+        </button>
+        <button type="button" onclick="closePreviewModal()" class="bg-gray-800 hover:bg-gray-700 text-gray-300 font-bold px-4 py-2.5 rounded-xl text-sm transition">
+          ✕ ปิดหน้าต่าง
+        </button>
+      </div>
+    </div>
+
+    <!-- พื้นที่แสดงแผ่นกระดาษ A4 แนวนอน (พิมพ์ออกมาตามนี้ 100%) -->
+    <div id="preview-content-container" class="max-w-[280mm] w-full mx-auto space-y-8">
+      <!-- แต่ละใบปะหน้าพาเลท A4 แนวนอนจะถูกสร้างที่นี่ -->
+    </div>
+  </div>
+
   <!-- 🛑 MODAL ตรวจรับสารจริงที่พาเลท (สำหรับพนักงานหน้างาน) -->
-  <div id="putaway-modal" style="display: none;" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 items-center justify-center p-4">
+  <div id="putaway-modal" style="display: none;" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 items-center justify-center p-4 no-print">
     <div class="bg-white max-w-md w-full p-6 rounded-2xl shadow-2xl border space-y-4">
       <div class="flex justify-between items-center border-b pb-3">
         <div>
@@ -248,19 +286,16 @@
           <p><b>ความคืบหน้า:</b> รับแล้ว <b id="modal-received-count" class="text-green-700">0</b> / <span id="modal-total-pallets">0</span> พาเลท</p>
         </div>
 
-        <!-- สแกน Pallet QR -->
         <div>
           <label class="block text-xs font-bold text-gray-700 mb-1">1. สแกน QR Code ประจำพาเลทนี้ *</label>
           <input type="text" id="scan_pallet" placeholder="สแกน QR พาเลท เช่น PAL-WO001-01" class="w-full px-3 py-2.5 border-2 border-indigo-400 rounded-xl font-bold text-indigo-700 uppercase">
         </div>
 
-        <!-- สแกน Lot QR -->
         <div>
           <label class="block text-xs font-bold text-gray-700 mb-1">2. สแกน QR Code ประจำ Lot *</label>
           <input type="text" id="scan_lot" placeholder="สแกน QR Lot เพื่อยืนยันความถูกต้อง" class="w-full px-3 py-2.5 border-2 border-amber-400 rounded-xl font-bold text-amber-800 uppercase">
         </div>
 
-        <!-- ระบุจำนวนสารจริงบนพาเลทนี้ -->
         <div class="grid grid-cols-2 gap-3 p-3 bg-green-50/60 rounded-xl border border-green-200">
           <div>
             <label class="block text-xs font-bold text-green-900 mb-1">จำนวนกระสอบจริง *</label>
@@ -272,7 +307,6 @@
           </div>
         </div>
 
-        <!-- ยิง Location Rack -->
         <div>
           <label class="block text-xs font-bold text-gray-700 mb-1">3. สแกนจัดเก็บเข้า Location Rack (BJI01A - BJI05M) *</label>
           <input type="text" id="scan_location" placeholder="เช่น BJI02B" class="w-full px-3 py-2.5 border-2 border-blue-400 rounded-xl font-bold text-blue-700 uppercase">
@@ -317,7 +351,7 @@
       if(tab === 'queue') loadPendingWOs();
     }
 
-    // 🌟 รันรหัส WO อัตโนมัติ: WO-202609-XXX
+    // รันรหัส WO อัตโนมัติ: WO-202609-XXX
     function generateWONumber() {
       const now = new Date();
       const yyyy = now.getFullYear();
@@ -367,9 +401,9 @@
     }
 
     // =========================================================================
-    // 🌟 1. สร้างใบงาน WO + สร้างใบปะหน้าพาเลท (10 ใบ) พร้อม QR Lot & QR Pallet
+    // 🌟 1. สร้างใบงาน WO + เปิดหน้าต่างพรีวิว A4 แนวนอน
     // =========================================================================
-    async function createInboundWOAndTags() {
+    async function createInboundWOAndPreview() {
       const select = document.getElementById('select_bean');
       if(select.value === "") return alert("กรุณาเลือกสารกาแฟ");
 
@@ -380,8 +414,15 @@
       const sackCount = document.getElementById('sack_count').value;
       const totalWeight = document.getElementById('total_weight').value;
 
+      const qcM1 = document.getElementById('qc_m1').value;
+      const qcD1 = document.getElementById('qc_d1').value;
+      const qcM2 = document.getElementById('qc_m2').value;
+      const qcD2 = document.getElementById('qc_d2').value;
+      const qcM3 = document.getElementById('qc_m3').value;
+      const qcD3 = document.getElementById('qc_d3').value;
+
       const btn = document.getElementById('btn-save-wo');
-      btn.innerText = "กำลังสร้างใบงาน & ป้ายพาเลท...";
+      btn.innerText = "กำลังสร้างใบงาน & เตรียมพรีวิว...";
       btn.disabled = true;
 
       const payload = {
@@ -397,38 +438,34 @@
         pallet_count: palletCount,
         sack_count: sackCount,
         weight: totalWeight,
-        qc_m1: document.getElementById('qc_m1').value,
-        qc_d1: document.getElementById('qc_d1').value,
-        qc_m2: document.getElementById('qc_m2').value,
-        qc_d2: document.getElementById('qc_d2').value,
-        qc_m3: document.getElementById('qc_m3').value,
-        qc_d3: document.getElementById('qc_d3').value,
+        qc_m1: qcM1, qc_d1: qcD1,
+        qc_m2: qcM2, qc_d2: qcD2,
+        qc_m3: qcM3, qc_d3: qcD3,
         operator: localStorage.getItem('name') || 'Admin'
       };
 
       try {
         const res = await fetch(API_URL, { method: "POST", body: JSON.stringify(payload) });
         const result = await res.json();
-        alert(result.message);
-
+        
         if(result.success) {
-          // เรนเดอร์ใบติดพาเลทตามจำนวนพาเลทที่ระบุ
-          renderPalletPrintTags(woNum, lotCode, bean, palletCount, sackCount, totalWeight);
-          document.getElementById('print-pallet-area').classList.remove('hidden');
-          // เลื่อนลงไปดูตัวอย่างการพิมพ์
-          document.getElementById('print-pallet-area').scrollIntoView({ behavior: 'smooth' });
+          // เรนเดอร์หน้ากระดาษ A4 แนวนอนสำหรับพรีวิว
+          renderA4LandscapePreview(woNum, lotCode, bean, palletCount, sackCount, totalWeight, { qcM1, qcD1, qcM2, qcD2, qcM3, qcD3 });
+          openPreviewModal(palletCount);
+        } else {
+          alert(result.message);
         }
       } catch (e) {
         alert("บันทึกใบงานไม่สำเร็จ");
       } finally {
-        btn.innerText = "🚀 1. บันทึกใบงาน & สร้างใบปะหน้าพาเลท";
+        btn.innerText = "👁️ บันทึกใบงาน & พรีวิวใบปะหน้าพาเลท (A4 แนวนอน)";
         btn.disabled = false;
       }
     }
 
-    // ฟังก์ชันสร้างแผ่นป้ายติดพาเลท (1 พาเลท = 1 ใบ มีทั้ง QR Lot และ QR Pallet)
-    function renderPalletPrintTags(woNum, lotCode, bean, palletCount, sackCount, totalWeight) {
-      const container = document.getElementById('pallet-tags-container');
+    // 🌟 ฟังก์ชันเรนเดอร์โครงสร้าง A4 แนวนอน (1 พาเลท = 1 แผ่น A4 แนวนอน)
+    function renderA4LandscapePreview(woNum, lotCode, bean, palletCount, sackCount, totalWeight, qc) {
+      const container = document.getElementById('preview-content-container');
       container.innerHTML = '';
 
       const estSacksPerPallet = Math.round((parseFloat(sackCount) || 0) / palletCount);
@@ -438,94 +475,143 @@
         const palletNumStr = String(p).padStart(2, '0');
         const palletCode = `PAL-${woNum.replace(/[^a-zA-Z0-9]/g, '')}-${palletNumStr}`;
 
-        const tag = document.createElement('div');
-        tag.className = "pallet-tag-card p-6 bg-white border-2 border-black rounded-2xl space-y-4 shadow-sm";
-        tag.innerHTML = `
-          <!-- หัวใบงาน -->
-          <div class="flex justify-between items-start border-b-2 border-black pb-3">
-            <div>
-              <h2 class="text-2xl font-black tracking-tight text-gray-900">BJ ROASTER - ใบปะหน้าพาเลทรับเข้า</h2>
-              <p class="text-xs font-bold text-gray-600 mt-0.5">ใบงาน: <span class="text-sm font-black text-black">${woNum}</span> | วันที่: ${new Date().toLocaleDateString('th-TH')}</p>
+        const page = document.createElement('div');
+        page.className = "a4-landscape-page shadow-2xl border-2 border-black bg-white rounded-lg p-6";
+        page.innerHTML = `
+          <!-- 1. Header แนวนอน -->
+          <div class="flex justify-between items-center border-b-2 border-black pb-2">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 bg-black text-white font-black flex items-center justify-center rounded-lg text-lg">BJ</div>
+              <div>
+                <h1 class="text-xl font-black text-black tracking-tight leading-none">BJ ROASTER - ใบตรวจรับและปะหน้าพาเลท (INBOUND PALLET TAG)</h1>
+                <p class="text-[11px] text-gray-700 font-bold mt-1">ใบสั่งงาน: <b class="text-black text-sm">${woNum}</b> | วันที่บันทึก: ${new Date().toLocaleDateString('th-TH')}</p>
+              </div>
             </div>
             <div class="text-right">
-              <span class="text-xs font-bold bg-black text-white px-3 py-1 rounded-md">พาเลทที่ ${p} / ${palletCount}</span>
-              <p class="text-sm font-black text-indigo-700 mt-1">${palletCode}</p>
+              <span class="inline-block bg-black text-white font-black text-sm px-4 py-1 rounded">พาเลทที่ ${p} / ${palletCount}</span>
+              <p class="font-mono font-black text-sm text-indigo-900 mt-1">${palletCode}</p>
             </div>
           </div>
 
-          <!-- ข้อมูลสินค้าที่เลือกไว้ -->
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs border-b-2 border-black pb-3 bg-gray-50 p-2.5 rounded-xl">
-            <div><span class="text-gray-500">ชื่อใน ERP:</span><br><b class="text-sm text-black">${bean.product_name || '-'} (${bean.product_code || '-'})</b></div>
-            <div><span class="text-gray-500">ชื่อเรียกสาร (หน้างาน):</span><br><b class="text-sm text-amber-900">${bean.bean_name || '-'} (${bean.bean_code || '-'})</b></div>
-            <div><span class="text-gray-500">Supplier:</span><br><b class="text-sm text-black">${bean.supplier_name || '-'}</b></div>
-            <div><span class="text-gray-500">Process:</span><br><b class="text-sm text-black">${bean.process || '-'}</b></div>
-          </div>
-
-          <!-- 🌟 พื้นที่สร้าง QR CODE 2 จุด: QR LOT และ QR PALLET 🌟 -->
-          <div class="grid grid-cols-2 gap-4 py-2 text-center">
+          <!-- 2. เนื้อหาหลักแบ่งซ้าย-ขวา แบบแนวนอนกว้างๆ -->
+          <div class="grid grid-cols-12 gap-4 my-auto py-2">
             
-            <!-- จุดที่ 1: QR CODE ประจำ LOT -->
-            <div class="p-3 bg-amber-50/60 border-2 border-dashed border-amber-400 rounded-xl flex flex-col items-center justify-center space-y-1">
-              <p class="text-xs font-black text-amber-900 uppercase">1. QR CODE ประจำ LOT</p>
-              <div id="qr-lot-${p}" class="p-1 bg-white rounded-lg"></div>
-              <p class="text-xs font-mono font-bold text-gray-800 tracking-wider">${lotCode}</p>
-              <span class="text-[10px] text-gray-500">ใช้สแกนข้อมูลล็อตสาร</span>
+            <!-- ฝั่งซ้าย (7 ส่วน): ข้อมูลสินค้า + แผนประมาณการ + QC -->
+            <div class="col-span-7 space-y-3">
+              
+              <!-- ตารางข้อมูลสินค้า -->
+              <div class="border border-black rounded-lg overflow-hidden text-xs">
+                <div class="bg-gray-100 font-bold p-1.5 border-b border-black text-gray-800">📦 ข้อมูลสารกาแฟ (Item Master)</div>
+                <div class="p-2.5 grid grid-cols-2 gap-2">
+                  <div><span class="text-gray-500">รหัสใน ERP:</span><br><b class="text-sm font-black text-blue-900">${bean.product_code || '-'}</b></div>
+                  <div><span class="text-gray-500">ชื่อใน ERP:</span><br><b class="text-sm font-bold text-gray-900">${bean.product_name || '-'}</b></div>
+                  <div><span class="text-gray-500">รหัสสารหน้างาน:</span><br><b class="text-sm font-black text-amber-900">${bean.bean_code || '-'}</b></div>
+                  <div><span class="text-gray-500">ชื่อเรียกสาร (หน้างาน):</span><br><b class="text-sm font-black text-amber-900">${bean.bean_name || '-'}</b></div>
+                  <div><span class="text-gray-500">Supplier:</span><br><b class="font-bold">${bean.supplier_name || '-'}</b></div>
+                  <div><span class="text-gray-500">Process:</span><br><b class="font-bold">${bean.process || '-'}</b></div>
+                </div>
+              </div>
+
+              <!-- ข้อมูล QC & ประมาณการ -->
+              <div class="grid grid-cols-2 gap-3 text-xs">
+                <div class="border border-black rounded-lg p-2 bg-gray-50">
+                  <span class="text-gray-500 font-bold">ประมาณการพาเลทนี้:</span>
+                  <p class="text-sm font-black text-black mt-1">~ ${estSacksPerPallet} กระสอบ (${estWeightPerPallet.toFixed(1)} kg)</p>
+                </div>
+                <div class="border border-black rounded-lg p-2 bg-blue-50/60">
+                  <span class="text-blue-900 font-bold">ผลสุ่มตรวจ QC:</span>
+                  <p class="text-xs text-blue-950 font-bold mt-1">
+                    Moisture: [${qc.qcM1 || '-'}%, ${qc.qcM2 || '-'}%, ${qc.qcM3 || '-'}]<br>
+                    Density: [${qc.qcD1 || '-'}, ${qc.qcD2 || '-'}, ${qc.qcD3 || '-'}] g/L
+                  </p>
+                </div>
+              </div>
+
             </div>
 
-            <!-- จุดที่ 2: QR CODE ประจำ PALLET รันเลข -->
-            <div class="p-3 bg-indigo-50/60 border-2 border-dashed border-indigo-400 rounded-xl flex flex-col items-center justify-center space-y-1">
-              <p class="text-xs font-black text-indigo-900 uppercase">2. QR CODE ประจำ PALLET</p>
-              <div id="qr-pal-${p}" class="p-1 bg-white rounded-lg"></div>
-              <p class="text-xs font-mono font-bold text-gray-800 tracking-wider">${palletCode}</p>
-              <span class="text-[10px] text-gray-500">ใช้สแกนยิงเข้า Location Rack</span>
+            <!-- ฝั่งขวา (5 ส่วน): Dual QR Code (ใหญ่ คม ชัด สแกนง่าย) -->
+            <div class="col-span-5 grid grid-cols-2 gap-2 border-2 border-black border-dashed rounded-xl p-3 bg-gray-50/50">
+              
+              <!-- QR 1: Lot Code -->
+              <div class="flex flex-col items-center justify-center p-2 bg-white border rounded-lg">
+                <span class="text-[11px] font-black text-amber-900 uppercase">1. QR CODE LOT</span>
+                <div id="prev-qr-lot-${p}" class="p-1 my-1"></div>
+                <p class="text-[10px] font-mono font-bold text-gray-800 text-center break-all">${lotCode}</p>
+                <span class="text-[9px] text-gray-500">ข้อมูลล็อตสาร</span>
+              </div>
+
+              <!-- QR 2: Pallet Code -->
+              <div class="flex flex-col items-center justify-center p-2 bg-white border rounded-lg">
+                <span class="text-[11px] font-black text-indigo-900 uppercase">2. QR PALLET</span>
+                <div id="prev-qr-pal-${p}" class="p-1 my-1"></div>
+                <p class="text-[10px] font-mono font-bold text-gray-800 text-center break-all">${palletCode}</p>
+                <span class="text-[9px] text-gray-500">รหัสประจำพาเลท</span>
+              </div>
+
             </div>
 
           </div>
 
-          <!-- ตารางสำหรับพนักงานหน้างานจดบันทึกจริงตอนยิง -->
-          <div class="border-2 border-black rounded-xl p-3 bg-gray-50 text-xs grid grid-cols-3 gap-3 text-center">
-            <div>
-              <span class="text-gray-500 font-bold">จำนวนกระสอบจริงบนพาเลทนี้</span>
-              <div class="h-8 border-b-2 border-black border-dashed mt-1 flex items-center justify-center font-bold text-base text-gray-800">
-                (ประมาณ ${estSacksPerPallet} กระสอบ)
+          <!-- 3. ด้านล่าง: ตารางสำหรับพนักงานหน้างานตรวจรับและยิงขึ้น Rack -->
+          <div class="border-2 border-black rounded-xl p-2.5 bg-gray-50 text-xs">
+            <p class="font-bold text-gray-700 mb-1">✍️ ผลการตรวจรับจริงและจุดจัดเก็บ (พนักงานหน้างานกรอกและสแกนยืนยันในระบบ):</p>
+            <div class="grid grid-cols-4 gap-2 text-center">
+              <div class="p-2 border border-black rounded bg-white">
+                <span class="text-gray-500">จำนวนกระสอบจริง</span>
+                <div class="h-6 border-b border-black border-dashed mt-1 flex items-center justify-center font-black text-sm">[ _____ กระสอบ ]</div>
               </div>
-            </div>
-            <div>
-              <span class="text-gray-500 font-bold">น้ำหนักชั่งจริงบนพาเลท (kg)</span>
-              <div class="h-8 border-b-2 border-black border-dashed mt-1 flex items-center justify-center font-bold text-base text-gray-800">
-                (ประมาณ ${estWeightPerPallet.toFixed(1)} kg)
+              <div class="p-2 border border-black rounded bg-white">
+                <span class="text-gray-500">น้ำหนักชั่งจริงบนพาเลท</span>
+                <div class="h-6 border-b border-black border-dashed mt-1 flex items-center justify-center font-black text-sm">[ _______ kg ]</div>
               </div>
-            </div>
-            <div>
-              <span class="text-gray-500 font-bold">Location Rack ที่นำขึ้นวาง</span>
-              <div class="h-8 border-b-2 border-black border-dashed mt-1 flex items-center justify-center font-black text-base text-blue-700">
-                [ ____________ ]
+              <div class="p-2 border border-black rounded bg-white">
+                <span class="text-gray-500">Location Rack ที่วาง</span>
+                <div class="h-6 border-b border-black border-dashed mt-1 flex items-center justify-center font-black text-sm text-blue-700">[ ___________ ]</div>
+              </div>
+              <div class="p-2 border border-black rounded bg-white">
+                <span class="text-gray-500">ผู้ตรวจรับ / วันที่</span>
+                <div class="h-6 border-b border-black border-dashed mt-1 flex items-center justify-center font-bold text-xs">[ ________________ ]</div>
               </div>
             </div>
           </div>
         `;
-        container.appendChild(tag);
+        container.appendChild(page);
 
-        // เจนเนอเรต QR Code Lot (จุดที่ 1)
-        new QRCode(document.getElementById(`qr-lot-${p}`), {
+        // วาด QR Code Lot (ฝั่งขวา จุดที่ 1)
+        new QRCode(document.getElementById(`prev-qr-lot-${p}`), {
           text: lotCode,
-          width: 95,
-          height: 95,
+          width: 105,
+          height: 105,
           correctLevel: QRCode.CorrectLevel.M
         });
 
-        // เจนเนอเรต QR Code Pallet (จุดที่ 2)
-        new QRCode(document.getElementById(`qr-pal-${p}`), {
+        // วาด QR Code Pallet (ฝั่งขวา จุดที่ 2)
+        new QRCode(document.getElementById(`prev-qr-pal-${p}`), {
           text: palletCode,
-          width: 95,
-          height: 95,
+          width: 105,
+          height: 105,
           correctLevel: QRCode.CorrectLevel.M
         });
       }
     }
 
+    function openPreviewModal(count) {
+      document.getElementById('preview-total-count').innerText = count;
+      document.getElementById('preview-modal').style.display = 'flex';
+    }
+
+    function closePreviewModal() {
+      document.getElementById('preview-modal').style.display = 'none';
+      // รีเฟรชคิวงานและเคลียร์ฟอร์ม
+      generateWONumber();
+      document.getElementById('select_bean').value = '';
+      document.getElementById('sack_count').value = '';
+      document.getElementById('total_weight').value = '';
+      switchInboundTab('queue');
+    }
+
     // =========================================================================
-    // 📱 2. ส่วนคิวตรวจรับจริงที่พาเลท (พนักงานใช้มือถือสแกนยิงเข้า Rack)
+    // 📱 2. ส่วนคิวตรวจรับจริงที่พาเลท (พนักงานใช้มือถือ)
     // =========================================================================
     async function loadPendingWOs() {
       const container = document.getElementById('queue-list');
@@ -587,7 +673,6 @@
       document.getElementById('putaway-modal').style.display = 'none';
     }
 
-    // พนักงานสแกนยิง Pallet + Lot + ระบุจำนวนจริง ➔ บันทึกเข้าสต๊อก
     async function confirmPalletPutaway() {
       const pallet = document.getElementById('scan_pallet').value.trim().toUpperCase();
       const lot = document.getElementById('scan_lot').value.trim().toUpperCase();
