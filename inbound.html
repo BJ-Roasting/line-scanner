@@ -12,14 +12,14 @@
     body { -ms-overflow-style: none; scrollbar-width: none; }
     .pb-safe { padding-bottom: env(safe-area-inset-bottom, 20px); }
 
-    /* 🖨️ ระบบควบคุมการพิมพ์ A4 แนวนอน */
+    /* 🖨️ ระบบพิมพ์ A4 แนวนอน */
     @page {
       size: A4 landscape;
       margin: 8mm;
     }
 
     @media print {
-      aside, #bottom-nav, .no-print, .sticky, nav, header, button, #edit-inbound-modal {
+      aside, #bottom-nav, .no-print, .sticky, nav, header, button, #edit-inbound-modal, #putaway-modal {
         display: none !important;
       }
       html, body, main, #preview-modal {
@@ -113,52 +113,42 @@
         </div>
 
         <!-- ========================================================================= -->
-        <!-- 📥 โซนที่ 1: ตาราง WO Inventory ด้านบน + ฟอร์มออกใบงานแยก 2 ปุ่มด้านล่าง -->
+        <!-- 📥 โซนที่ 1: การ์ด WO INVENTORY ด้านบน + ฟอร์มออกใบงานด้านล่าง -->
         <!-- ========================================================================= -->
         <div id="zone-create" class="space-y-6 max-w-5xl">
 
-          <!-- 🌟 ส่วนที่ 2 ตามที่คุณขอ: ตาราง WO INVENTORY ด้านบน พร้อมปุ่ม ⚙️ จัดการ (Edit, Delete, Print) -->
-          <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden no-print">
-            <div class="p-4 border-b bg-gray-50 flex justify-between items-center">
+          <!-- 🌟 ส่วนที่ 1: คลังการ์ด WO INVENTORY ด้านบนสุด (พร้อมปุ่ม ⚙️ จัดการ ที่กดแล้วโผล่ทันที) -->
+          <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm space-y-4 no-print">
+            <div class="flex flex-col md:flex-row justify-between md:items-center gap-3 border-b pb-3">
               <div>
-                <h3 class="font-bold text-gray-900 text-base">📋 รายการใบงานรับเข้า (Inbound WO Inventory)</h3>
-                <p class="text-xs text-gray-500">ติดตามสถานะใบงาน และสามารถกดจัดการเพื่อ พิมพ์ใบปะหน้า, แก้ไข หรือ ลบใบงานได้</p>
+                <h3 class="font-bold text-gray-900 text-lg flex items-center gap-2">
+                  <span>📦 คลังการ์ดใบงานรับเข้า (Inbound WO Inventory)</span>
+                  <span id="wo-inventory-count" class="text-xs bg-green-100 text-green-800 font-bold px-2 py-0.5 rounded-full">0 ใบงาน</span>
+                </h3>
+                <p class="text-xs text-gray-500">กดปุ่ม <b>"⚙️ จัดการ"</b> เพื่อเปิดแถบปุ่ม <b>พิมพ์ซ้ำ, แก้ไข, ลบ</b> บนการ์ดแต่ละใบ</p>
               </div>
+
               <div class="flex items-center gap-2">
-                <!-- 🌟 ปุ่มจัดการ Toggle ซ่อน/แสดง Action Buttons -->
-                <button type="button" id="btn-manage-wo" onclick="toggleManageWOMode()" class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 border border-gray-300 font-bold px-3 py-1.5 rounded-lg flex items-center gap-1 transition">
+                <!-- 🌟 ปุ่มสลับโหมดจัดการ (Toggle Management Mode) 🌟 -->
+                <button type="button" id="btn-manage-wo" onclick="toggleManageWOMode()" class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-800 border border-gray-300 font-bold px-4 py-2 rounded-xl flex items-center gap-1.5 transition shadow-sm">
                   ⚙️ จัดการ
                 </button>
-                <button type="button" onclick="loadAllWOs()" class="text-xs bg-gray-200 hover:bg-gray-300 font-bold px-3 py-1.5 rounded-lg">🔄 รีเฟรช</button>
+                <button type="button" onclick="loadAllWOs()" class="text-xs bg-gray-200 hover:bg-gray-300 font-bold px-3.5 py-2 rounded-xl">🔄 รีเฟรช</button>
               </div>
             </div>
 
-            <div class="overflow-x-auto">
-              <table class="min-w-full text-sm">
-                <thead class="bg-gray-100 text-gray-600">
-                  <tr>
-                    <th class="py-2.5 px-4 text-left font-bold">รหัส WO</th>
-                    <th class="py-2.5 px-4 text-left font-bold">ชื่อสารกาแฟ (หน้างาน)</th>
-                    <th class="py-2.5 px-4 text-left font-bold">Lot Code</th>
-                    <th class="py-2.5 px-4 text-center font-bold">จำนวนพาเลท</th>
-                    <th class="py-2.5 px-4 text-right font-bold">น้ำหนักรวม</th>
-                    <th class="py-2.5 px-4 text-center font-bold">สถานะ</th>
-                    <th id="th-action-wo" class="py-2.5 px-4 text-center font-bold hidden bg-amber-50 text-amber-900">จัดการ</th>
-                  </tr>
-                </thead>
-                <tbody id="wo-inventory-table-body" class="text-gray-700">
-                  <tr><td colspan="6" class="py-6 text-center text-gray-400">กำลังโหลดรายการใบงาน...</td></tr>
-                </tbody>
-              </table>
+            <!-- กล่องแสดงการ์ด WO ด้านบน -->
+            <div id="wo-cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <p class="col-span-full py-8 text-center text-gray-400 text-sm">กำลังโหลดการ์ดใบงาน...</p>
             </div>
           </div>
 
-          <!-- ฟอร์มสร้างใบงานรับเข้า -->
+          <!-- ฟอร์มสร้างใบงานรับเข้า (มี 2 ปุ่ม: พรีวิว&พิมพ์ VS บันทึกอย่างเดียว) -->
           <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 space-y-5 no-print">
             <div class="flex justify-between items-center border-b pb-3">
               <div>
                 <h2 class="text-lg font-bold text-gray-800">➕ สร้างใบงานรับสารกาแฟใหม่</h2>
-                <p class="text-xs text-gray-500 mt-0.5">ระบบจะรันรหัส Lot, รหัสพาเลทอัตโนมัติ</p>
+                <p class="text-xs text-gray-500 mt-0.5">ระบบจะรันรหัส Lot และรหัสพาเลทให้อัตโนมัติ</p>
               </div>
               <span class="text-xs text-gray-400">ผู้ทำรายการ: <b id="operator-name" class="text-blue-600 font-bold">Admin</b></span>
             </div>
@@ -236,14 +226,14 @@
               </div>
             </div>
 
-            <!-- 🌟 ส่วนที่ 1 ตามที่คุณขอ: แยกเป็น 2 ปุ่มชัดเจน (พรีวิว&ปริ๊น VS บันทึกอย่างเดียวไม่ต้องปริ๊น) -->
+            <!-- 🌟 2 ปุ่มแยกชัดเจน 🌟 -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
-              <!-- ปุ่มที่ 1: พรีวิวเพื่อเช็คงานและสั่งพิมพ์ A4 แนวนอน -->
+              <!-- ปุ่มที่ 1: พรีวิว & พิมพ์ A4 แนวนอน -->
               <button type="button" onclick="submitInboundWO(true)" id="btn-preview-wo" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl shadow-md transition flex items-center justify-center gap-2 active:scale-95">
                 <span>👁️ พรีวิว & สั่งพิมพ์ใบปะหน้า (A4 แนวนอน)</span>
               </button>
 
-              <!-- ปุ่มที่ 2: บันทึกและสร้าง WO เก็บเข้าคิวไว้เลย ไม่ต้องพิมพ์ -->
+              <!-- ปุ่มที่ 2: บันทึกและสร้าง WO (ไม่พิมพ์) -->
               <button type="button" onclick="submitInboundWO(false)" id="btn-save-wo" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3.5 rounded-xl shadow-md transition flex items-center justify-center gap-2 active:scale-95">
                 <span>💾 บันทึกและสร้าง WO (ไม่พิมพ์)</span>
               </button>
@@ -282,684 +272,9 @@
   </div>
 
   <!-- ========================================================================= -->
-  <!-- 👁️ MODAL พรีวิวก่อนพิมพ์ A4 แนวนอน (ใช้ดูซ้ำได้จากปุ่มพิมพ์ในตาราง) -->
+  <!-- 👁️ MODAL พรีวิวก่อนพิมพ์ A4 แนวนอน -->
   <!-- ========================================================================= -->
   <div id="preview-modal" style="display: none;" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex-col overflow-y-auto p-4 md:p-8">
     
     <div id="preview-header-bar" class="max-w-[280mm] w-full mx-auto bg-gray-900 text-white p-4 rounded-2xl mb-6 shadow-2xl flex flex-col md:flex-row justify-between items-center gap-3 no-print sticky top-2 z-50 border border-gray-700">
-      <div class="flex items-center gap-3">
-        <span class="text-2xl">📄</span>
-        <div>
-          <h3 class="font-bold text-base">พรีวิวใบปะหน้าพาเลท (A4 แนวนอน)</h3>
-          <p class="text-xs text-gray-400">ตรวจสอบความถูกต้องก่อนสั่งพิมพ์ (รวมทั้งหมด <span id="preview-total-count" class="text-green-400 font-bold">1</span> ใบ)</p>
-        </div>
-      </div>
-      <div class="flex gap-2 w-full md:w-auto">
-        <button type="button" onclick="window.print()" class="flex-1 md:flex-initial bg-green-500 hover:bg-green-600 text-gray-900 font-black px-6 py-2.5 rounded-xl text-sm shadow-lg transition flex items-center justify-center gap-2 active:scale-95">
-          🖨️ ยืนยันสั่งพิมพ์ A4 แนวนอน
-        </button>
-        <button type="button" onclick="closePreviewModal()" class="bg-gray-800 hover:bg-gray-700 text-gray-300 font-bold px-4 py-2.5 rounded-xl text-sm transition">
-          ✕ ปิดหน้าต่าง
-        </button>
-      </div>
-    </div>
-
-    <!-- แผ่นกระดาษ A4 แนวนอน -->
-    <div id="preview-content-container" class="max-w-[280mm] w-full mx-auto space-y-8">
-    </div>
-  </div>
-
-  <!-- 🛑 MODAL 1: แก้ไขใบงาน WO ที่อยู่ในตาราง (Edit WO Modal) -->
-  <div id="edit-inbound-modal" style="display: none;" onclick="if(event.target === this) closeEditInboundModal()" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 items-center justify-center p-4 no-print">
-    <div class="bg-white max-w-md w-full p-6 rounded-2xl shadow-2xl border space-y-4">
-      <div class="flex justify-between items-center border-b pb-3">
-        <div>
-          <h3 class="font-bold text-gray-900 text-lg">✏️ แก้ไขข้อมูลใบงานรับเข้า</h3>
-          <p id="edit-wo-title" class="text-xs text-green-700 font-bold">WO-xxxx</p>
-        </div>
-        <button type="button" onclick="closeEditInboundModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
-      </div>
-      <div class="space-y-3 text-sm">
-        <div>
-          <label class="block text-xs font-bold text-gray-500 mb-1">จำนวนกระสอบ</label>
-          <input type="number" id="edit_wo_sacks" class="w-full px-3 py-2 border rounded-xl font-bold">
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-gray-500 mb-1">น้ำหนักรวม (kg)</label>
-          <input type="number" id="edit_wo_weight" step="0.01" class="w-full px-3 py-2 border rounded-xl font-bold text-green-700">
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-gray-500 mb-1">สถานะ</label>
-          <select id="edit_wo_status" class="w-full px-3 py-2 border rounded-xl bg-white font-bold">
-            <option value="Pending">Pending (รอสแกนจัดเก็บ)</option>
-            <option value="Completed">Completed (จัดเก็บสำเร็จ)</option>
-          </select>
-        </div>
-      </div>
-      <div class="flex gap-2 pt-2">
-        <button type="button" onclick="closeEditInboundModal()" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-2.5 rounded-xl">ยกเลิก</button>
-        <button type="button" onclick="submitEditInboundWO()" id="btn-save-edit-wo" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl">💾 บันทึกการแก้ไข</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- 🛑 MODAL 2: ตรวจรับสารจริงที่พาเลท (สำหรับพนักงานหน้างาน) -->
-  <div id="putaway-modal" style="display: none;" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 items-center justify-center p-4 no-print">
-    <div class="bg-white max-w-md w-full p-6 rounded-2xl shadow-2xl border space-y-4">
-      <div class="flex justify-between items-center border-b pb-3">
-        <div>
-          <h3 class="font-bold text-gray-900 text-lg">📦 ยิงรับสารกาแฟประจำพาเลท</h3>
-          <p id="modal-wo-sub" class="text-xs text-green-700 font-bold">WO-202609-001</p>
-        </div>
-        <button type="button" onclick="closePutawayModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
-      </div>
-
-      <div class="space-y-3 text-sm">
-        <div class="p-3 bg-gray-50 rounded-xl border space-y-1 text-xs">
-          <p><b>สารกาแฟ:</b> <span id="modal-bean-name">-</span></p>
-          <p><b>Lot Code:</b> <span id="modal-lot-code" class="text-amber-800 font-bold">-</span></p>
-          <p><b>ความคืบหน้า:</b> รับแล้ว <b id="modal-received-count" class="text-green-700">0</b> / <span id="modal-total-pallets">0</span> พาเลท</p>
-        </div>
-
-        <div>
-          <label class="block text-xs font-bold text-gray-700 mb-1">1. สแกน QR Code ประจำพาเลทนี้ *</label>
-          <input type="text" id="scan_pallet" placeholder="สแกน QR พาเลท เช่น PAL-WO001-01" class="w-full px-3 py-2.5 border-2 border-indigo-400 rounded-xl font-bold text-indigo-700 uppercase">
-        </div>
-
-        <div>
-          <label class="block text-xs font-bold text-gray-700 mb-1">2. สแกน QR Code ประจำ Lot *</label>
-          <input type="text" id="scan_lot" placeholder="สแกน QR Lot เพื่อยืนยันความถูกต้อง" class="w-full px-3 py-2.5 border-2 border-amber-400 rounded-xl font-bold text-amber-800 uppercase">
-        </div>
-
-        <div class="grid grid-cols-2 gap-3 p-3 bg-green-50/60 rounded-xl border border-green-200">
-          <div>
-            <label class="block text-xs font-bold text-green-900 mb-1">จำนวนกระสอบจริง *</label>
-            <input type="number" id="scan_actual_sacks" placeholder="เช่น 10" class="w-full px-3 py-2 bg-white border border-green-400 rounded-lg font-bold text-green-900">
-          </div>
-          <div>
-            <label class="block text-xs font-bold text-green-900 mb-1">น้ำหนักจริงบนพาเลท (kg) *</label>
-            <input type="number" id="scan_actual_weight" step="0.01" placeholder="เช่น 502.5" class="w-full px-3 py-2 bg-white border border-green-400 rounded-lg font-bold text-green-900">
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-xs font-bold text-gray-700 mb-1">3. สแกนจัดเก็บเข้า Location Rack (BJI01A - BJI05M) *</label>
-          <input type="text" id="scan_location" placeholder="เช่น BJI02B" class="w-full px-3 py-2.5 border-2 border-blue-400 rounded-xl font-bold text-blue-700 uppercase">
-        </div>
-      </div>
-
-      <div class="flex gap-2 pt-2">
-        <button type="button" onclick="closePutawayModal()" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-2.5 rounded-xl">ปิด</button>
-        <button type="button" onclick="confirmPalletPutaway()" id="btn-confirm-putaway" class="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-2.5 rounded-xl">✅ บันทึกพาเลทนี้</button>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbxQywqP4da0BYdt_dHQtQl-kYlvGxmdJWNA59oqnZ_AM7SRyEESbMd73UD3Xx6VffQ/exec";
-    let masterBeans = [];
-    let allInboundWOs = [];
-    let pendingWOs = [];
-    let currentSelectedWO = null;
-    let isManageWOMode = false;
-
-    function handleLogout() {
-      if(confirm("ต้องการออกจากระบบใช่หรือไม่?")) {
-        localStorage.clear();
-        window.location.href='index.html';
-      }
-    }
-
-    window.onload = function() {
-      document.getElementById('operator-name').innerText = localStorage.getItem('name') || "Admin";
-      generateWONumber();
-      loadBeanMasterOptions();
-      loadAllWOs();
-      loadPendingWOs();
-    };
-
-    function switchInboundTab(tab) {
-      ['create', 'queue', 'return'].forEach(t => {
-        document.getElementById(`zone-${t}`).classList.add('hidden');
-        document.getElementById(`tab-btn-${t}`).className = "py-3 px-4 font-bold rounded-xl bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 text-sm";
-      });
-      document.getElementById(`zone-${tab}`).classList.remove('hidden');
-      document.getElementById(`tab-btn-${tab}`).className = "py-3 px-4 font-bold rounded-xl bg-green-600 text-white shadow-sm text-sm";
-
-      if(tab === 'queue') loadPendingWOs();
-      if(tab === 'create') loadAllWOs();
-    }
-
-    function generateWONumber() {
-      const now = new Date();
-      const yyyy = now.getFullYear();
-      const mm = String(now.getMonth() + 1).padStart(2, '0');
-      const randomSeq = String(Math.floor(Math.random() * 900) + 100);
-      document.getElementById('wo_number').value = `WO-${yyyy}${mm}-${randomSeq}`;
-    }
-
-    async function loadBeanMasterOptions() {
-      try {
-        const res = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'get_items' }) });
-        const result = await res.json();
-        if(result.success && result.data) {
-          masterBeans = result.data;
-          const select = document.getElementById('select_bean');
-          select.innerHTML = '<option value="">-- กรุณาเลือกรายการสารกาแฟ --</option>' + 
-            masterBeans.map((b, idx) => `
-              <option value="${idx}">[${b.bean_code || b.product_code}] ${b.bean_name || b.product_name} (${b.supplier_name || 'ไม่ระบุผู้ขาย'})</option>
-            `).join('');
-        }
-      } catch (e) {
-        console.error("โหลด Item Master ไม่สำเร็จ");
-      }
-    }
-
-    function onBeanSelected() {
-      const select = document.getElementById('select_bean');
-      const idx = select.value;
-      if(idx === "") return;
-
-      const bean = masterBeans[idx];
-      document.getElementById('view-prod-code').innerText = bean.product_code || '-';
-      document.getElementById('view-bean-name').innerText = bean.bean_name || '-';
-      document.getElementById('view-supplier').innerText = bean.supplier_name || '-';
-      document.getElementById('view-process').innerText = bean.process || '-';
-
-      const now = new Date();
-      const yy = String(now.getFullYear()).slice(-2);
-      const mm = String(now.getMonth() + 1).padStart(2, '0');
-      const code = (bean.bean_code || 'BEAN').replace(/[^a-zA-Z0-9]/g, '');
-      document.getElementById('lot_code').value = `LOT-${yy}${mm}-${code}-01`;
-    }
-
-    function calculateTotalWeight() {
-      const sacks = parseFloat(document.getElementById('sack_count').value) || 0;
-      document.getElementById('total_weight').value = (sacks * 50).toFixed(2);
-    }
-
-    // =========================================================================
-    // 🌟 1. ดึงรายการ WO ทั้งหมดมาโชว์ในตาราง WO INVENTORY ด้านบน
-    // =========================================================================
-    async function loadAllWOs() {
-      const tbody = document.getElementById('wo-inventory-table-body');
-      tbody.innerHTML = `<tr><td colspan="${isManageWOMode ? 7 : 6}" class="py-6 text-center text-gray-400">กำลังโหลดรายการใบงาน...</td></tr>`;
-      try {
-        const res = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'get_all_inbound_wos' }) });
-        const result = await res.json();
-        if(result.success && result.data && result.data.length > 0) {
-          allInboundWOs = result.data;
-          renderWOTable(allInboundWOs);
-        } else {
-          tbody.innerHTML = `<tr><td colspan="${isManageWOMode ? 7 : 6}" class="py-6 text-center text-gray-400">ยังไม่มีประวัติใบงานรับเข้า</td></tr>`;
-        }
-      } catch (e) {
-        tbody.innerHTML = `<tr><td colspan="${isManageWOMode ? 7 : 6}" class="py-6 text-center text-red-500">เชื่อมต่อไม่ได้</td></tr>`;
-      }
-    }
-
-    function renderWOTable(data) {
-      const tbody = document.getElementById('wo-inventory-table-body');
-      if(data.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="${isManageWOMode ? 7 : 6}" class="py-6 text-center text-gray-400">ยังไม่มีประวัติใบงานรับเข้า</td></tr>`;
-        return;
-      }
-      tbody.innerHTML = data.map(wo => `
-        <tr class="border-b border-gray-100 hover:bg-gray-50">
-          <td class="py-2.5 px-4 font-bold text-green-700">${wo.wo_number}</td>
-          <td class="py-2.5 px-4 font-medium text-gray-900">${wo.bean_name} <span class="text-xs text-gray-400 font-normal">(${wo.product_code || '-'})</span></td>
-          <td class="py-2.5 px-4 font-bold text-amber-800">${wo.lot_code}</td>
-          <td class="py-2.5 px-4 text-center font-bold text-gray-700">${wo.pallet_count || 1} พาเลท (${wo.sack_count || 0} กระสอบ)</td>
-          <td class="py-2.5 px-4 text-right font-bold text-green-700">${wo.weight} kg</td>
-          <td class="py-2.5 px-4 text-center">
-            <span class="px-2.5 py-0.5 rounded-full text-xs font-bold ${wo.status === 'Completed' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-800'}">
-              ${wo.status === 'Completed' ? 'จัดเก็บแล้ว' : 'รอสแกน'}
-            </span>
-          </td>
-          ${isManageWOMode ? `
-            <td class="py-2.5 px-4 text-center space-x-1">
-              <button type="button" onclick="printExistingWOTags('${wo.wo_number}')" class="bg-purple-50 text-purple-700 hover:bg-purple-100 px-2 py-1 rounded-lg text-xs font-bold transition">🖨️ พิมพ์</button>
-              <button type="button" onclick="openEditInboundModal('${wo.wo_number}')" class="bg-blue-50 text-blue-600 hover:bg-blue-100 px-2 py-1 rounded-lg text-xs font-bold transition">✏️ แก้ไข</button>
-              <button type="button" onclick="deleteInboundWOItem('${wo.wo_number}')" class="bg-red-50 text-red-600 hover:bg-red-100 px-2 py-1 rounded-lg text-xs font-bold transition">🗑️ ลบ</button>
-            </td>
-          ` : ''}
-        </tr>
-      `).join('');
-    }
-
-    // ฟังก์ชันสลับโหมดปุ่ม "⚙️ จัดการ" ในตาราง WO
-    function toggleManageWOMode() {
-      isManageWOMode = !isManageWOMode;
-      const btn = document.getElementById('btn-manage-wo');
-      const th = document.getElementById('th-action-wo');
-      if(isManageWOMode) {
-        btn.className = "text-xs bg-amber-500 hover:bg-amber-600 text-white font-bold px-3 py-1.5 rounded-lg flex items-center gap-1 transition shadow-sm";
-        btn.innerHTML = "✔️ เสร็จสิ้น";
-        if(th) th.classList.remove('hidden');
-      } else {
-        btn.className = "text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 border border-gray-300 font-bold px-3 py-1.5 rounded-lg flex items-center gap-1 transition";
-        btn.innerHTML = "⚙️ จัดการ";
-        if(th) th.classList.add('hidden');
-      }
-      renderWOTable(allInboundWOs);
-    }
-
-    // =========================================================================
-    // 🌟 2. ระบบส่งฟอร์มแยก 2 ปุ่ม: [พรีวิว&ปริ๊น] หรือ [บันทึกไม่พิมพ์]
-    // =========================================================================
-    async function submitInboundWO(needPreview) {
-      const select = document.getElementById('select_bean');
-      if(select.value === "") return alert("กรุณาเลือกสารกาแฟ");
-
-      const bean = masterBeans[select.value];
-      const woNum = document.getElementById('wo_number').value;
-      const lotCode = document.getElementById('lot_code').value;
-      const palletCount = parseInt(document.getElementById('pallet_count').value) || 1;
-      const sackCount = document.getElementById('sack_count').value;
-      const totalWeight = document.getElementById('total_weight').value;
-
-      const qcM1 = document.getElementById('qc_m1').value;
-      const qcD1 = document.getElementById('qc_d1').value;
-      const qcM2 = document.getElementById('qc_m2').value;
-      const qcD2 = document.getElementById('qc_d2').value;
-      const qcM3 = document.getElementById('qc_m3').value;
-      const qcD3 = document.getElementById('qc_d3').value;
-
-      const btnPreview = document.getElementById('btn-preview-wo');
-      const btnSave = document.getElementById('btn-save-wo');
-      btnPreview.disabled = true;
-      btnSave.disabled = true;
-
-      const payload = {
-        action: 'create_inbound_wo',
-        wo_number: woNum,
-        wo_type: 'รับสินค้าเข้า (สารกาแฟ)',
-        product_code: bean.product_code || '',
-        product_name: bean.product_name || '',
-        bean_code: bean.bean_code || '',
-        bean_name: bean.bean_name || '',
-        lot_code: lotCode,
-        supplier_name: bean.supplier_name || '',
-        pallet_count: palletCount,
-        sack_count: sackCount,
-        weight: totalWeight,
-        qc_m1: qcM1, qc_d1: qcD1,
-        qc_m2: qcM2, qc_d2: qcD2,
-        qc_m3: qcM3, qc_d3: qcD3,
-        operator: localStorage.getItem('name') || 'Admin'
-      };
-
-      try {
-        const res = await fetch(API_URL, { method: "POST", body: JSON.stringify(payload) });
-        const result = await res.json();
-        
-        if(result.success) {
-          loadAllWOs(); // อัปเดตตารางด้านบนทันที
-          loadPendingWOs(); // อัปเดตคิว
-
-          if(needPreview) {
-            // โหมด 1: พรีวิว A4 แนวนอน พร้อมสั่งพิมพ์
-            renderA4LandscapePreview(woNum, lotCode, bean, palletCount, sackCount, totalWeight, { qcM1, qcD1, qcM2, qcD2, qcM3, qcD3 });
-            openPreviewModal(palletCount);
-          } else {
-            // โหมด 2: บันทึกอย่างเดียว ไม่ต้องพิมพ์
-            alert(`✅ ${result.message}\n(ใบงานถูกบันทึกขึ้น WO Inventory ด้านบนแล้ว)`);
-            clearInboundForm();
-          }
-        } else {
-          alert(result.message);
-        }
-      } catch (e) {
-        alert("บันทึกใบงานไม่สำเร็จ");
-      } finally {
-        btnPreview.disabled = false;
-        btnSave.disabled = false;
-      }
-    }
-
-    function clearInboundForm() {
-      generateWONumber();
-      document.getElementById('select_bean').value = '';
-      document.getElementById('sack_count').value = '';
-      document.getElementById('total_weight').value = '';
-      document.getElementById('view-prod-code').innerText = '-';
-      document.getElementById('view-bean-name').innerText = '-';
-      document.getElementById('view-supplier').innerText = '-';
-      document.getElementById('view-process').innerText = '-';
-      document.getElementById('lot_code').value = '';
-    }
-
-    // =========================================================================
-    // 🖨️ เรนเดอร์ใบปะหน้าพาเลท A4 แนวนอน (1 พาเลท = 1 แผ่น A4)
-    // =========================================================================
-    function renderA4LandscapePreview(woNum, lotCode, bean, palletCount, sackCount, totalWeight, qc) {
-      const container = document.getElementById('preview-content-container');
-      container.innerHTML = '';
-
-      const estSacksPerPallet = Math.round((parseFloat(sackCount) || 0) / palletCount);
-      const estWeightPerPallet = (parseFloat(totalWeight) || 0) / palletCount;
-
-      for (let p = 1; p <= palletCount; p++) {
-        const palletNumStr = String(p).padStart(2, '0');
-        const palletCode = `PAL-${woNum.replace(/[^a-zA-Z0-9]/g, '')}-${palletNumStr}`;
-
-        const page = document.createElement('div');
-        page.className = "a4-landscape-page shadow-2xl border-2 border-black bg-white rounded-lg p-6";
-        page.innerHTML = `
-          <!-- Header แนวนอน -->
-          <div class="flex justify-between items-center border-b-2 border-black pb-2">
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 bg-black text-white font-black flex items-center justify-center rounded-lg text-lg">BJ</div>
-              <div>
-                <h1 class="text-xl font-black text-black tracking-tight leading-none">BJ ROASTER - ใบตรวจรับและปะหน้าพาเลท (INBOUND PALLET TAG)</h1>
-                <p class="text-[11px] text-gray-700 font-bold mt-1">ใบสั่งงาน: <b class="text-black text-sm">${woNum}</b> | วันที่บันทึก: ${new Date().toLocaleDateString('th-TH')}</p>
-              </div>
-            </div>
-            <div class="text-right">
-              <span class="inline-block bg-black text-white font-black text-sm px-4 py-1 rounded">พาเลทที่ ${p} / ${palletCount}</span>
-              <p class="font-mono font-black text-sm text-indigo-900 mt-1">${palletCode}</p>
-            </div>
-          </div>
-
-          <!-- เนื้อหาแบ่งซ้าย-ขวา แนวนอนกว้างๆ -->
-          <div class="grid grid-cols-12 gap-4 my-auto py-2">
-            
-            <!-- ซ้าย: ข้อมูลสินค้า + QC -->
-            <div class="col-span-7 space-y-3">
-              <div class="border border-black rounded-lg overflow-hidden text-xs">
-                <div class="bg-gray-100 font-bold p-1.5 border-b border-black text-gray-800">📦 ข้อมูลสารกาแฟ (Item Master)</div>
-                <div class="p-2.5 grid grid-cols-2 gap-2">
-                  <div><span class="text-gray-500">รหัสใน ERP:</span><br><b class="text-sm font-black text-blue-900">${bean.product_code || '-'}</b></div>
-                  <div><span class="text-gray-500">ชื่อใน ERP:</span><br><b class="text-sm font-bold text-gray-900">${bean.product_name || '-'}</b></div>
-                  <div><span class="text-gray-500">รหัสสารหน้างาน:</span><br><b class="text-sm font-black text-amber-900">${bean.bean_code || '-'}</b></div>
-                  <div><span class="text-gray-500">ชื่อเรียกสาร (หน้างาน):</span><br><b class="text-sm font-black text-amber-900">${bean.bean_name || '-'}</b></div>
-                  <div><span class="text-gray-500">Supplier:</span><br><b class="font-bold">${bean.supplier_name || '-'}</b></div>
-                  <div><span class="text-gray-500">Process:</span><br><b class="font-bold">${bean.process || '-'}</b></div>
-                </div>
-              </div>
-
-              <div class="grid grid-cols-2 gap-3 text-xs">
-                <div class="border border-black rounded-lg p-2 bg-gray-50">
-                  <span class="text-gray-500 font-bold">ประมาณการพาเลทนี้:</span>
-                  <p class="text-sm font-black text-black mt-1">~ ${estSacksPerPallet} กระสอบ (${estWeightPerPallet.toFixed(1)} kg)</p>
-                </div>
-                <div class="border border-black rounded-lg p-2 bg-blue-50/60">
-                  <span class="text-blue-900 font-bold">ผลสุ่มตรวจ QC:</span>
-                  <p class="text-xs text-blue-950 font-bold mt-1">
-                    Moisture: [${qc.qcM1 || '-'}%, ${qc.qcM2 || '-'}%, ${qc.qcM3 || '-'}]<br>
-                    Density: [${qc.qcD1 || '-'}, ${qc.qcD2 || '-'}, ${qc.qcD3 || '-'}] g/L
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <!-- ขวา: Dual QR Code (ใหญ่ คม ชัด) -->
-            <div class="col-span-5 grid grid-cols-2 gap-2 border-2 border-black border-dashed rounded-xl p-3 bg-gray-50/50">
-              <div class="flex flex-col items-center justify-center p-2 bg-white border rounded-lg">
-                <span class="text-[11px] font-black text-amber-900 uppercase">1. QR CODE LOT</span>
-                <div id="prev-qr-lot-${p}" class="p-1 my-1"></div>
-                <p class="text-[10px] font-mono font-bold text-gray-800 text-center break-all">${lotCode}</p>
-                <span class="text-[9px] text-gray-500">ข้อมูลล็อตสาร</span>
-              </div>
-              <div class="flex flex-col items-center justify-center p-2 bg-white border rounded-lg">
-                <span class="text-[11px] font-black text-indigo-900 uppercase">2. QR PALLET</span>
-                <div id="prev-qr-pal-${p}" class="p-1 my-1"></div>
-                <p class="text-[10px] font-mono font-bold text-gray-800 text-center break-all">${palletCode}</p>
-                <span class="text-[9px] text-gray-500">รหัสประจำพาเลท</span>
-              </div>
-            </div>
-
-          </div>
-
-          <!-- ล่าง: ช่องบันทึกตรวจรับหน้างาน -->
-          <div class="border-2 border-black rounded-xl p-2.5 bg-gray-50 text-xs">
-            <p class="font-bold text-gray-700 mb-1">✍️ ผลการตรวจรับจริงและจุดจัดเก็บ (พนักงานหน้างานกรอกและสแกนยืนยันในระบบ):</p>
-            <div class="grid grid-cols-4 gap-2 text-center">
-              <div class="p-2 border border-black rounded bg-white">
-                <span class="text-gray-500">จำนวนกระสอบจริง</span>
-                <div class="h-6 border-b border-black border-dashed mt-1 flex items-center justify-center font-black text-sm">[ _____ กระสอบ ]</div>
-              </div>
-              <div class="p-2 border border-black rounded bg-white">
-                <span class="text-gray-500">น้ำหนักชั่งจริงบนพาเลท</span>
-                <div class="h-6 border-b border-black border-dashed mt-1 flex items-center justify-center font-black text-sm">[ _______ kg ]</div>
-              </div>
-              <div class="p-2 border border-black rounded bg-white">
-                <span class="text-gray-500">Location Rack ที่วาง</span>
-                <div class="h-6 border-b border-black border-dashed mt-1 flex items-center justify-center font-black text-sm text-blue-700">[ ___________ ]</div>
-              </div>
-              <div class="p-2 border border-black rounded bg-white">
-                <span class="text-gray-500">ผู้ตรวจรับ / วันที่</span>
-                <div class="h-6 border-b border-black border-dashed mt-1 flex items-center justify-center font-bold text-xs">[ ________________ ]</div>
-              </div>
-            </div>
-          </div>
-        `;
-        container.appendChild(page);
-
-        new QRCode(document.getElementById(`prev-qr-lot-${p}`), {
-          text: lotCode,
-          width: 105,
-          height: 105,
-          correctLevel: QRCode.CorrectLevel.M
-        });
-
-        new QRCode(document.getElementById(`prev-qr-pal-${p}`), {
-          text: palletCode,
-          width: 105,
-          height: 105,
-          correctLevel: QRCode.CorrectLevel.M
-        });
-      }
-    }
-
-    // สั่งพิมพ์ใบปะหน้าพาเลทของ WO เก่าที่มีอยู่แล้วจากตาราง
-    function printExistingWOTags(woNum) {
-      const wo = allInboundWOs.find(w => w.wo_number === woNum);
-      if(!wo) return alert("ไม่พบข้อมูลใบงาน");
-
-      const beanObj = {
-        product_code: wo.product_code || '',
-        product_name: wo.product_name || '',
-        bean_code: wo.bean_code || '',
-        bean_name: wo.bean_name || '',
-        supplier_name: wo.supplier_name || '',
-        process: wo.process || ''
-      };
-
-      renderA4LandscapePreview(wo.wo_number, wo.lot_code, beanObj, parseInt(wo.pallet_count) || 1, wo.sack_count, wo.weight, {
-        qcM1: '-', qcD1: '-', qcM2: '-', qcD2: '-', qcM3: '-', qcD3: '-'
-      });
-      openPreviewModal(wo.pallet_count || 1);
-    }
-
-    function openPreviewModal(count) {
-      document.getElementById('preview-total-count').innerText = count;
-      document.getElementById('preview-modal').style.display = 'flex';
-    }
-
-    function closePreviewModal() {
-      document.getElementById('preview-modal').style.display = 'none';
-      clearInboundForm();
-    }
-
-    // =========================================================================
-    // ✏️ แก้ไข & ลบ ใบงานในตาราง WO INVENTORY
-    // =========================================================================
-    function openEditInboundModal(woNum) {
-      const wo = allInboundWOs.find(w => w.wo_number === woNum);
-      if(!wo) return;
-      currentSelectedWO = wo;
-      document.getElementById('edit-wo-title').innerText = wo.wo_number;
-      document.getElementById('edit_wo_sacks').value = wo.sack_count || '';
-      document.getElementById('edit_wo_weight').value = wo.weight || '';
-      document.getElementById('edit_wo_status').value = wo.status || 'Pending';
-      document.getElementById('edit-inbound-modal').style.display = 'flex';
-    }
-
-    function closeEditInboundModal() {
-      document.getElementById('edit-inbound-modal').style.display = 'none';
-    }
-
-    async function submitEditInboundWO() {
-      const sacks = document.getElementById('edit_wo_sacks').value;
-      const weight = document.getElementById('edit_wo_weight').value;
-      const status = document.getElementById('edit_wo_status').value;
-
-      const btn = document.getElementById('btn-save-edit-wo');
-      btn.innerText = "กำลังบันทึก...";
-      btn.disabled = true;
-
-      try {
-        const res = await fetch(API_URL, {
-          method: "POST",
-          body: JSON.stringify({
-            action: 'update_inbound_wo',
-            wo_number: currentSelectedWO.wo_number,
-            sack_count: sacks,
-            weight: weight,
-            status: status
-          })
-        });
-        const d = await res.json();
-        alert(d.message);
-        if(d.success) {
-          closeEditInboundModal();
-          loadAllWOs();
-          loadPendingWOs();
-        }
-      } catch (e) {
-        alert("แก้ไขไม่สำเร็จ");
-      } finally {
-        btn.innerText = "💾 บันทึกการแก้ไข";
-        btn.disabled = false;
-      }
-    }
-
-    async function deleteInboundWOItem(woNum) {
-      if(!confirm(`⚠️ ต้องการลบใบงาน [${woNum}] ใช่หรือไม่?`)) return;
-      try {
-        const res = await fetch(API_URL, {
-          method: "POST",
-          body: JSON.stringify({ action: 'delete_inbound_wo', wo_number: woNum })
-        });
-        const d = await res.json();
-        alert(d.message);
-        if(d.success) {
-          loadAllWOs();
-          loadPendingWOs();
-        }
-      } catch (e) {
-        alert("ลบไม่สำเร็จ");
-      }
-    }
-
-    // =========================================================================
-    // 📱 ส่วนคิวตรวจรับจริงที่พาเลท (พนักงานใช้มือถือ)
-    // =========================================================================
-    async function loadPendingWOs() {
-      const container = document.getElementById('queue-list');
-      container.innerHTML = `<p class="col-span-full py-8 text-center text-gray-400 text-sm">กำลังโหลดคิวงาน...</p>`;
-      try {
-        const res = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'get_pending_inbound_wos' }) });
-        const result = await res.json();
-        if(result.success && result.data && result.data.length > 0) {
-          pendingWOs = result.data;
-          document.getElementById('queue-badge').innerText = pendingWOs.length;
-          container.innerHTML = pendingWOs.map(wo => `
-            <div class="p-5 bg-white rounded-2xl border border-gray-200 shadow-sm space-y-3">
-              <div class="flex justify-between items-start">
-                <div>
-                  <span class="text-xs font-bold text-green-700 bg-green-50 px-2 py-0.5 rounded-md">${wo.wo_number}</span>
-                  <h3 class="font-bold text-base text-gray-900 mt-1">${wo.bean_name}</h3>
-                  <p class="text-xs text-gray-500">Lot: <b class="text-amber-800">${wo.lot_code}</b> | ผู้ขาย: ${wo.supplier_name || '-'}</p>
-                </div>
-                <span class="px-2.5 py-1 bg-yellow-100 text-yellow-800 text-xs font-bold rounded-full">รอสแกน</span>
-              </div>
-              <div class="text-xs text-gray-600 bg-gray-50 p-2.5 rounded-lg flex justify-between">
-                <span>ทั้งหมด: <b>${wo.pallet_count || 1}</b> พาเลท</span>
-                <span>รับแล้ว: <b class="text-green-600">${wo.received_pallets || 0}</b> พาเลท</span>
-              </div>
-              <button type="button" onclick="openPutawayModal('${wo.wo_number}')" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold text-xs shadow-sm transition">
-                📱 สแกนตรวจรับทีละพาเลท
-              </button>
-            </div>
-          `).join('');
-        } else {
-          document.getElementById('queue-badge').innerText = '0';
-          container.innerHTML = `<p class="col-span-full py-8 text-center text-gray-400 text-sm">ไม่มีใบงานค้างตรวจรับในขณะนี้</p>`;
-        }
-      } catch (e) {
-        container.innerHTML = `<p class="col-span-full py-8 text-center text-red-500 text-sm">โหลดคิวงานไม่สำเร็จ</p>`;
-      }
-    }
-
-    function openPutawayModal(woNum) {
-      currentSelectedWO = pendingWOs.find(w => w.wo_number === woNum);
-      if(!currentSelectedWO) return;
-
-      document.getElementById('modal-wo-sub').innerText = currentSelectedWO.wo_number;
-      document.getElementById('modal-bean-name').innerText = currentSelectedWO.bean_name;
-      document.getElementById('modal-lot-code').innerText = currentSelectedWO.lot_code;
-      document.getElementById('modal-received-count').innerText = currentSelectedWO.received_pallets || 0;
-      document.getElementById('modal-total-pallets').innerText = currentSelectedWO.pallet_count || 1;
-
-      document.getElementById('scan_pallet').value = '';
-      document.getElementById('scan_lot').value = '';
-      document.getElementById('scan_actual_sacks').value = '';
-      document.getElementById('scan_actual_weight').value = '';
-      document.getElementById('scan_location').value = '';
-
-      document.getElementById('putaway-modal').style.display = 'flex';
-    }
-
-    function closePutawayModal() {
-      document.getElementById('putaway-modal').style.display = 'none';
-    }
-
-    async function confirmPalletPutaway() {
-      const pallet = document.getElementById('scan_pallet').value.trim().toUpperCase();
-      const lot = document.getElementById('scan_lot').value.trim().toUpperCase();
-      const actualSacks = document.getElementById('scan_actual_sacks').value;
-      const actualWeight = document.getElementById('scan_actual_weight').value;
-      const location = document.getElementById('scan_location').value.trim().toUpperCase();
-
-      if(!pallet || !lot || !location || !actualWeight) {
-        return alert("กรุณาระบุ QR Pallet, QR Lot, Location Rack และน้ำหนักจริงให้ครบถ้วน");
-      }
-
-      const btn = document.getElementById('btn-confirm-putaway');
-      btn.innerText = "กำลังจัดเก็บ...";
-      btn.disabled = true;
-
-      try {
-        const res = await fetch(API_URL, {
-          method: "POST",
-          body: JSON.stringify({
-            action: 'complete_pallet_putaway',
-            wo_number: currentSelectedWO.wo_number,
-            lot_code: lot,
-            pallet_id: pallet,
-            item_name: currentSelectedWO.bean_name,
-            location: location,
-            sack_count: actualSacks,
-            weight: actualWeight,
-            operator: localStorage.getItem('name') || 'FloorStaff'
-          })
-        });
-        const result = await res.json();
-        alert(result.message);
-        if(result.success) {
-          closePutawayModal();
-          loadPendingWOs();
-          loadAllWOs();
-        }
-      } catch (e) {
-        alert("บันทึกจัดเก็บไม่สำเร็จ");
-      } finally {
-        btn.innerText = "✅ บันทึกพาเลทนี้";
-        btn.disabled = false;
-      }
-    }
-  </script>
-</body>
-</html>
+      <div class="flex items-center gap
