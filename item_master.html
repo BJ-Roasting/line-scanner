@@ -202,48 +202,63 @@
           </div>
         </div>
 
-        <!-- ============================================== -->
-        <!-- ☕ ส่วนที่ 3: เพิ่มข้อมูลสารกาแฟ (ปรับครบ 6 ฟิลด์) -->
-        <!-- ============================================== -->
+        <!-- ======================================================== -->
+        <!-- ☕ ส่วนที่ 3: เพิ่มข้อมูลสารกาแฟ (แยกฝั่ง ERP และ หน้างาน) -->
+        <!-- ======================================================== -->
         <div id="sec-bean" class="hidden space-y-6 max-w-4xl no-print">
-          <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 space-y-4">
-            <h2 class="text-lg font-bold text-gray-800 border-b pb-3">☕ บันทึกสารกาแฟใหม่ (Item Master)</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              
-              <!-- 1. Product Code -->
-              <div>
-                <label class="block text-xs font-bold text-gray-500 mb-1">Product Code (รหัสสินค้า) *</label>
-                <input type="text" id="prod_code" placeholder="เช่น GBN-BRA-001" class="w-full px-3 py-2 border rounded-xl font-bold text-indigo-600 uppercase">
-              </div>
+          <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 space-y-5">
+            <div class="border-b pb-3">
+              <h2 class="text-lg font-bold text-gray-800">☕ บันทึกสารกาแฟใหม่ (Item Master)</h2>
+              <p class="text-xs text-gray-500 mt-0.5">จับคู่รหัส ERP กับรหัสและชื่อเรียกสารที่หน้างานใช้จริง</p>
+            </div>
 
-              <!-- 2. Product Name -->
-              <div>
-                <label class="block text-xs font-bold text-gray-500 mb-1">Product Name (ชื่อสินค้า / สารกาแฟ) *</label>
-                <input type="text" id="prod_name" placeholder="เช่น Brazil Cerrado Dulce" class="w-full px-3 py-2 border rounded-xl font-medium">
+            <!-- กลุ่มที่ 1: ฝั่งระบบ ERP -->
+            <div class="p-4 bg-blue-50/50 border border-blue-100 rounded-xl space-y-3">
+              <p class="text-xs font-bold text-blue-800 uppercase tracking-wider">🏢 ข้อมูลระบบ ERP (ออฟฟิศ/บัญชี)</p>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-xs font-bold text-gray-600 mb-1">Product_Code (รหัสใน ERP) *</label>
+                  <input type="text" id="prod_code" placeholder="เช่น AD05" class="w-full px-3 py-2 bg-white border border-blue-200 rounded-xl font-bold text-blue-700 uppercase">
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-gray-600 mb-1">Product_Name (ชื่อใน ERP) *</label>
+                  <input type="text" id="prod_name" placeholder="เช่น Arabica Doi Chang Standard" class="w-full px-3 py-2 bg-white border border-blue-200 rounded-xl font-medium text-gray-800">
+                </div>
               </div>
+            </div>
 
-              <!-- 3. Supplier Code -->
+            <!-- กลุ่มที่ 2: ฝั่งสารกาแฟหน้างาน (Bean Master) -->
+            <div class="p-4 bg-amber-50/50 border border-amber-200 rounded-xl space-y-3">
+              <p class="text-xs font-bold text-amber-900 uppercase tracking-wider">☕ ข้อมูลสารกาแฟหน้างาน (โรงคั่ว)</p>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-xs font-bold text-amber-800 mb-1">Bean_Code (รหัสสารหน้างาน) *</label>
+                  <input type="text" id="bean_code" placeholder="เช่น PK-01 หรือ 3C-01" class="w-full px-3 py-2 bg-white border border-amber-300 rounded-xl font-bold text-amber-900 uppercase">
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-amber-800 mb-1">Bean_Name (ชื่อเรียกสารหน้างาน) *</label>
+                  <input type="text" id="bean_name" placeholder="เช่น ปางขอน หรือ สาร 3 สี" class="w-full px-3 py-2 bg-white border border-amber-300 rounded-xl font-bold text-amber-900">
+                </div>
+              </div>
+            </div>
+
+            <!-- กลุ่มที่ 3: Supplier & หน่วยนับ -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
               <div>
-                <label class="block text-xs font-bold text-gray-500 mb-1">Supplier Code (รหัสผู้จัดจำหน่าย)</label>
+                <label class="block text-xs font-bold text-gray-500 mb-1">Supplier_Code</label>
                 <input type="text" id="sup_code" placeholder="เช่น SUP-001" class="w-full px-3 py-2 border rounded-xl uppercase">
               </div>
-
-              <!-- 4. Supplier Name -->
               <div>
-                <label class="block text-xs font-bold text-gray-500 mb-1">Supplier Name (ชื่อผู้จัดจำหน่าย / ไร่)</label>
-                <input type="text" id="sup_name" placeholder="เช่น ไร่กาแฟดอยช้าง / InterAmerican" class="w-full px-3 py-2 border rounded-xl">
+                <label class="block text-xs font-bold text-gray-500 mb-1">Supplier_Name</label>
+                <input type="text" id="sup_name" placeholder="เช่น ไร่กาแฟดอยช้าง" class="w-full px-3 py-2 border rounded-xl">
               </div>
-
-              <!-- 5. Product unit -->
               <div>
-                <label class="block text-xs font-bold text-gray-500 mb-1">Product Unit (หน่วยนับสินค้า) *</label>
-                <input type="text" id="prod_unit" value="kg" placeholder="เช่น kg, กระสอบ, ถุง" class="w-full px-3 py-2 border rounded-xl font-medium">
+                <label class="block text-xs font-bold text-gray-500 mb-1">Product_Unit *</label>
+                <input type="text" id="prod_unit" value="kg" class="w-full px-3 py-2 border rounded-xl font-medium">
               </div>
-
-              <!-- 6. Process -->
               <div>
-                <label class="block text-xs font-bold text-gray-500 mb-1">Process (กระบวนการแปรรูป)</label>
-                <input type="text" id="prod_process" list="process-list" placeholder="เลือกหรือพิมพ์ เช่น Washed, Natural" class="w-full px-3 py-2 border rounded-xl">
+                <label class="block text-xs font-bold text-gray-500 mb-1">Process</label>
+                <input type="text" id="prod_process" list="process-list" placeholder="เช่น Washed, Natural" class="w-full px-3 py-2 border rounded-xl">
                 <datalist id="process-list">
                   <option value="Washed">
                   <option value="Natural">
@@ -252,12 +267,12 @@
                   <option value="Wet-Hulled">
                 </datalist>
               </div>
-
             </div>
-            <button onclick="saveBeanMaster()" id="save-bean-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl transition shadow-sm">💾 บันทึกข้อมูลสารกาแฟ</button>
+
+            <button onclick="saveBeanMaster()" id="save-bean-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl transition shadow-md">💾 บันทึกข้อมูลสารกาแฟ</button>
           </div>
 
-          <!-- ตารางสารกาแฟ (แสดงครบ 6 ฟิลด์) -->
+          <!-- ตารางสารกาแฟ (แสดงแยกฝั่ง ERP และ หน้างาน) -->
           <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
             <div class="p-4 border-b flex justify-between items-center bg-gray-50">
               <h3 class="font-bold text-gray-800">📋 รายการสารกาแฟทั้งหมดในระบบ</h3>
@@ -267,15 +282,17 @@
               <table class="min-w-full text-sm">
                 <thead class="bg-gray-100 text-gray-600">
                   <tr>
-                    <th class="py-2.5 px-4 text-left font-bold">Product Code</th>
-                    <th class="py-2.5 px-4 text-left font-bold">Product Name</th>
+                    <th class="py-2.5 px-4 text-left font-bold text-blue-700 bg-blue-50/70">Product_Code</th>
+                    <th class="py-2.5 px-4 text-left font-bold text-blue-700 bg-blue-50/70">Product_Name (ERP)</th>
+                    <th class="py-2.5 px-4 text-left font-bold text-amber-800 bg-amber-50">Bean_Code</th>
+                    <th class="py-2.5 px-4 text-left font-bold text-amber-800 bg-amber-50">Bean_Name</th>
                     <th class="py-2.5 px-4 text-left font-bold">Supplier</th>
                     <th class="py-2.5 px-4 text-center font-bold">Unit</th>
                     <th class="py-2.5 px-4 text-center font-bold">Process</th>
                   </tr>
                 </thead>
                 <tbody id="bean-table-body" class="text-gray-700">
-                  <tr><td colspan="5" class="py-6 text-center text-gray-400">กำลังโหลดข้อมูล...</td></tr>
+                  <tr><td colspan="7" class="py-6 text-center text-gray-400">กำลังโหลดข้อมูล...</td></tr>
                 </tbody>
               </table>
             </div>
@@ -498,42 +515,48 @@
       btn.disabled = false;
     }
 
-    // ===================================
-    // ☕ 3. ข้อมูลสารกาแฟ (6 ฟิลด์ใหม่)
-    // ===================================
+    // ========================================================
+    // ☕ 3. ข้อมูลสารกาแฟ (แยกฝั่ง ERP และ หน้างาน ชัดเจน)
+    // ========================================================
     async function loadBeans() {
       const tbody = document.getElementById('bean-table-body');
-      tbody.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-gray-400">กำลังโหลด...</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="7" class="py-6 text-center text-gray-400">กำลังโหลด...</td></tr>`;
       try {
         const res = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'get_items' }) });
         const result = await res.json();
         if(result.success && result.data.length > 0) {
           tbody.innerHTML = result.data.map(i => `
             <tr class="border-b border-gray-100 hover:bg-gray-50">
-              <td class="py-2.5 px-4 font-bold text-indigo-600">${i.product_code || i.item_code}</td>
-              <td class="py-2.5 px-4 font-medium text-gray-900">${i.product_name || i.item_name}</td>
+              <td class="py-2.5 px-4 font-bold text-blue-700 bg-blue-50/30">${i.product_code || '-'}</td>
+              <td class="py-2.5 px-4 font-medium text-gray-800 bg-blue-50/30">${i.product_name || '-'}</td>
+              <td class="py-2.5 px-4 font-bold text-amber-900 bg-amber-50/50">${i.bean_code || '-'}</td>
+              <td class="py-2.5 px-4 font-bold text-amber-900 bg-amber-50/50">${i.bean_name || '-'}</td>
               <td class="py-2.5 px-4 text-gray-600">${i.supplier_name || i.supplier_code ? `${i.supplier_name} <span class="text-xs text-gray-400">(${i.supplier_code})</span>` : '-'}</td>
-              <td class="py-2.5 px-4 text-center font-bold text-gray-700">${i.product_unit || i.unit || 'kg'}</td>
+              <td class="py-2.5 px-4 text-center font-bold text-gray-700">${i.product_unit || 'kg'}</td>
               <td class="py-2.5 px-4 text-center"><span class="bg-indigo-50 text-indigo-700 font-bold px-2 py-0.5 rounded text-xs">${i.process || '-'}</span></td>
             </tr>
           `).join('');
         } else {
-          tbody.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-gray-400">ยังไม่มีข้อมูลสารกาแฟ</td></tr>`;
+          tbody.innerHTML = `<tr><td colspan="7" class="py-6 text-center text-gray-400">ยังไม่มีข้อมูลสารกาแฟ</td></tr>`;
         }
       } catch (e) {
-        tbody.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-red-500">เชื่อมต่อไม่ได้</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" class="py-6 text-center text-red-500">เชื่อมต่อไม่ได้</td></tr>`;
       }
     }
 
     async function saveBeanMaster() {
       const prodCode = document.getElementById('prod_code').value.trim().toUpperCase();
       const prodName = document.getElementById('prod_name').value.trim();
+      const beanCode = document.getElementById('bean_code').value.trim().toUpperCase();
+      const beanName = document.getElementById('bean_name').value.trim();
       const supCode = document.getElementById('sup_code').value.trim().toUpperCase();
       const supName = document.getElementById('sup_name').value.trim();
       const prodUnit = document.getElementById('prod_unit').value.trim();
       const prodProcess = document.getElementById('prod_process').value.trim();
 
-      if(!prodCode || !prodName) return alert("กรุณาระบุ Product Code และ Product Name");
+      if(!prodCode || !prodName || !beanCode || !beanName) {
+        return alert("กรุณากรอกข้อมูลให้ครบทั้งฝั่ง ERP (Product_Code, Product_Name) และฝั่งหน้างาน (Bean_Code, Bean_Name)");
+      }
 
       const btn = document.getElementById('save-bean-btn');
       btn.innerText = "กำลังบันทึก...";
@@ -546,6 +569,8 @@
             action: 'add_item',
             product_code: prodCode,
             product_name: prodName,
+            bean_code: beanCode,
+            bean_name: beanName,
             supplier_code: supCode,
             supplier_name: supName,
             product_unit: prodUnit,
@@ -557,6 +582,8 @@
         if(d.success) {
           document.getElementById('prod_code').value = '';
           document.getElementById('prod_name').value = '';
+          document.getElementById('bean_code').value = '';
+          document.getElementById('bean_name').value = '';
           document.getElementById('sup_code').value = '';
           document.getElementById('sup_name').value = '';
           document.getElementById('prod_process').value = '';
@@ -570,108 +597,4 @@
     }
 
     // ===================================
-    // 📦 4. จัดการสต๊อก (แก้ไข / ลบ)
-    // ===================================
-    async function loadInventoryForEdit() {
-      const tbody = document.getElementById('inventory-edit-body');
-      tbody.innerHTML = `<tr><td colspan="6" class="py-6 text-center text-gray-400">กำลังโหลดสต๊อก...</td></tr>`;
-      try {
-        const res = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'get_inventory' }) });
-        const result = await res.json();
-        if(result.success && result.data.length > 0) {
-          rawInventory = result.data;
-          renderInventoryTable(rawInventory);
-        } else {
-          tbody.innerHTML = `<tr><td colspan="6" class="py-6 text-center text-gray-400">ไม่มีข้อมูลสต๊อก</td></tr>`;
-        }
-      } catch (e) {
-        tbody.innerHTML = `<tr><td colspan="6" class="py-6 text-center text-red-500">เชื่อมต่อไม่ได้</td></tr>`;
-      }
-    }
-
-    function renderInventoryTable(data) {
-      const tbody = document.getElementById('inventory-edit-body');
-      tbody.innerHTML = data.map(item => `
-        <tr class="border-b border-gray-100 hover:bg-gray-50">
-          <td class="py-2.5 px-4 font-bold text-blue-600">${item.barcode_id}</td>
-          <td class="py-2.5 px-4 font-medium">${item.item_name}</td>
-          <td class="py-2.5 px-4 text-right font-bold text-green-700">${item.weight_current} ${item.unit || 'kg'}</td>
-          <td class="py-2.5 px-4 text-center font-bold text-gray-600">${item.location}</td>
-          <td class="py-2.5 px-4 text-center"><span class="px-2 py-0.5 rounded text-xs font-bold ${item.status === 'Active' ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-600'}">${item.status}</span></td>
-          <td class="py-2.5 px-4 text-center space-x-1">
-            <button onclick="openEditModal('${item.barcode_id}')" class="bg-blue-50 text-blue-600 hover:bg-blue-100 px-2.5 py-1 rounded-lg text-xs font-bold transition">✏️ แก้ไข</button>
-            <button onclick="deleteInventoryItem('${item.barcode_id}')" class="bg-red-50 text-red-600 hover:bg-red-100 px-2.5 py-1 rounded-lg text-xs font-bold transition">🗑️ ลบ</button>
-          </td>
-        </tr>
-      `).join('');
-    }
-
-    function filterInventoryTable() {
-      const q = document.getElementById('inv-search').value.toLowerCase();
-      const filtered = rawInventory.filter(i => 
-        String(i.barcode_id).toLowerCase().includes(q) || 
-        String(i.item_name).toLowerCase().includes(q)
-      );
-      renderInventoryTable(filtered);
-    }
-
-    function openEditModal(barcode) {
-      const item = rawInventory.find(i => String(i.barcode_id) === String(barcode));
-      if(!item) return;
-      document.getElementById('edit_barcode').value = item.barcode_id;
-      document.getElementById('edit_name').value = item.item_name;
-      document.getElementById('edit_weight').value = item.weight_current;
-      document.getElementById('edit_location').value = item.location;
-      document.getElementById('edit_status').value = item.status;
-      document.getElementById('edit-modal').classList.remove('hidden');
-    }
-
-    function closeEditModal() {
-      document.getElementById('edit-modal').classList.add('hidden');
-    }
-
-    async function submitEditInventory() {
-      const barcode = document.getElementById('edit_barcode').value;
-      const weight = document.getElementById('edit_weight').value;
-      const loc = document.getElementById('edit_location').value;
-      const status = document.getElementById('edit_status').value;
-
-      const btn = document.getElementById('save-edit-btn');
-      btn.innerText = "กำลังบันทึก...";
-      btn.disabled = true;
-
-      try {
-        const res = await fetch(API_URL, {
-          method: "POST",
-          body: JSON.stringify({ action: 'update_inventory', barcode_id: barcode, new_weight: weight, new_location: loc, new_status: status })
-        });
-        const result = await res.json();
-        alert(result.message);
-        if(result.success) {
-          closeEditModal();
-          loadInventoryForEdit();
-        }
-      } catch (e) {
-        alert("แก้ไขไม่สำเร็จ");
-      }
-      btn.innerText = "💾 บันทึกการแก้ไข";
-      btn.disabled = false;
-    }
-
-    async function deleteInventoryItem(barcode) {
-      if(!confirm(`⚠️ ต้องการลบรายการ [${barcode}] ออกจากระบบสต๊อกใช่หรือไม่?`)) return;
-      try {
-        const res = await fetch(API_URL, {
-          method: "POST",
-          body: JSON.stringify({ action: 'delete_inventory', barcode_id: barcode })
-        });
-        const result = await res.json();
-        alert(result.message);
-        if(result.success) loadInventoryForEdit();
-      } catch (e) {
-        alert("ลบไม่สำเร็จ");
-      }
-    }
-  </script>
-</body>
-</html>
+    // 📦 4. จัดการสต๊
