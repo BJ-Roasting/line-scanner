@@ -90,7 +90,7 @@
         </div>
       </div>
 
-      <!-- 👇 แท็บเมนูย่อย 3 ส่วนหลัก (ตามที่คุณต้องการ) 👇 -->
+      <!-- 👇 แท็บเมนูย่อย 3 ส่วนหลัก 👇 -->
       <div class="p-5 md:p-10 pb-28 space-y-6">
         
         <!-- แถบเลือกโหมด 3 แท็บ -->
@@ -153,7 +153,7 @@
         </div>
 
         <!-- ============================================== -->
-        <!-- 👥 ส่วนที่ 2: ข้อมูลลูกค้า (มีปุ่ม แก้ไข / ลบ) -->
+        <!-- 👥 ส่วนที่ 2: ข้อมูลลูกค้า (มีปุ่ม ⚙️ จัดการ ซ่อน/แสดง Edit-Delete) -->
         <!-- ============================================== -->
         <div id="sec-cust" class="hidden space-y-6 max-w-5xl no-print">
           <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 space-y-4">
@@ -179,11 +179,17 @@
             <button type="button" onclick="saveCustomer()" id="save-cust-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl transition shadow-sm">💾 บันทึกข้อมูลลูกค้า</button>
           </div>
 
-          <!-- ตารางรายชื่อลูกค้า (มีปุ่ม แก้ไข / ลบ) -->
+          <!-- ตารางรายชื่อลูกค้า -->
           <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
             <div class="p-4 border-b flex justify-between items-center bg-gray-50">
               <h3 class="font-bold text-gray-800">📋 รายชื่อลูกค้าทั้งหมด</h3>
-              <button type="button" onclick="loadCustomers()" class="text-xs bg-gray-200 hover:bg-gray-300 font-bold px-3 py-1.5 rounded-lg">รีเฟรช</button>
+              <div class="flex items-center gap-2">
+                <!-- 🌟 ปุ่มจัดการ Toggle ซ่อน/แสดง Edit & Delete -->
+                <button type="button" id="btn-manage-cust" onclick="toggleManageMode('cust')" class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 border border-gray-300 font-bold px-3 py-1.5 rounded-lg flex items-center gap-1 transition">
+                  ⚙️ จัดการ
+                </button>
+                <button type="button" onclick="loadCustomers()" class="text-xs bg-gray-200 hover:bg-gray-300 font-bold px-3 py-1.5 rounded-lg">🔄 รีเฟรช</button>
+              </div>
             </div>
             <div class="overflow-x-auto">
               <table class="min-w-full text-sm">
@@ -193,11 +199,11 @@
                     <th class="py-2.5 px-4 text-left font-bold">ชื่อลูกค้า / ร้าน</th>
                     <th class="py-2.5 px-4 text-center font-bold">เบอร์โทร</th>
                     <th class="py-2.5 px-4 text-left font-bold">ที่อยู่</th>
-                    <th class="py-2.5 px-4 text-center font-bold">จัดการ</th>
+                    <th id="th-action-cust" class="py-2.5 px-4 text-center font-bold hidden bg-amber-50 text-amber-800">จัดการ</th>
                   </tr>
                 </thead>
                 <tbody id="cust-table-body" class="text-gray-700">
-                  <tr><td colspan="5" class="py-6 text-center text-gray-400">กำลังโหลดข้อมูล...</td></tr>
+                  <tr><td colspan="4" class="py-6 text-center text-gray-400">กำลังโหลดข้อมูล...</td></tr>
                 </tbody>
               </table>
             </div>
@@ -205,7 +211,7 @@
         </div>
 
         <!-- ======================================================== -->
-        <!-- ☕ ส่วนที่ 3: ข้อมูลสารกาแฟ (มีปุ่ม แก้ไข / ลบ) -->
+        <!-- ☕ ส่วนที่ 3: ข้อมูลสารกาแฟ (มีปุ่ม ⚙️ จัดการ ซ่อน/แสดง Edit-Delete) -->
         <!-- ======================================================== -->
         <div id="sec-bean" class="hidden space-y-6 max-w-5xl no-print">
           <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 space-y-5">
@@ -274,11 +280,17 @@
             <button type="button" onclick="saveBeanMaster()" id="save-bean-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl transition shadow-md">💾 บันทึกข้อมูลสารกาแฟ</button>
           </div>
 
-          <!-- ตารางสารกาแฟ (มีปุ่ม แก้ไข / ลบ) -->
+          <!-- ตารางสารกาแฟ -->
           <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
             <div class="p-4 border-b flex justify-between items-center bg-gray-50">
               <h3 class="font-bold text-gray-800">📋 รายการสารกาแฟทั้งหมดในระบบ</h3>
-              <button type="button" onclick="loadBeans()" class="text-xs bg-gray-200 hover:bg-gray-300 font-bold px-3 py-1.5 rounded-lg">รีเฟรช</button>
+              <div class="flex items-center gap-2">
+                <!-- 🌟 ปุ่มจัดการ Toggle ซ่อน/แสดง Edit & Delete -->
+                <button type="button" id="btn-manage-bean" onclick="toggleManageMode('bean')" class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 border border-gray-300 font-bold px-3 py-1.5 rounded-lg flex items-center gap-1 transition">
+                  ⚙️ จัดการ
+                </button>
+                <button type="button" onclick="loadBeans()" class="text-xs bg-gray-200 hover:bg-gray-300 font-bold px-3 py-1.5 rounded-lg">🔄 รีเฟรช</button>
+              </div>
             </div>
             <div class="overflow-x-auto">
               <table class="min-w-full text-sm">
@@ -291,11 +303,11 @@
                     <th class="py-2.5 px-4 text-left font-bold">Supplier</th>
                     <th class="py-2.5 px-4 text-center font-bold">Unit</th>
                     <th class="py-2.5 px-4 text-center font-bold">Process</th>
-                    <th class="py-2.5 px-4 text-center font-bold">จัดการ</th>
+                    <th id="th-action-bean" class="py-2.5 px-4 text-center font-bold hidden bg-amber-50 text-amber-800">จัดการ</th>
                   </tr>
                 </thead>
                 <tbody id="bean-table-body" class="text-gray-700">
-                  <tr><td colspan="8" class="py-6 text-center text-gray-400">กำลังโหลดข้อมูล...</td></tr>
+                  <tr><td colspan="7" class="py-6 text-center text-gray-400">กำลังโหลดข้อมูล...</td></tr>
                 </tbody>
               </table>
             </div>
@@ -306,7 +318,7 @@
     </main>
   </div>
 
-  <!-- 🛑 MODAL 1: แก้ไขข้อมูลสารกาแฟ (Edit Bean Modal) -->
+  <!-- 🛑 MODAL 1: แก้ไขข้อมูลสารกาแฟ -->
   <div id="edit-bean-modal" style="display: none;" onclick="if(event.target === this) closeEditBeanModal()" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 items-center justify-center p-4 no-print">
     <div class="bg-white max-w-lg w-full p-6 rounded-2xl shadow-2xl border border-gray-100 space-y-4">
       <div class="flex justify-between items-center border-b pb-3">
@@ -354,7 +366,7 @@
     </div>
   </div>
 
-  <!-- 🛑 MODAL 2: แก้ไขข้อมูลลูกค้า (Edit Customer Modal) -->
+  <!-- 🛑 MODAL 2: แก้ไขข้อมูลลูกค้า -->
   <div id="edit-cust-modal" style="display: none;" onclick="if(event.target === this) closeEditCustModal()" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 items-center justify-center p-4 no-print">
     <div class="bg-white max-w-md w-full p-6 rounded-2xl shadow-2xl border border-gray-100 space-y-4">
       <div class="flex justify-between items-center border-b pb-3">
@@ -391,6 +403,10 @@
     let allBeans = [];
     let allCustomers = [];
 
+    // สถานะเปิด-ปิดโหมดจัดการ (Toggle Mode)
+    let isManageModeBean = false;
+    let isManageModeCust = false;
+
     function handleLogout() {
       if(confirm("ต้องการออกจากระบบใช่หรือไม่?")) {
         localStorage.clear();
@@ -398,7 +414,6 @@
       }
     }
 
-    // สลับ 3 แท็บหลัก
     function switchSection(sec) {
       ['qr', 'cust', 'bean'].forEach(s => {
         const el = document.getElementById(`sec-${s}`);
@@ -477,34 +492,80 @@
     }
 
     // ===================================
-    // 👥 2. ข้อมูลลูกค้า (เพิ่ม, แก้ไข, ลบ)
+    // ⚙️ ฟังก์ชันสลับโหมด "จัดการ" (ซ่อน/แสดง Edit-Delete)
+    // ===================================
+    function toggleManageMode(type) {
+      if (type === 'bean') {
+        isManageModeBean = !isManageModeBean;
+        const btn = document.getElementById('btn-manage-bean');
+        const th = document.getElementById('th-action-bean');
+        if (isManageModeBean) {
+          btn.className = "text-xs bg-amber-500 hover:bg-amber-600 text-white font-bold px-3 py-1.5 rounded-lg flex items-center gap-1 transition shadow-sm";
+          btn.innerHTML = "✔️ เสร็จสิ้น";
+          if (th) th.classList.remove('hidden');
+        } else {
+          btn.className = "text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 border border-gray-300 font-bold px-3 py-1.5 rounded-lg flex items-center gap-1 transition";
+          btn.innerHTML = "⚙️ จัดการ";
+          if (th) th.classList.add('hidden');
+        }
+        renderBeansTable(allBeans);
+      } else if (type === 'cust') {
+        isManageModeCust = !isManageModeCust;
+        const btn = document.getElementById('btn-manage-cust');
+        const th = document.getElementById('th-action-cust');
+        if (isManageModeCust) {
+          btn.className = "text-xs bg-amber-500 hover:bg-amber-600 text-white font-bold px-3 py-1.5 rounded-lg flex items-center gap-1 transition shadow-sm";
+          btn.innerHTML = "✔️ เสร็จสิ้น";
+          if (th) th.classList.remove('hidden');
+        } else {
+          btn.className = "text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 border border-gray-300 font-bold px-3 py-1.5 rounded-lg flex items-center gap-1 transition";
+          btn.innerHTML = "⚙️ จัดการ";
+          if (th) th.classList.add('hidden');
+        }
+        renderCustTable(allCustomers);
+      }
+    }
+
+    // ===================================
+    // 👥 2. ข้อมูลลูกค้า
     // ===================================
     async function loadCustomers() {
       const tbody = document.getElementById('cust-table-body');
-      tbody.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-gray-400">กำลังโหลด...</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="${isManageModeCust ? 5 : 4}" class="py-6 text-center text-gray-400">กำลังโหลด...</td></tr>`;
       try {
         const res = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'get_customers' }) });
         const result = await res.json();
         if(result.success && result.data && result.data.length > 0) {
           allCustomers = result.data;
-          tbody.innerHTML = allCustomers.map(c => `
-            <tr class="border-b border-gray-100 hover:bg-gray-50">
-              <td class="py-2.5 px-4 font-bold text-indigo-600">${c.customer_code}</td>
-              <td class="py-2.5 px-4 font-medium">${c.customer_name}</td>
-              <td class="py-2.5 px-4 text-center">${c.phone || '-'}</td>
-              <td class="py-2.5 px-4 text-gray-500">${c.address || '-'}</td>
-              <td class="py-2.5 px-4 text-center space-x-1">
-                <button type="button" onclick="openEditCustModal('${c.customer_code}')" class="bg-blue-50 text-blue-600 hover:bg-blue-100 px-2.5 py-1 rounded-lg text-xs font-bold transition">✏️ แก้ไข</button>
-                <button type="button" onclick="deleteCustomerItem('${c.customer_code}')" class="bg-red-50 text-red-600 hover:bg-red-100 px-2.5 py-1 rounded-lg text-xs font-bold transition">🗑️ ลบ</button>
-              </td>
-            </tr>
-          `).join('');
+          renderCustTable(allCustomers);
         } else {
-          tbody.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-gray-400">ยังไม่มีข้อมูลลูกค้า</td></tr>`;
+          tbody.innerHTML = `<tr><td colspan="${isManageModeCust ? 5 : 4}" class="py-6 text-center text-gray-400">ยังไม่มีข้อมูลลูกค้า</td></tr>`;
         }
       } catch (e) {
-        tbody.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-red-500">เชื่อมต่อไม่ได้</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="${isManageModeCust ? 5 : 4}" class="py-6 text-center text-red-500">เชื่อมต่อไม่ได้</td></tr>`;
       }
+    }
+
+    function renderCustTable(data) {
+      const tbody = document.getElementById('cust-table-body');
+      if (data.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="${isManageModeCust ? 5 : 4}" class="py-6 text-center text-gray-400">ยังไม่มีข้อมูลลูกค้า</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = data.map(c => `
+        <tr class="border-b border-gray-100 hover:bg-gray-50">
+          <td class="py-2.5 px-4 font-bold text-indigo-600">${c.customer_code}</td>
+          <td class="py-2.5 px-4 font-medium">${c.customer_name}</td>
+          <td class="py-2.5 px-4 text-center">${c.phone || '-'}</td>
+          <td class="py-2.5 px-4 text-gray-500">${c.address || '-'}</td>
+          ${isManageModeCust ? `
+            <td class="py-2.5 px-4 text-center space-x-1">
+              <button type="button" onclick="openEditCustModal('${c.customer_code}')" class="bg-blue-50 text-blue-600 hover:bg-blue-100 px-2.5 py-1 rounded-lg text-xs font-bold transition">✏️ แก้ไข</button>
+              <button type="button" onclick="deleteCustomerItem('${c.customer_code}')" class="bg-red-50 text-red-600 hover:bg-red-100 px-2.5 py-1 rounded-lg text-xs font-bold transition">🗑️ ลบ</button>
+            </td>
+          ` : ''}
+        </tr>
+      `).join('');
     }
 
     async function saveCustomer() {
@@ -602,37 +663,48 @@
     }
 
     // ========================================================
-    // ☕ 3. ข้อมูลสารกาแฟ (เพิ่ม, แก้ไข, ลบ)
+    // ☕ 3. ข้อมูลสารกาแฟ
     // ========================================================
     async function loadBeans() {
       const tbody = document.getElementById('bean-table-body');
-      tbody.innerHTML = `<tr><td colspan="8" class="py-6 text-center text-gray-400">กำลังโหลด...</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="${isManageModeBean ? 8 : 7}" class="py-6 text-center text-gray-400">กำลังโหลด...</td></tr>`;
       try {
         const res = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'get_items' }) });
         const result = await res.json();
         if(result.success && result.data && result.data.length > 0) {
           allBeans = result.data;
-          tbody.innerHTML = allBeans.map(i => `
-            <tr class="border-b border-gray-100 hover:bg-gray-50">
-              <td class="py-2.5 px-4 font-bold text-blue-700 bg-blue-50/30">${i.product_code || '-'}</td>
-              <td class="py-2.5 px-4 font-medium text-gray-800 bg-blue-50/30">${i.product_name || '-'}</td>
-              <td class="py-2.5 px-4 font-bold text-amber-900 bg-amber-50/50">${i.bean_code || '-'}</td>
-              <td class="py-2.5 px-4 font-bold text-amber-900 bg-amber-50/50">${i.bean_name || '-'}</td>
-              <td class="py-2.5 px-4 text-gray-600">${i.supplier_name || i.supplier_code ? `${i.supplier_name} <span class="text-xs text-gray-400">(${i.supplier_code})</span>` : '-'}</td>
-              <td class="py-2.5 px-4 text-center font-bold text-gray-700">${i.product_unit || 'kg'}</td>
-              <td class="py-2.5 px-4 text-center"><span class="bg-indigo-50 text-indigo-700 font-bold px-2 py-0.5 rounded text-xs">${i.process || '-'}</span></td>
-              <td class="py-2.5 px-4 text-center space-x-1">
-                <button type="button" onclick="openEditBeanModal('${i.bean_code}')" class="bg-blue-50 text-blue-600 hover:bg-blue-100 px-2.5 py-1 rounded-lg text-xs font-bold transition">✏️ แก้ไข</button>
-                <button type="button" onclick="deleteBeanItem('${i.bean_code}')" class="bg-red-50 text-red-600 hover:bg-red-100 px-2.5 py-1 rounded-lg text-xs font-bold transition">🗑️ ลบ</button>
-              </td>
-            </tr>
-          `).join('');
+          renderBeansTable(allBeans);
         } else {
-          tbody.innerHTML = `<tr><td colspan="8" class="py-6 text-center text-gray-400">ยังไม่มีข้อมูลสารกาแฟ</td></tr>`;
+          tbody.innerHTML = `<tr><td colspan="${isManageModeBean ? 8 : 7}" class="py-6 text-center text-gray-400">ยังไม่มีข้อมูลสารกาแฟ</td></tr>`;
         }
       } catch (e) {
-        tbody.innerHTML = `<tr><td colspan="8" class="py-6 text-center text-red-500">เชื่อมต่อไม่ได้</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="${isManageModeBean ? 8 : 7}" class="py-6 text-center text-red-500">เชื่อมต่อไม่ได้</td></tr>`;
       }
+    }
+
+    function renderBeansTable(data) {
+      const tbody = document.getElementById('bean-table-body');
+      if (data.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="${isManageModeBean ? 8 : 7}" class="py-6 text-center text-gray-400">ยังไม่มีข้อมูลสารกาแฟ</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = data.map(i => `
+        <tr class="border-b border-gray-100 hover:bg-gray-50">
+          <td class="py-2.5 px-4 font-bold text-blue-700 bg-blue-50/30">${i.product_code || '-'}</td>
+          <td class="py-2.5 px-4 font-medium text-gray-800 bg-blue-50/30">${i.product_name || '-'}</td>
+          <td class="py-2.5 px-4 font-bold text-amber-900 bg-amber-50/50">${i.bean_code || '-'}</td>
+          <td class="py-2.5 px-4 font-bold text-amber-900 bg-amber-50/50">${i.bean_name || '-'}</td>
+          <td class="py-2.5 px-4 text-gray-600">${i.supplier_name || i.supplier_code ? `${i.supplier_name} <span class="text-xs text-gray-400">(${i.supplier_code})</span>` : '-'}</td>
+          <td class="py-2.5 px-4 text-center font-bold text-gray-700">${i.product_unit || 'kg'}</td>
+          <td class="py-2.5 px-4 text-center"><span class="bg-indigo-50 text-indigo-700 font-bold px-2 py-0.5 rounded text-xs">${i.process || '-'}</span></td>
+          ${isManageModeBean ? `
+            <td class="py-2.5 px-4 text-center space-x-1">
+              <button type="button" onclick="openEditBeanModal('${i.bean_code}')" class="bg-blue-50 text-blue-600 hover:bg-blue-100 px-2.5 py-1 rounded-lg text-xs font-bold transition">✏️ แก้ไข</button>
+              <button type="button" onclick="deleteBeanItem('${i.bean_code}')" class="bg-red-50 text-red-600 hover:bg-red-100 px-2.5 py-1 rounded-lg text-xs font-bold transition">🗑️ ลบ</button>
+            </td>
+          ` : ''}
+        </tr>
+      `).join('');
     }
 
     async function saveBeanMaster() {
