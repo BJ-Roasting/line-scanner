@@ -3,30 +3,34 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>BJ Roaster - เพิ่มข้อมูลใหม่ (สารกาแฟ & Supplier)</title>
+  <title>BJ Roaster - เพิ่มข้อมูลใหม่ & จัดการระบบ</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- ไลบรารีสร้าง QR Code ฝั่งเบราว์เซอร์ -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
     ::-webkit-scrollbar { display: none; }
     body { -ms-overflow-style: none; scrollbar-width: none; }
     .pb-safe { padding-bottom: env(safe-area-inset-bottom, 20px); }
+    @media print {
+      body * { visibility: hidden; }
+      #qr-print-area, #qr-print-area * { visibility: visible; }
+      #qr-print-area { position: absolute; left: 0; top: 0; width: 100%; }
+    }
   </style>
 </head>
 <body class="bg-gray-50 text-gray-900 font-sans antialiased selection:bg-blue-200">
 
   <div class="flex min-h-screen">
     
-    <!-- 💻 Sidebar สำหรับ Desktop (ไอคอนเส้นเรียบ SVG) -->
+    <!-- 💻 Sidebar Desktop -->
     <aside class="hidden md:flex flex-col w-64 fixed left-0 top-0 h-screen bg-white border-r border-gray-200 pt-10 pb-6 px-4 z-50 shadow-sm">
       <h2 class="text-2xl font-bold text-gray-900 mb-10 px-2">BJ Roaster</h2>
       <nav class="flex-1 space-y-2">
         <a href="index.html" class="flex items-center gap-3 text-gray-700 hover:bg-gray-50 px-4 py-3 rounded-xl font-bold transition">
-          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg>
-          หน้าแรก
+          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg> หน้าแรก
         </a>
-        <!-- 🌟 Sidebar เมนู "ทำงาน" (Active) -->
-        <a href="work.html" class="flex items-center gap-3 bg-blue-50 text-blue-600 px-4 py-3 rounded-xl font-bold transition">
-          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 011.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.56.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.893.149c-.425.07-.765.383-.93.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 01-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.397.165-.71.505-.78.929l-.15.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 01-.12-1.45l.527-.737c.25-.35.273-.806.108-1.204-.165-.397-.505-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.107-1.204l-.527-.738a1.125 1.125 0 01.12-1.45l.773-.773a1.125 1.125 0 011.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-          ทำงาน
+        <a href="planner.html" class="flex items-center gap-3 bg-blue-50 text-blue-600 px-4 py-3 rounded-xl font-bold transition">
+          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 011.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.56.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.893.149c-.425.07-.765.383-.93.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 01-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.397.165-.71.505-.78.929l-.15.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 01-.12-1.45l.527-.737c.25-.35.273-.806.108-1.204-.165-.397-.505-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.107-1.204l-.527-.738a1.125 1.125 0 01.12-1.45l.773-.773a1.125 1.125 0 011.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg> ทำงาน
         </a>
         <a href="report.html" class="flex items-center gap-3 text-gray-700 hover:bg-gray-50 px-4 py-3 rounded-xl font-bold transition"><svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" /></svg> รายงาน</a>
         <a href="stock.html" class="flex items-center gap-3 text-gray-700 hover:bg-gray-50 px-4 py-3 rounded-xl font-bold transition"><svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" /></svg> สต๊อกสินค้า</a>
@@ -38,130 +42,224 @@
     <!-- 💻 พื้นที่แสดงผลฝั่งขวา -->
     <main class="w-full md:ml-64 relative overflow-hidden flex flex-col min-h-screen">
       
-      <!-- 🌟 ลำดับการ์ดใหม่: วางแผน ➔ เบิกคั่ว ➔ บรรจุ ➔ จัดส่ง ➔ เพิ่มข้อมูล ➔ รับเข้า -->
+      <!-- 🌟 ล็อกแถบการ์ดกระบวนการทำงานไว้ด้านบนสุด -->
       <div class="sticky top-0 z-40 bg-gray-50/95 backdrop-blur-xl pt-6 pb-4 border-b border-gray-200">
         <div class="flex flex-row overflow-x-auto gap-3 px-5 md:px-10 pr-10 snap-x w-full items-center">
-          
-          <!-- 1. วางแผน -->
-          <div class="relative flex-none w-40 h-24 md:w-48 md:h-28 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-yellow-50 to-yellow-100 border border-yellow-200 cursor-pointer hover:bg-yellow-100 transition snap-start flex flex-col justify-center px-4 opacity-70 hover:opacity-100" onclick="window.location.href='planner.html'">
-            <h2 class="text-base md:text-lg font-bold text-yellow-800 leading-tight">วางแผน<br><span class="text-xs font-medium text-yellow-600">(ออเดอร์)</span></h2>
-          </div>
+          <div class="relative flex-none w-40 h-24 md:w-48 md:h-28 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-yellow-50 to-yellow-100 border border-yellow-200 cursor-pointer hover:bg-yellow-100 transition px-4 flex flex-col justify-center opacity-70 hover:opacity-100" onclick="window.location.href='planner.html'"><h2 class="text-base md:text-lg font-bold text-yellow-800 leading-tight">วางแผน<br><span class="text-xs font-medium text-yellow-600">(ออเดอร์)</span></h2></div>
+          <div class="relative flex-none w-40 h-24 md:w-48 md:h-28 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-orange-50 to-orange-100 border border-orange-200 cursor-pointer hover:bg-orange-100 transition px-4 flex flex-col justify-center opacity-70 hover:opacity-100" onclick="window.location.href='wip.html'"><h2 class="text-base md:text-lg font-bold text-orange-800 leading-tight">เบิกคั่ว<br><span class="text-xs font-medium text-orange-600">(WIP)</span></h2></div>
+          <div class="relative flex-none w-40 h-24 md:w-48 md:h-28 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-200 cursor-pointer hover:bg-purple-100 transition px-4 flex flex-col justify-center opacity-70 hover:opacity-100" onclick="window.location.href='packing.html'"><h2 class="text-base md:text-lg font-bold text-purple-800 leading-tight">บรรจุสินค้า<br><span class="text-xs font-medium text-purple-600">(Packing)</span></h2></div>
+          <div class="relative flex-none w-40 h-24 md:w-48 md:h-28 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-teal-50 to-teal-100 border border-teal-200 cursor-pointer hover:bg-teal-100 transition px-4 flex flex-col justify-center opacity-70 hover:opacity-100" onclick="window.location.href='shipping.html'"><h2 class="text-base md:text-lg font-bold text-teal-800 leading-tight">จัดส่ง<br><span class="text-xs font-medium text-teal-600">(Shipping)</span></h2></div>
 
-          <!-- 2. เบิกคั่ว (WIP) -->
-          <div class="relative flex-none w-40 h-24 md:w-48 md:h-28 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-orange-50 to-orange-100 border border-orange-200 cursor-pointer hover:bg-orange-100 transition snap-start flex flex-col justify-center px-4 opacity-70 hover:opacity-100" onclick="window.location.href='wip.html'">
-            <h2 class="text-base md:text-lg font-bold text-orange-800 leading-tight">เบิกคั่ว<br><span class="text-xs font-medium text-orange-600">(WIP)</span></h2>
-          </div>
-
-          <!-- 3. บรรจุสินค้า -->
-          <div class="relative flex-none w-40 h-24 md:w-48 md:h-28 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-200 cursor-pointer hover:bg-purple-100 transition snap-start flex flex-col justify-center px-4 opacity-70 hover:opacity-100" onclick="window.location.href='packing.html'">
-            <h2 class="text-base md:text-lg font-bold text-purple-800 leading-tight">บรรจุสินค้า<br><span class="text-xs font-medium text-purple-600">(Packing)</span></h2>
-          </div>
-
-          <!-- 4. จัดส่ง -->
-          <div class="relative flex-none w-40 h-24 md:w-48 md:h-28 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-teal-50 to-teal-100 border border-teal-200 cursor-pointer hover:bg-teal-100 transition snap-start flex flex-col justify-center px-4 opacity-70 hover:opacity-100" onclick="window.location.href='shipping.html'">
-            <h2 class="text-base md:text-lg font-bold text-teal-800 leading-tight">จัดส่ง<br><span class="text-xs font-medium text-teal-600">(Shipping)</span></h2>
-          </div>
-
-          <!-- 5. เพิ่มข้อมูลใหม่ (🟣 ACTIVE ในหน้านี้) -->
+          <!-- 5. เพิ่มข้อมูลใหม่ (ACTIVE 🌟) -->
           <div class="relative flex-none w-40 h-24 md:w-48 md:h-28 rounded-2xl overflow-hidden shadow-md bg-gradient-to-br from-indigo-500 to-indigo-600 border border-indigo-600 cursor-default flex flex-col justify-center px-4 transform scale-105">
-            <h2 class="text-base md:text-lg font-bold text-white leading-tight">เพิ่มข้อมูลใหม่<br><span class="text-xs font-medium text-indigo-100">(สาร, Sup)</span></h2>
+            <h2 class="text-base md:text-lg font-bold text-white leading-tight">เพิ่มข้อมูลใหม่<br><span class="text-xs font-medium text-indigo-100">(สาร, QR, สต๊อก)</span></h2>
           </div>
 
-          <!-- 6. รับสินค้าเข้า -->
-          <div class="relative flex-none w-40 h-24 md:w-48 md:h-28 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-green-50 to-green-100 border border-green-200 cursor-pointer hover:bg-green-100 transition snap-start flex flex-col justify-center px-4 opacity-70 hover:opacity-100" onclick="window.location.href='work.html'">
-            <h2 class="text-base md:text-lg font-bold text-green-800 leading-tight">รับสินค้าเข้า<br><span class="text-xs font-medium text-green-600">(สารกาแฟ)</span></h2>
-          </div>
-
+          <div class="relative flex-none w-40 h-24 md:w-48 md:h-28 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-green-50 to-green-100 border border-green-200 cursor-pointer hover:bg-green-100 transition px-4 flex flex-col justify-center opacity-70 hover:opacity-100" onclick="window.location.href='inbound.html'"><h2 class="text-base md:text-lg font-bold text-green-800 leading-tight">รับสินค้าเข้า<br><span class="text-xs font-medium text-green-600">(สารกาแฟ)</span></h2></div>
         </div>
       </div>
 
-      <!-- 👇 ฟอร์มจัดการสารกาแฟ & Supplier 👇 -->
+      <!-- 👇 แท็บเมนูย่อย 4 ส่วนหลัก 👇 -->
       <div class="p-5 md:p-10 pb-28 space-y-6">
         
-        <!-- แท็บสลับ สารกาแฟ / Supplier -->
-        <div class="flex gap-2 max-w-3xl">
-          <button id="tab-btn-item" onclick="switchTab('item')" class="flex-1 py-3 font-bold rounded-xl bg-indigo-600 text-white shadow-sm transition">☕ เพิ่มรายการสารกาแฟ</button>
-          <button id="tab-btn-supplier" onclick="switchTab('supplier')" class="flex-1 py-3 font-bold rounded-xl bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 transition">🏭 เพิ่มซัพพลายเออร์</button>
+        <!-- แถบเลือกโหมด 4 แท็บ -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-2 max-w-4xl">
+          <button id="btn-tab-bean" onclick="switchSection('bean')" class="py-3 px-2 font-bold rounded-xl bg-indigo-600 text-white shadow-sm text-sm">☕ 1. ข้อมูลสารกาแฟ</button>
+          <button id="btn-tab-qr" onclick="switchSection('qr')" class="py-3 px-2 font-bold rounded-xl bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 text-sm">🖨️ 2. สร้าง QR Code</button>
+          <button id="btn-tab-cust" onclick="switchSection('cust')" class="py-3 px-2 font-bold rounded-xl bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 text-sm">👥 3. ข้อมูลลูกค้า</button>
+          <button id="btn-tab-inv" onclick="switchSection('inv')" class="py-3 px-2 font-bold rounded-xl bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 text-sm">📦 4. จัดการสต๊อก (แก้ไข/ลบ)</button>
         </div>
 
-        <!-- 1. ฟอร์มเพิ่มสารกาแฟ -->
-        <div id="item-panel" class="max-w-3xl bg-white p-6 rounded-2xl shadow-sm border border-gray-200 space-y-4">
-          <h2 class="text-lg font-bold text-gray-800 border-b pb-3">☕ บันทึกรหัสสินค้า / สารกาแฟใหม่ (Item Master)</h2>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label class="block text-xs font-bold text-gray-500 mb-1">รหัสสินค้า (Item Code) *</label>
-              <input type="text" id="item_code" placeholder="เช่น GBN-BRA-001" class="w-full px-3 py-2 border rounded-xl font-bold text-indigo-600">
+        <!-- ============================================== -->
+        <!-- ☕ ส่วนที่ 1: เพิ่มข้อมูลสารกาแฟ -->
+        <!-- ============================================== -->
+        <div id="sec-bean" class="space-y-6 max-w-4xl">
+          <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 space-y-4">
+            <h2 class="text-lg font-bold text-gray-800 border-b pb-3">☕ บันทึกสารกาแฟใหม่ (Item Master)</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-bold text-gray-500 mb-1">รหัสสินค้า (Item Code) *</label>
+                <input type="text" id="item_code" placeholder="เช่น GBN-BRA-001" class="w-full px-3 py-2 border rounded-xl font-bold text-indigo-600">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-gray-500 mb-1">ชื่อสารกาแฟ (Item Name) *</label>
+                <input type="text" id="item_name" placeholder="เช่น Brazil Cerrado Dulce" class="w-full px-3 py-2 border rounded-xl">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-gray-500 mb-1">หมวดหมู่</label>
+                <select id="item_category" class="w-full px-3 py-2 border rounded-xl bg-white">
+                  <option value="Green Bean">Green Bean (สารกาแฟ)</option>
+                  <option value="Packaging">Packaging (บรรจุภัณฑ์)</option>
+                  <option value="Other">อื่น ๆ</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-gray-500 mb-1">หน่วยนับ</label>
+                <input type="text" id="item_unit" value="kg" class="w-full px-3 py-2 border rounded-xl">
+              </div>
+              <div class="md:col-span-2">
+                <label class="block text-xs font-bold text-gray-500 mb-1">รายละเอียดสายพันธุ์ / Process</label>
+                <input type="text" id="item_desc" placeholder="เช่น Bourbon, Natural Process, Screen 17/18" class="w-full px-3 py-2 border rounded-xl">
+              </div>
             </div>
-            <div>
-              <label class="block text-xs font-bold text-gray-500 mb-1">ชื่อสารกาแฟ (Item Name) *</label>
-              <input type="text" id="item_name" placeholder="เช่น Brazil Cerrado Dulce" class="w-full px-3 py-2 border rounded-xl">
+            <button onclick="saveBeanMaster()" id="save-bean-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl transition">💾 บันทึกสารกาแฟ</button>
+          </div>
+
+          <!-- ตารางสารกาแฟ -->
+          <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+            <div class="p-4 border-b flex justify-between items-center bg-gray-50">
+              <h3 class="font-bold text-gray-800">📋 รายการสารกาแฟทั้งหมดในระบบ</h3>
+              <button onclick="loadBeans()" class="text-xs bg-gray-200 hover:bg-gray-300 font-bold px-3 py-1.5 rounded-lg">รีเฟรช</button>
             </div>
-            <div>
-              <label class="block text-xs font-bold text-gray-500 mb-1">หมวดหมู่ (Category)</label>
-              <select id="item_category" class="w-full px-3 py-2 border rounded-xl bg-white">
-                <option value="Green Bean">Green Bean (สารกาแฟ)</option>
-                <option value="Packaging">Packaging (บรรจุภัณฑ์)</option>
-                <option value="Other">อื่น ๆ</option>
-              </select>
-            </div>
-            <div>
-              <label class="block text-xs font-bold text-gray-500 mb-1">หน่วยนับ (Unit)</label>
-              <input type="text" id="item_unit" value="kg" class="w-full px-3 py-2 border rounded-xl">
-            </div>
-            <div class="md:col-span-2">
-              <label class="block text-xs font-bold text-gray-500 mb-1">รายละเอียดเพิ่มเติม / สายพันธุ์ / Process</label>
-              <textarea id="item_desc" rows="2" placeholder="เช่น Bourbon, Natural Process, Grade 1" class="w-full px-3 py-2 border rounded-xl"></textarea>
+            <div class="overflow-x-auto">
+              <table class="min-w-full text-sm">
+                <thead class="bg-gray-100 text-gray-600">
+                  <tr>
+                    <th class="py-2.5 px-4 text-left font-bold">รหัสสินค้า</th>
+                    <th class="py-2.5 px-4 text-left font-bold">ชื่อสารกาแฟ</th>
+                    <th class="py-2.5 px-4 text-center font-bold">หมวดหมู่</th>
+                    <th class="py-2.5 px-4 text-center font-bold">หน่วย</th>
+                  </tr>
+                </thead>
+                <tbody id="bean-table-body" class="text-gray-700">
+                  <tr><td colspan="4" class="py-6 text-center text-gray-400">กำลังโหลดข้อมูล...</td></tr>
+                </tbody>
+              </table>
             </div>
           </div>
-          <p id="item-msg" class="text-sm font-bold text-center hidden"></p>
-          <button onclick="saveItemMaster()" id="save-item-btn" class="w-full bg-indigo-600 text-white font-bold py-3 rounded-xl hover:bg-indigo-700 active:scale-95 transition">💾 บันทึกสารกาแฟ</button>
         </div>
 
-        <!-- 2. ฟอร์มเพิ่ม Supplier (ซ่อนเริ่มต้น) -->
-        <div id="supplier-panel" class="hidden max-w-3xl bg-white p-6 rounded-2xl shadow-sm border border-gray-200 space-y-4">
-          <h2 class="text-lg font-bold text-gray-800 border-b pb-3">🏭 บันทึกซัพพลายเออร์ใหม่ (Supplier Master)</h2>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label class="block text-xs font-bold text-gray-500 mb-1">รหัสผู้จัดจำหน่าย (Supplier Code)</label>
-              <input type="text" id="sup_code" placeholder="เช่น SUP-01" class="w-full px-3 py-2 border rounded-xl">
+        <!-- ============================================== -->
+        <!-- 🖨️ ส่วนที่ 2: ระบบสร้าง QR Code (Pallet / Lot) -->
+        <!-- ============================================== -->
+        <div id="sec-qr" class="hidden space-y-6 max-w-4xl">
+          <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 space-y-4">
+            <div class="border-b pb-3 flex justify-between items-center">
+              <div>
+                <h2 class="text-lg font-bold text-gray-800">🖨️ เครื่องพิมพ์สร้าง QR Code (Pallet & Lot Bean)</h2>
+                <p class="text-xs text-gray-500 mt-1">สร้าง QR Code แปะพาเลท หรือกระสอบสินค้าล่วงหน้า</p>
+              </div>
+              <button onclick="window.print()" class="bg-gray-800 hover:bg-gray-900 text-white text-xs font-bold px-4 py-2 rounded-xl flex items-center gap-2">
+                🖨️ พิมพ์ออกเครื่องพิมพ์
+              </button>
             </div>
-            <div>
-              <label class="block text-xs font-bold text-gray-500 mb-1">ชื่อบริษัท / ฟาร์ม (Supplier Name) *</label>
-              <input type="text" id="sup_name" placeholder="เช่น ไร่กาแฟดอยช้าง" class="w-full px-3 py-2 border rounded-xl">
+
+            <!-- ฟอร์มสร้าง QR Code -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <div>
+                <label class="block text-xs font-bold text-gray-500 mb-1">ประเภท QR Code</label>
+                <select id="qr_type" onchange="autoFillQRPrefix()" class="w-full px-3 py-2 border rounded-xl bg-white font-bold">
+                  <option value="PALLET">QR แปะพาเลท (Pallet No.)</option>
+                  <option value="LOT">QR ข้อมูลสาร (Lot Bean)</option>
+                  <option value="RACK">QR จุดเก็บ (Rack Location)</option>
+                  <option value="CUSTOM">QR กำหนดเอง</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-gray-500 mb-1">คำนำหน้า (Prefix)</label>
+                <input type="text" id="qr_prefix" value="PAL-" class="w-full px-3 py-2 border rounded-xl font-bold text-indigo-600">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-gray-500 mb-1">จำนวนที่ต้องการสร้าง (ใบ)</label>
+                <input type="number" id="qr_count" value="10" min="1" max="50" class="w-full px-3 py-2 border rounded-xl font-bold">
+              </div>
             </div>
-            <div>
-              <label class="block text-xs font-bold text-gray-500 mb-1">เบอร์โทรศัพท์</label>
-              <input type="text" id="sup_phone" placeholder="08x-xxx-xxxx" class="w-full px-3 py-2 border rounded-xl">
-            </div>
-            <div>
-              <label class="block text-xs font-bold text-gray-500 mb-1">ผู้ติดต่อ / หมายเหตุ</label>
-              <input type="text" id="sup_contact" placeholder="เช่น คุณสมชาย (ฝ่ายขาย)" class="w-full px-3 py-2 border rounded-xl">
+
+            <button onclick="generateBatchQR()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl transition">
+              ⚡ สร้างและแสดงตัวอย่าง QR Code
+            </button>
+          </div>
+
+          <!-- พื้นที่แสดง QR Code สำหรับปริ้นท์ -->
+          <div id="qr-print-area" class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+            <h3 class="text-sm font-bold text-gray-400 mb-4 uppercase tracking-wider">ตัวอย่างสติ๊กเกอร์ QR Code พร้อมพิมพ์</h3>
+            <div id="qr-gallery" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 text-center">
+              <p class="col-span-full py-8 text-gray-400">กดปุ่มสร้างเพื่อดูตัวอย่าง QR Code</p>
             </div>
           </div>
-          <p id="sup-msg" class="text-sm font-bold text-center hidden"></p>
-          <button onclick="saveSupplier()" id="save-sup-btn" class="w-full bg-indigo-600 text-white font-bold py-3 rounded-xl hover:bg-indigo-700 active:scale-95 transition">💾 บันทึกซัพพลายเออร์</button>
         </div>
 
-        <!-- ตารางแสดงรายการสารกาแฟที่มีในระบบ -->
-        <div class="max-w-3xl bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
-          <div class="p-4 border-b flex justify-between items-center bg-gray-50">
-            <h3 class="font-bold text-gray-800">📋 รายการ Master สารกาแฟ</h3>
-            <button onclick="loadItemMasterList()" class="text-xs bg-gray-200 hover:bg-gray-300 font-bold px-3 py-1.5 rounded-lg transition">🔄 รีเฟรช</button>
+        <!-- ============================================== -->
+        <!-- 👥 ส่วนที่ 3: ข้อมูลลูกค้า (Customer Master) -->
+        <!-- ============================================== -->
+        <div id="sec-cust" class="hidden space-y-6 max-w-4xl">
+          <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 space-y-4">
+            <h2 class="text-lg font-bold text-gray-800 border-b pb-3">👥 บันทึกข้อมูลลูกค้า / ร้านกาแฟ (Customer Master)</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-bold text-gray-500 mb-1">รหัสลูกค้า (Customer Code)</label>
+                <input type="text" id="cust_code" placeholder="เช่น CUST-001" class="w-full px-3 py-2 border rounded-xl font-bold text-indigo-600">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-gray-500 mb-1">ชื่อลูกค้า / ร้านกาแฟ *</label>
+                <input type="text" id="cust_name" placeholder="เช่น โรงคั่วกาแฟ คาเฟ่ อารีย์" class="w-full px-3 py-2 border rounded-xl">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-gray-500 mb-1">เบอร์โทรศัพท์ติดต่อ</label>
+                <input type="text" id="cust_phone" placeholder="08x-xxx-xxxx" class="w-full px-3 py-2 border rounded-xl">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-gray-500 mb-1">ที่อยู่จัดส่ง / สาขา</label>
+                <input type="text" id="cust_address" placeholder="เช่น สาขาสุขุมวิท กรุงเทพฯ" class="w-full px-3 py-2 border rounded-xl">
+              </div>
+            </div>
+            <button onclick="saveCustomer()" id="save-cust-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl transition">💾 บันทึกข้อมูลลูกค้า</button>
           </div>
-          <div class="overflow-x-auto">
-            <table class="min-w-full text-sm">
-              <thead class="bg-gray-100 text-gray-600">
-                <tr>
-                  <th class="py-2.5 px-4 text-left font-bold">รหัสสินค้า</th>
-                  <th class="py-2.5 px-4 text-left font-bold">ชื่อสารกาแฟ</th>
-                  <th class="py-2.5 px-4 text-center font-bold">หมวดหมู่</th>
-                  <th class="py-2.5 px-4 text-center font-bold">หน่วย</th>
-                </tr>
-              </thead>
-              <tbody id="item-table-body" class="text-gray-700">
-                <tr><td colspan="4" class="py-8 text-center text-gray-400">กำลังโหลดข้อมูล...</td></tr>
-              </tbody>
-            </table>
+
+          <!-- ตารางรายชื่อลูกค้า -->
+          <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+            <div class="p-4 border-b flex justify-between items-center bg-gray-50">
+              <h3 class="font-bold text-gray-800">รายชื่อลูกค้าทั้งหมด</h3>
+              <button onclick="loadCustomers()" class="text-xs bg-gray-200 hover:bg-gray-300 font-bold px-3 py-1.5 rounded-lg">รีเฟรช</button>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="min-w-full text-sm">
+                <thead class="bg-gray-100 text-gray-600">
+                  <tr>
+                    <th class="py-2.5 px-4 text-left font-bold">รหัส</th>
+                    <th class="py-2.5 px-4 text-left font-bold">ชื่อลูกค้า / ร้าน</th>
+                    <th class="py-2.5 px-4 text-center font-bold">เบอร์โทร</th>
+                    <th class="py-2.5 px-4 text-left font-bold">ที่อยู่</th>
+                  </tr>
+                </thead>
+                <tbody id="cust-table-body" class="text-gray-700">
+                  <tr><td colspan="4" class="py-6 text-center text-gray-400">กำลังโหลดข้อมูล...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- 📦 ส่วนที่ 4: จัดการสต๊อก (แก้ไข / ลบ ข้อมูล) -->
+        <!-- ============================================== -->
+        <div id="sec-inv" class="hidden space-y-6 max-w-5xl">
+          <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 space-y-4">
+            <div class="flex flex-col md:flex-row justify-between md:items-center gap-3 border-b pb-4">
+              <div>
+                <h2 class="text-lg font-bold text-gray-800">📦 จัดการสต๊อกคงคลัง (แก้ไข / ลบ)</h2>
+                <p class="text-xs text-gray-500 mt-1">สามารถแก้ไขจำนวนคงเหลือ จุดเก็บ หรือลบรายการที่คีย์ผิดพลาดได้</p>
+              </div>
+              <input type="text" id="inv-search" onkeyup="filterInventoryTable()" placeholder="🔍 ค้นหาบาร์โค้ด หรือชื่อสินค้า..." class="px-3 py-2 border rounded-xl text-sm w-full md:w-64">
+            </div>
+
+            <div class="overflow-x-auto">
+              <table class="min-w-full text-sm">
+                <thead class="bg-gray-100 text-gray-600">
+                  <tr>
+                    <th class="py-2.5 px-4 text-left font-bold">บาร์โค้ด / พาเลท</th>
+                    <th class="py-2.5 px-4 text-left font-bold">ชื่อสินค้า</th>
+                    <th class="py-2.5 px-4 text-right font-bold">คงเหลือ</th>
+                    <th class="py-2.5 px-4 text-center font-bold">Location</th>
+                    <th class="py-2.5 px-4 text-center font-bold">สถานะ</th>
+                    <th class="py-2.5 px-4 text-center font-bold">จัดการ</th>
+                  </tr>
+                </thead>
+                <tbody id="inventory-edit-body" class="text-gray-700">
+                  <tr><td colspan="6" class="py-6 text-center text-gray-400">กำลังโหลดสต๊อก...</td></tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
 
@@ -169,30 +267,48 @@
     </main>
   </div>
 
-  <!-- 📱 Bottom Navigation (มือถือ - ไอคอนเส้นเรียบ SVG) -->
-  <div id="bottom-nav" class="fixed bottom-0 w-full bg-white/95 backdrop-blur-xl border-t border-gray-200 pb-safe z-50 md:hidden shadow-[0_-4px_10px_-1px_rgba(0,0,0,0.05)]">
-    <div class="flex justify-around items-center pt-3 pb-2 px-1">
-      <div onclick="window.location.href='index.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-gray-800 cursor-pointer">
-        <svg class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg><span class="text-[10px] font-medium">หน้าแรก</span>
+  <!-- 🛑 MODAL หน้าต่างแก้ไขสต๊อกสินค้า -->
+  <div id="edit-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white max-w-md w-full p-6 rounded-2xl shadow-2xl border border-gray-100 space-y-4">
+      <div class="flex justify-between items-center border-b pb-3">
+        <h3 class="font-bold text-gray-800 text-lg">✏️ แก้ไขข้อมูลสต๊อก</h3>
+        <button onclick="closeEditModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
       </div>
-      <!-- 🌟 ปุ่มทำงาน (Active) -->
-      <div class="flex flex-col items-center justify-center w-[20%] text-blue-600 cursor-pointer">
-        <svg class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 011.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.56.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.893.149c-.425.07-.765.383-.93.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 01-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.397.165-.71.505-.78.929l-.15.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 01-.12-1.45l.527-.737c.25-.35.273-.806.108-1.204-.165-.397-.505-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.107-1.204l-.527-.738a1.125 1.125 0 01.12-1.45l.773-.773a1.125 1.125 0 011.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg><span class="text-[10px] font-bold">ทำงาน</span>
+      <div class="space-y-3">
+        <div>
+          <label class="block text-xs font-bold text-gray-500 mb-1">รหัสบาร์โค้ด</label>
+          <input type="text" id="edit_barcode" class="w-full px-3 py-2 bg-gray-100 border rounded-xl font-bold text-gray-600" readonly>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-gray-500 mb-1">ชื่อสินค้า</label>
+          <input type="text" id="edit_name" class="w-full px-3 py-2 bg-gray-100 border rounded-xl text-gray-600" readonly>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-gray-500 mb-1">น้ำหนักคงเหลือใหม่ (kg)</label>
+          <input type="number" id="edit_weight" step="0.01" class="w-full px-3 py-2 border rounded-xl font-bold text-green-600">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-gray-500 mb-1">จุดจัดเก็บ (Location)</label>
+          <input type="text" id="edit_location" class="w-full px-3 py-2 border rounded-xl">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-gray-500 mb-1">สถานะ</label>
+          <select id="edit_status" class="w-full px-3 py-2 border rounded-xl bg-white font-bold">
+            <option value="Active">Active</option>
+            <option value="Empty">Empty (สินค้าหมด)</option>
+          </select>
+        </div>
       </div>
-      <div onclick="window.location.href='report.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-gray-800 cursor-pointer">
-        <svg class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" /></svg><span class="text-[10px] font-medium">รายงาน</span>
-      </div>
-      <div onclick="window.location.href='stock.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-gray-800 cursor-pointer">
-        <svg class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" /></svg><span class="text-[10px] font-medium">สต๊อก</span>
-      </div>
-      <div onclick="window.location.href='profile.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-gray-800 cursor-pointer">
-        <svg class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg><span class="text-[10px] font-medium">โปรไฟล์</span>
+      <div class="flex gap-2 pt-2">
+        <button onclick="closeEditModal()" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-2.5 rounded-xl">ยกเลิก</button>
+        <button onclick="submitEditInventory()" id="save-edit-btn" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl">💾 บันทึกการแก้ไข</button>
       </div>
     </div>
   </div>
 
   <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbxQywqP4da0BYdt_dHQtQl-kYlvGxmdJWNA59oqnZ_AM7SRyEESbMd73UD3Xx6VffQ/exec";
+    let rawInventory = [];
 
     function handleLogout() {
       if(confirm("ต้องการออกจากระบบใช่หรือไม่?")) {
@@ -201,143 +317,285 @@
       }
     }
 
-    function switchTab(tab) {
-      const itemPanel = document.getElementById('item-panel');
-      const supPanel = document.getElementById('supplier-panel');
-      const itemBtn = document.getElementById('tab-btn-item');
-      const supBtn = document.getElementById('tab-btn-supplier');
+    // ฟังก์ชันสลับแท็บ
+    function switchSection(sec) {
+      ['bean', 'qr', 'cust', 'inv'].forEach(s => {
+        document.getElementById(`sec-${s}`).classList.add('hidden');
+        document.getElementById(`btn-tab-${s}`).className = "py-3 px-2 font-bold rounded-xl bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 text-sm";
+      });
+      document.getElementById(`sec-${sec}`).classList.remove('hidden');
+      document.getElementById(`btn-tab-${sec}`).className = "py-3 px-2 font-bold rounded-xl bg-indigo-600 text-white shadow-sm text-sm";
 
-      if(tab === 'item') {
-        itemPanel.classList.remove('hidden');
-        supPanel.classList.add('hidden');
-        itemBtn.className = "flex-1 py-3 font-bold rounded-xl bg-indigo-600 text-white shadow-sm transition";
-        supBtn.className = "flex-1 py-3 font-bold rounded-xl bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 transition";
-      } else {
-        itemPanel.classList.add('hidden');
-        supPanel.classList.remove('hidden');
-        supBtn.className = "flex-1 py-3 font-bold rounded-xl bg-indigo-600 text-white shadow-sm transition";
-        itemBtn.className = "flex-1 py-3 font-bold rounded-xl bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 transition";
-      }
+      if(sec === 'bean') loadBeans();
+      if(sec === 'cust') loadCustomers();
+      if(sec === 'inv') loadInventoryForEdit();
     }
 
-    window.onload = loadItemMasterList;
+    window.onload = function() {
+      loadBeans();
+      autoFillQRPrefix();
+    };
 
-    async function loadItemMasterList() {
-      const tbody = document.getElementById('item-table-body');
+    // ===================================
+    // ☕ 1. ข้อมูลสารกาแฟ (Item Master)
+    // ===================================
+    async function loadBeans() {
+      const tbody = document.getElementById('bean-table-body');
       tbody.innerHTML = `<tr><td colspan="4" class="py-6 text-center text-gray-400">กำลังโหลด...</td></tr>`;
       try {
-        const response = await fetch(API_URL, {
-          method: "POST",
-          body: JSON.stringify({ action: 'get_items' })
-        });
-        const result = await response.json();
-        if(result.success && result.data && result.data.length > 0) {
+        const res = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'get_items' }) });
+        const result = await res.json();
+        if(result.success && result.data.length > 0) {
           tbody.innerHTML = result.data.map(i => `
             <tr class="border-b border-gray-100 hover:bg-gray-50">
               <td class="py-2.5 px-4 font-bold text-indigo-600">${i.item_code}</td>
               <td class="py-2.5 px-4 font-medium">${i.item_name}</td>
               <td class="py-2.5 px-4 text-center text-gray-500">${i.category || '-'}</td>
-              <td class="py-2.5 px-4 text-center font-bold text-gray-600">${i.unit || 'kg'}</td>
+              <td class="py-2.5 px-4 text-center font-bold">${i.unit || 'kg'}</td>
             </tr>
           `).join('');
         } else {
-          tbody.innerHTML = `<tr><td colspan="4" class="py-6 text-center text-gray-400">ยังไม่มีข้อมูลใน Master</td></tr>`;
+          tbody.innerHTML = `<tr><td colspan="4" class="py-6 text-center text-gray-400">ยังไม่มีข้อมูลสารกาแฟ</td></tr>`;
         }
       } catch (e) {
-        tbody.innerHTML = `<tr><td colspan="4" class="py-6 text-center text-red-500">เชื่อมต่อระบบไม่ได้</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="4" class="py-6 text-center text-red-500">เชื่อมต่อไม่ได้</td></tr>`;
       }
     }
 
-    async function saveItemMaster() {
+    async function saveBeanMaster() {
       const code = document.getElementById('item_code').value.trim();
       const name = document.getElementById('item_name').value.trim();
-      const category = document.getElementById('item_category').value;
+      const cat = document.getElementById('item_category').value;
       const unit = document.getElementById('item_unit').value.trim();
       const desc = document.getElementById('item_desc').value.trim();
-      const msg = document.getElementById('item-msg');
-      const btn = document.getElementById('save-item-btn');
 
-      if(!code || !name) {
-        msg.textContent = "กรุณากรอกรหัสและชื่อสินค้า";
-        msg.className = "text-sm font-bold text-center text-red-500 block";
-        return;
-      }
+      if(!code || !name) return alert("กรุณากรอกรหัสและชื่อสินค้า");
 
+      const btn = document.getElementById('save-bean-btn');
       btn.innerText = "กำลังบันทึก...";
       btn.disabled = true;
 
       try {
         const res = await fetch(API_URL, {
           method: "POST",
-          body: JSON.stringify({
-            action: 'add_item',
-            item_code: code,
-            item_name: name,
-            category: category,
-            unit: unit,
-            description: desc
-          })
+          body: JSON.stringify({ action: 'add_item', item_code: code, item_name: name, category: cat, unit: unit, description: desc })
         });
-        const data = await res.json();
-        msg.textContent = data.message;
-        msg.className = data.success ? "text-sm font-bold text-center text-green-600 block" : "text-sm font-bold text-center text-red-500 block";
-        if(data.success) {
+        const d = await res.json();
+        alert(d.message);
+        if(d.success) {
           document.getElementById('item_code').value = '';
           document.getElementById('item_name').value = '';
           document.getElementById('item_desc').value = '';
-          loadItemMasterList();
+          loadBeans();
         }
       } catch (e) {
-        msg.textContent = "เกิดข้อผิดพลาดในการเชื่อมต่อ";
-        msg.className = "text-sm font-bold text-center text-red-500 block";
+        alert("บันทึกไม่สำเร็จ");
       }
       btn.innerText = "💾 บันทึกสารกาแฟ";
       btn.disabled = false;
     }
 
-    async function saveSupplier() {
-      const code = document.getElementById('sup_code').value.trim();
-      const name = document.getElementById('sup_name').value.trim();
-      const phone = document.getElementById('sup_phone').value.trim();
-      const contact = document.getElementById('sup_contact').value.trim();
-      const msg = document.getElementById('sup-msg');
-      const btn = document.getElementById('save-sup-btn');
+    // ===================================
+    // 🖨️ 2. ระบบสร้าง QR Code (Pallet/Lot)
+    // ===================================
+    function autoFillQRPrefix() {
+      const type = document.getElementById('qr_type').value;
+      const prefixInput = document.getElementById('qr_prefix');
+      if(type === 'PALLET') prefixInput.value = "PAL-";
+      else if(type === 'LOT') prefixInput.value = "LOT-";
+      else if(type === 'RACK') prefixInput.value = "RACK-";
+      else prefixInput.value = "";
+    }
 
-      if(!name) {
-        msg.textContent = "กรุณากรอกชื่อบริษัท/ซัพพลายเออร์";
-        msg.className = "text-sm font-bold text-center text-red-500 block";
-        return;
+    function generateBatchQR() {
+      const prefix = document.getElementById('qr_prefix').value.trim();
+      const count = parseInt(document.getElementById('qr_count').value) || 1;
+      const gallery = document.getElementById('qr-gallery');
+      gallery.innerHTML = '';
+
+      for(let i = 1; i <= count; i++) {
+        const numStr = String(i).padStart(3, '0');
+        const codeText = `${prefix}${numStr}`;
+
+        const card = document.createElement('div');
+        card.className = "p-4 bg-white border-2 border-dashed border-gray-300 rounded-xl flex flex-col items-center justify-center space-y-2";
+        card.innerHTML = `
+          <div id="qrcode-${i}" class="p-2 bg-white rounded-lg shadow-sm"></div>
+          <p class="font-bold text-sm text-gray-900 tracking-wider">${codeText}</p>
+          <span class="text-[10px] text-gray-400">BJ Roaster System</span>
+        `;
+        gallery.appendChild(card);
+
+        new QRCode(document.getElementById(`qrcode-${i}`), {
+          text: codeText,
+          width: 110,
+          height: 110,
+          correctLevel: QRCode.CorrectLevel.M
+        });
       }
+    }
 
+    // ===================================
+    // 👥 3. ข้อมูลลูกค้า (Customer Master)
+    // ===================================
+    async function loadCustomers() {
+      const tbody = document.getElementById('cust-table-body');
+      tbody.innerHTML = `<tr><td colspan="4" class="py-6 text-center text-gray-400">กำลังโหลด...</td></tr>`;
+      try {
+        const res = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'get_customers' }) });
+        const result = await res.json();
+        if(result.success && result.data.length > 0) {
+          tbody.innerHTML = result.data.map(c => `
+            <tr class="border-b border-gray-100 hover:bg-gray-50">
+              <td class="py-2.5 px-4 font-bold text-indigo-600">${c.customer_code}</td>
+              <td class="py-2.5 px-4 font-medium">${c.customer_name}</td>
+              <td class="py-2.5 px-4 text-center">${c.phone || '-'}</td>
+              <td class="py-2.5 px-4 text-gray-500">${c.address || '-'}</td>
+            </tr>
+          `).join('');
+        } else {
+          tbody.innerHTML = `<tr><td colspan="4" class="py-6 text-center text-gray-400">ยังไม่มีข้อมูลลูกค้า</td></tr>`;
+        }
+      } catch (e) {
+        tbody.innerHTML = `<tr><td colspan="4" class="py-6 text-center text-red-500">เชื่อมต่อไม่ได้</td></tr>`;
+      }
+    }
+
+    async function saveCustomer() {
+      const code = document.getElementById('cust_code').value.trim();
+      const name = document.getElementById('cust_name').value.trim();
+      const phone = document.getElementById('cust_phone').value.trim();
+      const addr = document.getElementById('cust_address').value.trim();
+
+      if(!name) return alert("กรุณากรอกชื่อลูกค้า/ร้านกาแฟ");
+
+      const btn = document.getElementById('save-cust-btn');
       btn.innerText = "กำลังบันทึก...";
       btn.disabled = true;
 
       try {
         const res = await fetch(API_URL, {
           method: "POST",
-          body: JSON.stringify({
-            action: 'add_supplier',
-            supplier_code: code,
-            supplier_name: name,
-            phone: phone,
-            contact: contact
-          })
+          body: JSON.stringify({ action: 'add_customer', customer_code: code, customer_name: name, phone: phone, address: addr })
         });
-        const data = await res.json();
-        msg.textContent = data.message;
-        msg.className = data.success ? "text-sm font-bold text-center text-green-600 block" : "text-sm font-bold text-center text-red-500 block";
-        if(data.success) {
-          document.getElementById('sup_code').value = '';
-          document.getElementById('sup_name').value = '';
-          document.getElementById('sup_phone').value = '';
-          document.getElementById('sup_contact').value = '';
+        const d = await res.json();
+        alert(d.message);
+        if(d.success) {
+          document.getElementById('cust_code').value = '';
+          document.getElementById('cust_name').value = '';
+          document.getElementById('cust_phone').value = '';
+          document.getElementById('cust_address').value = '';
+          loadCustomers();
         }
       } catch (e) {
-        msg.textContent = "เกิดข้อผิดพลาดในการเชื่อมต่อ";
-        msg.className = "text-sm font-bold text-center text-red-500 block";
+        alert("บันทึกไม่สำเร็จ");
       }
-      btn.innerText = "💾 บันทึกซัพพลายเออร์";
+      btn.innerText = "💾 บันทึกข้อมูลลูกค้า";
       btn.disabled = false;
+    }
+
+    // ===================================
+    // 📦 4. จัดการสต๊อก (แก้ไข / ลบ)
+    // ===================================
+    async function loadInventoryForEdit() {
+      const tbody = document.getElementById('inventory-edit-body');
+      tbody.innerHTML = `<tr><td colspan="6" class="py-6 text-center text-gray-400">กำลังโหลดสต๊อก...</td></tr>`;
+      try {
+        const res = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'get_inventory' }) });
+        const result = await res.json();
+        if(result.success && result.data.length > 0) {
+          rawInventory = result.data;
+          renderInventoryTable(rawInventory);
+        } else {
+          tbody.innerHTML = `<tr><td colspan="6" class="py-6 text-center text-gray-400">ไม่มีข้อมูลสต๊อก</td></tr>`;
+        }
+      } catch (e) {
+        tbody.innerHTML = `<tr><td colspan="6" class="py-6 text-center text-red-500">เชื่อมต่อไม่ได้</td></tr>`;
+      }
+    }
+
+    function renderInventoryTable(data) {
+      const tbody = document.getElementById('inventory-edit-body');
+      tbody.innerHTML = data.map(item => `
+        <tr class="border-b border-gray-100 hover:bg-gray-50">
+          <td class="py-2.5 px-4 font-bold text-blue-600">${item.barcode_id}</td>
+          <td class="py-2.5 px-4 font-medium">${item.item_name}</td>
+          <td class="py-2.5 px-4 text-right font-bold text-green-700">${item.weight_current} ${item.unit || 'kg'}</td>
+          <td class="py-2.5 px-4 text-center font-bold text-gray-600">${item.location}</td>
+          <td class="py-2.5 px-4 text-center"><span class="px-2 py-0.5 rounded text-xs font-bold ${item.status === 'Active' ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-600'}">${item.status}</span></td>
+          <td class="py-2.5 px-4 text-center space-x-1">
+            <button onclick="openEditModal('${item.barcode_id}')" class="bg-blue-50 text-blue-600 hover:bg-blue-100 px-2.5 py-1 rounded-lg text-xs font-bold transition">✏️ แก้ไข</button>
+            <button onclick="deleteInventoryItem('${item.barcode_id}')" class="bg-red-50 text-red-600 hover:bg-red-100 px-2.5 py-1 rounded-lg text-xs font-bold transition">🗑️ ลบ</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function filterInventoryTable() {
+      const q = document.getElementById('inv-search').value.toLowerCase();
+      const filtered = rawInventory.filter(i => 
+        String(i.barcode_id).toLowerCase().includes(q) || 
+        String(i.item_name).toLowerCase().includes(q)
+      );
+      renderInventoryTable(filtered);
+    }
+
+    function openEditModal(barcode) {
+      const item = rawInventory.find(i => String(i.barcode_id) === String(barcode));
+      if(!item) return;
+      document.getElementById('edit_barcode').value = item.barcode_id;
+      document.getElementById('edit_name').value = item.item_name;
+      document.getElementById('edit_weight').value = item.weight_current;
+      document.getElementById('edit_location').value = item.location;
+      document.getElementById('edit_status').value = item.status;
+      document.getElementById('edit-modal').classList.remove('hidden');
+    }
+
+    function closeEditModal() {
+      document.getElementById('edit-modal').classList.add('hidden');
+    }
+
+    async function submitEditInventory() {
+      const barcode = document.getElementById('edit_barcode').value;
+      const weight = document.getElementById('edit_weight').value;
+      const loc = document.getElementById('edit_location').value;
+      const status = document.getElementById('edit_status').value;
+
+      const btn = document.getElementById('save-edit-btn');
+      btn.innerText = "กำลังบันทึก...";
+      btn.disabled = true;
+
+      try {
+        const res = await fetch(API_URL, {
+          method: "POST",
+          body: JSON.stringify({ action: 'update_inventory', barcode_id: barcode, new_weight: weight, new_location: loc, new_status: status })
+        });
+        const result = await res.json();
+        alert(result.message);
+        if(result.success) {
+          closeEditModal();
+          loadInventoryForEdit();
+        }
+      } catch (e) {
+        alert("แก้ไขไม่สำเร็จ");
+      }
+      btn.innerText = "💾 บันทึกการแก้ไข";
+      btn.disabled = false;
+    }
+
+    async function deleteInventoryItem(barcode) {
+      if(!confirm(`⚠️ ต้องการลบรายการ [${barcode}] ออกจากระบบสต๊อกใช่หรือไม่?`)) return;
+      try {
+        const res = await fetch(API_URL, {
+          method: "POST",
+          body: JSON.stringify({ action: 'delete_inventory', barcode_id: barcode })
+        });
+        const result = await res.json();
+        alert(result.message);
+        if(result.success) loadInventoryForEdit();
+      } catch (e) {
+        alert("ลบไม่สำเร็จ");
+      }
     }
   </script>
 </body>
