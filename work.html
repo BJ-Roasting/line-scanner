@@ -38,39 +38,40 @@
     <!-- 📱 พื้นที่แสดงผลฝั่งขวา -->
     <main class="w-full md:ml-64 relative overflow-hidden flex flex-col min-h-screen">
       
-      <!-- 🌟 ล็อกแถบการ์ดไว้ด้านบนสุด (Sticky Top) ไม่มีข้อความอื่น -->
+      <!-- 🌟 ล็อกแถบการ์ดไว้ด้านบนสุด (เรียงลำดับใหม่: วางแผน -> เบิกคั่ว -> บรรจุ -> จัดส่ง -> เพิ่มข้อมูล -> รับสินค้าเข้า) -->
       <div class="sticky top-0 z-40 bg-gray-50/95 backdrop-blur-xl pt-6 pb-4 border-b border-gray-200">
         <div class="flex flex-row overflow-x-auto gap-3 px-5 md:px-10 pr-10 snap-x w-full items-center">
           
-          <!-- 1. รับสินค้าเข้า (Inbound) -> 🟢 ACTIVE (สีเข้มขึ้น + มีเงา + ขยายใหญ่ขึ้นนิดนึง) -->
-          <div class="relative flex-none w-40 h-24 md:w-48 md:h-28 rounded-2xl overflow-hidden shadow-md bg-gradient-to-br from-green-300 to-green-500 border border-green-500 cursor-default flex flex-col justify-center px-4 transform scale-105">
-            <h2 class="text-base md:text-lg font-bold text-white leading-tight">รับสินค้าเข้า<br><span class="text-xs font-medium text-green-100">(สารกาแฟ)</span></h2>
+          <!-- 1. วางแผน -->
+          <div class="relative flex-none w-40 h-24 md:w-48 md:h-28 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-yellow-50 to-yellow-100 border border-yellow-200 cursor-pointer hover:bg-yellow-100 transition snap-start flex flex-col justify-center px-4 opacity-70 hover:opacity-100" onclick="window.location.href='planner.html'">
+            <h2 class="text-base md:text-lg font-bold text-yellow-800 leading-tight">วางแผน<br><span class="text-xs font-medium text-yellow-600">(ออเดอร์)</span></h2>
           </div>
 
-          <!-- 2. เบิกคั่ว (WIP) -> ⚪ INACTIVE (สีอ่อนปกติ) -->
+          <!-- 2. เบิกคั่ว (WIP) -->
           <div class="relative flex-none w-40 h-24 md:w-48 md:h-28 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-orange-50 to-orange-100 border border-orange-200 cursor-pointer hover:bg-orange-100 transition snap-start flex flex-col justify-center px-4 opacity-70 hover:opacity-100" onclick="window.location.href='wip.html'">
             <h2 class="text-base md:text-lg font-bold text-orange-800 leading-tight">เบิกคั่ว<br><span class="text-xs font-medium text-orange-600">(WIP)</span></h2>
           </div>
 
-          <!-- 3. บรรจุ -> ⚪ INACTIVE -->
-          <div class="relative flex-none w-40 h-24 md:w-48 md:h-28 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-200 cursor-pointer hover:bg-purple-100 transition snap-start flex flex-col justify-center px-4 opacity-70 hover:opacity-100" onclick="alert('กำลังพัฒนาระบบบรรจุ')">
+          <!-- 3. บรรจุ -->
+          <div class="relative flex-none w-40 h-24 md:w-48 md:h-28 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-200 cursor-pointer hover:bg-purple-100 transition snap-start flex flex-col justify-center px-4 opacity-70 hover:opacity-100" onclick="window.location.href='packing.html'">
             <h2 class="text-base md:text-lg font-bold text-purple-800 leading-tight">บรรจุสินค้า<br><span class="text-xs font-medium text-purple-600">(Packing)</span></h2>
           </div>
 
-          <!-- 4. จัดส่ง -> ⚪ INACTIVE -->
-          <div class="relative flex-none w-40 h-24 md:w-48 md:h-28 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-teal-50 to-teal-100 border border-teal-200 cursor-pointer hover:bg-teal-100 transition snap-start flex flex-col justify-center px-4 opacity-70 hover:opacity-100" onclick="alert('กำลังพัฒนาระบบจัดส่ง')">
+          <!-- 4. จัดส่ง -->
+          <div class="relative flex-none w-40 h-24 md:w-48 md:h-28 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-teal-50 to-teal-100 border border-teal-200 cursor-pointer hover:bg-teal-100 transition snap-start flex flex-col justify-center px-4 opacity-70 hover:opacity-100" onclick="window.location.href='shipping.html'">
             <h2 class="text-base md:text-lg font-bold text-teal-800 leading-tight">จัดส่ง<br><span class="text-xs font-medium text-teal-600">(Shipping)</span></h2>
           </div>
 
-          <!-- 5. เพิ่มสินค้าเข้า -> ⚪ INACTIVE -->
+          <!-- 5. เพิ่มข้อมูลใหม่ -->
           <div class="relative flex-none w-40 h-24 md:w-48 md:h-28 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-indigo-50 to-indigo-100 border border-indigo-200 cursor-pointer hover:bg-indigo-100 transition snap-start flex flex-col justify-center px-4 opacity-70 hover:opacity-100" onclick="window.location.href='item_master.html'">
             <h2 class="text-base md:text-lg font-bold text-indigo-800 leading-tight">เพิ่มข้อมูลใหม่<br><span class="text-xs font-medium text-indigo-600">(สาร, Sup)</span></h2>
           </div>
 
-          <!-- 6. วางแผน -> ⚪ INACTIVE -->
-          <div class="relative flex-none w-40 h-24 md:w-48 md:h-28 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-yellow-50 to-yellow-100 border border-yellow-200 cursor-pointer hover:bg-yellow-100 transition snap-start flex flex-col justify-center px-4 opacity-70 hover:opacity-100" onclick="window.location.href='planner.html'">
-            <h2 class="text-base md:text-lg font-bold text-yellow-800 leading-tight">วางแผน<br><span class="text-xs font-medium text-yellow-600">(ออเดอร์)</span></h2>
+          <!-- 6. รับสินค้าเข้า (🟢 ACTIVE ในหน้านี้) -->
+          <div class="relative flex-none w-40 h-24 md:w-48 md:h-28 rounded-2xl overflow-hidden shadow-md bg-gradient-to-br from-green-400 to-green-500 border border-green-500 cursor-default flex flex-col justify-center px-4 transform scale-105">
+            <h2 class="text-base md:text-lg font-bold text-white leading-tight">รับสินค้าเข้า<br><span class="text-xs font-medium text-green-100">(สารกาแฟ)</span></h2>
           </div>
+
         </div>
       </div>
 
@@ -138,7 +139,7 @@
     </main>
   </div>
 
-  <!-- 📱 Bottom Navigation (สำหรับมือถือ - เมนู "ทำงาน" Active) -->
+  <!-- 📱 Bottom Navigation (สำหรับมือถือ) -->
   <div id="bottom-nav" class="fixed bottom-0 w-full bg-white/95 backdrop-blur-xl border-t border-gray-200 pb-safe z-50 md:hidden shadow-[0_-4px_10px_-1px_rgba(0,0,0,0.05)]">
     <div class="flex justify-around items-center pt-3 pb-2 px-1">
       <div onclick="window.location.href='index.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-gray-800 cursor-pointer">
@@ -173,9 +174,7 @@
       }
     }
 
-    // ฟังก์ชันบันทึกข้อมูล (เหมือนเดิมที่เชื่อมต่อ Google Sheets ไว้แล้ว)
     async function saveInbound() {
-      // (ซ่อนโค้ดฟังก์ชันไว้เพื่อความสั้นกระชับ สามารถใช้ของเดิมได้เลย)
       const barcode = document.getElementById('barcode_id').value;
       const itemName = document.getElementById('item_name').value;
       const weight = document.getElementById('weight').value;
@@ -194,7 +193,28 @@
       btn.disabled = true;
       msg.classList.add('hidden');
 
-      const payload = { action: 'inbound', barcode_id: barcode, item_name: itemName, weight: parseFloat(weight), location: location, wo_number: document.getElementById('wo_number').value, wo_type: document.getElementById('wo_type').value, wo_count: document.getElementById('wo_count').value, supplier: document.getElementById('supplier').value, lot_code: document.getElementById('lot_code').value, pallet_count: document.getElementById('pallet_count').value, kg_per_sack: document.getElementById('kg_per_sack').value, moisture1: document.getElementById('moisture1').value, density1: document.getElementById('density1').value, moisture2: document.getElementById('moisture2').value, density2: document.getElementById('density2').value, moisture3: document.getElementById('moisture3').value, density3: document.getElementById('density3').value, operator: operatorName, description: '' };
+      const payload = {
+        action: 'inbound',
+        barcode_id: barcode,
+        item_name: itemName,
+        weight: parseFloat(weight),
+        location: location,
+        wo_number: document.getElementById('wo_number').value,
+        wo_type: document.getElementById('wo_type').value,
+        wo_count: document.getElementById('wo_count').value,
+        supplier: document.getElementById('supplier').value,
+        lot_code: document.getElementById('lot_code').value,
+        pallet_count: document.getElementById('pallet_count').value,
+        kg_per_sack: document.getElementById('kg_per_sack').value,
+        moisture1: document.getElementById('moisture1').value,
+        density1: document.getElementById('density1').value,
+        moisture2: document.getElementById('moisture2').value,
+        density2: document.getElementById('density2').value,
+        moisture3: document.getElementById('moisture3').value,
+        density3: document.getElementById('density3').value,
+        operator: operatorName,
+        description: ''
+      };
 
       try {
         const response = await fetch(API_URL, { method: "POST", body: JSON.stringify(payload) });
