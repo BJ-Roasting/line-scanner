@@ -43,7 +43,7 @@
         break-inside: avoid !important;
         border: 1px dashed #666 !important;
         border-radius: 8px !important;
-        padding: 12px !important;
+        padding: 14px !important;
         box-shadow: none !important;
       }
     }
@@ -93,38 +93,85 @@
       <!-- 👇 แท็บเมนูย่อย 3 ส่วนหลัก 👇 -->
       <div class="p-5 md:p-10 pb-28 space-y-6">
         
-        <!-- แถบเลือกโหมด 3 แท็บ -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-3 max-w-4xl no-print">
           <button type="button" id="btn-tab-qr" onclick="switchSection('qr')" class="py-3 px-4 font-bold rounded-xl bg-indigo-600 text-white shadow-sm text-sm">🖨️ 1. สร้าง QR Code</button>
           <button type="button" id="btn-tab-cust" onclick="switchSection('cust')" class="py-3 px-4 font-bold rounded-xl bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 text-sm">👥 2. ข้อมูลลูกค้า</button>
           <button type="button" id="btn-tab-bean" onclick="switchSection('bean')" class="py-3 px-4 font-bold rounded-xl bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 text-sm">☕ 3. ข้อมูลสารกาแฟ</button>
         </div>
 
-        <!-- ============================================== -->
-        <!-- 🖨️ ส่วนที่ 1: ระบบสร้าง QR Code (Pallet / Lot) -->
-        <!-- ============================================== -->
+        <!-- ========================================================================= -->
+        <!-- 🖨️ ส่วนที่ 1: ระบบสร้าง QR Code (ตัดคำอธิบายใต้ Rack QR ออกแล้ว) -->
+        <!-- ========================================================================= -->
         <div id="sec-qr" class="space-y-6 max-w-4xl">
           <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 space-y-4 no-print">
             <div class="border-b pb-3 flex justify-between items-center">
               <div>
-                <h2 class="text-lg font-bold text-gray-800">🖨️ เครื่องพิมพ์สร้าง QR Code (Pallet & Lot Bean)</h2>
-                <p class="text-xs text-gray-500 mt-1">สร้าง QR Code แปะพาเลท หรือกระสอบสินค้าล่วงหน้า</p>
+                <h2 class="text-lg font-bold text-gray-800">🖨️ เครื่องพิมพ์สร้าง QR Code (Pallet, Lot & Rack)</h2>
+                <p class="text-xs text-gray-500 mt-1">สามารถเลือกพิมพ์เฉพาะช่อง Rack ที่ชำรุด หรือพิมพ์ทั้งชั้นได้ตามต้องการ</p>
               </div>
               <button type="button" onclick="window.print()" class="bg-gray-800 hover:bg-gray-900 text-white text-xs font-bold px-4 py-2.5 rounded-xl flex items-center gap-2 shadow-sm transition active:scale-95">
                 🖨️ สั่งพิมพ์ออกเครื่องพิมพ์
               </button>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
-              <div>
-                <label class="block text-xs font-bold text-gray-500 mb-1">ประเภท QR Code</label>
-                <select id="qr_type" onchange="autoFillQRPrefix()" class="w-full px-3 py-2 border rounded-xl bg-white font-bold text-sm">
-                  <option value="PALLET">QR แปะพาเลท (Pallet No.)</option>
-                  <option value="LOT">QR ข้อมูลสาร (Lot Bean)</option>
-                  <option value="RACK">QR จุดเก็บ (Rack Location)</option>
-                  <option value="CUSTOM">QR กำหนดเอง</option>
-                </select>
+            <!-- เลือกประเภท QR -->
+            <div>
+              <label class="block text-xs font-bold text-gray-500 mb-1">ประเภท QR Code ที่ต้องการสร้าง *</label>
+              <select id="qr_type" onchange="onQRTypeChanged()" class="w-full px-3 py-2.5 border-2 border-indigo-500 rounded-xl bg-white font-bold text-sm text-indigo-900">
+                <option value="RACK">🏢 QR จุดจัดเก็บแร็ค (Rack Location: BJI01A - BJI05M)</option>
+                <option value="PALLET">📦 QR แปะพาเลท (Pallet No: PAL-)</option>
+                <option value="LOT">🏷️ QR ข้อมูลสาร (Lot Bean: LOT-)</option>
+                <option value="CUSTOM">✏️ QR กำหนดรหัสเอง</option>
+              </select>
+            </div>
+
+            <!-- กล่องควบคุมของ RACK LOCATION (เลือกระบุชั้น-แถว) -->
+            <div id="box-rack-controls" class="p-4 bg-indigo-50/60 border border-indigo-200 rounded-xl space-y-3">
+              <div class="flex justify-between items-center">
+                <span class="text-xs font-bold text-indigo-900 uppercase">🏢 กำหนดพิกัด Rack I (คลัง BJ) ที่ต้องการพิมพ์</span>
+                <span id="rack-summary-label" class="text-xs text-indigo-700 font-bold bg-white px-2.5 py-0.5 rounded-lg border border-indigo-200">ทั้งหมด 65 ช่อง</span>
               </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <!-- เลือกชั้น -->
+                <div>
+                  <label class="block text-xs font-bold text-gray-700 mb-1">เลือก ชั้น (Level / 01 - 05)</label>
+                  <select id="rack_level_select" onchange="updateRackSummary()" class="w-full px-3 py-2 border rounded-xl bg-white font-bold text-sm">
+                    <option value="ALL">ทุกชั้น (ชั้น 01 ถึง ชั้น 05)</option>
+                    <option value="01">ชั้น 01 (ล่างสุด)</option>
+                    <option value="02">ชั้น 02</option>
+                    <option value="03">ชั้น 03</option>
+                    <option value="04">ชั้น 04</option>
+                    <option value="05">ชั้น 05 (บนสุด)</option>
+                  </select>
+                </div>
+
+                <!-- เลือกช่อง/แถว -->
+                <div>
+                  <label class="block text-xs font-bold text-gray-700 mb-1">เลือก ช่อง/แถว (Bay / A - M)</label>
+                  <select id="rack_bay_select" onchange="updateRackSummary()" class="w-full px-3 py-2 border rounded-xl bg-white font-bold text-sm">
+                    <option value="ALL">ทุกช่อง (ช่อง A ถึง ช่อง M)</option>
+                    <option value="A">ช่อง A</option>
+                    <option value="B">ช่อง B</option>
+                    <option value="C">ช่อง C</option>
+                    <option value="D">ช่อง D</option>
+                    <option value="E">ช่อง E</option>
+                    <option value="F">ช่อง F</option>
+                    <option value="G">ช่อง G</option>
+                    <option value="H">ช่อง H</option>
+                    <option value="I">ช่อง I</option>
+                    <option value="J">ช่อง J</option>
+                    <option value="K">ช่อง K</option>
+                    <option value="L">ช่อง L</option>
+                    <option value="M">ช่อง M</option>
+                  </select>
+                </div>
+              </div>
+              <p class="text-[11px] text-indigo-800 font-medium">💡 ตัวอย่าง: ป้าย <b>BJI02B</b> ชำรุด ให้เลือก <i>"ชั้น 02"</i> และ <i>"ช่อง B"</i> ระบบจะพิมพ์ให้ใบเดียวสำหรับแปะซ่อมได้ทันที</p>
+            </div>
+
+            <!-- กล่องควบคุมของ PALLET / LOT / CUSTOM -->
+            <div id="box-general-controls" class="hidden grid grid-cols-1 md:grid-cols-3 gap-3">
               <div>
                 <label class="block text-xs font-bold text-gray-500 mb-1">คำนำหน้ารหัส (Prefix)</label>
                 <input type="text" id="qr_prefix" value="PAL-" class="w-full px-3 py-2 border rounded-xl font-bold text-indigo-600 text-sm">
@@ -135,12 +182,12 @@
               </div>
               <div>
                 <label class="block text-xs font-bold text-gray-500 mb-1">ข้อความใต้ QR Code</label>
-                <input type="text" id="qr_subtext" value="พาเลทจัดเก็บสารกาแฟ" placeholder="เช่น สารกาแฟ Lot 2025" class="w-full px-3 py-2 border rounded-xl font-medium text-gray-700 text-sm">
+                <input type="text" id="qr_subtext" value="พาเลทจัดเก็บสารกาแฟ" class="w-full px-3 py-2 border rounded-xl font-medium text-gray-700 text-sm">
               </div>
             </div>
 
-            <button type="button" onclick="generateBatchQR()" id="btn-gen-qr" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl transition shadow-md">
-              ⚡ สร้างและอัปเดตตัวอย่าง QR Code
+            <button type="button" onclick="generateSelectedQR()" id="btn-gen-qr" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl transition shadow-md flex items-center justify-center gap-2 active:scale-95">
+              <span>⚡ สร้างและอัปเดตตัวอย่าง QR Code</span>
             </button>
           </div>
 
@@ -153,7 +200,7 @@
         </div>
 
         <!-- ============================================== -->
-        <!-- 👥 ส่วนที่ 2: ข้อมูลลูกค้า (มีปุ่ม ⚙️ จัดการ ซ่อน/แสดง Edit-Delete) -->
+        <!-- 👥 ส่วนที่ 2: ข้อมูลลูกค้า (มีปุ่ม ⚙️ จัดการ) -->
         <!-- ============================================== -->
         <div id="sec-cust" class="hidden space-y-6 max-w-5xl no-print">
           <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 space-y-4">
@@ -179,12 +226,10 @@
             <button type="button" onclick="saveCustomer()" id="save-cust-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl transition shadow-sm">💾 บันทึกข้อมูลลูกค้า</button>
           </div>
 
-          <!-- ตารางรายชื่อลูกค้า -->
           <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
             <div class="p-4 border-b flex justify-between items-center bg-gray-50">
               <h3 class="font-bold text-gray-800">📋 รายชื่อลูกค้าทั้งหมด</h3>
               <div class="flex items-center gap-2">
-                <!-- 🌟 ปุ่มจัดการ Toggle ซ่อน/แสดง Edit & Delete -->
                 <button type="button" id="btn-manage-cust" onclick="toggleManageMode('cust')" class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 border border-gray-300 font-bold px-3 py-1.5 rounded-lg flex items-center gap-1 transition">
                   ⚙️ จัดการ
                 </button>
@@ -211,7 +256,7 @@
         </div>
 
         <!-- ======================================================== -->
-        <!-- ☕ ส่วนที่ 3: ข้อมูลสารกาแฟ (มีปุ่ม ⚙️ จัดการ ซ่อน/แสดง Edit-Delete) -->
+        <!-- ☕ ส่วนที่ 3: ข้อมูลสารกาแฟ (มีปุ่ม ⚙️ จัดการ) -->
         <!-- ======================================================== -->
         <div id="sec-bean" class="hidden space-y-6 max-w-5xl no-print">
           <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 space-y-5">
@@ -220,7 +265,6 @@
               <p class="text-xs text-gray-500 mt-0.5">จับคู่รหัส ERP กับรหัสและชื่อเรียกสารที่หน้างานใช้จริง</p>
             </div>
 
-            <!-- กลุ่มที่ 1: ฝั่งระบบ ERP -->
             <div class="p-4 bg-blue-50/50 border border-blue-100 rounded-xl space-y-3">
               <p class="text-xs font-bold text-blue-800 uppercase tracking-wider">🏢 ข้อมูลระบบ ERP (ออฟฟิศ/บัญชี)</p>
               <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -235,7 +279,6 @@
               </div>
             </div>
 
-            <!-- กลุ่มที่ 2: ฝั่งสารกาแฟหน้างาน (Bean Master) -->
             <div class="p-4 bg-amber-50/50 border border-amber-200 rounded-xl space-y-3">
               <p class="text-xs font-bold text-amber-900 uppercase tracking-wider">☕ ข้อมูลสารกาแฟหน้างาน (โรงคั่ว)</p>
               <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -250,7 +293,6 @@
               </div>
             </div>
 
-            <!-- กลุ่มที่ 3: Supplier & หน่วยนับ -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
               <div>
                 <label class="block text-xs font-bold text-gray-500 mb-1">Supplier_Code</label>
@@ -280,12 +322,10 @@
             <button type="button" onclick="saveBeanMaster()" id="save-bean-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl transition shadow-md">💾 บันทึกข้อมูลสารกาแฟ</button>
           </div>
 
-          <!-- ตารางสารกาแฟ -->
           <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
             <div class="p-4 border-b flex justify-between items-center bg-gray-50">
               <h3 class="font-bold text-gray-800">📋 รายการสารกาแฟทั้งหมดในระบบ</h3>
               <div class="flex items-center gap-2">
-                <!-- 🌟 ปุ่มจัดการ Toggle ซ่อน/แสดง Edit & Delete -->
                 <button type="button" id="btn-manage-bean" onclick="toggleManageMode('bean')" class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 border border-gray-300 font-bold px-3 py-1.5 rounded-lg flex items-center gap-1 transition">
                   ⚙️ จัดการ
                 </button>
@@ -400,10 +440,10 @@
 
   <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbxQywqP4da0BYdt_dHQtQl-kYlvGxmdJWNA59oqnZ_AM7SRyEESbMd73UD3Xx6VffQ/exec";
+    const BAYS = ['A','B','C','D','E','F','G','H','I','J','K','L','M'];
     let allBeans = [];
     let allCustomers = [];
 
-    // สถานะเปิด-ปิดโหมดจัดการ (Toggle Mode)
     let isManageModeBean = false;
     let isManageModeCust = false;
 
@@ -431,68 +471,126 @@
     }
 
     window.onload = function() {
-      autoFillQRPrefix();
+      onQRTypeChanged();
     };
 
-    // ===================================
-    // 🖨️ 1. ระบบสร้าง QR Code
-    // ===================================
-    function autoFillQRPrefix() {
+    // =========================================================================
+    // 🖨️ 1. ระบบสร้าง QR Code (ตัดคำอธิบายใต้ Rack QR ออกแล้ว)
+    // =========================================================================
+    function onQRTypeChanged() {
       const type = document.getElementById('qr_type').value;
-      const prefixInput = document.getElementById('qr_prefix');
-      const subInput = document.getElementById('qr_subtext');
-      
-      if(type === 'PALLET') {
-        prefixInput.value = "PAL-";
-        subInput.value = "พาเลทจัดเก็บสารกาแฟ";
-      } else if(type === 'LOT') {
-        prefixInput.value = "LOT-";
-        subInput.value = "สารกาแฟนำเข้าสต๊อก";
-      } else if(type === 'RACK') {
-        prefixInput.value = "BJI";
-        subInput.value = "จุดจัดเก็บคลัง BJ Rack I";
+      const boxRack = document.getElementById('box-rack-controls');
+      const boxGen = document.getElementById('box-general-controls');
+
+      if(type === 'RACK') {
+        boxRack.classList.remove('hidden');
+        boxGen.classList.add('hidden');
+        updateRackSummary();
       } else {
-        prefixInput.value = "";
-        subInput.value = "BJ Roaster System";
+        boxRack.classList.add('hidden');
+        boxGen.classList.remove('hidden');
+
+        const prefixInput = document.getElementById('qr_prefix');
+        const subInput = document.getElementById('qr_subtext');
+        if(type === 'PALLET') {
+          prefixInput.value = "PAL-";
+          subInput.value = "พาเลทจัดเก็บสารกาแฟ";
+        } else if(type === 'LOT') {
+          prefixInput.value = "LOT-";
+          subInput.value = "สารกาแฟนำเข้าสต๊อก";
+        } else {
+          prefixInput.value = "";
+          subInput.value = "BJ Roaster System";
+        }
       }
     }
 
-    function generateBatchQR() {
+    function updateRackSummary() {
+      const level = document.getElementById('rack_level_select').value;
+      const bay = document.getElementById('rack_bay_select').value;
+      const label = document.getElementById('rack-summary-label');
+
+      if(level === 'ALL' && bay === 'ALL') {
+        label.innerText = "พิมพ์ทั้ง Rack (65 ช่อง: BJI01A - BJI05M)";
+      } else if(level !== 'ALL' && bay === 'ALL') {
+        label.innerText = `พิมพ์ทั้งชั้น ${level} (13 ช่อง: BJI${level}A - BJI${level}M)`;
+      } else if(level === 'ALL' && bay !== 'ALL') {
+        label.innerText = `พิมพ์ทั้งแถว/ช่อง ${bay} (5 ชั้น: BJI01${bay} - BJI05${bay})`;
+      } else {
+        label.innerText = `พิมพ์เฉพาะช่อง: BJI${level}${bay} (1 ใบ สำหรับซ่อมป้าย)`;
+      }
+    }
+
+    function generateSelectedQR() {
       if (typeof QRCode === 'undefined') {
         alert("กำลังโหลดระบบสร้าง QR Code กรุณารอสักครู่แล้วกดใหม่อีกครั้งครับ");
         return;
       }
 
-      const prefix = document.getElementById('qr_prefix').value.trim();
-      const count = parseInt(document.getElementById('qr_count').value) || 1;
-      const subText = document.getElementById('qr_subtext').value.trim() || 'BJ Roaster System';
+      const type = document.getElementById('qr_type').value;
       const gallery = document.getElementById('qr-gallery');
       gallery.innerHTML = '';
 
-      for(let i = 1; i <= count; i++) {
-        const numStr = String(i).padStart(3, '0');
-        const codeText = `${prefix}${numStr}`;
+      let itemsToGenerate = []; // [{ code: 'BJI02B', sub: '' }]
 
+      if (type === 'RACK') {
+        const levelChoice = document.getElementById('rack_level_select').value;
+        const bayChoice = document.getElementById('rack_bay_select').value;
+
+        const levels = levelChoice === 'ALL' ? ['01', '02', '03', '04', '05'] : [levelChoice];
+        const bays = bayChoice === 'ALL' ? BAYS : [bayChoice];
+
+        levels.forEach(lvl => {
+          bays.forEach(b => {
+            const codeText = `BJI${lvl}${b}`;
+            // 🌟 ตัดคำอธิบายใต้ Rack QR ออกตามสั่ง ให้เหลือแค่รหัสช่องตัวหนาๆ
+            itemsToGenerate.push({
+              code: codeText,
+              sub: '' 
+            });
+          });
+        });
+      } else {
+        // PALLET / LOT / CUSTOM
+        const prefix = document.getElementById('qr_prefix').value.trim();
+        const count = parseInt(document.getElementById('qr_count').value) || 1;
+        const subText = document.getElementById('qr_subtext').value.trim() || 'BJ Roaster System';
+
+        for (let i = 1; i <= count; i++) {
+          const numStr = String(i).padStart(3, '0');
+          itemsToGenerate.push({
+            code: `${prefix}${numStr}`,
+            sub: subText
+          });
+        }
+      }
+
+      // เรนเดอร์การ์ด QR Code
+      itemsToGenerate.forEach((item, idx) => {
         const card = document.createElement('div');
         card.className = "qr-card-item p-4 bg-white border-2 border-dashed border-gray-300 rounded-xl flex flex-col items-center justify-center space-y-2";
+        
+        // ถ้ามี subtext (เช่น Pallet/Lot) ค่อยแสดงผล ถ้าเป็น Rack จะไม่มีแถบข้อความด้านล่าง
+        const subHtml = item.sub ? `<span class="text-xs text-gray-600 font-medium px-2 py-0.5 bg-gray-100 rounded-md inline-block max-w-full truncate">${item.sub}</span>` : '';
+
         card.innerHTML = `
-          <div id="qrcode-${i}" class="p-1.5 bg-white rounded-lg"></div>
-          <p class="font-bold text-base text-gray-900 tracking-wider">${codeText}</p>
-          <span class="text-xs text-gray-600 font-medium px-2 py-0.5 bg-gray-100 rounded-md inline-block max-w-full truncate">${subText}</span>
+          <div id="qrcode-gen-${idx}" class="p-1.5 bg-white rounded-lg"></div>
+          <p class="font-black text-xl text-gray-900 tracking-wider mt-1">${item.code}</p>
+          ${subHtml}
         `;
         gallery.appendChild(card);
 
-        new QRCode(document.getElementById(`qrcode-${i}`), {
-          text: codeText,
-          width: 110,
-          height: 110,
+        new QRCode(document.getElementById(`qrcode-gen-${idx}`), {
+          text: item.code,
+          width: 115,
+          height: 115,
           correctLevel: QRCode.CorrectLevel.M
         });
-      }
+      });
     }
 
     // ===================================
-    // ⚙️ ฟังก์ชันสลับโหมด "จัดการ" (ซ่อน/แสดง Edit-Delete)
+    // ⚙️ ฟังก์ชันสลับโหมด "จัดการ"
     // ===================================
     function toggleManageMode(type) {
       if (type === 'bean') {
