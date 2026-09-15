@@ -12,43 +12,56 @@
     body { -ms-overflow-style: none; scrollbar-width: none; }
     .pb-safe { padding-bottom: env(safe-area-inset-bottom, 20px); }
 
-    /* 🖨️ ระบบพิมพ์ A4 แนวนอน */
+    /* 🖨️ ระบบควบคุมการพิมพ์ A4 แนวนอน (แก้ปัญหากระดาษเปล่าหน้าแรกและหน้าท้าย) */
     @page {
       size: A4 landscape;
       margin: 8mm;
     }
 
     @media print {
-      aside, #bottom-nav, .no-print, .sticky, nav, header, button, #edit-inbound-modal, #putaway-modal {
+      /* 1. ซ่อนโครงสร้างหน้าเว็บหลักทั้งหมด เพื่อไม่ให้กินพื้นที่หน้าแรก */
+      #app-layout, aside, #bottom-nav, .no-print, .sticky, nav, header, button, #edit-inbound-modal, #putaway-modal {
         display: none !important;
       }
-      html, body, main, #preview-modal {
-        overflow: visible !important;
-        height: auto !important;
-        min-height: auto !important;
+      
+      /* 2. ให้ body แสดงผลเฉพาะ Modal พรีวิวเท่านั้น */
+      html, body {
         background: white !important;
-        padding: 0 !important;
         margin: 0 !important;
-        position: static !important;
+        padding: 0 !important;
+        width: 100% !important;
+        height: auto !important;
+        overflow: visible !important;
       }
+
       #preview-modal {
         display: block !important;
         position: static !important;
         background: transparent !important;
         padding: 0 !important;
+        margin: 0 !important;
+        overflow: visible !important;
       }
+
       #preview-header-bar {
         display: none !important;
       }
+
+      #preview-content-container {
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+      }
+
+      /* 3. ขนาดกระดาษ A4 แนวนอนแบบพอดี ไม่ล้น */
       .a4-landscape-page {
         width: 280mm !important;
         height: 192mm !important;
-        page-break-after: always !important;
-        break-after: page !important;
+        max-height: 192mm !important;
         page-break-inside: avoid !important;
         break-inside: avoid !important;
         border: 2px solid #000 !important;
-        margin: 0 auto 10mm auto !important;
+        margin: 0 auto !important;
         padding: 16px 20px !important;
         box-shadow: none !important;
         border-radius: 0 !important;
@@ -58,12 +71,19 @@
         flex-direction: column !important;
         justify-content: space-between !important;
       }
+
+      /* ตัดหน้าเฉพาะแผ่นที่ไม่ใช่แผ่นสุดท้าย (ไม่ให้มีกระดาษเปล่าแถมท้าย) */
+      .a4-landscape-page:not(:last-child) {
+        page-break-after: always !important;
+        break-after: page !important;
+      }
     }
   </style>
 </head>
 <body class="bg-gray-50 text-gray-900 font-sans antialiased selection:bg-blue-200">
 
-  <div class="flex min-h-screen">
+  <!-- 🌟 ห่อโครงสร้างหน้าเว็บหลักด้วย #app-layout เพื่อให้ซ่อนได้หมดจดเวลาพิมพ์ 🌟 -->
+  <div id="app-layout" class="flex min-h-screen">
     
     <!-- 💻 Sidebar Desktop -->
     <aside class="hidden md:flex flex-col w-64 fixed left-0 top-0 h-screen bg-white border-r border-gray-200 pt-10 pb-6 px-4 z-40 shadow-sm no-print">
@@ -117,7 +137,7 @@
         <!-- ========================================================================= -->
         <div id="zone-create" class="space-y-6 max-w-5xl">
 
-          <!-- 🌟 ส่วนที่ 1: คลังการ์ด WO INVENTORY ด้านบนสุด (พร้อมปุ่ม ⚙️ จัดการ ที่กดแล้วโผล่ทันที) -->
+          <!-- คลังการ์ด WO INVENTORY ด้านบน -->
           <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm space-y-4 no-print">
             <div class="flex flex-col md:flex-row justify-between md:items-center gap-3 border-b pb-3">
               <div>
@@ -129,7 +149,6 @@
               </div>
 
               <div class="flex items-center gap-2">
-                <!-- 🌟 ปุ่มสลับโหมดจัดการ (Toggle Management Mode) 🌟 -->
                 <button type="button" id="btn-manage-wo" onclick="toggleManageWOMode()" class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-800 border border-gray-300 font-bold px-4 py-2 rounded-xl flex items-center gap-1.5 transition shadow-sm">
                   ⚙️ จัดการ
                 </button>
@@ -143,7 +162,7 @@
             </div>
           </div>
 
-          <!-- ฟอร์มสร้างใบงานรับเข้า (มี 2 ปุ่ม: พรีวิว&พิมพ์ VS บันทึกอย่างเดียว) -->
+          <!-- ฟอร์มสร้างใบงานรับเข้า -->
           <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 space-y-5 no-print">
             <div class="flex justify-between items-center border-b pb-3">
               <div>
@@ -226,14 +245,11 @@
               </div>
             </div>
 
-            <!-- 🌟 2 ปุ่มแยกชัดเจน 🌟 -->
+            <!-- 2 ปุ่มแยกชัดเจน -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
-              <!-- ปุ่มที่ 1: พรีวิว & พิมพ์ A4 แนวนอน -->
               <button type="button" onclick="submitInboundWO(true)" id="btn-preview-wo" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl shadow-md transition flex items-center justify-center gap-2 active:scale-95">
                 <span>👁️ พรีวิว & สั่งพิมพ์ใบปะหน้า (A4 แนวนอน)</span>
               </button>
-
-              <!-- ปุ่มที่ 2: บันทึกและสร้าง WO (ไม่พิมพ์) -->
               <button type="button" onclick="submitInboundWO(false)" id="btn-save-wo" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3.5 rounded-xl shadow-md transition flex items-center justify-center gap-2 active:scale-95">
                 <span>💾 บันทึกและสร้าง WO (ไม่พิมพ์)</span>
               </button>
@@ -272,7 +288,7 @@
   </div>
 
   <!-- ========================================================================= -->
-  <!-- 👁️ MODAL พรีวิวก่อนพิมพ์ A4 แนวนอน -->
+  <!-- 👁️ MODAL พรีวิวก่อนพิมพ์ A4 แนวนอน (อยู่เดี่ยวๆ นอก #app-layout) -->
   <!-- ========================================================================= -->
   <div id="preview-modal" style="display: none;" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex-col overflow-y-auto p-4 md:p-8">
     
@@ -479,7 +495,7 @@
         if(result.success && result.data && result.data.length > 0) {
           allInboundWOs = result.data;
         } else if(pendingWOs && pendingWOs.length > 0) {
-          allInboundWOs = pendingWOs; // ใช้ข้อมูลสำรองถ้ามี
+          allInboundWOs = pendingWOs;
         }
         renderWOCards(allInboundWOs);
       } catch (e) {
@@ -488,7 +504,6 @@
       }
     }
 
-    // เรนเดอร์การ์ด WO ด้านบน (พร้อมแถบปุ่มจัดการที่จะโผล่ออกมาทันทีเมื่อกด ⚙️ จัดการ)
     function renderWOCards(data) {
       const grid = document.getElementById('wo-cards-grid');
       document.getElementById('wo-inventory-count').innerText = `${data.length} ใบงาน`;
@@ -501,7 +516,6 @@
       grid.innerHTML = data.map(wo => `
         <div class="p-5 bg-white rounded-2xl border-2 ${isManageWOMode ? 'border-amber-400 shadow-md' : 'border-gray-200 shadow-sm'} space-y-3 transition">
           
-          <!-- หัวการ์ด WO -->
           <div class="flex justify-between items-start">
             <div>
               <span class="text-xs font-black text-green-800 bg-green-100 px-2 py-0.5 rounded-md">${wo.wo_number}</span>
@@ -513,7 +527,6 @@
             </span>
           </div>
 
-          <!-- ข้อมูล Lot และ ปริมาณ -->
           <div class="bg-gray-50 p-2.5 rounded-xl text-xs space-y-1 border border-gray-100">
             <div class="flex justify-between">
               <span class="text-gray-500">Lot Code:</span>
@@ -529,7 +542,6 @@
             </div>
           </div>
 
-          <!-- 🌟 แถบปุ่มจัดการ [พิมพ์, แก้ไข, ลบ] ที่จะโผล่ขึ้นมาทันทีเมื่อกดปุ่ม ⚙️ จัดการ 🌟 -->
           ${isManageWOMode ? `
             <div class="pt-2 border-t border-dashed border-amber-300 flex gap-2">
               <button type="button" onclick="printExistingWOTags('${wo.wo_number}')" class="flex-1 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-xl font-bold text-xs shadow-sm transition flex items-center justify-center gap-1 active:scale-95">
@@ -554,7 +566,6 @@
       `).join('');
     }
 
-    // 🌟 สลับโหมดปุ่ม ⚙️ จัดการ (กดปุ๊บ แถบปุ่ม [พิมพ์, แก้ไข, ลบ] จะโผล่ออกมาทันที)
     function toggleManageWOMode() {
       isManageWOMode = !isManageWOMode;
       const btn = document.getElementById('btn-manage-wo');
@@ -623,17 +634,14 @@
         const result = await res.json();
         
         if(result.success) {
-          // ใส่ลงในตัวแปรทันที การ์ดด้านบนจะโผล่ขึ้นมาทันที 100%
           allInboundWOs.unshift(newWOData);
           renderWOCards(allInboundWOs);
           loadPendingWOs();
 
           if(needPreview) {
-            // โหมด 1: พรีวิว A4 แนวนอน
             renderA4LandscapePreview(woNum, lotCode, bean, palletCount, sackCount, totalWeight, { qcM1, qcD1, qcM2, qcD2, qcM3, qcD3 });
             openPreviewModal(palletCount);
           } else {
-            // โหมด 2: บันทึกอย่างเดียว
             alert(`✅ ${result.message}\n(การ์ดใบงานขึ้นที่ WO Inventory ด้านบนแล้ว)`);
             clearInboundForm();
           }
@@ -661,7 +669,7 @@
     }
 
     // =========================================================================
-    // 🖨️ เรนเดอร์ใบปะหน้าพาเลท A4 แนวนอน (1 พาเลท = 1 แผ่น A4)
+    // 🖨️ เรนเดอร์ใบปะหน้าพาเลท A4 แนวนอน
     // =========================================================================
     function renderA4LandscapePreview(woNum, lotCode, bean, palletCount, sackCount, totalWeight, qc) {
       const container = document.getElementById('preview-content-container');
@@ -675,7 +683,7 @@
         const palletCode = `PAL-${woNum.replace(/[^a-zA-Z0-9]/g, '')}-${palletNumStr}`;
 
         const page = document.createElement('div');
-        page.className = "a4-landscape-page shadow-2xl border-2 border-black bg-white rounded-lg p-6";
+        page.className = "a4-landscape-page shadow-2xl border-2 border-black bg-white rounded-lg p-5";
         page.innerHTML = `
           <!-- Header แนวนอน -->
           <div class="flex justify-between items-center border-b-2 border-black pb-2">
@@ -696,7 +704,7 @@
           <div class="grid grid-cols-12 gap-4 my-auto py-2">
             
             <!-- ซ้าย: ข้อมูลสินค้า + QC -->
-            <div class="col-span-7 space-y-3">
+            <div class="col-span-7 space-y-2.5">
               <div class="border border-black rounded-lg overflow-hidden text-xs">
                 <div class="bg-gray-100 font-bold p-1.5 border-b border-black text-gray-800">📦 ข้อมูลสารกาแฟ (Item Master)</div>
                 <div class="p-2.5 grid grid-cols-2 gap-2">
@@ -716,7 +724,7 @@
                 </div>
                 <div class="border border-black rounded-lg p-2 bg-blue-50/60">
                   <span class="text-blue-900 font-bold">ผลสุ่มตรวจ QC:</span>
-                  <p class="text-xs text-blue-950 font-bold mt-1">
+                  <p class="text-xs text-blue-950 font-bold mt-0.5">
                     Moisture: [${qc.qcM1 || '-'}%, ${qc.qcM2 || '-'}%, ${qc.qcM3 || '-'}]<br>
                     Density: [${qc.qcD1 || '-'}, ${qc.qcD2 || '-'}, ${qc.qcD3 || '-'}] g/L
                   </p>
@@ -724,7 +732,7 @@
               </div>
             </div>
 
-            <!-- ขวา: Dual QR Code (ใหญ่ คม ชัด) -->
+            <!-- ขวา: Dual QR Code -->
             <div class="col-span-5 grid grid-cols-2 gap-2 border-2 border-black border-dashed rounded-xl p-3 bg-gray-50/50">
               <div class="flex flex-col items-center justify-center p-2 bg-white border rounded-lg">
                 <span class="text-[11px] font-black text-amber-900 uppercase">1. QR CODE LOT</span>
@@ -769,15 +777,15 @@
 
         new QRCode(document.getElementById(`prev-qr-lot-${p}`), {
           text: lotCode,
-          width: 105,
-          height: 105,
+          width: 100,
+          height: 100,
           correctLevel: QRCode.CorrectLevel.M
         });
 
         new QRCode(document.getElementById(`prev-qr-pal-${p}`), {
           text: palletCode,
-          width: 105,
-          height: 105,
+          width: 100,
+          height: 100,
           correctLevel: QRCode.CorrectLevel.M
         });
       }
@@ -854,7 +862,6 @@
         alert(d.message);
         if(d.success) {
           closeEditInboundModal();
-          // อัปเดตในตัวแปรหน้าเว็บทันที
           currentSelectedWO.sack_count = sacks;
           currentSelectedWO.weight = weight;
           currentSelectedWO.status = status;
@@ -877,7 +884,6 @@
         });
         const d = await res.json();
         alert(d.message);
-        // ลบออกจากตัวแปรหน้าเว็บทันที
         allInboundWOs = allInboundWOs.filter(w => w.wo_number !== woNum);
         renderWOCards(allInboundWOs);
       } catch (e) {
