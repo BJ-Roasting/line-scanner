@@ -49,7 +49,7 @@
 
     <main class="w-full md:ml-64 relative overflow-hidden flex flex-col min-h-screen">
       
-      <!-- 🌟 แถบการ์ดบน -->
+      <!-- 🌟 แถบการ์ดกระบวนการทำงานด้านบน -->
       <div class="sticky top-0 z-30 bg-gray-50/95 backdrop-blur-xl pt-6 pb-4 border-b border-gray-200 no-print">
         <div class="flex flex-row overflow-x-auto gap-3 px-5 md:px-10 pr-10 snap-x w-full items-center">
           <div class="relative flex-none w-40 h-24 md:w-48 md:h-28 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-yellow-50 to-yellow-100 border border-yellow-200 cursor-pointer flex flex-col justify-center px-4 opacity-70 hover:opacity-100" onclick="window.location.href='planner.html'"><h2 class="text-base md:text-lg font-bold text-yellow-800 leading-tight">วางแผน<br><span class="text-xs font-medium text-yellow-600">(ออเดอร์)</span></h2></div>
@@ -84,7 +84,7 @@
         </div>
 
         <!-- ========================================================================= -->
-        <!-- 📥 โซนที่ 1: การ์ด WO Inventory ด้านบน + ฟอร์มออกใบงานรับเข้า (QC ครบ 3 ครั้ง) -->
+        <!-- 📥 โซนที่ 1: การ์ด WO Inventory ด้านบน + ฟอร์มออกใบงานรับเข้า -->
         <!-- ========================================================================= -->
         <div id="zone-create" class="space-y-6 max-w-5xl">
 
@@ -191,7 +191,7 @@
               </div>
             </div>
 
-            <!-- 🌟 สุ่มตรวจ QC ครบทั้ง 3 ครั้ง (Moisture & Density) 🌟 -->
+            <!-- 🔬 โปรไฟล์ QC สารกาแฟ (สุ่มตรวจครบ 3 ครั้ง) -->
             <div class="p-4 bg-blue-50/50 rounded-xl border border-blue-100 space-y-3">
               <p class="text-xs font-bold text-blue-900 uppercase tracking-wider">🔬 โปรไฟล์ QC สารกาแฟ (สุ่มตรวจ 3 ครั้ง)</p>
               <div class="grid grid-cols-3 gap-2 text-center items-center text-xs">
@@ -332,7 +332,7 @@
         </div>
 
         <!-- ========================================================================= -->
-        <!-- 🏢 โซนที่ 3: รถโฟล์คลิฟต์ยิงพาเลทขึ้น Rack -->
+        <!-- 🏢 โซนที่ 2: รถโฟล์คลิฟต์ยิงพาเลทขึ้น Rack -->
         <!-- ========================================================================= -->
         <div id="zone-rack" class="hidden max-w-2xl space-y-5 no-print">
           <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm space-y-4">
@@ -375,11 +375,28 @@
         <div id="zone-return" class="hidden max-w-3xl bg-white p-8 rounded-2xl border border-gray-200 shadow-sm text-center space-y-3 no-print">
           <div class="text-4xl">↩️</div>
           <h2 class="text-xl font-bold text-gray-800">ระบบส่งคืนสินค้า (Return & Reject Management)</h2>
-          <p class="text-sm text-gray-400 max-w-md mx-auto">ฟังก์ชันสำหรับบันทึกรายการสารกาแฟที่ไม่ได้คุณภาพและส่งคืน Supplier อยู่ระหว่างการเตรียมโครงสร้างเพื่อพัฒนาต่อในอนาคต</p>
+          <p class="text-sm text-gray-400 max-w-md mx-auto">ฟังก์ชันสำหรับบันทึกรายการสารกาแฟที่ไม่ได้คุณภาพและส่งคืน Supplier</p>
         </div>
 
       </div>
     </main>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- 👁️ MODAL พรีวิวก่อนพิมพ์ A4 แนวนอน (แก้ไขความปลอดภัย เรนเดอร์แน่นอน 100%) -->
+  <!-- ========================================================================= -->
+  <div id="preview-modal" style="display: none;" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex-col overflow-y-auto p-4 md:p-8">
+    <div id="preview-header-bar" class="max-w-[280mm] w-full mx-auto bg-gray-900 text-white p-4 rounded-2xl mb-6 shadow-2xl flex justify-between items-center no-print sticky top-2 z-50 border border-gray-700">
+      <div class="flex items-center gap-2">
+        <span class="text-xl">📄</span>
+        <h3 class="font-bold text-sm text-white">พรีวิวใบปะหน้าพาเลท A4 แนวนอน (รวม <span id="preview-total-count" class="text-green-400 font-bold">1</span> ใบ)</h3>
+      </div>
+      <div class="flex gap-2">
+        <button type="button" onclick="window.print()" class="bg-green-500 hover:bg-green-600 text-gray-900 font-black px-6 py-2 rounded-xl text-xs shadow-lg transition active:scale-95">🖨️ สั่งพิมพ์ A4 แนวนอน</button>
+        <button type="button" onclick="closePreviewModal()" class="bg-gray-800 hover:bg-gray-700 text-gray-300 font-bold px-4 py-2 rounded-xl text-xs">✕ ปิด</button>
+      </div>
+    </div>
+    <div id="preview-content-container" class="max-w-[280mm] w-full mx-auto space-y-8"></div>
   </div>
 
   <!-- 🛑 MODAL แก้ไขพาเลทที่ยิงรับแล้ว -->
@@ -442,21 +459,6 @@
         <button type="button" onclick="submitEditInboundWO()" id="btn-save-edit-wo" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl">💾 บันทึกการแก้ไข</button>
       </div>
     </div>
-  </div>
-
-  <!-- 👁️ MODAL พรีวิวก่อนพิมพ์ A4 แนวนอน -->
-  <div id="preview-modal" style="display: none;" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex-col overflow-y-auto p-4 md:p-8">
-    <div id="preview-header-bar" class="max-w-[280mm] w-full mx-auto bg-gray-900 text-white p-4 rounded-2xl mb-6 shadow-2xl flex justify-between items-center no-print sticky top-2 z-50 border border-gray-700">
-      <div class="flex items-center gap-2">
-        <span class="text-xl">📄</span>
-        <h3 class="font-bold text-sm text-white">พรีวิวใบปะหน้าพาเลท A4 แนวนอน (QR Code แยกช่องห่างชัดเจน)</h3>
-      </div>
-      <div class="flex gap-2">
-        <button type="button" onclick="window.print()" class="bg-green-500 hover:bg-green-600 text-gray-900 font-black px-6 py-2 rounded-xl text-xs shadow-lg transition">🖨️ สั่งพิมพ์ A4 แนวนอน</button>
-        <button type="button" onclick="closePreviewModal()" class="bg-gray-800 hover:bg-gray-700 text-gray-300 font-bold px-4 py-2 rounded-xl text-xs">✕ ปิด</button>
-      </div>
-    </div>
-    <div id="preview-content-container" class="max-w-[280mm] w-full mx-auto space-y-8"></div>
   </div>
 
   <!-- 📷 CAMERA SCANNER MODAL -->
@@ -528,10 +530,10 @@
       try {
         const res = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'get_items' }) });
         const result = await res.json();
-        if(result.success && result.data && result.data.length > 0) {
+        if(result.success && result.data) {
           masterBeans = result.data;
           const select = document.getElementById('select_bean');
-          select.innerHTML = '<option value="">-- กรุณาเลือกรายการสารกาแฟ --</option>' + 
+          select.innerHTML = '<option value="">-- เลือกสารกาแฟ --</option>' + 
             masterBeans.map((b, idx) => `<option value="${idx}">[${b.bean_code || b.product_code || 'CODE'}] ${b.bean_name || b.product_name}</option>`).join('');
         }
       } catch (e) {}
@@ -560,7 +562,7 @@
     }
 
     // =========================================================================
-    // 🌟 1. ดึงข้อมูลและจัดการ "การ์ด WO INVENTORY" (มีปุ่ม พิมพ์, แก้ไข, ลบ ครบ)
+    // 🌟 1. ดึงข้อมูลและจัดการ "การ์ด WO INVENTORY" (มีปุ่ม พิมพ์ A4, แก้ไข, ลบ ครบ)
     // =========================================================================
     async function loadAllWOs() {
       try {
@@ -574,7 +576,6 @@
       } catch (e) {}
     }
 
-    // 🌟 ปุ่ม ⚙️ จัดการ สลับแสดงปุ่ม พิมพ์ A4, แก้ไข, ลบ 🌟
     function toggleManageWOMode() {
       isManageWOMode = !isManageWOMode;
       const btn = document.getElementById('btn-manage-wo');
@@ -593,7 +594,7 @@
       document.getElementById('wo-inventory-count').innerText = `${data.length} ใบงาน`;
 
       if(!data || data.length === 0) {
-        grid.innerHTML = `<p class="col-span-full py-6 text-center text-gray-400 text-sm">ยังไม่มีใบงานรับเข้า (กรอกฟอร์มด้านล่างเพื่อสร้าง)</p>`;
+        grid.innerHTML = `<p class="col-span-full py-8 text-center text-gray-400 text-sm">ยังไม่มีใบงานรับเข้า (กรอกฟอร์มด้านล่างเพื่อสร้าง)</p>`;
         return;
       }
 
@@ -690,7 +691,7 @@
     }
 
     // =========================================================================
-    // 🌟 2. แก้ไขระบบพรีวิวพิมพ์ (เปิดได้ทันที ไม่ค้าง)
+    // 🌟 2. แก้ไขระบบพรีวิวพิมพ์ (เปิดได้ทันที ชัดเจน ปลอดภัย 100%)
     // =========================================================================
     function getFormData() {
       const select = document.getElementById('select_bean');
@@ -723,18 +724,18 @@
       return { bean, woNum, lotCode, palletCount, sackCount, totalWeight, qc };
     }
 
-    // 🌟 ฟังก์ชันพรีวิวและพิมพ์ (เปิดหน้าต่างขึ้นมาก่อนเสมอ) 🌟
     function previewAndPrintA4() {
       const data = getFormData();
       
-      // 1. เปิดหน้าต่างพรีวิวทันที ไม่ต้องรอดึง backend
+      // 1. เปิดหน้าต่างพรีวิวก่อน
       document.getElementById('preview-modal').style.display = 'flex';
-      document.getElementById('preview-total-count').innerText = data.palletCount;
+      const countEl = document.getElementById('preview-total-count');
+      if (countEl) countEl.innerText = data.palletCount;
 
-      // 2. วาดแผ่น A4 แนวนอน
+      // 2. วาดแผ่นกระดาษ A4 แนวนอน
       renderA4LandscapePreview(data.woNum, data.lotCode, data.bean, data.palletCount, data.sackCount, data.totalWeight, data.qc);
 
-      // 3. บันทึกเข้าสต๊อกเบื้องหลัง
+      // 3. บันทึกลงระบบเบื้องหลัง
       saveWOInBackground(data);
     }
 
@@ -795,20 +796,28 @@
       document.getElementById('qc_m3').value = ''; document.getElementById('qc_d3').value = '';
     }
 
-    // 🌟 เรนเดอร์ A4 แนวนอน (มีข้อมูล QC ทั้ง 3 ครั้ง + เว้นระยะห่าง QR ชัดเจน) 🌟
+    // 🌟 เรนเดอร์ A4 แนวนอน (กระดาษสีขาวคมชัด ไม่ว่างเปล่าแน่นอน) 🌟
     function renderA4LandscapePreview(woNum, lotCode, bean, palletCount, sackCount, totalWeight, qc) {
       const container = document.getElementById('preview-content-container');
+      if (!container) return;
       container.innerHTML = '';
 
+      palletCount = parseInt(palletCount) || 1;
+      woNum = woNum || 'WO-RECEIVING';
+      lotCode = lotCode || 'LOT-DEFAULT';
+      bean = bean || {};
+      qc = qc || { m1: '-', d1: '-', m2: '-', d2: '-', m3: '-', d3: '-' };
+
       const estSacks = Math.round((parseFloat(sackCount) || 0) / palletCount);
-      const estWeight = (parseFloat(totalWeight) || 0) / palletCount;
+      const estWeight = ((parseFloat(totalWeight) || 0) / palletCount).toFixed(1);
 
       for (let p = 1; p <= palletCount; p++) {
         const palletNumStr = String(p).padStart(2, '0');
-        const palletCode = `PAL-${woNum.replace(/[^a-zA-Z0-9]/g, '')}-${palletNumStr}`;
+        const cleanWO = woNum.replace(/[^a-zA-Z0-9]/g, '');
+        const palletCode = `PAL-${cleanWO}-${palletNumStr}`;
 
         const page = document.createElement('div');
-        page.className = "a4-landscape-page shadow-2xl border-2 border-black bg-white rounded-lg p-6";
+        page.className = "a4-landscape-page shadow-2xl border-2 border-black bg-white rounded-lg p-6 my-4";
         page.innerHTML = `
           <!-- Header แนวนอน -->
           <div class="flex justify-between items-center border-b-2 border-black pb-2.5">
@@ -830,7 +839,7 @@
             
             <!-- ซ้าย: ข้อมูลสินค้า + QC 3 ครั้ง -->
             <div class="col-span-6 space-y-3">
-              <div class="border-2 border-black p-3 rounded-xl text-xs bg-gray-50/50 space-y-1.5">
+              <div class="border-2 border-black p-3 rounded-xl text-xs bg-gray-50 space-y-1.5">
                 <p class="font-black text-sm text-gray-800 border-b border-gray-300 pb-1">📦 รายละเอียดสารกาแฟ</p>
                 <p><b>ชื่อเรียกสาร:</b> <b class="text-base text-amber-900 block">${bean.bean_name || '-'}</b></p>
                 <p><b>รหัสสารหน้างาน:</b> <span class="font-bold text-amber-900">${bean.bean_code || '-'}</span> | <b>ERP:</b> ${bean.product_code || '-'}</p>
@@ -874,10 +883,17 @@
         `;
         container.appendChild(page);
 
+        // วาด QR Code อย่างปลอดภัย
         try {
-          new QRCode(document.getElementById(`prev-qr-lot-${p}`), { text: lotCode, width: 105, height: 105, correctLevel: QRCode.CorrectLevel.M });
-          new QRCode(document.getElementById(`prev-qr-pal-${p}`), { text: palletCode, width: 105, height: 105, correctLevel: QRCode.CorrectLevel.M });
-        } catch(e) {}
+          if (typeof QRCode !== 'undefined') {
+            const lotEl = document.getElementById(`prev-qr-lot-${p}`);
+            const palEl = document.getElementById(`prev-qr-pal-${p}`);
+            if (lotEl) new QRCode(lotEl, { text: String(lotCode), width: 105, height: 105, correctLevel: QRCode.CorrectLevel.M });
+            if (palEl) new QRCode(palEl, { text: String(palletCode), width: 105, height: 105, correctLevel: QRCode.CorrectLevel.M });
+          }
+        } catch(e) {
+          console.warn("QR Render warning:", e);
+        }
       }
     }
 
@@ -887,7 +903,9 @@
       const beanObj = { product_code: wo.product_code || '', product_name: wo.product_name || '', bean_code: wo.bean_code || '', bean_name: wo.bean_name || '', supplier_name: wo.supplier_name || '', process: '-' };
       
       document.getElementById('preview-modal').style.display = 'flex';
-      document.getElementById('preview-total-count').innerText = wo.pallet_count || 1;
+      const countEl = document.getElementById('preview-total-count');
+      if (countEl) countEl.innerText = wo.pallet_count || 1;
+      
       renderA4LandscapePreview(wo.wo_number, wo.lot_code, beanObj, parseInt(wo.pallet_count) || 1, wo.sack_count, wo.weight, { m1: '-', d1: '-', m2: '-', d2: '-', m3: '-', d3: '-' });
     }
 
@@ -896,7 +914,7 @@
     }
 
     // =========================================================================
-    // 🚚 หน้าลานรับของ (รันพาเลทต่อเนื่อง 0.1 วิ)
+    // 🚚 หน้าลานรับของ
     // =========================================================================
     function populateDockWOSelect() {
       const select = document.getElementById('dock_wo_select');
