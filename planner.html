@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>BJ Roaster - วางแผนการคั่ว</title>
+  <title>BJ Roaster - วางแผน</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     ::-webkit-scrollbar { display: none; }
@@ -15,24 +15,58 @@
   <div class="flex min-h-screen">
     
     <!-- 💻 Sidebar Desktop -->
-    <aside class="hidden md:flex flex-col w-64 fixed left-0 top-0 h-screen bg-white border-r border-gray-200 pt-8 pb-6 px-4 z-40 shadow-sm">
-      <h2 class="text-xl font-black text-black mb-8 px-2 tracking-tight">BJ ROASTER</h2>
-      <nav class="flex-1 space-y-1">
-        <a href="index.html" class="flex items-center gap-3 text-gray-500 hover:text-black hover:bg-gray-100 px-3.5 py-2.5 rounded-lg font-bold text-sm transition">หน้าแรก</a>
-        <a href="planner.html" class="flex items-center gap-3 bg-black text-white px-3.5 py-2.5 rounded-lg font-bold text-sm transition">ทำงาน</a>
-        <a href="report.html" class="flex items-center gap-3 text-gray-500 hover:text-black hover:bg-gray-100 px-3.5 py-2.5 rounded-lg font-bold text-sm transition">รายงาน</a>
-        <a href="stock.html" class="flex items-center gap-3 text-gray-500 hover:text-black hover:bg-gray-100 px-3.5 py-2.5 rounded-lg font-bold text-sm transition">สต๊อกสินค้า</a>
-        <a href="profile.html" class="flex items-center gap-3 text-gray-500 hover:text-black hover:bg-gray-100 px-3.5 py-2.5 rounded-lg font-bold text-sm transition">โปรไฟล์</a>
-      </nav>
-      <button onclick="handleLogout()" class="mt-8 flex items-center gap-3 text-gray-400 hover:text-black px-3.5 py-2.5 rounded-lg font-bold text-sm transition">ออกจากระบบ</button>
+    <aside class="hidden md:flex flex-col w-64 fixed left-0 top-0 h-screen bg-white border-r border-gray-200 pt-7 pb-6 px-4 z-40 shadow-sm no-print">
+      <div class="px-2 mb-7">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 bg-black text-white font-black flex items-center justify-center rounded-lg text-sm tracking-tighter">BJ</div>
+          <div>
+            <h2 class="text-sm font-black text-black tracking-tight leading-none">BJ ROASTER</h2>
+            <span class="text-[9px] font-bold text-gray-400 uppercase tracking-widest block mt-0.5">ROASTERY & WMS</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex-1 space-y-6 overflow-y-auto">
+        <div>
+          <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest px-3 mb-2">การปฏิบัติการ</p>
+          <nav class="space-y-1">
+            <a href="index.html" class="flex items-center gap-3 text-gray-500 hover:text-black hover:bg-gray-100 px-3 py-2 rounded-lg font-bold text-xs transition">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg> หน้าแรก
+            </a>
+            <a href="planner.html" class="flex items-center gap-3 bg-black text-white px-3 py-2 rounded-lg font-bold text-xs transition shadow-sm">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 011.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.56.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.893.149c-.425.07-.765.383-.93.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 01-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.397.165-.71.505-.78.929l-.15.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 01-.12-1.45l.527-.737c.25-.35.273-.806.108-1.204-.165-.397-.505-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.107-1.204l-.527-.738a1.125 1.125 0 01.12-1.45l.773-.773a1.125 1.125 0 011.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg> ทำงาน
+            </a>
+            <a href="stock.html" class="flex items-center gap-3 text-gray-500 hover:text-black hover:bg-gray-100 px-3 py-2 rounded-lg font-bold text-xs transition">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" /></svg> สต๊อกสินค้า
+            </a>
+            <a href="report.html" class="flex items-center gap-3 text-gray-500 hover:text-black hover:bg-gray-100 px-3 py-2 rounded-lg font-bold text-xs transition">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" /></svg> รายงาน
+            </a>
+          </nav>
+        </div>
+
+        <div>
+          <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest px-3 mb-2">การจัดการระบบ</p>
+          <nav class="space-y-1">
+            <a href="profile.html" class="flex items-center gap-3 text-gray-500 hover:text-black hover:bg-gray-100 px-3 py-2 rounded-lg font-bold text-xs transition">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg> โปรไฟล์
+            </a>
+          </nav>
+        </div>
+      </div>
+
+      <div class="pt-4 border-t border-gray-100">
+        <button onclick="handleLogout()" class="w-full flex items-center gap-3 text-gray-400 hover:text-black hover:bg-gray-50 px-3 py-2 rounded-lg font-bold text-xs transition cursor-pointer">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" /></svg> ออกจากระบบ
+        </button>
+      </div>
     </aside>
 
     <main class="w-full md:ml-64 relative flex flex-col min-h-screen">
       
-      <!-- 🌟 แถบเมนูด้านบน สไตล์ Binance Tab Header (ข้อความล้วน ขาว-ดำ) 🌟 -->
+      <!-- 🌟 แถบเมนูด้านบน สไตล์ Binance Tab Header (ขาว-ดำ) 🌟 -->
       <div class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-gray-200">
         <div class="flex items-center gap-2 overflow-x-auto px-4 md:px-8 py-2.5 snap-x">
-          <!-- Active Tab: วางแผน -->
           <button class="px-4 py-2 rounded-lg text-sm font-bold bg-black text-white whitespace-nowrap shadow-sm">วางแผน</button>
           <button onclick="window.location.href='wip.html'" class="px-4 py-2 rounded-lg text-sm font-bold text-gray-400 hover:text-black hover:bg-gray-100 transition whitespace-nowrap">เบิกคั่ว</button>
           <button onclick="window.location.href='packing.html'" class="px-4 py-2 rounded-lg text-sm font-bold text-gray-400 hover:text-black hover:bg-gray-100 transition whitespace-nowrap">บรรจุสินค้า</button>
@@ -42,14 +76,11 @@
         </div>
       </div>
 
-      <!-- เนื้อหาหลัก -->
       <div class="p-4 md:p-8 pb-28 max-w-4xl space-y-6">
-        
-        <!-- ฟอร์มสร้างแผนการคั่ว -->
         <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-4">
           <div class="border-b border-gray-100 pb-3">
-            <h2 class="text-base font-bold text-black">สร้างแผนการคั่ว (Roasting Plan)</h2>
-            <p class="text-xs text-gray-400">กำหนดแผนและระดับการคั่วสำหรับเข้าเตา</p>
+            <h2 class="text-base font-bold text-black">สร้างแผนการคั่ว</h2>
+            <p class="text-xs text-gray-400">กำหนดออเดอร์และระดับการคั่วสำหรับเข้าเตา</p>
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -62,11 +93,11 @@
               <input type="text" id="plan_item_name" placeholder="เช่น Brazil Cerrado" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm">
             </div>
             <div>
-              <label class="block text-xs font-bold text-gray-600 mb-1">น้ำหนักสารกาแฟเป้าหมาย (kg) *</label>
+              <label class="block text-xs font-bold text-gray-600 mb-1">น้ำหนักสารกาแฟเป้าหมาย kg *</label>
               <input type="number" id="plan_weight" placeholder="30.00" class="w-full px-3 py-2 border border-black rounded-lg text-base font-black">
             </div>
             <div>
-              <label class="block text-xs font-bold text-gray-600 mb-1">ระดับการคั่ว (Profile) *</label>
+              <label class="block text-xs font-bold text-gray-600 mb-1">ระดับการคั่ว *</label>
               <select id="roast_level" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white font-bold">
                 <option value="Light">Light (คั่วอ่อน)</option>
                 <option value="Medium">Medium (คั่วกลาง)</option>
@@ -85,7 +116,6 @@
           </button>
         </div>
 
-        <!-- รายการคิวคั่วทั้งหมด -->
         <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
           <div class="p-4 border-b border-gray-100 flex justify-between items-center">
             <h3 class="font-bold text-black text-sm">คิวแผนการคั่ว</h3>
