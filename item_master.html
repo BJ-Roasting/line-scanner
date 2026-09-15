@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>BJ Roaster - เพิ่มข้อมูลใหม่ & จัดการระบบ</title>
+  <title>BJ Roaster - ฐานข้อมูล & QR Code</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- ไลบรารีสร้าง QR Code -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
     ::-webkit-scrollbar { display: none; }
@@ -13,242 +12,217 @@
     .pb-safe { padding-bottom: env(safe-area-inset-bottom, 20px); }
 
     @media print {
-      aside, #bottom-nav, .no-print, .sticky, #edit-bean-modal, #edit-cust-modal, nav, button {
-        display: none !important;
-      }
-      html, body, main, #sec-qr, #qr-print-area {
-        overflow: visible !important;
-        height: auto !important;
-        min-height: auto !important;
-        position: static !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        background: white !important;
-      }
-      #qr-print-area {
-        border: none !important;
-        box-shadow: none !important;
-        width: 100% !important;
-      }
-      #qr-print-area h3 {
-        display: none !important;
-      }
-      #qr-gallery {
-        display: grid !important;
-        grid-template-columns: repeat(3, 1fr) !important;
-        gap: 16px !important;
-      }
-      .qr-card-item {
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
-        border: 1px dashed #666 !important;
-        border-radius: 8px !important;
-        padding: 14px !important;
-        box-shadow: none !important;
-      }
+      aside, #bottom-nav, .no-print, .sticky, #edit-bean-modal, #edit-cust-modal, nav, button { display: none !important; }
+      html, body, main, #sec-qr, #qr-print-area { overflow: visible !important; height: auto !important; position: static !important; margin: 0 !important; padding: 0 !important; background: white !important; }
+      #qr-print-area { border: none !important; box-shadow: none !important; width: 100% !important; }
+      #qr-print-area h3 { display: none !important; }
+      #qr-gallery { display: grid !important; grid-template-columns: repeat(3, 1fr) !important; gap: 16px !important; }
+      .qr-card-item { page-break-inside: avoid !important; break-inside: avoid !important; border: 1px dashed #000 !important; border-radius: 8px !important; padding: 14px !important; box-shadow: none !important; }
     }
   </style>
 </head>
-<body class="bg-gray-50 text-gray-900 font-sans antialiased selection:bg-blue-200">
+<body class="bg-white text-black font-sans antialiased selection:bg-gray-200">
 
   <div class="flex min-h-screen">
     
     <!-- 💻 Sidebar Desktop -->
-    <aside class="hidden md:flex flex-col w-64 fixed left-0 top-0 h-screen bg-white border-r border-gray-200 pt-10 pb-6 px-4 z-40 shadow-sm no-print">
-      <h2 class="text-2xl font-bold text-gray-900 mb-10 px-2">BJ Roaster</h2>
-      <nav class="flex-1 space-y-2">
-        <a href="index.html" class="flex items-center gap-3 text-gray-700 hover:bg-gray-50 px-4 py-3 rounded-xl font-bold transition">
-          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg> หน้าแรก
+    <aside class="hidden md:flex flex-col w-64 fixed left-0 top-0 h-screen bg-white border-r border-gray-200 pt-8 pb-6 px-4 z-40 shadow-sm no-print">
+      <h2 class="text-xl font-black text-black mb-8 px-2 tracking-tight">BJ ROASTER</h2>
+      <nav class="flex-1 space-y-1">
+        <a href="index.html" class="flex items-center gap-3 text-gray-500 hover:text-black hover:bg-gray-100 px-3.5 py-2.5 rounded-lg font-bold text-sm transition">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg>
+          หน้าแรก
         </a>
-        <a href="planner.html" class="flex items-center gap-3 bg-blue-50 text-blue-600 px-4 py-3 rounded-xl font-bold transition">
-          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 011.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.56.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.893.149c-.425.07-.765.383-.93.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 01-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.397.165-.71.505-.78.929l-.15.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 01-.12-1.45l.527-.737c.25-.35.273-.806.108-1.204-.165-.397-.505-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.107-1.204l-.527-.738a1.125 1.125 0 01.12-1.45l.773-.773a1.125 1.125 0 011.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg> ทำงาน
+        <a href="planner.html" class="flex items-center gap-3 bg-black text-white px-3.5 py-2.5 rounded-lg font-bold text-sm transition">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 011.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.56.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.893.149c-.425.07-.765.383-.93.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 01-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.397.165-.71.505-.78.929l-.15.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 01-.12-1.45l.527-.737c.25-.35.273-.806.108-1.204-.165-.397-.505-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.107-1.204l-.527-.738a1.125 1.125 0 01.12-1.45l.773-.773a1.125 1.125 0 011.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+          ทำงาน
         </a>
-        <a href="report.html" class="flex items-center gap-3 text-gray-700 hover:bg-gray-50 px-4 py-3 rounded-xl font-bold transition"><svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" /></svg> รายงาน</a>
-        <a href="stock.html" class="flex items-center gap-3 text-gray-700 hover:bg-gray-50 px-4 py-3 rounded-xl font-bold transition"><svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" /></svg> สต๊อกสินค้า</a>
-        <a href="profile.html" class="flex items-center gap-3 text-gray-700 hover:bg-gray-50 px-4 py-3 rounded-xl font-bold transition"><svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg> โปรไฟล์</a>
+        <a href="report.html" class="flex items-center gap-3 text-gray-500 hover:text-black hover:bg-gray-100 px-3.5 py-2.5 rounded-lg font-bold text-sm transition">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" /></svg>
+          รายงาน
+        </a>
+        <a href="stock.html" class="flex items-center gap-3 text-gray-500 hover:text-black hover:bg-gray-100 px-3.5 py-2.5 rounded-lg font-bold text-sm transition">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" /></svg>
+          สต๊อกสินค้า
+        </a>
+        <a href="profile.html" class="flex items-center gap-3 text-gray-500 hover:text-black hover:bg-gray-100 px-3.5 py-2.5 rounded-lg font-bold text-sm transition">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg>
+          โปรไฟล์
+        </a>
       </nav>
-      <button onclick="handleLogout()" class="mt-8 flex items-center gap-3 text-gray-500 hover:text-red-500 px-4 py-3 rounded-xl font-bold transition"><svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" /></svg> ออกจากระบบ</button>
+      <button onclick="handleLogout()" class="mt-8 flex items-center gap-3 text-gray-400 hover:text-black px-3.5 py-2.5 rounded-lg font-bold text-sm transition">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" /></svg>
+        ออกจากระบบ
+      </button>
     </aside>
 
-    <!-- 💻 พื้นที่แสดงผลฝั่งขวา -->
-    <main class="w-full md:ml-64 relative overflow-hidden flex flex-col min-h-screen">
+    <main class="w-full md:ml-64 relative flex flex-col min-h-screen">
       
-      <!-- 🌟 แถบการ์ดบน (การ์ดที่ 6 ชี้ไป inbound.html) -->
-      <div class="sticky top-0 z-30 bg-gray-50/95 backdrop-blur-xl pt-6 pb-4 border-b border-gray-200 no-print">
-        <div class="flex flex-row overflow-x-auto gap-3 px-5 md:px-10 pr-10 snap-x w-full items-center">
-          <div class="relative flex-none w-40 h-24 md:w-48 md:h-28 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-yellow-50 to-yellow-100 border border-yellow-200 cursor-pointer hover:bg-yellow-100 transition px-4 flex flex-col justify-center opacity-70 hover:opacity-100" onclick="window.location.href='planner.html'"><h2 class="text-base md:text-lg font-bold text-yellow-800 leading-tight">วางแผน<br><span class="text-xs font-medium text-yellow-600">(ออเดอร์)</span></h2></div>
-          <div class="relative flex-none w-40 h-24 md:w-48 md:h-28 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-orange-50 to-orange-100 border border-orange-200 cursor-pointer hover:bg-orange-100 transition px-4 flex flex-col justify-center opacity-70 hover:opacity-100" onclick="window.location.href='wip.html'"><h2 class="text-base md:text-lg font-bold text-orange-800 leading-tight">เบิกคั่ว<br><span class="text-xs font-medium text-orange-600">(WIP)</span></h2></div>
-          <div class="relative flex-none w-40 h-24 md:w-48 md:h-28 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-200 cursor-pointer hover:bg-purple-100 transition px-4 flex flex-col justify-center opacity-70 hover:opacity-100" onclick="window.location.href='packing.html'"><h2 class="text-base md:text-lg font-bold text-purple-800 leading-tight">บรรจุสินค้า<br><span class="text-xs font-medium text-purple-600">(Packing)</span></h2></div>
-          <div class="relative flex-none w-40 h-24 md:w-48 md:h-28 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-teal-50 to-teal-100 border border-teal-200 cursor-pointer hover:bg-teal-100 transition px-4 flex flex-col justify-center opacity-70 hover:opacity-100" onclick="window.location.href='shipping.html'"><h2 class="text-base md:text-lg font-bold text-teal-800 leading-tight">จัดส่ง<br><span class="text-xs font-medium text-teal-600">(Shipping)</span></h2></div>
-
-          <!-- 5. เพิ่มข้อมูลใหม่ (ACTIVE 🌟) -->
-          <div class="relative flex-none w-40 h-24 md:w-48 md:h-28 rounded-2xl overflow-hidden shadow-md bg-gradient-to-br from-indigo-500 to-indigo-600 border border-indigo-600 cursor-default flex flex-col justify-center px-4 transform scale-105">
-            <h2 class="text-base md:text-lg font-bold text-white leading-tight">เพิ่มข้อมูลใหม่<br><span class="text-xs font-medium text-indigo-100">(QR, ลูกค้า, สาร)</span></h2>
-          </div>
-
-          <div class="relative flex-none w-40 h-24 md:w-48 md:h-28 rounded-2xl overflow-hidden shadow-sm bg-gradient-to-br from-green-50 to-green-100 border border-green-200 cursor-pointer hover:bg-green-100 transition px-4 flex flex-col justify-center opacity-70 hover:opacity-100" onclick="window.location.href='inbound.html'"><h2 class="text-base md:text-lg font-bold text-green-800 leading-tight">รับสินค้าเข้า<br><span class="text-xs font-medium text-green-600">(สารกาแฟ)</span></h2></div>
+      <!-- 🌟 แถบเมนูด้านบน สไตล์ Binance Tab Header (ข้อความล้วน ขาว-ดำ) 🌟 -->
+      <div class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-gray-200 no-print">
+        <div class="flex items-center gap-2 overflow-x-auto px-4 md:px-8 py-2.5 snap-x">
+          <button onclick="window.location.href='planner.html'" class="px-4 py-2 rounded-lg text-sm font-bold text-gray-400 hover:text-black hover:bg-gray-100 transition whitespace-nowrap">วางแผน</button>
+          <button onclick="window.location.href='wip.html'" class="px-4 py-2 rounded-lg text-sm font-bold text-gray-400 hover:text-black hover:bg-gray-100 transition whitespace-nowrap">เบิกคั่ว</button>
+          <button onclick="window.location.href='packing.html'" class="px-4 py-2 rounded-lg text-sm font-bold text-gray-400 hover:text-black hover:bg-gray-100 transition whitespace-nowrap">บรรจุสินค้า</button>
+          <button onclick="window.location.href='shipping.html'" class="px-4 py-2 rounded-lg text-sm font-bold text-gray-400 hover:text-black hover:bg-gray-100 transition whitespace-nowrap">จัดส่ง</button>
+          <!-- Active Tab: เพิ่มข้อมูลใหม่ -->
+          <button class="px-4 py-2 rounded-lg text-sm font-bold bg-black text-white whitespace-nowrap shadow-sm">เพิ่มข้อมูลใหม่</button>
+          <button onclick="window.location.href='inbound.html'" class="px-4 py-2 rounded-lg text-sm font-bold text-gray-400 hover:text-black hover:bg-gray-100 transition whitespace-nowrap">รับสินค้าเข้า</button>
         </div>
       </div>
 
-      <!-- 👇 แท็บเมนูย่อย 3 ส่วนหลัก 👇 -->
-      <div class="p-5 md:p-10 pb-28 space-y-6">
+      <!-- 👇 เนื้อหาหลัก 👇 -->
+      <div class="p-4 md:p-8 pb-28 max-w-5xl space-y-6">
         
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 max-w-4xl no-print">
-          <button type="button" id="btn-tab-qr" onclick="switchSection('qr')" class="py-3 px-4 font-bold rounded-xl bg-indigo-600 text-white shadow-sm text-sm">🖨️ 1. สร้าง QR Code</button>
-          <button type="button" id="btn-tab-cust" onclick="switchSection('cust')" class="py-3 px-4 font-bold rounded-xl bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 text-sm">👥 2. ข้อมูลลูกค้า</button>
-          <button type="button" id="btn-tab-bean" onclick="switchSection('bean')" class="py-3 px-4 font-bold rounded-xl bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 text-sm">☕ 3. ข้อมูลสารกาแฟ</button>
+        <!-- 3 แท็บย่อย (สร้าง QR, ข้อมูลลูกค้า, ข้อมูลสาร) -->
+        <div class="flex gap-2 overflow-x-auto border-b border-gray-200 pb-2 no-print">
+          <button type="button" id="btn-tab-qr" onclick="switchSection('qr')" class="px-4 py-2 font-bold rounded-lg bg-black text-white text-xs md:text-sm whitespace-nowrap transition cursor-pointer">
+            1. สร้าง QR Code
+          </button>
+          <button type="button" id="btn-tab-cust" onclick="switchSection('cust')" class="px-4 py-2 font-bold rounded-lg text-gray-500 hover:text-black hover:bg-gray-100 text-xs md:text-sm whitespace-nowrap transition cursor-pointer">
+            2. ข้อมูลลูกค้า
+          </button>
+          <button type="button" id="btn-tab-bean" onclick="switchSection('bean')" class="px-4 py-2 font-bold rounded-lg text-gray-500 hover:text-black hover:bg-gray-100 text-xs md:text-sm whitespace-nowrap transition cursor-pointer">
+            3. ข้อมูลสารกาแฟ
+          </button>
         </div>
 
-        <!-- ========================================================================= -->
-        <!-- 🖨️ ส่วนที่ 1: ระบบสร้าง QR Code (ตัดคำอธิบายใต้ Rack QR ออกแล้ว) -->
-        <!-- ========================================================================= -->
-        <div id="sec-qr" class="space-y-6 max-w-4xl">
-          <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 space-y-4 no-print">
-            <div class="border-b pb-3 flex justify-between items-center">
+        <!-- ============================================== -->
+        <!-- 1. ส่วนสร้าง QR Code (Rack & General) -->
+        <!-- ============================================== -->
+        <div id="sec-qr" class="space-y-6">
+          <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-4 no-print">
+            <div class="flex justify-between items-center border-b border-gray-100 pb-3">
               <div>
-                <h2 class="text-lg font-bold text-gray-800">🖨️ เครื่องพิมพ์สร้าง QR Code (Pallet, Lot & Rack)</h2>
-                <p class="text-xs text-gray-500 mt-1">สามารถเลือกพิมพ์เฉพาะช่อง Rack ที่ชำรุด หรือพิมพ์ทั้งชั้นได้ตามต้องการ</p>
+                <h2 class="text-base font-bold text-black">สร้าง QR Code</h2>
+                <p class="text-xs text-gray-400">เลือกพิมพ์เฉพาะช่อง Rack ที่ชำรุด หรือพิมพ์เป็นชุดได้ตามต้องการ</p>
               </div>
-              <button type="button" onclick="window.print()" class="bg-gray-800 hover:bg-gray-900 text-white text-xs font-bold px-4 py-2.5 rounded-xl flex items-center gap-2 shadow-sm transition active:scale-95">
-                🖨️ สั่งพิมพ์ออกเครื่องพิมพ์
+              <button type="button" onclick="window.print()" class="bg-black hover:bg-gray-800 text-white text-xs font-bold px-4 py-2 rounded-lg transition cursor-pointer">
+                สั่งพิมพ์ออกเครื่องพิมพ์
               </button>
             </div>
 
-            <!-- เลือกประเภท QR -->
             <div>
-              <label class="block text-xs font-bold text-gray-500 mb-1">ประเภท QR Code ที่ต้องการสร้าง *</label>
-              <select id="qr_type" onchange="onQRTypeChanged()" class="w-full px-3 py-2.5 border-2 border-indigo-500 rounded-xl bg-white font-bold text-sm text-indigo-900">
-                <option value="RACK">🏢 QR จุดจัดเก็บแร็ค (Rack Location: BJI01A - BJI05M)</option>
-                <option value="PALLET">📦 QR แปะพาเลท (Pallet No: PAL-)</option>
-                <option value="LOT">🏷️ QR ข้อมูลสาร (Lot Bean: LOT-)</option>
-                <option value="CUSTOM">✏️ QR กำหนดรหัสเอง</option>
+              <label class="block text-xs font-bold text-gray-700 mb-1">ประเภท QR Code *</label>
+              <select id="qr_type" onchange="onQRTypeChanged()" class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white font-bold text-sm text-black">
+                <option value="RACK">QR จุดจัดเก็บแร็ค (BJI01A - BJI05M)</option>
+                <option value="PALLET">QR แปะพาเลท (PAL-)</option>
+                <option value="LOT">QR ข้อมูลสาร (LOT-)</option>
+                <option value="CUSTOM">QR กำหนดรหัสเอง</option>
               </select>
             </div>
 
-            <!-- กล่องควบคุมของ RACK LOCATION (เลือกระบุชั้น-แถว) -->
-            <div id="box-rack-controls" class="p-4 bg-indigo-50/60 border border-indigo-200 rounded-xl space-y-3">
+            <!-- กล่องควบคุมของ RACK (เลือกชั้น-ช่อง) -->
+            <div id="box-rack-controls" class="p-4 bg-gray-50 border border-gray-200 rounded-xl space-y-3">
               <div class="flex justify-between items-center">
-                <span class="text-xs font-bold text-indigo-900 uppercase">🏢 กำหนดพิกัด Rack I (คลัง BJ) ที่ต้องการพิมพ์</span>
-                <span id="rack-summary-label" class="text-xs text-indigo-700 font-bold bg-white px-2.5 py-0.5 rounded-lg border border-indigo-200">ทั้งหมด 65 ช่อง</span>
+                <span class="text-xs font-bold text-black uppercase">กำหนดพิกัด Rack I ที่ต้องการพิมพ์</span>
+                <span id="rack-summary-label" class="text-xs text-black font-bold bg-white px-2.5 py-0.5 rounded border border-gray-300">ทั้งหมด 65 ช่อง</span>
               </div>
 
               <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <!-- เลือกชั้น -->
                 <div>
-                  <label class="block text-xs font-bold text-gray-700 mb-1">เลือก ชั้น (Level / 01 - 05)</label>
-                  <select id="rack_level_select" onchange="updateRackSummary()" class="w-full px-3 py-2 border rounded-xl bg-white font-bold text-sm">
-                    <option value="ALL">ทุกชั้น (ชั้น 01 ถึง ชั้น 05)</option>
-                    <option value="01">ชั้น 01 (ล่างสุด)</option>
+                  <label class="block text-xs font-bold text-gray-700 mb-1">เลือก ชั้น (01 - 05)</label>
+                  <select id="rack_level_select" onchange="updateRackSummary()" class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white font-bold text-sm">
+                    <option value="ALL">ทุกชั้น (01 - 05)</option>
+                    <option value="01">ชั้น 01</option>
                     <option value="02">ชั้น 02</option>
                     <option value="03">ชั้น 03</option>
                     <option value="04">ชั้น 04</option>
-                    <option value="05">ชั้น 05 (บนสุด)</option>
+                    <option value="05">ชั้น 05</option>
                   </select>
                 </div>
-
-                <!-- เลือกช่อง/แถว -->
                 <div>
-                  <label class="block text-xs font-bold text-gray-700 mb-1">เลือก ช่อง/แถว (Bay / A - M)</label>
-                  <select id="rack_bay_select" onchange="updateRackSummary()" class="w-full px-3 py-2 border rounded-xl bg-white font-bold text-sm">
-                    <option value="ALL">ทุกช่อง (ช่อง A ถึง ช่อง M)</option>
-                    <option value="A">ช่อง A</option>
-                    <option value="B">ช่อง B</option>
-                    <option value="C">ช่อง C</option>
-                    <option value="D">ช่อง D</option>
-                    <option value="E">ช่อง E</option>
-                    <option value="F">ช่อง F</option>
-                    <option value="G">ช่อง G</option>
-                    <option value="H">ช่อง H</option>
-                    <option value="I">ช่อง I</option>
-                    <option value="J">ช่อง J</option>
-                    <option value="K">ช่อง K</option>
-                    <option value="L">ช่อง L</option>
-                    <option value="M">ช่อง M</option>
+                  <label class="block text-xs font-bold text-gray-700 mb-1">เลือก ช่อง/แถว (A - M)</label>
+                  <select id="rack_bay_select" onchange="updateRackSummary()" class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white font-bold text-sm">
+                    <option value="ALL">ทุกช่อง (A - M)</option>
+                    <option value="A">ช่อง A</option><option value="B">ช่อง B</option><option value="C">ช่อง C</option>
+                    <option value="D">ช่อง D</option><option value="E">ช่อง E</option><option value="F">ช่อง F</option>
+                    <option value="G">ช่อง G</option><option value="H">ช่อง H</option><option value="I">ช่อง I</option>
+                    <option value="J">ช่อง J</option><option value="K">ช่อง K</option><option value="L">ช่อง L</option><option value="M">ช่อง M</option>
                   </select>
                 </div>
               </div>
-              <p class="text-[11px] text-indigo-800 font-medium">💡 ตัวอย่าง: ป้าย <b>BJI02B</b> ชำรุด ให้เลือก <i>"ชั้น 02"</i> และ <i>"ช่อง B"</i> ระบบจะพิมพ์ให้ใบเดียวสำหรับแปะซ่อมได้ทันที</p>
             </div>
 
             <!-- กล่องควบคุมของ PALLET / LOT / CUSTOM -->
             <div id="box-general-controls" class="hidden grid grid-cols-1 md:grid-cols-3 gap-3">
               <div>
-                <label class="block text-xs font-bold text-gray-500 mb-1">คำนำหน้ารหัส (Prefix)</label>
-                <input type="text" id="qr_prefix" value="PAL-" class="w-full px-3 py-2 border rounded-xl font-bold text-indigo-600 text-sm">
+                <label class="block text-xs font-bold text-gray-500 mb-1">คำนำหน้า (Prefix)</label>
+                <input type="text" id="qr_prefix" value="PAL-" class="w-full px-3 py-2 border border-gray-300 rounded-lg font-bold text-black text-sm">
               </div>
               <div>
-                <label class="block text-xs font-bold text-gray-500 mb-1">จำนวนที่สร้าง (ใบ)</label>
-                <input type="number" id="qr_count" value="10" min="1" max="100" class="w-full px-3 py-2 border rounded-xl font-bold text-sm">
+                <label class="block text-xs font-bold text-gray-500 mb-1">จำนวนที่สร้าง</label>
+                <input type="number" id="qr_count" value="10" min="1" max="100" class="w-full px-3 py-2 border border-gray-300 rounded-lg font-bold text-sm">
               </div>
               <div>
-                <label class="block text-xs font-bold text-gray-500 mb-1">ข้อความใต้ QR Code</label>
-                <input type="text" id="qr_subtext" value="พาเลทจัดเก็บสารกาแฟ" class="w-full px-3 py-2 border rounded-xl font-medium text-gray-700 text-sm">
+                <label class="block text-xs font-bold text-gray-500 mb-1">ข้อความใต้ QR</label>
+                <input type="text" id="qr_subtext" value="พาเลทจัดเก็บสารกาแฟ" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm">
               </div>
             </div>
 
-            <button type="button" onclick="generateSelectedQR()" id="btn-gen-qr" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl transition shadow-md flex items-center justify-center gap-2 active:scale-95">
-              <span>⚡ สร้างและอัปเดตตัวอย่าง QR Code</span>
+            <button type="button" onclick="generateSelectedQR()" id="btn-gen-qr" class="w-full bg-black hover:bg-gray-800 text-white font-bold py-3 rounded-lg text-sm transition active:scale-95 cursor-pointer">
+              สร้าง QR Code
             </button>
           </div>
 
-          <div id="qr-print-area" class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-            <h3 class="text-sm font-bold text-gray-400 mb-4 uppercase tracking-wider no-print">ตัวอย่างสติ๊กเกอร์ QR Code พร้อมพิมพ์</h3>
-            <div id="qr-gallery" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 text-center">
-              <p class="col-span-full py-8 text-gray-400 text-sm">กดปุ่ม "สร้างและอัปเดตตัวอย่าง QR Code" ด้านบนเพื่อดูตัวอย่าง</p>
+          <div id="qr-print-area" class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+            <h3 class="text-xs font-bold text-gray-400 mb-4 uppercase tracking-wider no-print">ตัวอย่างสติ๊กเกอร์ QR Code</h3>
+            <div id="qr-gallery" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 text-center">
+              <p class="col-span-full py-8 text-gray-400 text-xs">กดปุ่มสร้างเพื่อดูตัวอย่าง</p>
             </div>
           </div>
         </div>
 
         <!-- ============================================== -->
-        <!-- 👥 ส่วนที่ 2: ข้อมูลลูกค้า (มีปุ่ม ⚙️ จัดการ) -->
+        <!-- 2. ส่วนข้อมูลลูกค้า (Customer Master) -->
         <!-- ============================================== -->
-        <div id="sec-cust" class="hidden space-y-6 max-w-5xl no-print">
-          <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 space-y-4">
-            <h2 class="text-lg font-bold text-gray-800 border-b pb-3">👥 บันทึกข้อมูลลูกค้า / ร้านกาแฟ (Customer Master)</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div id="sec-cust" class="hidden space-y-6 no-print">
+          <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-4">
+            <h2 class="text-base font-bold text-black border-b border-gray-100 pb-3">บันทึกข้อมูลลูกค้า</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
               <div>
-                <label class="block text-xs font-bold text-gray-500 mb-1">รหัสลูกค้า (Customer Code) *</label>
-                <input type="text" id="cust_code" placeholder="เช่น CUST-001" class="w-full px-3 py-2 border rounded-xl font-bold text-indigo-600 uppercase">
+                <label class="block text-xs font-bold text-gray-500 mb-1">รหัสลูกค้า *</label>
+                <input type="text" id="cust_code" placeholder="CUST-001" class="w-full px-3 py-2 border border-gray-300 rounded-lg font-bold text-black uppercase text-sm">
               </div>
               <div>
                 <label class="block text-xs font-bold text-gray-500 mb-1">ชื่อลูกค้า / ร้านกาแฟ *</label>
-                <input type="text" id="cust_name" placeholder="เช่น โรงคั่วกาแฟ คาเฟ่ อารีย์" class="w-full px-3 py-2 border rounded-xl">
+                <input type="text" id="cust_name" placeholder="ชื่อร้านค้า" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm">
               </div>
               <div>
-                <label class="block text-xs font-bold text-gray-500 mb-1">เบอร์โทรศัพท์ติดต่อ</label>
-                <input type="text" id="cust_phone" placeholder="08x-xxx-xxxx" class="w-full px-3 py-2 border rounded-xl">
+                <label class="block text-xs font-bold text-gray-500 mb-1">เบอร์โทรศัพท์</label>
+                <input type="text" id="cust_phone" placeholder="08x-xxx-xxxx" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm">
               </div>
               <div>
-                <label class="block text-xs font-bold text-gray-500 mb-1">ที่อยู่จัดส่ง / สาขา</label>
-                <input type="text" id="cust_address" placeholder="เช่น สาขาสุขุมวิท กรุงเทพฯ" class="w-full px-3 py-2 border rounded-xl">
+                <label class="block text-xs font-bold text-gray-500 mb-1">ที่อยู่จัดส่ง</label>
+                <input type="text" id="cust_address" placeholder="ที่อยู่สาขา" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm">
               </div>
             </div>
-            <button type="button" onclick="saveCustomer()" id="save-cust-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl transition shadow-sm">💾 บันทึกข้อมูลลูกค้า</button>
+            <button type="button" onclick="saveCustomer()" id="save-cust-btn" class="w-full bg-black hover:bg-gray-800 text-white font-bold py-2.5 rounded-lg text-sm transition cursor-pointer">บันทึกข้อมูลลูกค้า</button>
           </div>
 
-          <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
-            <div class="p-4 border-b flex justify-between items-center bg-gray-50">
-              <h3 class="font-bold text-gray-800">📋 รายชื่อลูกค้าทั้งหมด</h3>
+          <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+            <div class="p-4 border-b border-gray-100 flex justify-between items-center">
+              <h3 class="font-bold text-black text-sm">รายชื่อลูกค้า</h3>
               <div class="flex items-center gap-2">
-                <button type="button" id="btn-manage-cust" onclick="toggleManageMode('cust')" class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 border border-gray-300 font-bold px-3 py-1.5 rounded-lg flex items-center gap-1 transition">
-                  ⚙️ จัดการ
+                <button type="button" id="btn-manage-cust" onclick="toggleManageMode('cust')" class="text-xs bg-white hover:bg-gray-100 text-black border border-gray-300 font-bold px-3 py-1.5 rounded-lg transition cursor-pointer">
+                  จัดการ
                 </button>
-                <button type="button" onclick="loadCustomers()" class="text-xs bg-gray-200 hover:bg-gray-300 font-bold px-3 py-1.5 rounded-lg">🔄 รีเฟรช</button>
+                <button type="button" onclick="loadCustomers()" class="text-xs bg-gray-100 hover:bg-gray-200 text-black font-bold px-3 py-1.5 rounded-lg transition cursor-pointer">รีเฟรช</button>
               </div>
             </div>
             <div class="overflow-x-auto">
-              <table class="min-w-full text-sm">
-                <thead class="bg-gray-100 text-gray-600">
+              <table class="min-w-full text-xs">
+                <thead class="bg-gray-50 text-gray-500 border-b border-gray-200">
                   <tr>
-                    <th class="py-2.5 px-4 text-left font-bold">รหัส</th>
-                    <th class="py-2.5 px-4 text-left font-bold">ชื่อลูกค้า / ร้าน</th>
-                    <th class="py-2.5 px-4 text-center font-bold">เบอร์โทร</th>
-                    <th class="py-2.5 px-4 text-left font-bold">ที่อยู่</th>
-                    <th id="th-action-cust" class="py-2.5 px-4 text-center font-bold hidden bg-amber-50 text-amber-800">จัดการ</th>
+                    <th class="py-2 px-3 text-left font-bold">รหัส</th>
+                    <th class="py-2 px-3 text-left font-bold">ชื่อลูกค้า</th>
+                    <th class="py-2 px-3 text-center font-bold">เบอร์โทร</th>
+                    <th class="py-2 px-3 text-left font-bold">ที่อยู่</th>
+                    <th id="th-action-cust" class="py-2 px-3 text-center font-bold hidden">จัดการ</th>
                   </tr>
                 </thead>
-                <tbody id="cust-table-body" class="text-gray-700">
-                  <tr><td colspan="4" class="py-6 text-center text-gray-400">กำลังโหลดข้อมูล...</td></tr>
+                <tbody id="cust-table-body" class="text-black divide-y divide-gray-100">
+                  <tr><td colspan="4" class="py-6 text-center text-gray-400">กำลังโหลด...</td></tr>
                 </tbody>
               </table>
             </div>
@@ -256,98 +230,87 @@
         </div>
 
         <!-- ======================================================== -->
-        <!-- ☕ ส่วนที่ 3: ข้อมูลสารกาแฟ (มีปุ่ม ⚙️ จัดการ) -->
+        <!-- 3. ส่วนข้อมูลสารกาแฟ (Item Master: ERP + Bean) -->
         <!-- ======================================================== -->
-        <div id="sec-bean" class="hidden space-y-6 max-w-5xl no-print">
-          <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 space-y-5">
-            <div class="border-b pb-3">
-              <h2 class="text-lg font-bold text-gray-800">☕ บันทึกสารกาแฟใหม่ (Item Master)</h2>
-              <p class="text-xs text-gray-500 mt-0.5">จับคู่รหัส ERP กับรหัสและชื่อเรียกสารที่หน้างานใช้จริง</p>
-            </div>
+        <div id="sec-bean" class="hidden space-y-6 no-print">
+          <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-4">
+            <h2 class="text-base font-bold text-black border-b border-gray-100 pb-3">บันทึกสารกาแฟใหม่</h2>
 
-            <div class="p-4 bg-blue-50/50 border border-blue-100 rounded-xl space-y-3">
-              <p class="text-xs font-bold text-blue-800 uppercase tracking-wider">🏢 ข้อมูลระบบ ERP (ออฟฟิศ/บัญชี)</p>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <!-- ERP -->
+              <div class="p-3.5 bg-gray-50 border border-gray-200 rounded-lg space-y-2">
+                <span class="text-xs font-bold text-gray-500 uppercase block">ข้อมูลในระบบ ERP</span>
                 <div>
-                  <label class="block text-xs font-bold text-gray-600 mb-1">Product_Code (รหัสใน ERP) *</label>
-                  <input type="text" id="prod_code" placeholder="เช่น AD05" class="w-full px-3 py-2 bg-white border border-blue-200 rounded-xl font-bold text-blue-700 uppercase">
+                  <label class="block text-[11px] font-bold text-gray-600 mb-0.5">Product_Code *</label>
+                  <input type="text" id="prod_code" placeholder="เช่น AD05" class="w-full px-2.5 py-1.5 bg-white border border-gray-300 rounded font-bold text-black uppercase text-xs">
                 </div>
                 <div>
-                  <label class="block text-xs font-bold text-gray-600 mb-1">Product_Name (ชื่อใน ERP) *</label>
-                  <input type="text" id="prod_name" placeholder="เช่น Arabica Doi Chang Standard" class="w-full px-3 py-2 bg-white border border-blue-200 rounded-xl font-medium text-gray-800">
+                  <label class="block text-[11px] font-bold text-gray-600 mb-0.5">Product_Name *</label>
+                  <input type="text" id="prod_name" placeholder="ชื่อสินค้าใน ERP" class="w-full px-2.5 py-1.5 bg-white border border-gray-300 rounded text-xs">
                 </div>
               </div>
-            </div>
 
-            <div class="p-4 bg-amber-50/50 border border-amber-200 rounded-xl space-y-3">
-              <p class="text-xs font-bold text-amber-900 uppercase tracking-wider">☕ ข้อมูลสารกาแฟหน้างาน (โรงคั่ว)</p>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <!-- Bean หน้างาน -->
+              <div class="p-3.5 bg-gray-50 border border-gray-200 rounded-lg space-y-2">
+                <span class="text-xs font-bold text-black uppercase block">ข้อมูลสารหน้างาน</span>
                 <div>
-                  <label class="block text-xs font-bold text-amber-800 mb-1">Bean_Code (รหัสสารหน้างาน) *</label>
-                  <input type="text" id="bean_code" placeholder="เช่น PK-01 หรือ 3C-01" class="w-full px-3 py-2 bg-white border border-amber-300 rounded-xl font-bold text-amber-900 uppercase">
+                  <label class="block text-[11px] font-bold text-black mb-0.5">Bean_Code *</label>
+                  <input type="text" id="bean_code" placeholder="เช่น PK-01" class="w-full px-2.5 py-1.5 bg-white border border-gray-300 rounded font-bold text-black uppercase text-xs">
                 </div>
                 <div>
-                  <label class="block text-xs font-bold text-amber-800 mb-1">Bean_Name (ชื่อเรียกสารหน้างาน) *</label>
-                  <input type="text" id="bean_name" placeholder="เช่น ปางขอน หรือ สาร 3 สี" class="w-full px-3 py-2 bg-white border border-amber-300 rounded-xl font-bold text-amber-900">
+                  <label class="block text-[11px] font-bold text-black mb-0.5">Bean_Name *</label>
+                  <input type="text" id="bean_name" placeholder="เช่น ปางขอน" class="w-full px-2.5 py-1.5 bg-white border border-gray-300 rounded font-bold text-black text-xs">
                 </div>
               </div>
-            </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+              <!-- รายละเอียดอื่น -->
               <div>
-                <label class="block text-xs font-bold text-gray-500 mb-1">Supplier_Code</label>
-                <input type="text" id="sup_code" placeholder="เช่น SUP-001" class="w-full px-3 py-2 border rounded-xl uppercase">
+                <label class="block text-xs font-bold text-gray-500 mb-1">Supplier Code</label>
+                <input type="text" id="sup_code" placeholder="SUP-001" class="w-full px-3 py-2 border border-gray-300 rounded-lg uppercase text-xs">
               </div>
               <div>
-                <label class="block text-xs font-bold text-gray-500 mb-1">Supplier_Name</label>
-                <input type="text" id="sup_name" placeholder="เช่น ไร่กาแฟดอยช้าง" class="w-full px-3 py-2 border rounded-xl">
+                <label class="block text-xs font-bold text-gray-500 mb-1">Supplier Name</label>
+                <input type="text" id="sup_name" placeholder="ชื่อผู้ขาย" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs">
               </div>
               <div>
-                <label class="block text-xs font-bold text-gray-500 mb-1">Product_Unit *</label>
-                <input type="text" id="prod_unit" value="kg" class="w-full px-3 py-2 border rounded-xl font-medium">
+                <label class="block text-xs font-bold text-gray-500 mb-1">Unit</label>
+                <input type="text" id="prod_unit" value="kg" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs">
               </div>
               <div>
                 <label class="block text-xs font-bold text-gray-500 mb-1">Process</label>
-                <input type="text" id="prod_process" list="process-list" placeholder="เช่น Washed, Natural" class="w-full px-3 py-2 border rounded-xl">
-                <datalist id="process-list">
-                  <option value="Washed">
-                  <option value="Natural">
-                  <option value="Honey">
-                  <option value="Anaerobic">
-                  <option value="Wet-Hulled">
-                </datalist>
+                <input type="text" id="prod_process" placeholder="Washed, Natural" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs">
               </div>
             </div>
 
-            <button type="button" onclick="saveBeanMaster()" id="save-bean-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl transition shadow-md">💾 บันทึกข้อมูลสารกาแฟ</button>
+            <button type="button" onclick="saveBeanMaster()" id="save-bean-btn" class="w-full bg-black hover:bg-gray-800 text-white font-bold py-2.5 rounded-lg text-sm transition cursor-pointer">บันทึกข้อมูลสารกาแฟ</button>
           </div>
 
-          <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
-            <div class="p-4 border-b flex justify-between items-center bg-gray-50">
-              <h3 class="font-bold text-gray-800">📋 รายการสารกาแฟทั้งหมดในระบบ</h3>
+          <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+            <div class="p-4 border-b border-gray-100 flex justify-between items-center">
+              <h3 class="font-bold text-black text-sm">รายการสารกาแฟ</h3>
               <div class="flex items-center gap-2">
-                <button type="button" id="btn-manage-bean" onclick="toggleManageMode('bean')" class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 border border-gray-300 font-bold px-3 py-1.5 rounded-lg flex items-center gap-1 transition">
-                  ⚙️ จัดการ
+                <button type="button" id="btn-manage-bean" onclick="toggleManageMode('bean')" class="text-xs bg-white hover:bg-gray-100 text-black border border-gray-300 font-bold px-3 py-1.5 rounded-lg transition cursor-pointer">
+                  จัดการ
                 </button>
-                <button type="button" onclick="loadBeans()" class="text-xs bg-gray-200 hover:bg-gray-300 font-bold px-3 py-1.5 rounded-lg">🔄 รีเฟรช</button>
+                <button type="button" onclick="loadBeans()" class="text-xs bg-gray-100 hover:bg-gray-200 text-black font-bold px-3 py-1.5 rounded-lg transition cursor-pointer">รีเฟรช</button>
               </div>
             </div>
             <div class="overflow-x-auto">
-              <table class="min-w-full text-sm">
-                <thead class="bg-gray-100 text-gray-600">
+              <table class="min-w-full text-xs">
+                <thead class="bg-gray-50 text-gray-500 border-b border-gray-200">
                   <tr>
-                    <th class="py-2.5 px-4 text-left font-bold text-blue-700 bg-blue-50/70">Product_Code</th>
-                    <th class="py-2.5 px-4 text-left font-bold text-blue-700 bg-blue-50/70">Product_Name (ERP)</th>
-                    <th class="py-2.5 px-4 text-left font-bold text-amber-800 bg-amber-50">Bean_Code</th>
-                    <th class="py-2.5 px-4 text-left font-bold text-amber-800 bg-amber-50">Bean_Name</th>
-                    <th class="py-2.5 px-4 text-left font-bold">Supplier</th>
-                    <th class="py-2.5 px-4 text-center font-bold">Unit</th>
-                    <th class="py-2.5 px-4 text-center font-bold">Process</th>
-                    <th id="th-action-bean" class="py-2.5 px-4 text-center font-bold hidden bg-amber-50 text-amber-800">จัดการ</th>
+                    <th class="py-2 px-3 text-left font-bold">Product_Code</th>
+                    <th class="py-2 px-3 text-left font-bold">Product_Name</th>
+                    <th class="py-2 px-3 text-left font-bold text-black">Bean_Code</th>
+                    <th class="py-2 px-3 text-left font-bold text-black">Bean_Name</th>
+                    <th class="py-2 px-3 text-left font-bold">Supplier</th>
+                    <th class="py-2 px-3 text-center font-bold">Unit</th>
+                    <th class="py-2 px-3 text-center font-bold">Process</th>
+                    <th id="th-action-bean" class="py-2 px-3 text-center font-bold hidden">จัดการ</th>
                   </tr>
                 </thead>
-                <tbody id="bean-table-body" class="text-gray-700">
-                  <tr><td colspan="7" class="py-6 text-center text-gray-400">กำลังโหลดข้อมูล...</td></tr>
+                <tbody id="bean-table-body" class="text-black divide-y divide-gray-100">
+                  <tr><td colspan="7" class="py-6 text-center text-gray-400">กำลังโหลด...</td></tr>
                 </tbody>
               </table>
             </div>
@@ -358,82 +321,46 @@
     </main>
   </div>
 
-  <!-- 🛑 MODAL 1: แก้ไขข้อมูลสารกาแฟ -->
-  <div id="edit-bean-modal" style="display: none;" onclick="if(event.target === this) closeEditBeanModal()" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 items-center justify-center p-4 no-print">
-    <div class="bg-white max-w-lg w-full p-6 rounded-2xl shadow-2xl border border-gray-100 space-y-4">
-      <div class="flex justify-between items-center border-b pb-3">
-        <h3 class="font-bold text-gray-800 text-lg">✏️ แก้ไขข้อมูลสารกาแฟ</h3>
-        <button type="button" onclick="closeEditBeanModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
+  <!-- 🛑 MODAL 1: แก้ไขสารกาแฟ -->
+  <div id="edit-bean-modal" style="display: none;" onclick="if(event.target === this) closeEditBeanModal()" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 items-center justify-center p-4 no-print">
+    <div class="bg-white max-w-md w-full p-5 rounded-xl shadow-2xl border border-gray-200 space-y-3">
+      <div class="flex justify-between items-center border-b pb-2">
+        <h3 class="font-bold text-black text-sm">แก้ไขข้อมูลสารกาแฟ</h3>
+        <button type="button" onclick="closeEditBeanModal()" class="text-gray-400 hover:text-black font-bold">&times;</button>
       </div>
-      <div class="grid grid-cols-2 gap-3">
-        <div>
-          <label class="block text-xs font-bold text-gray-500 mb-1">Product_Code (ERP)</label>
-          <input type="text" id="edit_prod_code" class="w-full px-3 py-2 bg-gray-100 border rounded-xl font-bold text-blue-700" readonly>
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-gray-500 mb-1">Product_Name (ERP)</label>
-          <input type="text" id="edit_prod_name" class="w-full px-3 py-2 border rounded-xl">
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-amber-800 mb-1">Bean_Code (หน้างาน)</label>
-          <input type="text" id="edit_bean_code" class="w-full px-3 py-2 bg-gray-100 border rounded-xl font-bold text-amber-900" readonly>
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-amber-800 mb-1">Bean_Name (หน้างาน)</label>
-          <input type="text" id="edit_bean_name" class="w-full px-3 py-2 border rounded-xl font-bold text-amber-900">
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-gray-500 mb-1">Supplier_Code</label>
-          <input type="text" id="edit_sup_code" class="w-full px-3 py-2 border rounded-xl">
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-gray-500 mb-1">Supplier_Name</label>
-          <input type="text" id="edit_sup_name" class="w-full px-3 py-2 border rounded-xl">
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-gray-500 mb-1">Unit</label>
-          <input type="text" id="edit_prod_unit" class="w-full px-3 py-2 border rounded-xl">
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-gray-500 mb-1">Process</label>
-          <input type="text" id="edit_prod_process" class="w-full px-3 py-2 border rounded-xl">
-        </div>
+      <div class="grid grid-cols-2 gap-2 text-xs">
+        <div><label class="block text-gray-500 mb-0.5 font-bold">Product_Code</label><input type="text" id="edit_prod_code" class="w-full px-2 py-1 bg-gray-50 border rounded font-bold" readonly></div>
+        <div><label class="block text-gray-500 mb-0.5 font-bold">Product_Name</label><input type="text" id="edit_prod_name" class="w-full px-2 py-1 border rounded"></div>
+        <div><label class="block text-black mb-0.5 font-bold">Bean_Code</label><input type="text" id="edit_bean_code" class="w-full px-2 py-1 bg-gray-50 border rounded font-bold" readonly></div>
+        <div><label class="block text-black mb-0.5 font-bold">Bean_Name</label><input type="text" id="edit_bean_name" class="w-full px-2 py-1 border rounded font-bold"></div>
+        <div><label class="block text-gray-500 mb-0.5 font-bold">Supplier_Code</label><input type="text" id="edit_sup_code" class="w-full px-2 py-1 border rounded"></div>
+        <div><label class="block text-gray-500 mb-0.5 font-bold">Supplier_Name</label><input type="text" id="edit_sup_name" class="w-full px-2 py-1 border rounded"></div>
+        <div><label class="block text-gray-500 mb-0.5 font-bold">Unit</label><input type="text" id="edit_prod_unit" class="w-full px-2 py-1 border rounded"></div>
+        <div><label class="block text-gray-500 mb-0.5 font-bold">Process</label><input type="text" id="edit_prod_process" class="w-full px-2 py-1 border rounded"></div>
       </div>
       <div class="flex gap-2 pt-2">
-        <button type="button" onclick="closeEditBeanModal()" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-2.5 rounded-xl">ยกเลิก</button>
-        <button type="button" onclick="submitEditBean()" id="save-edit-bean-btn" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl">💾 บันทึกการแก้ไข</button>
+        <button type="button" onclick="closeEditBeanModal()" class="flex-1 bg-gray-100 text-gray-600 font-bold py-2 rounded text-xs">ยกเลิก</button>
+        <button type="button" onclick="submitEditBean()" id="save-edit-bean-btn" class="flex-1 bg-black text-white font-bold py-2 rounded text-xs">บันทึก</button>
       </div>
     </div>
   </div>
 
-  <!-- 🛑 MODAL 2: แก้ไขข้อมูลลูกค้า -->
-  <div id="edit-cust-modal" style="display: none;" onclick="if(event.target === this) closeEditCustModal()" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 items-center justify-center p-4 no-print">
-    <div class="bg-white max-w-md w-full p-6 rounded-2xl shadow-2xl border border-gray-100 space-y-4">
-      <div class="flex justify-between items-center border-b pb-3">
-        <h3 class="font-bold text-gray-800 text-lg">✏️ แก้ไขข้อมูลลูกค้า</h3>
-        <button type="button" onclick="closeEditCustModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
+  <!-- 🛑 MODAL 2: แก้ไขลูกค้า -->
+  <div id="edit-cust-modal" style="display: none;" onclick="if(event.target === this) closeEditCustModal()" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 items-center justify-center p-4 no-print">
+    <div class="bg-white max-w-sm w-full p-5 rounded-xl shadow-2xl border border-gray-200 space-y-3">
+      <div class="flex justify-between items-center border-b pb-2">
+        <h3 class="font-bold text-black text-sm">แก้ไขข้อมูลลูกค้า</h3>
+        <button type="button" onclick="closeEditCustModal()" class="text-gray-400 hover:text-black font-bold">&times;</button>
       </div>
-      <div class="space-y-3">
-        <div>
-          <label class="block text-xs font-bold text-gray-500 mb-1">รหัสลูกค้า</label>
-          <input type="text" id="edit_cust_code" class="w-full px-3 py-2 bg-gray-100 border rounded-xl font-bold text-indigo-700" readonly>
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-gray-500 mb-1">ชื่อลูกค้า / ร้านกาแฟ</label>
-          <input type="text" id="edit_cust_name" class="w-full px-3 py-2 border rounded-xl font-medium">
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-gray-500 mb-1">เบอร์โทรศัพท์</label>
-          <input type="text" id="edit_cust_phone" class="w-full px-3 py-2 border rounded-xl">
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-gray-500 mb-1">ที่อยู่จัดส่ง</label>
-          <input type="text" id="edit_cust_address" class="w-full px-3 py-2 border rounded-xl">
-        </div>
+      <div class="space-y-2 text-xs">
+        <div><label class="block text-gray-500 mb-0.5 font-bold">รหัสลูกค้า</label><input type="text" id="edit_cust_code" class="w-full px-2.5 py-1.5 bg-gray-50 border rounded font-bold" readonly></div>
+        <div><label class="block text-gray-500 mb-0.5 font-bold">ชื่อลูกค้า</label><input type="text" id="edit_cust_name" class="w-full px-2.5 py-1.5 border rounded"></div>
+        <div><label class="block text-gray-500 mb-0.5 font-bold">เบอร์โทร</label><input type="text" id="edit_cust_phone" class="w-full px-2.5 py-1.5 border rounded"></div>
+        <div><label class="block text-gray-500 mb-0.5 font-bold">ที่อยู่</label><input type="text" id="edit_cust_address" class="w-full px-2.5 py-1.5 border rounded"></div>
       </div>
       <div class="flex gap-2 pt-2">
-        <button type="button" onclick="closeEditCustModal()" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-2.5 rounded-xl">ยกเลิก</button>
-        <button type="button" onclick="submitEditCust()" id="save-edit-cust-btn" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl">💾 บันทึกการแก้ไข</button>
+        <button type="button" onclick="closeEditCustModal()" class="flex-1 bg-gray-100 text-gray-600 font-bold py-2 rounded text-xs">ยกเลิก</button>
+        <button type="button" onclick="submitEditCust()" id="save-edit-cust-btn" class="flex-1 bg-black text-white font-bold py-2 rounded text-xs">บันทึก</button>
       </div>
     </div>
   </div>
@@ -459,12 +386,12 @@
         const el = document.getElementById(`sec-${s}`);
         const btn = document.getElementById(`btn-tab-${s}`);
         if(el) el.classList.add('hidden');
-        if(btn) btn.className = "py-3 px-4 font-bold rounded-xl bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 text-sm";
+        if(btn) btn.className = "px-4 py-2 font-bold rounded-lg text-gray-500 hover:text-black hover:bg-gray-100 text-xs md:text-sm whitespace-nowrap transition cursor-pointer";
       });
       const activeEl = document.getElementById(`sec-${sec}`);
       const activeBtn = document.getElementById(`btn-tab-${sec}`);
       if(activeEl) activeEl.classList.remove('hidden');
-      if(activeBtn) activeBtn.className = "py-3 px-4 font-bold rounded-xl bg-indigo-600 text-white shadow-sm text-sm";
+      if(activeBtn) activeBtn.className = "px-4 py-2 font-bold rounded-lg bg-black text-white text-xs md:text-sm whitespace-nowrap shadow-sm transition cursor-pointer";
 
       if(sec === 'bean') loadBeans();
       if(sec === 'cust') loadCustomers();
@@ -474,9 +401,6 @@
       onQRTypeChanged();
     };
 
-    // =========================================================================
-    // 🖨️ 1. ระบบสร้าง QR Code (ตัดคำอธิบายใต้ Rack QR ออกแล้ว)
-    // =========================================================================
     function onQRTypeChanged() {
       const type = document.getElementById('qr_type').value;
       const boxRack = document.getElementById('box-rack-controls');
@@ -500,7 +424,7 @@
           subInput.value = "สารกาแฟนำเข้าสต๊อก";
         } else {
           prefixInput.value = "";
-          subInput.value = "BJ Roaster System";
+          subInput.value = "BJ Roaster";
         }
       }
     }
@@ -510,156 +434,109 @@
       const bay = document.getElementById('rack_bay_select').value;
       const label = document.getElementById('rack-summary-label');
 
-      if(level === 'ALL' && bay === 'ALL') {
-        label.innerText = "พิมพ์ทั้ง Rack (65 ช่อง: BJI01A - BJI05M)";
-      } else if(level !== 'ALL' && bay === 'ALL') {
-        label.innerText = `พิมพ์ทั้งชั้น ${level} (13 ช่อง: BJI${level}A - BJI${level}M)`;
-      } else if(level === 'ALL' && bay !== 'ALL') {
-        label.innerText = `พิมพ์ทั้งแถว/ช่อง ${bay} (5 ชั้น: BJI01${bay} - BJI05${bay})`;
-      } else {
-        label.innerText = `พิมพ์เฉพาะช่อง: BJI${level}${bay} (1 ใบ สำหรับซ่อมป้าย)`;
-      }
+      if(level === 'ALL' && bay === 'ALL') label.innerText = "ทั้งหมด 65 ช่อง (BJI01A - BJI05M)";
+      else if(level !== 'ALL' && bay === 'ALL') label.innerText = `ชั้น ${level} (13 ช่อง)`;
+      else if(level === 'ALL' && bay !== 'ALL') label.innerText = `แถว ${bay} (5 ชั้น)`;
+      else label.innerText = `ช่อง: BJI${level}${bay} (1 ใบ)`;
     }
 
     function generateSelectedQR() {
-      if (typeof QRCode === 'undefined') {
-        alert("กำลังโหลดระบบสร้าง QR Code กรุณารอสักครู่แล้วกดใหม่อีกครั้งครับ");
-        return;
-      }
+      if (typeof QRCode === 'undefined') return alert("กำลังโหลด QR Code กรุณารอสักครู่");
 
       const type = document.getElementById('qr_type').value;
       const gallery = document.getElementById('qr-gallery');
       gallery.innerHTML = '';
 
-      let itemsToGenerate = []; // [{ code: 'BJI02B', sub: '' }]
+      let itemsToGenerate = [];
 
       if (type === 'RACK') {
         const levelChoice = document.getElementById('rack_level_select').value;
         const bayChoice = document.getElementById('rack_bay_select').value;
-
         const levels = levelChoice === 'ALL' ? ['01', '02', '03', '04', '05'] : [levelChoice];
         const bays = bayChoice === 'ALL' ? BAYS : [bayChoice];
 
         levels.forEach(lvl => {
           bays.forEach(b => {
-            const codeText = `BJI${lvl}${b}`;
-            // 🌟 ตัดคำอธิบายใต้ Rack QR ออกตามสั่ง ให้เหลือแค่รหัสช่องตัวหนาๆ
-            itemsToGenerate.push({
-              code: codeText,
-              sub: '' 
-            });
+            itemsToGenerate.push({ code: `BJI${lvl}${b}`, sub: '' });
           });
         });
       } else {
-        // PALLET / LOT / CUSTOM
         const prefix = document.getElementById('qr_prefix').value.trim();
         const count = parseInt(document.getElementById('qr_count').value) || 1;
-        const subText = document.getElementById('qr_subtext').value.trim() || 'BJ Roaster System';
+        const subText = document.getElementById('qr_subtext').value.trim() || '';
 
         for (let i = 1; i <= count; i++) {
-          const numStr = String(i).padStart(3, '0');
-          itemsToGenerate.push({
-            code: `${prefix}${numStr}`,
-            sub: subText
-          });
+          itemsToGenerate.push({ code: `${prefix}${String(i).padStart(3, '0')}`, sub: subText });
         }
       }
 
-      // เรนเดอร์การ์ด QR Code
       itemsToGenerate.forEach((item, idx) => {
         const card = document.createElement('div');
-        card.className = "qr-card-item p-4 bg-white border-2 border-dashed border-gray-300 rounded-xl flex flex-col items-center justify-center space-y-2";
-        
-        // ถ้ามี subtext (เช่น Pallet/Lot) ค่อยแสดงผล ถ้าเป็น Rack จะไม่มีแถบข้อความด้านล่าง
-        const subHtml = item.sub ? `<span class="text-xs text-gray-600 font-medium px-2 py-0.5 bg-gray-100 rounded-md inline-block max-w-full truncate">${item.sub}</span>` : '';
+        card.className = "qr-card-item p-4 bg-white border border-black rounded-xl flex flex-col items-center justify-center space-y-1.5";
+        const subHtml = item.sub ? `<span class="text-[11px] text-gray-500 font-medium">${item.sub}</span>` : '';
 
         card.innerHTML = `
-          <div id="qrcode-gen-${idx}" class="p-1.5 bg-white rounded-lg"></div>
-          <p class="font-black text-xl text-gray-900 tracking-wider mt-1">${item.code}</p>
+          <div id="qrcode-gen-${idx}" class="p-1 bg-white"></div>
+          <p class="font-black text-lg text-black tracking-wider">${item.code}</p>
           ${subHtml}
         `;
         gallery.appendChild(card);
 
         new QRCode(document.getElementById(`qrcode-gen-${idx}`), {
-          text: item.code,
-          width: 115,
-          height: 115,
-          correctLevel: QRCode.CorrectLevel.M
+          text: item.code, width: 110, height: 110, correctLevel: QRCode.CorrectLevel.M
         });
       });
     }
 
-    // ===================================
-    // ⚙️ ฟังก์ชันสลับโหมด "จัดการ"
-    // ===================================
     function toggleManageMode(type) {
       if (type === 'bean') {
         isManageModeBean = !isManageModeBean;
         const btn = document.getElementById('btn-manage-bean');
         const th = document.getElementById('th-action-bean');
-        if (isManageModeBean) {
-          btn.className = "text-xs bg-amber-500 hover:bg-amber-600 text-white font-bold px-3 py-1.5 rounded-lg flex items-center gap-1 transition shadow-sm";
-          btn.innerHTML = "✔️ เสร็จสิ้น";
-          if (th) th.classList.remove('hidden');
-        } else {
-          btn.className = "text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 border border-gray-300 font-bold px-3 py-1.5 rounded-lg flex items-center gap-1 transition";
-          btn.innerHTML = "⚙️ จัดการ";
-          if (th) th.classList.add('hidden');
-        }
+        btn.innerHTML = isManageModeBean ? "เสร็จสิ้น" : "จัดการ";
+        btn.className = isManageModeBean ? "text-xs bg-black text-white font-bold px-3 py-1.5 rounded-lg transition shadow-sm cursor-pointer" : "text-xs bg-white hover:bg-gray-100 text-black border border-gray-300 font-bold px-3 py-1.5 rounded-lg transition cursor-pointer";
+        if (th) th.classList.toggle('hidden', !isManageModeBean);
         renderBeansTable(allBeans);
       } else if (type === 'cust') {
         isManageModeCust = !isManageModeCust;
         const btn = document.getElementById('btn-manage-cust');
         const th = document.getElementById('th-action-cust');
-        if (isManageModeCust) {
-          btn.className = "text-xs bg-amber-500 hover:bg-amber-600 text-white font-bold px-3 py-1.5 rounded-lg flex items-center gap-1 transition shadow-sm";
-          btn.innerHTML = "✔️ เสร็จสิ้น";
-          if (th) th.classList.remove('hidden');
-        } else {
-          btn.className = "text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 border border-gray-300 font-bold px-3 py-1.5 rounded-lg flex items-center gap-1 transition";
-          btn.innerHTML = "⚙️ จัดการ";
-          if (th) th.classList.add('hidden');
-        }
+        btn.innerHTML = isManageModeCust ? "เสร็จสิ้น" : "จัดการ";
+        btn.className = isManageModeCust ? "text-xs bg-black text-white font-bold px-3 py-1.5 rounded-lg transition shadow-sm cursor-pointer" : "text-xs bg-white hover:bg-gray-100 text-black border border-gray-300 font-bold px-3 py-1.5 rounded-lg transition cursor-pointer";
+        if (th) th.classList.toggle('hidden', !isManageModeCust);
         renderCustTable(allCustomers);
       }
     }
 
-    // ===================================
-    // 👥 2. ข้อมูลลูกค้า
-    // ===================================
     async function loadCustomers() {
       const tbody = document.getElementById('cust-table-body');
-      tbody.innerHTML = `<tr><td colspan="${isManageModeCust ? 5 : 4}" class="py-6 text-center text-gray-400">กำลังโหลด...</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="4" class="py-4 text-center text-gray-400">กำลังโหลด...</td></tr>`;
       try {
         const res = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'get_customers' }) });
         const result = await res.json();
-        if(result.success && result.data && result.data.length > 0) {
+        if(result.success && result.data) {
           allCustomers = result.data;
           renderCustTable(allCustomers);
-        } else {
-          tbody.innerHTML = `<tr><td colspan="${isManageModeCust ? 5 : 4}" class="py-6 text-center text-gray-400">ยังไม่มีข้อมูลลูกค้า</td></tr>`;
         }
-      } catch (e) {
-        tbody.innerHTML = `<tr><td colspan="${isManageModeCust ? 5 : 4}" class="py-6 text-center text-red-500">เชื่อมต่อไม่ได้</td></tr>`;
-      }
+      } catch (e) {}
     }
 
     function renderCustTable(data) {
       const tbody = document.getElementById('cust-table-body');
       if (data.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="${isManageModeCust ? 5 : 4}" class="py-6 text-center text-gray-400">ยังไม่มีข้อมูลลูกค้า</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="4" class="py-4 text-center text-gray-400">ไม่มีข้อมูล</td></tr>`;
         return;
       }
       tbody.innerHTML = data.map(c => `
-        <tr class="border-b border-gray-100 hover:bg-gray-50">
-          <td class="py-2.5 px-4 font-bold text-indigo-600">${c.customer_code}</td>
-          <td class="py-2.5 px-4 font-medium">${c.customer_name}</td>
-          <td class="py-2.5 px-4 text-center">${c.phone || '-'}</td>
-          <td class="py-2.5 px-4 text-gray-500">${c.address || '-'}</td>
+        <tr class="hover:bg-gray-50">
+          <td class="py-2 px-3 font-mono font-bold text-black">${c.customer_code}</td>
+          <td class="py-2 px-3 text-black font-medium">${c.customer_name}</td>
+          <td class="py-2 px-3 text-center text-gray-500">${c.phone || '-'}</td>
+          <td class="py-2 px-3 text-gray-500">${c.address || '-'}</td>
           ${isManageModeCust ? `
-            <td class="py-2.5 px-4 text-center space-x-1">
-              <button type="button" onclick="openEditCustModal('${c.customer_code}')" class="bg-blue-50 text-blue-600 hover:bg-blue-100 px-2.5 py-1 rounded-lg text-xs font-bold transition">✏️ แก้ไข</button>
-              <button type="button" onclick="deleteCustomerItem('${c.customer_code}')" class="bg-red-50 text-red-600 hover:bg-red-100 px-2.5 py-1 rounded-lg text-xs font-bold transition">🗑️ ลบ</button>
+            <td class="py-2 px-3 text-center space-x-2">
+              <button type="button" onclick="openEditCustModal('${c.customer_code}')" class="text-black hover:underline font-bold cursor-pointer">แก้ไข</button>
+              <button type="button" onclick="deleteCustomerItem('${c.customer_code}')" class="text-gray-400 hover:text-black font-bold cursor-pointer">ลบ</button>
             </td>
           ` : ''}
         </tr>
@@ -671,33 +548,19 @@
       const name = document.getElementById('cust_name').value.trim();
       const phone = document.getElementById('cust_phone').value.trim();
       const addr = document.getElementById('cust_address').value.trim();
-
       if(!code || !name) return alert("กรุณากรอกรหัสและชื่อลูกค้า");
 
-      const btn = document.getElementById('save-cust-btn');
-      btn.innerText = "กำลังบันทึก...";
-      btn.disabled = true;
-
       try {
-        const res = await fetch(API_URL, {
+        await fetch(API_URL, {
           method: "POST",
           body: JSON.stringify({ action: 'add_customer', customer_code: code, customer_name: name, phone: phone, address: addr })
         });
-        const d = await res.json();
-        alert(d.message);
-        if(d.success) {
-          document.getElementById('cust_code').value = '';
-          document.getElementById('cust_name').value = '';
-          document.getElementById('cust_phone').value = '';
-          document.getElementById('cust_address').value = '';
-          loadCustomers();
-        }
-      } catch (e) {
-        alert("บันทึกไม่สำเร็จ");
-      } finally {
-        btn.innerText = "💾 บันทึกข้อมูลลูกค้า";
-        btn.disabled = false;
-      }
+        document.getElementById('cust_code').value = '';
+        document.getElementById('cust_name').value = '';
+        document.getElementById('cust_phone').value = '';
+        document.getElementById('cust_address').value = '';
+        loadCustomers();
+      } catch (e) {}
     }
 
     function openEditCustModal(code) {
@@ -720,85 +583,56 @@
       const phone = document.getElementById('edit_cust_phone').value.trim();
       const addr = document.getElementById('edit_cust_address').value.trim();
 
-      if(!name) return alert("กรุณาระบุชื่อลูกค้า");
-
-      const btn = document.getElementById('save-edit-cust-btn');
-      btn.innerText = "กำลังบันทึก...";
-      btn.disabled = true;
-
       try {
-        const res = await fetch(API_URL, {
+        await fetch(API_URL, {
           method: "POST",
           body: JSON.stringify({ action: 'update_customer', customer_code: code, customer_name: name, phone: phone, address: addr })
         });
-        const d = await res.json();
-        alert(d.message);
-        if(d.success) {
-          closeEditCustModal();
-          loadCustomers();
-        }
-      } catch (e) {
-        alert("แก้ไขไม่สำเร็จ");
-      } finally {
-        btn.innerText = "💾 บันทึกการแก้ไข";
-        btn.disabled = false;
-      }
+        closeEditCustModal();
+        loadCustomers();
+      } catch (e) {}
     }
 
     async function deleteCustomerItem(code) {
-      if(!confirm(`⚠️ ต้องการลบข้อมูลลูกค้า [${code}] ใช่หรือไม่?`)) return;
+      if(!confirm(`ต้องการลบลูกค้า [${code}]?`)) return;
       try {
-        const res = await fetch(API_URL, {
-          method: "POST",
-          body: JSON.stringify({ action: 'delete_customer', customer_code: code })
-        });
-        const d = await res.json();
-        alert(d.message);
-        if(d.success) loadCustomers();
-      } catch (e) {
-        alert("ลบไม่สำเร็จ");
-      }
+        await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'delete_customer', customer_code: code }) });
+        loadCustomers();
+      } catch (e) {}
     }
 
-    // ========================================================
-    // ☕ 3. ข้อมูลสารกาแฟ
-    // ========================================================
     async function loadBeans() {
       const tbody = document.getElementById('bean-table-body');
-      tbody.innerHTML = `<tr><td colspan="${isManageModeBean ? 8 : 7}" class="py-6 text-center text-gray-400">กำลังโหลด...</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="7" class="py-4 text-center text-gray-400">กำลังโหลด...</td></tr>`;
       try {
         const res = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'get_items' }) });
         const result = await res.json();
-        if(result.success && result.data && result.data.length > 0) {
+        if(result.success && result.data) {
           allBeans = result.data;
           renderBeansTable(allBeans);
-        } else {
-          tbody.innerHTML = `<tr><td colspan="${isManageModeBean ? 8 : 7}" class="py-6 text-center text-gray-400">ยังไม่มีข้อมูลสารกาแฟ</td></tr>`;
         }
-      } catch (e) {
-        tbody.innerHTML = `<tr><td colspan="${isManageModeBean ? 8 : 7}" class="py-6 text-center text-red-500">เชื่อมต่อไม่ได้</td></tr>`;
-      }
+      } catch (e) {}
     }
 
     function renderBeansTable(data) {
       const tbody = document.getElementById('bean-table-body');
       if (data.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="${isManageModeBean ? 8 : 7}" class="py-6 text-center text-gray-400">ยังไม่มีข้อมูลสารกาแฟ</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" class="py-4 text-center text-gray-400">ไม่มีข้อมูล</td></tr>`;
         return;
       }
       tbody.innerHTML = data.map(i => `
-        <tr class="border-b border-gray-100 hover:bg-gray-50">
-          <td class="py-2.5 px-4 font-bold text-blue-700 bg-blue-50/30">${i.product_code || '-'}</td>
-          <td class="py-2.5 px-4 font-medium text-gray-800 bg-blue-50/30">${i.product_name || '-'}</td>
-          <td class="py-2.5 px-4 font-bold text-amber-900 bg-amber-50/50">${i.bean_code || '-'}</td>
-          <td class="py-2.5 px-4 font-bold text-amber-900 bg-amber-50/50">${i.bean_name || '-'}</td>
-          <td class="py-2.5 px-4 text-gray-600">${i.supplier_name || i.supplier_code ? `${i.supplier_name} <span class="text-xs text-gray-400">(${i.supplier_code})</span>` : '-'}</td>
-          <td class="py-2.5 px-4 text-center font-bold text-gray-700">${i.product_unit || 'kg'}</td>
-          <td class="py-2.5 px-4 text-center"><span class="bg-indigo-50 text-indigo-700 font-bold px-2 py-0.5 rounded text-xs">${i.process || '-'}</span></td>
+        <tr class="hover:bg-gray-50">
+          <td class="py-2 px-3 font-mono font-bold text-black">${i.product_code || '-'}</td>
+          <td class="py-2 px-3 text-gray-600">${i.product_name || '-'}</td>
+          <td class="py-2 px-3 font-mono font-bold text-black">${i.bean_code || '-'}</td>
+          <td class="py-2 px-3 font-bold text-black">${i.bean_name || '-'}</td>
+          <td class="py-2 px-3 text-gray-600">${i.supplier_name || '-'}</td>
+          <td class="py-2 px-3 text-center">${i.product_unit || 'kg'}</td>
+          <td class="py-2 px-3 text-center">${i.process || '-'}</td>
           ${isManageModeBean ? `
-            <td class="py-2.5 px-4 text-center space-x-1">
-              <button type="button" onclick="openEditBeanModal('${i.bean_code}')" class="bg-blue-50 text-blue-600 hover:bg-blue-100 px-2.5 py-1 rounded-lg text-xs font-bold transition">✏️ แก้ไข</button>
-              <button type="button" onclick="deleteBeanItem('${i.bean_code}')" class="bg-red-50 text-red-600 hover:bg-red-100 px-2.5 py-1 rounded-lg text-xs font-bold transition">🗑️ ลบ</button>
+            <td class="py-2 px-3 text-center space-x-2">
+              <button type="button" onclick="openEditBeanModal('${i.bean_code}')" class="text-black hover:underline font-bold cursor-pointer">แก้ไข</button>
+              <button type="button" onclick="deleteBeanItem('${i.bean_code}')" class="text-gray-400 hover:text-black font-bold cursor-pointer">ลบ</button>
             </td>
           ` : ''}
         </tr>
@@ -815,47 +649,22 @@
       const prodUnit = document.getElementById('prod_unit').value.trim();
       const prodProcess = document.getElementById('prod_process').value.trim();
 
-      if(!prodCode || !prodName || !beanCode || !beanName) {
-        return alert("กรุณากรอกข้อมูลให้ครบทั้งฝั่ง ERP (Product_Code, Product_Name) และฝั่งหน้างาน (Bean_Code, Bean_Name)");
-      }
-
-      const btn = document.getElementById('save-bean-btn');
-      btn.innerText = "กำลังบันทึก...";
-      btn.disabled = true;
+      if(!prodCode || !prodName || !beanCode || !beanName) return alert("กรุณากรอกข้อมูลให้ครบถ้วน");
 
       try {
-        const res = await fetch(API_URL, {
+        await fetch(API_URL, {
           method: "POST",
-          body: JSON.stringify({
-            action: 'add_item',
-            product_code: prodCode,
-            product_name: prodName,
-            bean_code: beanCode,
-            bean_name: beanName,
-            supplier_code: supCode,
-            supplier_name: supName,
-            product_unit: prodUnit,
-            process: prodProcess
-          })
+          body: JSON.stringify({ action: 'add_item', product_code: prodCode, product_name: prodName, bean_code: beanCode, bean_name: beanName, supplier_code: supCode, supplier_name: supName, product_unit: prodUnit, process: prodProcess })
         });
-        const d = await res.json();
-        alert(d.message);
-        if(d.success) {
-          document.getElementById('prod_code').value = '';
-          document.getElementById('prod_name').value = '';
-          document.getElementById('bean_code').value = '';
-          document.getElementById('bean_name').value = '';
-          document.getElementById('sup_code').value = '';
-          document.getElementById('sup_name').value = '';
-          document.getElementById('prod_process').value = '';
-          loadBeans();
-        }
-      } catch (e) {
-        alert("บันทึกไม่สำเร็จ");
-      } finally {
-        btn.innerText = "💾 บันทึกข้อมูลสารกาแฟ";
-        btn.disabled = false;
-      }
+        document.getElementById('prod_code').value = '';
+        document.getElementById('prod_name').value = '';
+        document.getElementById('bean_code').value = '';
+        document.getElementById('bean_name').value = '';
+        document.getElementById('sup_code').value = '';
+        document.getElementById('sup_name').value = '';
+        document.getElementById('prod_process').value = '';
+        loadBeans();
+      } catch (e) {}
     }
 
     function openEditBeanModal(beanCode) {
@@ -886,54 +695,22 @@
       const prodUnit = document.getElementById('edit_prod_unit').value.trim();
       const prodProcess = document.getElementById('edit_prod_process').value.trim();
 
-      if(!prodName || !beanName) return alert("กรุณาระบุชื่อสินค้าและชื่อเรียกสาร");
-
-      const btn = document.getElementById('save-edit-bean-btn');
-      btn.innerText = "กำลังบันทึก...";
-      btn.disabled = true;
-
       try {
-        const res = await fetch(API_URL, {
+        await fetch(API_URL, {
           method: "POST",
-          body: JSON.stringify({
-            action: 'update_item',
-            product_code: prodCode,
-            product_name: prodName,
-            bean_code: beanCode,
-            bean_name: beanName,
-            supplier_code: supCode,
-            supplier_name: supName,
-            product_unit: prodUnit,
-            process: prodProcess
-          })
+          body: JSON.stringify({ action: 'update_item', product_code: prodCode, product_name: prodName, bean_code: beanCode, bean_name: beanName, supplier_code: supCode, supplier_name: supName, product_unit: prodUnit, process: prodProcess })
         });
-        const d = await res.json();
-        alert(d.message);
-        if(d.success) {
-          closeEditBeanModal();
-          loadBeans();
-        }
-      } catch (e) {
-        alert("แก้ไขไม่สำเร็จ");
-      } finally {
-        btn.innerText = "💾 บันทึกการแก้ไข";
-        btn.disabled = false;
-      }
+        closeEditBeanModal();
+        loadBeans();
+      } catch (e) {}
     }
 
     async function deleteBeanItem(beanCode) {
-      if(!confirm(`⚠️ ต้องการลบข้อมูลสารกาแฟรหัส [${beanCode}] ใช่หรือไม่?`)) return;
+      if(!confirm(`ต้องการลบสารกาแฟรหัส [${beanCode}]?`)) return;
       try {
-        const res = await fetch(API_URL, {
-          method: "POST",
-          body: JSON.stringify({ action: 'delete_item', bean_code: beanCode })
-        });
-        const d = await res.json();
-        alert(d.message);
-        if(d.success) loadBeans();
-      } catch (e) {
-        alert("ลบไม่สำเร็จ");
-      }
+        await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'delete_item', bean_code: beanCode }) });
+        loadBeans();
+      } catch (e) {}
     }
   </script>
 </body>
