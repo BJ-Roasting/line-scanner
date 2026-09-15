@@ -5,16 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>BJ Roaster - รับสินค้าเข้า</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- ไลบรารีกล้องมือถือ -->
   <script src="https://unpkg.com/html5-qrcode"></script>
-  <!-- ไลบรารีสร้าง QR Code -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
     ::-webkit-scrollbar { display: none; }
     body { -ms-overflow-style: none; scrollbar-width: none; }
     .pb-safe { padding-bottom: env(safe-area-inset-bottom, 20px); }
 
-    /* 🖨️ ระบบพิมพ์ A4 แนวนอน */
     @page { size: A4 landscape; margin: 8mm; }
     @media print {
       #app-layout, aside, #bottom-nav, .no-print, .sticky, nav, header, button, #camera-modal, #edit-pallet-modal, #edit-inbound-modal { display: none !important; }
@@ -34,40 +31,62 @@
 
   <div id="app-layout" class="flex min-h-screen">
     
-    <!-- 💻 Sidebar Desktop (คงไอคอน SVG ไว้ตามสั่ง) -->
-    <aside class="hidden md:flex flex-col w-64 fixed left-0 top-0 h-screen bg-white border-r border-gray-200 pt-8 pb-6 px-4 z-40 shadow-sm no-print">
-      <h2 class="text-xl font-black text-black mb-8 px-2 tracking-tight">BJ ROASTER</h2>
-      <nav class="flex-1 space-y-1">
-        <a href="index.html" class="flex items-center gap-3 text-gray-500 hover:text-black hover:bg-gray-100 px-3.5 py-2.5 rounded-lg font-bold text-sm transition">
-          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg>
-          หน้าแรก
-        </a>
-        <a href="planner.html" class="flex items-center gap-3 bg-black text-white px-3.5 py-2.5 rounded-lg font-bold text-sm transition">
-          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 011.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.56.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.893.149c-.425.07-.765.383-.93.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 01-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.397.165-.71.505-.78.929l-.15.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 01-.12-1.45l.527-.737c.25-.35.273-.806.108-1.204-.165-.397-.505-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.107-1.204l-.527-.738a1.125 1.125 0 01.12-1.45l.773-.773a1.125 1.125 0 011.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-          ทำงาน
-        </a>
-        <a href="report.html" class="flex items-center gap-3 text-gray-500 hover:text-black hover:bg-gray-100 px-3.5 py-2.5 rounded-lg font-bold text-sm transition">
-          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" /></svg>
-          รายงาน
-        </a>
-        <a href="stock.html" class="flex items-center gap-3 text-gray-500 hover:text-black hover:bg-gray-100 px-3.5 py-2.5 rounded-lg font-bold text-sm transition">
-          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" /></svg>
-          สต๊อกสินค้า
-        </a>
-        <a href="profile.html" class="flex items-center gap-3 text-gray-500 hover:text-black hover:bg-gray-100 px-3.5 py-2.5 rounded-lg font-bold text-sm transition">
-          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg>
-          โปรไฟล์
-        </a>
-      </nav>
-      <button onclick="handleLogout()" class="mt-8 flex items-center gap-3 text-gray-400 hover:text-black px-3.5 py-2.5 rounded-lg font-bold text-sm transition">
-        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" /></svg>
-        ออกจากระบบ
-      </button>
+    <!-- 💻 Sidebar Desktop -->
+    <aside class="hidden md:flex flex-col w-64 fixed left-0 top-0 h-screen bg-white border-r border-gray-200 pt-7 pb-6 px-4 z-40 shadow-sm no-print">
+      <div class="px-2 mb-7">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 bg-black text-white font-black flex items-center justify-center rounded-lg text-sm tracking-tighter">BJ</div>
+          <div>
+            <h2 class="text-sm font-black text-black tracking-tight leading-none">BJ ROASTER</h2>
+            <span class="text-[9px] font-bold text-gray-400 uppercase tracking-widest block mt-0.5">ROASTERY & WMS</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex-1 space-y-6 overflow-y-auto">
+        <div>
+          <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest px-3 mb-2">การปฏิบัติการ</p>
+          <nav class="space-y-1">
+            <a href="index.html" class="flex items-center gap-3 text-gray-500 hover:text-black hover:bg-gray-100 px-3 py-2 rounded-lg font-bold text-xs transition">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg> หน้าแรก
+            </a>
+            <a href="planner.html" class="flex items-center gap-3 bg-black text-white px-3 py-2 rounded-lg font-bold text-xs transition shadow-sm">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 011.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.56.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.893.149c-.425.07-.765.383-.93.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 01-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.397.165-.71.505-.78.929l-.15.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 01-.12-1.45l.527-.737c.25-.35.273-.806.108-1.204-.165-.397-.505-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.107-1.204l-.527-.738a1.125 1.125 0 01.12-1.45l.773-.773a1.125 1.125 0 011.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+              ทำงาน
+            </a>
+            <a href="stock.html" class="flex items-center gap-3 text-gray-500 hover:text-black hover:bg-gray-100 px-3 py-2 rounded-lg font-bold text-xs transition">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" /></svg>
+              สต๊อกสินค้า
+            </a>
+            <a href="report.html" class="flex items-center gap-3 text-gray-500 hover:text-black hover:bg-gray-100 px-3 py-2 rounded-lg font-bold text-xs transition">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" /></svg>
+              รายงาน
+            </a>
+          </nav>
+        </div>
+
+        <div>
+          <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest px-3 mb-2">การจัดการระบบ</p>
+          <nav class="space-y-1">
+            <a href="profile.html" class="flex items-center gap-3 text-gray-500 hover:text-black hover:bg-gray-100 px-3 py-2 rounded-lg font-bold text-xs transition">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg>
+              โปรไฟล์
+            </a>
+          </nav>
+        </div>
+      </div>
+
+      <div class="pt-4 border-t border-gray-100">
+        <button onclick="handleLogout()" class="w-full flex items-center gap-3 text-gray-400 hover:text-black hover:bg-gray-50 px-3 py-2 rounded-lg font-bold text-xs transition cursor-pointer">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" /></svg>
+          ออกจากระบบ
+        </button>
+      </div>
     </aside>
 
     <main class="w-full md:ml-64 relative flex flex-col min-h-screen">
       
-      <!-- 🌟 แถบเมนูด้านบน สไตล์ Binance Tab Header (มีแค่ข้อความ คลีนสุดๆ ขาว-ดำ) 🌟 -->
+      <!-- 🌟 แถบเมนูด้านบน สไตล์ Binance Tab Header (ขาว-ดำ) 🌟 -->
       <div class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-gray-200 no-print">
         <div class="flex items-center gap-2 overflow-x-auto px-4 md:px-8 py-2.5 snap-x">
           <button onclick="window.location.href='planner.html'" class="px-4 py-2 rounded-lg text-sm font-bold text-gray-400 hover:text-black hover:bg-gray-100 transition whitespace-nowrap">วางแผน</button>
@@ -75,17 +94,16 @@
           <button onclick="window.location.href='packing.html'" class="px-4 py-2 rounded-lg text-sm font-bold text-gray-400 hover:text-black hover:bg-gray-100 transition whitespace-nowrap">บรรจุสินค้า</button>
           <button onclick="window.location.href='shipping.html'" class="px-4 py-2 rounded-lg text-sm font-bold text-gray-400 hover:text-black hover:bg-gray-100 transition whitespace-nowrap">จัดส่ง</button>
           <button onclick="window.location.href='item_master.html'" class="px-4 py-2 rounded-lg text-sm font-bold text-gray-400 hover:text-black hover:bg-gray-100 transition whitespace-nowrap">เพิ่มข้อมูลใหม่</button>
-          <!-- Active Tab: ปุ่มดำ ตัวหนังสือขาว สะอาดตา -->
+          <!-- Active Tab: รับสินค้าเข้า -->
           <button class="px-4 py-2 rounded-lg text-sm font-bold bg-black text-white whitespace-nowrap shadow-sm">รับสินค้าเข้า</button>
         </div>
       </div>
 
-      <!-- 👇 เนื้อหาหลัก 👇 -->
+      <!-- 👇 4 แท็บฟังก์ชันหลัก 👇 -->
       <div class="p-4 md:p-8 pb-28 max-w-5xl space-y-6">
         
-        <!-- 4 แท็บโหมดการทำงาน (สไตล์ Binance Pills ขาว-ดำ ไม่มีอีโมจิ) -->
         <div class="flex gap-2 overflow-x-auto border-b border-gray-200 pb-2 no-print">
-          <button type="button" id="tab-btn-create" onclick="switchInboundTab('create')" class="px-4 py-2 font-bold rounded-lg bg-black text-white text-xs md:text-sm whitespace-nowrap transition cursor-pointer">
+          <button type="button" id="tab-btn-create" onclick="switchInboundTab('create')" class="px-4 py-2 font-bold rounded-lg bg-black text-white text-xs md:text-sm whitespace-nowrap shadow-sm transition cursor-pointer">
             1. ออกใบงาน
           </button>
           <button type="button" id="tab-btn-dock" onclick="switchInboundTab('dock')" class="px-4 py-2 font-bold rounded-lg text-gray-500 hover:text-black hover:bg-gray-100 text-xs md:text-sm whitespace-nowrap transition cursor-pointer">
@@ -100,11 +118,11 @@
         </div>
 
         <!-- ========================================================================= -->
-        <!-- 📥 แท็บที่ 1: ออกใบงานรับเข้า & คลังการ์ด WO Inventory -->
+        <!-- 📥 โซนที่ 1: ออกใบงานรับเข้า & คลังการ์ด WO Inventory -->
         <!-- ========================================================================= -->
         <div id="zone-create" class="space-y-6">
 
-          <!-- คลังการ์ด WO INVENTORY (คลีน ขาว-ดำ) -->
+          <!-- คลังการ์ด WO INVENTORY ด้านบน -->
           <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-4 no-print">
             <div class="flex justify-between items-center border-b border-gray-100 pb-3">
               <div>
@@ -113,7 +131,6 @@
                   <span id="wo-inventory-count" class="text-xs bg-gray-100 text-black font-bold px-2 py-0.5 rounded">0 รายการ</span>
                 </h3>
               </div>
-
               <div class="flex items-center gap-2">
                 <button type="button" id="btn-manage-wo" onclick="toggleManageWOMode()" class="text-xs bg-white hover:bg-gray-100 text-black border border-gray-300 font-bold px-3 py-1.5 rounded-lg transition cursor-pointer">
                   จัดการ
@@ -122,16 +139,16 @@
               </div>
             </div>
 
-            <!-- การ์ด WO (สไตล์ Binance Market Card ขาว-ดำ) -->
+            <!-- กล่องแสดงการ์ด WO -->
             <div id="wo-cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
               <p class="col-span-full py-6 text-center text-gray-400 text-xs">กำลังโหลด...</p>
             </div>
           </div>
 
-          <!-- ฟอร์มสร้างใบงานรับเข้า (สไตล์ Minimalist Form) -->
+          <!-- ฟอร์มสร้างใบงานรับเข้า -->
           <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-5 no-print">
             <div class="flex justify-between items-center border-b border-gray-100 pb-3">
-              <h2 class="text-base font-bold text-black">สร้างใบงานรับสารกาแฟ</h2>
+              <h2 class="text-base font-bold text-black">สร้างใบงานรับสารกาแฟใหม่</h2>
               <span class="text-xs text-gray-400">ผู้บันทึก: <b id="operator-name" class="text-black font-bold">Admin</b></span>
             </div>
 
@@ -152,7 +169,7 @@
               </div>
             </div>
 
-            <!-- แสดงข้อมูลสารแบบกระชับ -->
+            <!-- ข้อมูลสาร -->
             <div class="grid grid-cols-2 md:grid-cols-4 gap-2 bg-gray-50 p-3 rounded-lg border border-gray-200 text-xs">
               <div><span class="text-gray-400">Product Code:</span><br><b id="view-prod-code" class="text-black">-</b></div>
               <div><span class="text-gray-400">ชื่อเรียกสาร:</span><br><b id="view-bean-name" class="text-black">-</b></div>
@@ -160,7 +177,7 @@
               <div><span class="text-gray-400">Process:</span><br><b id="view-process" class="text-black">-</b></div>
             </div>
 
-            <!-- ข้อมูล Lot & พาเลท -->
+            <!-- Lot & พาเลท -->
             <div class="border-t border-gray-100 pt-4 space-y-3">
               <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
                 <div>
@@ -192,7 +209,7 @@
 
             <!-- QC 3 ครั้ง -->
             <div class="border-t border-gray-100 pt-4 space-y-2">
-              <span class="text-xs font-bold text-black block">สุ่มตรวจ QC</span>
+              <span class="text-xs font-bold text-black block">สุ่มตรวจ QC 3 ครั้ง</span>
               <div class="grid grid-cols-3 gap-2 text-center text-xs">
                 <div class="font-bold text-gray-400">สุ่มตรวจ</div>
                 <div class="font-bold text-gray-400">ความชื้น %</div>
@@ -212,7 +229,6 @@
               </div>
             </div>
 
-            <!-- ปุ่มขาว-ดำ สไตล์ Binance Button -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
               <button type="button" onclick="previewAndPrintA4()" id="btn-preview-wo" class="w-full bg-white hover:bg-gray-100 text-black border-2 border-black font-bold py-3 rounded-lg text-sm transition active:scale-95 cursor-pointer">
                 พรีวิวและพิมพ์ A4
@@ -221,12 +237,11 @@
                 บันทึกสร้าง WO
               </button>
             </div>
-
           </div>
         </div>
 
         <!-- ========================================================================= -->
-        <!-- 🚚 แท็บที่ 2: หน้าลานรับของ (สแกนรับพาเลท) -->
+        <!-- 🚚 โซนที่ 2: หน้าลานรับของ -->
         <!-- ========================================================================= -->
         <div id="zone-dock" class="hidden max-w-3xl space-y-6 no-print">
           
@@ -290,7 +305,7 @@
             </div>
           </div>
 
-          <!-- ตารางสต๊อกพาเลท (ขาว-ดำ คลีนๆ) -->
+          <!-- ตารางสต๊อกพาเลท -->
           <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden p-5 space-y-3">
             <div class="flex justify-between items-center border-b border-gray-100 pb-2">
               <h3 class="font-bold text-black text-sm">พาเลทที่ยิงรับแล้ว</h3>
@@ -319,7 +334,7 @@
         </div>
 
         <!-- ========================================================================= -->
-        <!-- 🏢 แท็บที่ 3: รถโฟล์คลิฟต์ยิงพาเลทขึ้น Rack -->
+        <!-- 🏢 โซนที่ 3: รถโฟล์คลิฟต์ยิงพาเลทขึ้น Rack -->
         <!-- ========================================================================= -->
         <div id="zone-rack" class="hidden max-w-xl space-y-5 no-print">
           <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-4">
@@ -357,7 +372,7 @@
         </div>
 
         <!-- ============================================== -->
-        <!-- ↩️ แท็บที่ 4: ส่งคืนสินค้า -->
+        <!-- ↩️ โซนที่ 4: ส่งคืนสินค้า -->
         <!-- ============================================== -->
         <div id="zone-return" class="hidden max-w-xl bg-white p-8 rounded-xl border border-gray-200 shadow-sm text-center space-y-2 no-print">
           <h2 class="text-base font-bold text-black">ระบบส่งคืนสินค้า</h2>
@@ -368,7 +383,7 @@
     </main>
   </div>
 
-  <!-- 📱 Bottom Navigation มือถือ (ไอคอน SVG ครบถ้วน) -->
+  <!-- 📱 Bottom Navigation มือถือ -->
   <div id="bottom-nav" class="fixed bottom-0 w-full bg-white border-t border-gray-200 pb-safe z-30 md:hidden shadow-lg no-print">
     <div class="flex justify-around items-center pt-2.5 pb-1 px-1">
       <div onclick="window.location.href='index.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-black cursor-pointer">
@@ -452,13 +467,13 @@
     </div>
   </div>
 
-  <!-- 👁️ MODAL พรีวิว A4 แนวนอน -->
+  <!-- 👁️ MODAL พรีวิว A4 แนวนอน (แก้ปัญหาม่านดำค้าง เรนเดอร์แน่นอน 100%) -->
   <div id="preview-modal" style="display: none;" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex-col overflow-y-auto p-4 md:p-8">
-    <div id="preview-header-bar" class="max-w-[280mm] w-full mx-auto bg-black text-white p-3 rounded-xl mb-4 shadow-2xl flex justify-between items-center no-print">
-      <span class="text-xs font-bold">พรีวิวใบปะหน้าพาเลท A4 แนวนอน</span>
+    <div id="preview-header-bar" class="max-w-[280mm] w-full mx-auto bg-black text-white p-3 rounded-xl mb-4 shadow-2xl flex justify-between items-center no-print sticky top-2 z-50 border border-gray-700">
+      <span class="text-xs font-bold">พรีวิวใบปะหน้าพาเลท A4 แนวนอน (รวม <span id="preview-total-count" class="text-green-400 font-bold">1</span> ใบ)</span>
       <div class="flex gap-2">
-        <button type="button" onclick="window.print()" class="bg-white hover:bg-gray-100 text-black font-black px-4 py-1.5 rounded-lg text-xs transition">พิมพ์ A4 แนวนอน</button>
-        <button type="button" onclick="closePreviewModal()" class="bg-gray-800 text-gray-300 px-3 py-1.5 rounded-lg text-xs">ปิด</button>
+        <button type="button" onclick="window.print()" class="bg-white hover:bg-gray-100 text-black font-black px-4 py-1.5 rounded-lg text-xs transition active:scale-95 cursor-pointer">พิมพ์ A4 แนวนอน</button>
+        <button type="button" onclick="closePreviewModal()" class="bg-gray-800 text-gray-300 px-3 py-1.5 rounded-lg text-xs cursor-pointer">ปิด</button>
       </div>
     </div>
     <div id="preview-content-container" class="max-w-[280mm] w-full mx-auto space-y-6"></div>
@@ -504,7 +519,6 @@
       switchInboundTab('create');
     };
 
-    // 🌟 สลับ 4 แท็บ ทำงานแม่นยำ 100% 🌟
     function switchInboundTab(tab) {
       const tabs = ['create', 'dock', 'rack', 'return'];
       tabs.forEach(t => {
@@ -589,9 +603,6 @@
       document.getElementById('total_weight').value = ((sacks * kg) + partial).toFixed(2);
     }
 
-    // =========================================================================
-    // 🚚 หน้าลานรับของ
-    // =========================================================================
     async function loadAllWOs() {
       try {
         const res = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'get_all_inbound_wos' }) });
@@ -614,13 +625,6 @@
       }
       select.innerHTML = '<option value="">-- เลือกใบงานรับเข้า --</option>' + 
         pendingList.map(w => `<option value="${w.wo_number}">${w.wo_number} | ${w.bean_name || w.product_name} (${w.lot_code})</option>`).join('');
-    }
-
-    function selectAndGoToDock(woNum) {
-      switchInboundTab('dock');
-      const select = document.getElementById('dock_wo_select');
-      select.value = woNum;
-      onDockWOSelected();
     }
 
     function onDockWOSelected() {
@@ -673,7 +677,7 @@
         document.getElementById('dock_sacks').focus();
       } else {
         isCompletedWO = true;
-        alert(`🎉 ครบถ้วนแล้ว! บันทึกครบทั้ง ${totalTargetPallets} พาเลทเรียบร้อย ปิดงานใบงาน [${woNum}] สำเร็จ!`);
+        alert(`ครบถ้วนแล้ว! บันทึกครบทั้ง ${totalTargetPallets} พาเลทตามใบงาน [${woNum}] เรียบร้อย`);
         if (currentSelectedWO) {
           currentSelectedWO.status = 'Completed';
           renderWOCards(allInboundWOs);
@@ -692,7 +696,7 @@
     function forceCompleteWO() {
       if(!currentSelectedWO) return alert("กรุณาเลือกใบงาน WO ก่อน");
       const confirmedSacks = receivedPalletsList.filter(p => p.wo_number === currentSelectedWO.wo_number).length;
-      if(!confirm(`ยืนยันปิดจบใบงาน [${currentSelectedWO.wo_number}] ตามยอดจริงที่รับแล้วจำนวน ${confirmedSacks} พาเลท?`)) return;
+      if(!confirm(`ยืนยันปิดจบใบงาน [${currentSelectedWO.wo_number}] ตามยอดจริงที่รับแล้ว ${confirmedSacks} พาเลท?`)) return;
 
       currentSelectedWO.status = 'Completed';
       currentSelectedWO.pallet_count = confirmedSacks;
@@ -795,9 +799,6 @@
       }).catch(e => {});
     }
 
-    // =========================================================================
-    // 🏢 รถโฟล์คลิฟต์ยิงพาเลทขึ้น Rack
-    // =========================================================================
     async function submitPutawayRack() {
       const pallet = document.getElementById('rack_pallet').value.trim().toUpperCase();
       const location = document.getElementById('rack_location').value.trim().toUpperCase();
@@ -826,9 +827,6 @@
       }
     }
 
-    // =========================================================================
-    // 📷 CAMERA SCANNER
-    // =========================================================================
     function startScanner(targetInputId) {
       activeTargetInputId = targetInputId;
       document.getElementById('camera-modal').style.display = 'flex';
@@ -865,12 +863,11 @@
       }
     }
 
-    // =========================================================================
-    // 📄 ส่วนสร้างใบงาน & พรีวิว A4
-    // =========================================================================
     function previewAndPrintA4() {
       const data = getFormData();
       document.getElementById('preview-modal').style.display = 'flex';
+      const countEl = document.getElementById('preview-total-count');
+      if (countEl) countEl.innerText = data.palletCount;
       renderA4LandscapePreview(data.woNum, data.lotCode, data.bean, data.palletCount, data.sackCount, data.totalWeight, data.qc);
       saveWOInBackground(data);
     }
@@ -890,11 +887,7 @@
       };
 
       const woNum = document.getElementById('wo_number').value || 'WO-202609-001';
-      let lotCode = document.getElementById('lot_code').value;
-      if(!lotCode) {
-        lotCode = `LOT-2609-BEAN-01`;
-        document.getElementById('lot_code').value = lotCode;
-      }
+      let lotCode = document.getElementById('lot_code').value || 'LOT-2609-BEAN-01';
       const palletCount = parseInt(document.getElementById('pallet_count').value) || 10;
       const sackCount = document.getElementById('sack_count').value || '0';
       const totalWeight = document.getElementById('total_weight').value || '0';
@@ -954,9 +947,6 @@
       document.getElementById('view-supplier').innerText = '-';
       document.getElementById('view-process').innerText = '-';
       document.getElementById('lot_code').value = '';
-      document.getElementById('qc_m1').value = ''; document.getElementById('qc_d1').value = '';
-      document.getElementById('qc_m2').value = ''; document.getElementById('qc_d2').value = '';
-      document.getElementById('qc_m3').value = ''; document.getElementById('qc_d3').value = '';
     }
 
     function toggleManageWOMode() {
@@ -1062,7 +1052,6 @@
       fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'delete_inbound_wo', wo_number: woNum }) }).catch(e => {});
     }
 
-    // 🌟 พรีวิว A4 แนวนอน (ขาว-ดำ คมกริบ) 🌟
     function renderA4LandscapePreview(woNum, lotCode, bean, palletCount, sackCount, totalWeight, qc) {
       const container = document.getElementById('preview-content-container');
       if (!container) return;
@@ -1087,10 +1076,10 @@
         page.innerHTML = `
           <div class="flex justify-between items-center border-b-2 border-black pb-2.5">
             <div class="flex items-center gap-3">
-              <div class="w-10 h-10 bg-black text-white font-black flex items-center justify-center rounded text-base">BJ</div>
+              <div class="w-10 h-10 bg-black text-white font-black flex items-center justify-center rounded-lg text-lg">BJ</div>
               <div>
                 <h1 class="text-xl font-black text-black tracking-tight leading-none">BJ ROASTER - ใบปะหน้าพาเลทรับเข้า</h1>
-                <p class="text-xs text-gray-700 font-bold mt-1">ใบสั่งงาน: <b class="text-black">${woNum}</b> | วันที่: ${new Date().toLocaleDateString('th-TH')}</p>
+                <p class="text-[11px] text-gray-700 font-bold mt-1">ใบสั่งงาน: <b class="text-black text-sm">${woNum}</b> | วันที่: ${new Date().toLocaleDateString('th-TH')}</p>
               </div>
             </div>
             <div class="text-right">
@@ -1118,7 +1107,6 @@
               </div>
             </div>
 
-            <!-- Dual QR Code แยกห่างกันชัดเจน -->
             <div class="col-span-6 grid grid-cols-2 gap-8 p-3 bg-white border-2 border-black rounded-xl">
               <div class="flex flex-col items-center justify-between p-2.5 border-2 border-dashed border-black rounded-xl">
                 <span class="text-xs font-black text-black uppercase">1. QR LOT</span>
@@ -1159,6 +1147,8 @@
       const beanObj = { product_code: wo.product_code || '', product_name: wo.product_name || '', bean_code: wo.bean_code || '', bean_name: wo.bean_name || '', supplier_name: wo.supplier_name || '', process: '-' };
       
       document.getElementById('preview-modal').style.display = 'flex';
+      const countEl = document.getElementById('preview-total-count');
+      if (countEl) countEl.innerText = wo.pallet_count || 1;
       renderA4LandscapePreview(wo.wo_number, wo.lot_code, beanObj, parseInt(wo.pallet_count) || 1, wo.sack_count, wo.weight, { m1: '-', d1: '-', m2: '-', d2: '-', m3: '-', d3: '-' });
     }
 
