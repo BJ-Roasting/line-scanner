@@ -157,9 +157,8 @@
                 <input type="text" id="wo_type" value="รับสินค้าเข้า" class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg font-bold text-gray-700 text-sm" readonly>
               </div>
               
-              <!-- 🌟 ช่องเลือกสารกาแฟ (แสดงชื่อ Supplier ชัดเจน) 🌟 -->
               <div class="md:col-span-2">
-                <label class="block text-xs font-bold text-gray-700 mb-1">เลือกสารกาแฟ * (แสดงชื่อซัพพลายเออร์ต่อท้าย)</label>
+                <label class="block text-xs font-bold text-gray-700 mb-1">เลือกสารกาแฟ *</label>
                 <select id="select_bean" onchange="onBeanSelected()" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg bg-white font-bold text-black text-sm focus:border-black focus:outline-none">
                   <option value="">-- กำลังโหลดรายการสารกาแฟ --</option>
                 </select>
@@ -350,20 +349,37 @@
         </div>
 
         <!-- ========================================================================= -->
-        <!-- 🏢 โซนที่ 3: รถโฟล์คลิฟต์ยิงพาเลทขึ้น Rack -->
+        <!-- 🏢 โซนที่ 3: รถโฟล์คลิฟต์ยิงพาเลทขึ้น Rack (🌟 อัปเกรด OFFLINE FIRST 100% 🌟) -->
         <!-- ========================================================================= -->
-        <div id="zone-rack" class="hidden max-w-xl space-y-5 no-print">
-          <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-4">
-            <div class="border-b border-gray-100 pb-3">
-              <h2 class="text-base font-bold text-black">ยิงพาเลทเข้า Location Rack</h2>
-              <p class="text-xs text-gray-400">ยิงป้ายพาเลทและป้ายช่อง Rack</p>
+        <div id="zone-rack" class="hidden max-w-4xl space-y-5 no-print">
+          
+          <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-4">
+            
+            <div class="flex justify-between items-center bg-gray-50 p-3 rounded-lg border border-gray-200">
+              <div>
+                <h2 class="text-sm font-black text-black tracking-tight">ยิงพาเลทเข้า Location Rack (โฟล์คลิฟต์)</h2>
+                <p class="text-xs text-gray-400">ทำงานได้แม้อยู่ในซอกแร็คที่ไม่มีสัญญาณเน็ต</p>
+              </div>
+              <span id="net-status-badge-rack" class="text-[10px] font-bold px-2 py-0.5 rounded bg-black text-white">ออนไลน์</span>
             </div>
 
-            <div class="space-y-3">
+            <!-- กล่องคู่: พิกัดแร็คล่าสุด & พาเลทล่าสุดที่เพิ่งย้าย -->
+            <div class="grid grid-cols-2 gap-3 text-center">
+              <div class="p-3 bg-gray-50 rounded-xl border border-gray-200">
+                <span class="text-[10px] font-bold text-gray-400 uppercase block mb-1">ช่อง Rack ล่าสุด</span>
+                <p id="rack-last-loc-label" class="text-sm font-black text-black font-mono">-</p>
+              </div>
+              <div class="p-3 bg-gray-50 rounded-xl border border-gray-200">
+                <span class="text-[10px] font-bold text-gray-400 uppercase block mb-1">พาเลทล่าสุด</span>
+                <p id="rack-last-pallet-label" class="text-sm font-black text-black font-mono">-</p>
+              </div>
+            </div>
+
+            <div class="space-y-3 pt-1">
               <div>
                 <label class="block text-xs font-bold text-gray-700 mb-1">1. สแกน QR พาเลท *</label>
                 <div class="flex gap-2">
-                  <input type="text" id="rack_pallet" placeholder="เช่น PAL-2609-001" class="flex-1 px-3 py-2.5 border border-gray-300 rounded-lg font-mono font-bold text-black text-sm uppercase">
+                  <input type="text" id="rack_pallet" placeholder="เช่น PAL-2609-001" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg font-mono font-bold text-black text-sm uppercase">
                   <button type="button" onclick="startScanner('rack_pallet')" class="bg-black hover:bg-gray-800 text-white px-4 rounded-lg font-bold text-xs transition cursor-pointer">
                     เปิดกล้อง
                   </button>
@@ -373,7 +389,7 @@
               <div>
                 <label class="block text-xs font-bold text-gray-700 mb-1">2. สแกน Location Rack *</label>
                 <div class="flex gap-2">
-                  <input type="text" id="rack_location" placeholder="เช่น BJI02B" class="flex-1 px-3 py-2.5 border border-gray-300 rounded-lg font-mono font-bold text-black text-sm uppercase">
+                  <input type="text" id="rack_location" placeholder="เช่น BJI02B" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg font-mono font-bold text-black text-sm uppercase">
                   <button type="button" onclick="startScanner('rack_location')" class="bg-black hover:bg-gray-800 text-white px-4 rounded-lg font-bold text-xs transition cursor-pointer">
                     เปิดกล้อง
                   </button>
@@ -381,10 +397,43 @@
               </div>
             </div>
 
-            <button type="button" onclick="submitPutawayRack()" id="btn-rack-save" class="w-full bg-black hover:bg-gray-800 text-white font-bold py-3.5 rounded-lg text-sm transition active:scale-95 cursor-pointer">
-              ยืนยันเก็บเข้า Rack
+            <!-- ปุ่มบันทึกลงเครื่องทันที -->
+            <button type="button" onclick="submitPutawayLocalFirst()" id="btn-rack-save" class="w-full bg-black hover:bg-gray-800 text-white font-bold py-3.5 rounded-lg text-sm transition active:scale-95 cursor-pointer">
+              บันทึกเก็บเข้าแร็คลงเครื่อง (วนเก็บถัดไป)
             </button>
           </div>
+
+          <!-- 🌟 ตารางบันทึกพาเลทขึ้นแร็คในเครื่อง & ปุ่มซิงค์ 🌟 -->
+          <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden p-5 space-y-3">
+            <div class="flex justify-between items-center border-b border-gray-100 pb-2">
+              <div>
+                <h3 class="font-bold text-black text-sm">เก็บเข้าแร็คแล้ว ( <span id="rack-scanned-count">0</span> )</h3>
+                <p class="text-[11px] text-gray-400">รายการย้ายพาเลทที่บันทึกอยู่ในเครื่อง</p>
+              </div>
+              <button type="button" onclick="syncOfflinePutawayToCloud()" id="btn-sync-rack-cloud" class="bg-black hover:bg-gray-800 text-white font-bold px-3 py-1.5 rounded-lg text-xs transition cursor-pointer flex items-center gap-1">
+                <span>⚡ ซิงค์ขึ้นระบบ</span>
+                <span id="unsynced-rack-badge" class="bg-white text-black px-1.5 py-0.2 rounded-full text-[10px]">0</span>
+              </button>
+            </div>
+
+            <div class="overflow-x-auto">
+              <table class="min-w-full text-xs">
+                <thead class="bg-gray-50 text-gray-500 border-b border-gray-200">
+                  <tr>
+                    <th class="py-2 px-3 text-left font-bold">Pallet ID</th>
+                    <th class="py-2 px-3 text-center font-bold">Location Rack</th>
+                    <th class="py-2 px-3 text-center font-bold">เวลา</th>
+                    <th class="py-2 px-3 text-center font-bold">สถานะซิงค์</th>
+                    <th class="py-2 px-3 text-center font-bold">จัดการ</th>
+                  </tr>
+                </thead>
+                <tbody id="rack-pallets-tbody" class="text-black divide-y divide-gray-100">
+                  <tr><td colspan="5" class="py-6 text-center text-gray-400">ยังไม่มีข้อมูล</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
         </div>
 
         <!-- ============================================== -->
@@ -512,6 +561,7 @@
     let masterBeans = [];
     let allInboundWOs = [];
     let receivedPalletsList = [];
+    let putawayQueueList = [];
     let currentSelectedWO = null;
     let isManageWOMode = false;
     let html5QrScanner = null;
@@ -527,18 +577,18 @@
       }
     }
 
+    // 🌟 เช็คสถานะอินเทอร์เน็ตแบบเรียลไทม์ 🌟
     window.addEventListener('online', updateNetworkStatus);
     window.addEventListener('offline', updateNetworkStatus);
 
     function updateNetworkStatus() {
-      const badge = document.getElementById('net-status-badge');
-      if (navigator.onLine) {
-        badge.className = "text-[10px] font-bold px-2 py-0.5 rounded bg-black text-white";
-        badge.innerText = "ออนไลน์";
-      } else {
-        badge.className = "text-[10px] font-bold px-2 py-0.5 rounded bg-gray-200 text-gray-700 border border-gray-300";
-        badge.innerText = "ออฟไลน์ (บันทึกลงเครื่อง)";
-      }
+      const badgeDock = document.getElementById('net-status-badge');
+      const badgeRack = document.getElementById('net-status-badge-rack');
+      const text = navigator.onLine ? "ออนไลน์" : "ออฟไลน์ (บันทึกลงเครื่อง)";
+      const cls = navigator.onLine ? "text-[10px] font-bold px-2 py-0.5 rounded bg-black text-white" : "text-[10px] font-bold px-2 py-0.5 rounded bg-gray-200 text-gray-700 border border-gray-300";
+
+      if (badgeDock) { badgeDock.className = cls; badgeDock.innerText = text; }
+      if (badgeRack) { badgeRack.className = cls; badgeRack.innerText = text; }
     }
 
     window.onload = function() {
@@ -546,6 +596,8 @@
       updateNetworkStatus();
 
       loadLocalPalletQueue();
+      loadLocalPutawayQueue();
+
       loadAllWOs();
       loadBeanMasterOptions();
       loadReceivedPallets();
@@ -572,10 +624,8 @@
 
       try {
         if (tab === 'create') loadAllWOs();
-        if (tab === 'dock') {
-          populateDockWOSelect();
-          loadLocalPalletQueue();
-        }
+        if (tab === 'dock') { populateDockWOSelect(); loadLocalPalletQueue(); }
+        if (tab === 'rack') { loadLocalPutawayQueue(); }
       } catch (e) {}
     }
 
@@ -599,7 +649,6 @@
       document.getElementById('wo_number').value = `${prefix}${nextSeq}`;
     }
 
-    // 🌟 แสดงชื่อและรหัส Supplier ในช่องเลือกสารกาแฟทันที 🌟
     async function loadBeanMasterOptions() {
       try {
         const res = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'get_items' }) });
@@ -969,6 +1018,9 @@
       document.getElementById('preview-modal').style.display = 'none';
     }
 
+    // =========================================================================
+    // 🚚 หน้าลานรับของ (ระบบ LOCAL QUEUE & OFFLINE FIRST)
+    // =========================================================================
     function populateDockWOSelect() {
       const select = document.getElementById('dock_wo_select');
       const pendingList = Array.isArray(allInboundWOs) ? allInboundWOs.filter(w => w.status !== 'Completed') : [];
@@ -1218,34 +1270,137 @@
       } catch (e) {}
     }
 
-    async function submitPutawayRack() {
+    // =========================================================================
+    // 🏢 โซนที่ 3: รถโฟล์คลิฟต์ยิงพาเลทขึ้น Rack (🌟 OFFLINE FIRST ENGINE 🌟)
+    // =========================================================================
+    function submitPutawayLocalFirst() {
       const pallet = document.getElementById('rack_pallet').value.trim().toUpperCase();
       const location = document.getElementById('rack_location').value.trim().toUpperCase();
 
       if(!pallet || !location) return alert("กรุณาสแกน QR พาเลท และ Location Rack");
 
-      const btn = document.getElementById('btn-rack-save');
-      btn.innerText = "กำลังย้ายเข้า Rack...";
-      btn.disabled = true;
+      const newPutaway = {
+        pallet_id: pallet,
+        location: location,
+        timestamp: new Date().toLocaleTimeString('th-TH'),
+        synced: false
+      };
 
-      try {
-        const res = await fetch(API_URL, {
-          method: "POST",
-          body: JSON.stringify({ action: 'putaway_pallet_to_rack', pallet_id: pallet, location: location, operator: localStorage.getItem('name') || 'Forklift' })
-        });
-        const d = await res.json();
-        alert(d.message);
-        document.getElementById('rack_pallet').value = '';
-        document.getElementById('rack_location').value = '';
-        loadReceivedPallets();
-      } catch (e) {
-        alert("ย้ายเข้า Rack ไม่สำเร็จ");
-      } finally {
-        btn.innerText = "ยืนยันเก็บเข้า Rack";
-        btn.disabled = false;
+      putawayQueueList.unshift(newPutaway);
+      saveLocalPutawayQueue();
+      renderPutawayTable();
+
+      // อัปเดตป้ายพิกัดและพาเลทล่าสุด
+      document.getElementById('rack-last-loc-label').innerText = location;
+      document.getElementById('rack-last-pallet-label').innerText = pallet;
+
+      // ล้างช่องสแกนเพื่อให้ยิงตัวถัดไปได้ทันที
+      document.getElementById('rack_pallet').value = '';
+      document.getElementById('rack_location').value = '';
+      document.getElementById('rack_pallet').focus();
+
+      // ถ้ามีเน็ต ให้พยายามซิงค์เบื้องหลังอัตโนมัติ
+      if (navigator.onLine) {
+        syncSinglePutawaySilently(newPutaway);
       }
     }
 
+    function saveLocalPutawayQueue() {
+      localStorage.setItem('local_putaway_queue', JSON.stringify(putawayQueueList));
+    }
+
+    function loadLocalPutawayQueue() {
+      const saved = localStorage.getItem('local_putaway_queue');
+      if (saved) {
+        try {
+          putawayQueueList = JSON.parse(saved);
+          renderPutawayTable();
+        } catch(e) {}
+      }
+    }
+
+    async function syncOfflinePutawayToCloud() {
+      const unsyncedItems = putawayQueueList.filter(p => !p.synced);
+      if (unsyncedItems.length === 0) return alert("ไม่มีข้อมูลที่ค้างซิงค์ ทุกรายการถูกบันทึกขึ้นระบบคลาวด์แล้วครับ");
+
+      if (!navigator.onLine) return alert("มือถือยังออฟไลน์อยู่ กรุณาเชื่อมต่อ Wi-Fi หรือสัญญาณเน็ตก่อนกดซิงค์ครับ");
+
+      const btn = document.getElementById('btn-sync-rack-cloud');
+      btn.innerText = "กำลังซิงค์...";
+
+      let successCount = 0;
+      for (let item of unsyncedItems) {
+        try {
+          await fetch(API_URL, {
+            method: "POST",
+            body: JSON.stringify({ action: 'putaway_pallet_to_rack', pallet_id: item.pallet_id, location: item.location, operator: localStorage.getItem('name') || 'Forklift' })
+          });
+          item.synced = true;
+          successCount++;
+        } catch(e) {
+          console.warn("ซิงค์ไม่สำเร็จ:", item.pallet_id);
+        }
+      }
+
+      saveLocalPutawayQueue();
+      renderPutawayTable();
+      alert(`✅ ซิงค์ข้อมูลขึ้นแร็คสำเร็จ ${successCount} พาเลทเรียบร้อยแล้ว!`);
+      btn.innerHTML = `<span>⚡ ซิงค์ขึ้นระบบ</span><span id="unsynced-rack-badge" class="bg-white text-black px-1.5 py-0.2 rounded-full text-[10px]">0</span>`;
+    }
+
+    async function syncSinglePutawaySilently(item) {
+      try {
+        await fetch(API_URL, {
+          method: "POST",
+          body: JSON.stringify({ action: 'putaway_pallet_to_rack', pallet_id: item.pallet_id, location: item.location, operator: localStorage.getItem('name') || 'Forklift' })
+        });
+        item.synced = true;
+        saveLocalPutawayQueue();
+        renderPutawayTable();
+      } catch(e) {}
+    }
+
+    function renderPutawayTable() {
+      const tbody = document.getElementById('rack-pallets-tbody');
+      const unsyncedCount = putawayQueueList.filter(p => !p.synced).length;
+      
+      document.getElementById('rack-scanned-count').innerText = putawayQueueList.length;
+      const unsyncedBadge = document.getElementById('unsynced-rack-badge');
+      if (unsyncedBadge) unsyncedBadge.innerText = unsyncedCount;
+
+      if(putawayQueueList.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-gray-400">ยังไม่มีข้อมูล</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = putawayQueueList.map((p, idx) => `
+        <tr class="hover:bg-gray-50">
+          <td class="py-2 px-3 font-mono font-bold text-black">${p.pallet_id}</td>
+          <td class="py-2 px-3 text-center font-mono font-bold text-black">${p.location}</td>
+          <td class="py-2 px-3 text-center text-gray-400">${p.timestamp || '-'}</td>
+          <td class="py-2 px-3 text-center">
+            <span class="text-[10px] font-bold px-2 py-0.5 rounded border ${p.synced ? 'border-gray-300 text-gray-400 bg-gray-50' : 'border-black bg-black text-white'}">
+              ${p.synced ? 'คลาวด์' : 'รอซิงค์'}
+            </span>
+          </td>
+          <td class="py-2 px-3 text-center">
+            <button type="button" onclick="deletePutawayQueueItem(${idx})" class="text-gray-400 hover:text-black font-bold cursor-pointer">ลบ</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function deletePutawayQueueItem(idx) {
+      const p = putawayQueueList[idx];
+      if(!confirm(`ต้องการลบรายการย้าย [${p.pallet_id}] ออกใช่หรือไม่?`)) return;
+      putawayQueueList.splice(idx, 1);
+      saveLocalPutawayQueue();
+      renderPutawayTable();
+    }
+
+    // =========================================================================
+    // 📷 CAMERA SCANNER (ทำงานได้แม้ออฟไลน์ 100%)
+    // =========================================================================
     function startScanner(targetInputId) {
       activeTargetInputId = targetInputId;
       document.getElementById('camera-modal').style.display = 'flex';
