@@ -98,12 +98,12 @@
           </div>
           <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
             <span class="text-xs font-bold text-gray-500 block">แร็คที่ว่าง</span>
-            <p class="text-2xl font-black text-black mt-1" id="stat-rack-empty">0</p>
+            <p class="text-2xl font-black text-black mt-1" id="stat-rack-empty">65</p>
             <span class="text-[10px] text-gray-400">ช่องว่าง</span>
           </div>
         </div>
 
-        <!-- 🌟 ส่วนที่เพิ่มใหม่: แดชบอร์ดแจ้งเตือนจุดพักของค้างท่อ (เป้าหมาย: เคลียร์ให้เป็น 0) 🌟 -->
+        <!-- แดชบอร์ดแจ้งเตือนจุดพักของค้างท่อ (เป้าหมาย: เคลียร์ให้เป็น 0) -->
         <div class="bg-white p-5 rounded-xl border-2 border-black shadow-sm space-y-3">
           <div class="flex justify-between items-center border-b border-gray-100 pb-2">
             <div>
@@ -114,8 +114,7 @@
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-1">
-            
-            <!-- 1. ลานรับของ (รอนำขึ้นแร็ค) -->
+            <!-- 1. ลานรับของ -->
             <div class="p-4 bg-gray-50 rounded-xl border border-gray-200 flex flex-col justify-between">
               <div>
                 <div class="flex justify-between items-start">
@@ -130,7 +129,7 @@
               </div>
             </div>
 
-            <!-- 2. ระหว่างคั่วหน้าเตา (Working WIP) -->
+            <!-- 2. ระหว่างคั่ว -->
             <div class="p-4 bg-gray-50 rounded-xl border border-gray-200 flex flex-col justify-between">
               <div>
                 <div class="flex justify-between items-start">
@@ -145,7 +144,7 @@
               </div>
             </div>
 
-            <!-- 3. รอแพ็คถุง (Packing Stage) -->
+            <!-- 3. รอแพ็คถุง -->
             <div class="p-4 bg-gray-50 rounded-xl border border-gray-200 flex flex-col justify-between">
               <div>
                 <div class="flex justify-between items-start">
@@ -159,11 +158,10 @@
                 <span class="text-xs font-bold text-black font-mono" id="pipe-pack-desc">พร้อมส่ง</span>
               </div>
             </div>
-
           </div>
         </div>
 
-        <!-- ผังจำลอง Rack I ขาว-ดำ คลีนตา -->
+        <!-- 🌟 ผังจำลอง Rack I ขาว-ดำ (เชื่อมต่อสถานะสต๊อกจริงโดยตรง) 🌟 -->
         <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-3">
           <div class="flex justify-between items-center border-b border-gray-100 pb-2">
             <h2 class="text-sm font-bold text-black">ผังแร็ค Rack I (13 ช่อง x 5 ชั้น)</h2>
@@ -176,7 +174,7 @@
 
           <div class="overflow-x-auto pb-1">
             <div id="rack-grid" class="min-w-[800px] space-y-1.5">
-              <p class="text-center py-6 text-gray-400 text-xs">กำลังโหลด...</p>
+              <p class="text-center py-6 text-gray-400 text-xs">กำลังโหลดผังแร็ค...</p>
             </div>
           </div>
         </div>
@@ -209,27 +207,6 @@
 
       </div>
     </main>
-  </div>
-
-  <!-- 📱 Bottom Navigation มือถือ -->
-  <div id="bottom-nav" class="fixed bottom-0 w-full bg-white border-t border-gray-200 pb-safe z-50 md:hidden shadow-lg no-print">
-    <div class="flex justify-around items-center pt-2.5 pb-1 px-1">
-      <div onclick="window.location.href='index.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-black cursor-pointer">
-        <svg class="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg><span class="text-[10px] font-medium">หน้าแรก</span>
-      </div>
-      <div onclick="window.location.href='planner.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-black cursor-pointer">
-        <svg class="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 011.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.56.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.893.149c-.425.07-.765.383-.93.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 01-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.397.165-.71.505-.78.929l-.15.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 01-.12-1.45l.527-.737c.25-.35.273-.806.108-1.204-.165-.397-.505-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.107-1.204l-.527-.738a1.125 1.125 0 01.12-1.45l.773-.773a1.125 1.125 0 011.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg><span class="text-[10px] font-medium">ทำงาน</span>
-      </div>
-      <div onclick="window.location.href='report.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-black cursor-pointer">
-        <svg class="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" /></svg><span class="text-[10px] font-medium">รายงาน</span>
-      </div>
-      <div onclick="window.location.href='stock.html'" class="flex flex-col items-center justify-center w-[20%] text-black cursor-pointer">
-        <svg class="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" /></svg><span class="text-[10px] font-bold">สต๊อก</span>
-      </div>
-      <div onclick="window.location.href='profile.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-black cursor-pointer">
-        <svg class="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg><span class="text-[10px] font-medium">โปรไฟล์</span>
-      </div>
-    </div>
   </div>
 
   <script>
@@ -271,14 +248,13 @@
         const result = await response.json();
         if(result.success && result.data) {
           locationsData = result.data;
-          renderVisualRackMap(locationsData);
         }
       } catch (e) {}
     }
 
-    // 🌟 คำนวณสถิติภาพรวม + ยอดแจ้งเตือนค้างท่อ (เป้าหมาย 0) 🌟
+    // 🌟 คำนวณยอดและผูกสต๊อกจริง 🌟
     function updateDashboardStats() {
-      // 1. สารกาแฟบนแร็ค (ไม่รวมของที่ค้างอยู่ลานรับ)
+      // 1. สารกาแฟบนแร็ค
       const greenBeansInRack = inventoryData
         .filter(i => (i.category === 'Green Bean' || !i.category) && i.status === 'Active' && i.location !== 'DOCK-STAGE')
         .reduce((sum, item) => sum + (parseFloat(item.weight_current) || 0), 0);
@@ -290,12 +266,17 @@
         .reduce((sum, item) => sum + (parseFloat(item.weight_current) || 0), 0);
       document.getElementById('stat-roasted').innerText = roasted.toLocaleString('th-TH');
 
-      // 3. สถานะแร็ค 65 ช่อง
-      const rackIn = locationsData.filter(l => l.status === 'In').length;
-      document.getElementById('stat-rack-in').innerText = rackIn;
-      document.getElementById('stat-rack-empty').innerText = (65 - rackIn);
+      // 3. แร็คที่มีของจริง (ตรวจจากพิกัดใน Inventory โดยตรง)
+      const occupiedRacks = new Set(
+        inventoryData
+          .filter(i => i.status === 'Active' && i.location && i.location.startsWith('BJI'))
+          .map(i => i.location)
+      );
+      const rackInCount = occupiedRacks.size;
+      document.getElementById('stat-rack-in').innerText = rackInCount;
+      document.getElementById('stat-rack-empty').innerText = (65 - rackInCount);
 
-      // 🌟 4. ยอดค้างที่ 1: ลานรับของ (DOCK-STAGE) ➔ รอยกขึ้นแร็ค
+      // 4. ลานรับของ (DOCK-STAGE)
       const dockItems = inventoryData.filter(i => (i.location === 'DOCK-STAGE' || i.status === 'Loaded') && i.status !== 'Empty');
       const dockCount = dockItems.length;
       const dockWeight = dockItems.reduce((sum, item) => sum + (parseFloat(item.weight_current) || 0), 0);
@@ -310,43 +291,17 @@
         dockBadge.innerText = `รอยกขึ้นแร็ค (${dockCount})`;
       }
 
-      // 🌟 5. ยอดค้างที่ 2: ระหว่างคั่ว (Working / WIP)
-      const wipLocs = locationsData.filter(l => l.status === 'Working').length;
-      const wipItems = inventoryData.filter(i => (i.status === 'Working' || i.location === 'WIP-ZONE') && i.status !== 'Empty');
-      const wipCount = wipLocs || wipItems.length;
-      const wipWeight = wipItems.reduce((sum, item) => sum + (parseFloat(item.weight_current) || 0), 0);
-      document.getElementById('pipe-wip-count').innerText = wipCount;
-      document.getElementById('pipe-wip-weight').innerText = wipWeight.toFixed(1) + " kg";
-      const wipBadge = document.getElementById('pipe-wip-badge');
-      if (wipCount === 0) {
-        wipBadge.className = "text-[10px] font-bold px-2 py-0.5 rounded bg-gray-100 text-gray-500 border border-gray-200";
-        wipBadge.innerText = "เตาว่าง (0)";
-      } else {
-        wipBadge.className = "text-[10px] font-bold px-2 py-0.5 rounded bg-black text-white";
-        wipBadge.innerText = `กำลังคั่ว (${wipCount})`;
-      }
-
-      // 🌟 6. ยอดค้างที่ 3: ระหว่างบรรจุ (Packing Stage)
-      const packLocs = locationsData.filter(l => l.status === 'Packing').length;
-      const packItems = inventoryData.filter(i => (i.status === 'Packing' || i.location === 'PACK-STAGE') && i.status !== 'Empty');
-      const packCount = packLocs || packItems.length;
-      document.getElementById('pipe-pack-count').innerText = packCount;
-      const packBadge = document.getElementById('pipe-pack-badge');
-      if (packCount === 0) {
-        packBadge.className = "text-[10px] font-bold px-2 py-0.5 rounded bg-gray-100 text-gray-500 border border-gray-200";
-        packBadge.innerText = "แพ็คครบ (0)";
-      } else {
-        packBadge.className = "text-[10px] font-bold px-2 py-0.5 rounded bg-black text-white";
-        packBadge.innerText = `รอแพ็คถุง (${packCount})`;
-      }
+      // วาดผังแร็ค
+      renderVisualRackMap(locationsData);
     }
 
+    // 🌟 วาดผังแร็ค BJI01A - BJI05M ดึงข้อมูลจริงจากสต๊อก 🌟
     function renderVisualRackMap(locs) {
       const container = document.getElementById('rack-grid');
       container.innerHTML = '';
 
       const COLOR_MAP = {
-        'In': 'bg-black text-white',
+        'In': 'bg-black text-white hover:bg-gray-800',
         'Working': 'bg-gray-500 text-white',
         'Packing': 'bg-gray-700 text-white',
         'Out': 'border border-gray-400 text-black',
@@ -371,15 +326,32 @@
 
         BAYS.forEach(bay => {
           const locName = `BJI${levelStr}${bay}`;
+          
+          // 🌟 ตรวจสอบสต๊อกจริงจากตาราง Inventory เป็นอันดับแรก 🌟
+          const itemInRack = inventoryData.find(i => i.location === locName && i.status === 'Active');
           const loc = locs.find(l => l.name === locName);
-          const status = loc ? loc.status : 'Empty';
+
+          let status = 'Empty';
+          if (itemInRack) {
+            status = 'In';
+          } else if (loc) {
+            status = loc.status;
+          }
+
           const colorClass = COLOR_MAP[status] || COLOR_MAP['Empty'];
 
           const cell = document.createElement('div');
           cell.className = `flex-1 py-1.5 text-center rounded text-[10px] font-bold cursor-pointer transition ${colorClass}`;
           cell.innerText = `${bay}`;
           cell.title = `${locName} | ${status}`;
-          cell.onclick = () => alert(`รหัสช่อง: ${locName}\nสถานะ: ${status}`);
+          
+          cell.onclick = () => {
+            if (itemInRack) {
+              alert(`📍 รหัสช่อง: ${locName}\nสถานะ: In (มีของในแร็ค)\n📦 สินค้า: ${itemInRack.item_name}\n🏷️ รหัสพาเลท: ${itemInRack.barcode_id}\n⚖️ คงเหลือ: ${itemInRack.weight_current} kg\n🔖 Lot: ${itemInRack.lot_code || '-'}`);
+            } else {
+              alert(`📍 รหัสช่อง: ${locName}\nสถานะ: ${status} (ว่าง)`);
+            }
+          };
 
           row.appendChild(cell);
         });
