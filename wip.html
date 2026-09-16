@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>BJ Roaster - เบิกคั่ว</title>
+  <title>BJ Roaster - เบิกคั่ว & ร่อนสาร</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/html5-qrcode"></script>
   <style>
     ::-webkit-scrollbar { display: none; }
     body { -ms-overflow-style: none; scrollbar-width: none; }
@@ -13,10 +14,10 @@
 </head>
 <body class="bg-white text-black font-sans antialiased selection:bg-gray-200">
 
-  <div class="flex min-h-screen">
+  <div id="app-layout" class="flex min-h-screen">
     
     <!-- 💻 Sidebar Desktop -->
-    <aside class="hidden md:flex flex-col w-64 fixed left-0 top-0 h-screen bg-white border-r border-gray-200 pt-7 pb-6 px-4 z-40 shadow-sm">
+    <aside class="hidden md:flex flex-col w-64 fixed left-0 top-0 h-screen bg-white border-r border-gray-200 pt-7 pb-6 px-4 z-40 shadow-sm no-print">
       <div class="px-2 mb-7">
         <div class="flex items-center gap-2.5">
           <div class="w-8 h-8 bg-black text-white font-black flex items-center justify-center rounded-lg text-sm tracking-tighter">BJ</div>
@@ -66,7 +67,7 @@
     <main class="w-full md:ml-64 relative flex flex-col min-h-screen">
       
       <!-- 🌟 แถบเมนูด้านบน สไตล์ Binance Tab Header 🌟 -->
-      <div class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-gray-200">
+      <div class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-gray-200 no-print">
         <div class="flex items-center gap-2 overflow-x-auto px-4 md:px-8 py-2.5 snap-x">
           <button onclick="window.location.href='planner.html'" class="px-4 py-2 rounded-lg text-sm font-bold text-gray-400 hover:text-black hover:bg-gray-100 transition whitespace-nowrap">วางแผน</button>
           <button class="px-4 py-2 rounded-lg text-sm font-bold bg-black text-white whitespace-nowrap shadow-sm">เบิกคั่ว</button>
@@ -77,45 +78,140 @@
         </div>
       </div>
 
-      <div class="p-4 md:p-8 pb-32 max-w-2xl space-y-6">
-        <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-4">
-          <div class="border-b border-gray-100 pb-3">
-            <h2 class="text-base font-bold text-black">เบิกสารกาแฟเข้าเตาคั่ว</h2>
-            <p class="text-xs text-gray-400">สแกนรหัสเพื่อตัดสต๊อกสารกาแฟ</p>
-          </div>
-          
-          <div class="space-y-4">
-            <div>
-              <label class="block text-xs font-bold text-gray-600 mb-1">รหัสบาร์โค้ด / พาเลท</label>
+      <!-- 👇 พื้นที่ทำงาน 2 กล่องหลัก 👇 -->
+      <div class="p-4 md:p-8 pb-32 max-w-4xl space-y-6">
+        
+        <!-- แถบสลับกล่องทำงาน -->
+        <div class="flex gap-2 overflow-x-auto border-b border-gray-200 pb-2 no-print">
+          <button type="button" id="tab-btn-sift" onclick="switchWIPTab('sift')" class="px-4 py-2 font-bold rounded-lg bg-black text-white text-xs md:text-sm whitespace-nowrap shadow-sm transition cursor-pointer">
+            1. ร่อนสาร
+          </button>
+          <button type="button" id="tab-btn-roast" onclick="switchWIPTab('roast')" class="px-4 py-2 font-bold rounded-lg text-gray-500 hover:text-black hover:bg-gray-100 text-xs md:text-sm whitespace-nowrap transition cursor-pointer">
+            2. คั่วกาแฟ
+          </button>
+        </div>
+
+        <!-- ========================================================================= -->
+        <!-- 🌾 กล่องที่ 1: ร่อนสาร (Sifting Zone & Waste Logger) 🌾 -->
+        <!-- ========================================================================= -->
+        <div id="zone-sift" class="space-y-6">
+
+          <!-- ฟอร์มร่อนสาร -->
+          <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-5">
+            <div class="border-b border-gray-100 pb-3 flex justify-between items-center">
+              <div>
+                <h2 class="text-base font-bold text-black">ร่อนสารและคัดแยกขยะ</h2>
+                <p class="text-xs text-gray-400">บันทึกสารสะอาดแบ่งใส่ถุง 30 kg และตัดยอดพาเลทแม่</p>
+              </div>
+              <span class="text-xs font-bold bg-gray-100 text-black px-2.5 py-1 rounded">ย้ายเข้าคลัง RT</span>
+            </div>
+
+            <!-- 1. ค้นหา/สแกนพาเลทสารดิบ -->
+            <div class="space-y-2">
+              <label class="block text-xs font-bold text-gray-700">เลือกพาเลทสารดิบที่นำมาร่อน *</label>
               <div class="flex gap-2">
-                <input type="text" id="barcode" class="flex-1 px-3 py-2.5 border border-gray-300 rounded-lg font-mono font-bold text-black uppercase text-sm focus:border-black focus:outline-none" placeholder="สแกนหรือพิมพ์รหัส...">
-                <button type="button" onclick="fetchData()" class="bg-black text-white font-bold px-4 rounded-lg text-xs hover:bg-gray-800 transition cursor-pointer">ค้นหา</button>
+                <input type="text" id="sift_pallet_id" placeholder="สแกน QR พาเลท หรือเลือกจากรายการ" class="flex-1 px-3 py-2.5 border border-gray-300 rounded-lg font-mono font-bold text-black uppercase text-sm focus:border-black focus:outline-none">
+                <button type="button" onclick="startScanner('sift_pallet_id')" class="bg-black hover:bg-gray-800 text-white px-4 rounded-lg font-bold text-xs transition cursor-pointer">
+                  เปิดกล้อง
+                </button>
+              </div>
+              <!-- รายการเลือกด่วน -->
+              <select id="sift_pallet_select" onchange="onSiftPalletSelected()" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-xs font-medium bg-gray-50 text-black focus:outline-none">
+                <option value="">-- หรือคลิกเลือกพาเลทสารดิบที่มีในคลัง --</option>
+              </select>
+            </div>
+
+            <!-- กล่องแสดงรายละเอียดพาเลทที่เลือก -->
+            <div id="sift-pallet-info" class="hidden p-4 bg-gray-50 rounded-xl border border-gray-200 space-y-2 text-xs">
+              <div class="flex justify-between items-start">
+                <div>
+                  <span class="text-[10px] text-gray-400 font-bold uppercase block">สารกาแฟ</span>
+                  <h4 id="info-bean-name" class="text-sm font-black text-black">-</h4>
+                </div>
+                <span id="info-pallet-loc" class="font-mono font-black text-black bg-white px-2 py-0.5 rounded border border-gray-200">-</span>
+              </div>
+              <div class="grid grid-cols-3 gap-2 pt-1 border-t border-gray-200 text-center">
+                <div><span class="text-gray-400 block">น้ำหนักเดิม</span><b id="info-raw-weight" class="text-black font-bold">0.00 kg</b></div>
+                <div><span class="text-gray-400 block">จำนวนกระสอบ</span><b id="info-raw-sacks" class="text-black font-bold">0</b></div>
+                <div><span class="text-gray-400 block">รหัส Lot</span><b id="info-lot-code" class="text-black font-mono">-</b></div>
               </div>
             </div>
 
-            <div id="item-info" class="hidden p-3 bg-gray-50 rounded-lg border border-gray-200 space-y-1">
-              <span class="text-xs font-bold text-gray-400">รายละเอียด</span>
-              <h3 id="show-name" class="font-bold text-sm text-black">-</h3>
-              <p class="text-xs text-gray-600">สต๊อกคงเหลือ: <span id="show-stock" class="font-bold text-black">0</span> kg</p>
+            <!-- 2. กรอกผลการร่อน (สารสะอาด + ขยะ) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+              <div class="space-y-1">
+                <label class="block text-xs font-bold text-black">สารสะอาดที่ได้ทั้งหมด (kg) *</label>
+                <input type="number" id="sift_clean_weight" oninput="calculateSiftingMath()" step="0.01" placeholder="เช่น 482.00" class="w-full px-3 py-2.5 border-2 border-black rounded-lg font-black text-black text-base focus:outline-none">
+                <span id="calc-sacks-hint" class="text-[11px] text-gray-500 font-medium block mt-0.5">แบ่ง 30 kg ได้: 0 ถุง</span>
+              </div>
+
+              <div class="space-y-1">
+                <label class="block text-xs font-bold text-black">ของเสียและหิน (Waste kg) *</label>
+                <input type="number" id="sift_waste_weight" oninput="calculateSiftingMath()" step="0.01" placeholder="เช่น 12.00" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg font-black text-black text-base focus:border-black focus:outline-none">
+                <span class="text-[11px] text-gray-400 block mt-0.5">น้ำหนักหินและเมล็ดเสียที่ชั่งทิ้ง</span>
+              </div>
             </div>
 
-            <div>
-              <label class="block text-xs font-bold text-gray-600 mb-1">น้ำหนักที่เบิก (kg)</label>
-              <input type="number" id="issue-qty" step="0.01" class="w-full px-3 py-2 border border-black rounded-lg text-lg font-black focus:outline-none" placeholder="0.00">
+            <!-- 3. แถบสรุปผลลัพธ์การร่อนอัตโนมัติ -->
+            <div class="p-3 bg-gray-50 rounded-xl border border-gray-200 grid grid-cols-2 gap-2 text-center text-xs">
+              <div>
+                <span class="text-gray-400 block font-medium">สัดส่วนของเสีย (Waste %)</span>
+                <b id="math-waste-percent" class="text-sm font-black text-black">0.00%</b>
+              </div>
+              <div>
+                <span class="text-gray-400 block font-medium">ส่วนต่างระเหย (Shrinkage)</span>
+                <b id="math-shrinkage" class="text-sm font-black text-black">0.00 kg</b>
+              </div>
             </div>
 
-            <p id="msg" class="text-xs font-bold text-center hidden"></p>
-            
-            <button type="button" onclick="submitWIP()" id="submit-btn" class="w-full bg-black text-white font-bold py-3.5 rounded-lg text-sm hover:bg-gray-800 transition active:scale-95 cursor-pointer">
-              ตัดสต๊อกเบิกคั่ว
+            <!-- ปุ่มกดยืนยันบันทึกผลการร่อน -->
+            <button type="button" onclick="submitSiftingProcess()" id="btn-submit-sift" class="w-full bg-black hover:bg-gray-800 text-white font-bold py-3.5 rounded-lg text-sm transition active:scale-95 cursor-pointer">
+              บันทึกผลร่อนสารและย้ายเข้าคลัง RT
             </button>
           </div>
+
+          <!-- ตารางประวัติการร่อนล่าสุด -->
+          <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden p-5 space-y-3">
+            <div class="flex justify-between items-center border-b border-gray-100 pb-2">
+              <h3 class="font-bold text-black text-sm">ประวัติการร่อนสารล่าสุด</h3>
+              <button onclick="loadSiftingData()" class="text-xs font-bold text-black bg-gray-100 hover:bg-gray-200 px-3 py-1 rounded-lg transition cursor-pointer">รีเฟรช</button>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="min-w-full text-xs">
+                <thead class="bg-gray-50 text-gray-500 border-b border-gray-200">
+                  <tr>
+                    <th class="py-2 px-3 text-left font-bold">สารกาแฟ</th>
+                    <th class="py-2 px-3 text-center font-bold">พาเลทแม่</th>
+                    <th class="py-2 px-3 text-right font-bold">สารสะอาด</th>
+                    <th class="py-2 px-3 text-right font-bold">ของเสีย (Waste)</th>
+                    <th class="py-2 px-3 text-center font-bold">ผู้บันทึก</th>
+                  </tr>
+                </thead>
+                <tbody id="sift-history-tbody" class="text-black divide-y divide-gray-100">
+                  <tr><td colspan="5" class="py-6 text-center text-gray-400">ยังไม่มีประวัติการร่อน</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
         </div>
+
+        <!-- ========================================================================= -->
+        <!-- ☕ กล่องที่ 2: คั่วกาแฟ (เตรียมไว้สำหรับขั้นตอนถัดไป) ☕ -->
+        <!-- ========================================================================= -->
+        <div id="zone-roast" class="hidden space-y-5">
+          <div class="bg-white p-8 rounded-xl border border-gray-200 shadow-sm text-center space-y-3">
+            <h2 class="text-base font-black text-black">ระบบเบิกคั่วหน้าเตา</h2>
+            <p class="text-xs text-gray-400 max-w-md mx-auto">ดึงใบงานแผนการคั่ว สแกนถุงสารสะอาดจากคลัง RT และตัดสต๊อกเข้าเตาคั่ว</p>
+            <span class="inline-block bg-gray-100 text-black text-xs font-bold px-3 py-1 rounded-lg">พร้อมเชื่อมต่อในขั้นตอนถัดไป</span>
+          </div>
+        </div>
+
       </div>
     </main>
   </div>
 
-  <!-- 📱 Bottom Navigation มือถือ (แสดงผลตลอดเวลา 100%) -->
+  <!-- 📱 Bottom Navigation มือถือ (5 ปุ่มหลัก สไตล์ Binance ขาว-ดำ) -->
   <div id="bottom-nav" class="fixed bottom-0 w-full bg-white border-t border-gray-200 pb-safe z-50 md:hidden shadow-lg no-print">
     <div class="flex justify-around items-center pt-2.5 pb-1 px-1">
       <div onclick="window.location.href='index.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-black cursor-pointer">
@@ -136,8 +232,24 @@
     </div>
   </div>
 
+  <!-- 📷 CAMERA SCANNER MODAL -->
+  <div id="camera-modal" style="display: none;" class="fixed inset-0 bg-black/90 z-50 flex flex-col items-center justify-center p-4 no-print">
+    <div class="max-w-sm w-full bg-black text-white rounded-xl overflow-hidden shadow-2xl border border-gray-800 space-y-3 p-4">
+      <div class="flex justify-between items-center">
+        <span class="text-xs font-bold text-gray-300">กล้องสแกน QR Code</span>
+        <button type="button" onclick="stopScanner()" class="text-gray-400 hover:text-white font-bold">&times;</button>
+      </div>
+      <div id="scanner-view" class="w-full aspect-square bg-gray-900 rounded-lg overflow-hidden border border-gray-800"></div>
+      <button type="button" onclick="stopScanner()" class="w-full py-2 bg-gray-800 text-white rounded-lg text-xs font-bold">ปิดกล้อง</button>
+    </div>
+  </div>
+
   <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbxQywqP4da0BYdt_dHQtQl-kYlvGxmdJWNA59oqnZ_AM7SRyEESbMd73UD3Xx6VffQ/exec"; 
+    const API_URL = "https://script.google.com/macros/s/AKfycbxQywqP4da0BYdt_dHQtQl-kYlvGxmdJWNA59oqnZ_AM7SRyEESbMd73UD3Xx6VffQ/exec";
+    let rawPalletsList = [];
+    let selectedRawPallet = null;
+    let html5QrScanner = null;
+    let activeTargetInputId = null;
 
     function handleLogout() {
       if(confirm("ต้องการออกจากระบบใช่หรือไม่?")) {
@@ -146,63 +258,203 @@
       }
     }
 
-    async function fetchData() {
-      const barcode = document.getElementById('barcode').value.trim();
-      if(!barcode) return alert('กรุณาสแกนหรือพิมพ์บาร์โค้ด');
+    window.onload = function() {
+      loadSiftingData();
+    };
 
-      try {
-        const response = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'get_inventory' }) });
-        const result = await response.json();
-        
-        if(result.success) {
-          const item = result.data.find(row => (row.barcode_id === barcode || row.pallet_id === barcode) && row.status !== 'Empty');
-          if(item) {
-            document.getElementById('show-name').innerText = item.item_name;
-            document.getElementById('show-stock').innerText = item.weight_current;
-            document.getElementById('item-info').classList.remove('hidden');
-            document.getElementById('issue-qty').focus();
-          } else {
-            alert('ไม่พบบาร์โค้ดนี้ในระบบ หรือสินค้าหมดแล้ว');
-          }
-        }
-      } catch (error) {}
+    function switchWIPTab(tab) {
+      document.getElementById('zone-sift').classList.toggle('hidden', tab !== 'sift');
+      document.getElementById('zone-roast').classList.toggle('hidden', tab !== 'roast');
+
+      document.getElementById('tab-btn-sift').className = tab === 'sift'
+        ? "px-4 py-2 font-bold rounded-lg bg-black text-white text-xs md:text-sm whitespace-nowrap shadow-sm transition cursor-pointer"
+        : "px-4 py-2 font-bold rounded-lg text-gray-500 hover:text-black hover:bg-gray-100 text-xs md:text-sm whitespace-nowrap transition cursor-pointer";
+
+      document.getElementById('tab-btn-roast').className = tab === 'roast'
+        ? "px-4 py-2 font-bold rounded-lg bg-black text-white text-xs md:text-sm whitespace-nowrap shadow-sm transition cursor-pointer"
+        : "px-4 py-2 font-bold rounded-lg text-gray-500 hover:text-black hover:bg-gray-100 text-xs md:text-sm whitespace-nowrap transition cursor-pointer";
     }
 
-    async function submitWIP() {
-      const barcode = document.getElementById('barcode').value.trim();
-      const qty = document.getElementById('issue-qty').value;
-      const currentStock = parseFloat(document.getElementById('show-stock').innerText);
-      const msg = document.getElementById('msg');
-      const btn = document.getElementById('submit-btn');
+    // 🌟 ดึงพาเลทสารดิบที่มีในคลังมาให้เลือกร่อน 🌟
+    async function loadSiftingData() {
+      try {
+        const res = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'get_inventory' }) });
+        const result = await res.json();
+        if(result.success && result.data) {
+          // กรองเฉพาะสารดิบที่มีของจริง
+          rawPalletsList = result.data.filter(i => 
+            (i.category === 'Green Bean' || !i.category) && 
+            i.status === 'Active' && 
+            parseFloat(i.weight_current) > 0
+          );
 
-      if(!barcode || !qty) return alert('กรุณาระบุรหัสและจำนวนที่เบิก');
-      if(parseFloat(qty) > currentStock) return alert('สต๊อกไม่พอเบิก! (เหลือ ' + currentStock + ' kg)');
+          const select = document.getElementById('sift_pallet_select');
+          select.innerHTML = '<option value="">-- หรือคลิกเลือกพาเลทสารดิบที่มีในคลัง --</option>' + 
+            rawPalletsList.map((p, idx) => `<option value="${idx}">[${p.location || 'แร็ค'}] ${p.item_name} - ${p.barcode_id} (${p.weight_current} kg)</option>`).join('');
+        }
+      } catch(e) {}
+    }
 
-      btn.innerText = "กำลังตัดสต๊อก...";
+    function onSiftPalletSelected() {
+      const idx = document.getElementById('sift_pallet_select').value;
+      if(idx === "") return;
+      const p = rawPalletsList[idx];
+      setSiftPallet(p);
+    }
+
+    function setSiftPallet(p) {
+      selectedRawPallet = p;
+      document.getElementById('sift_pallet_id').value = p.barcode_id || p.pallet_id;
+      document.getElementById('info-bean-name').innerText = p.item_name || 'สารกาแฟ';
+      document.getElementById('info-pallet-loc').innerText = p.location || 'แร็ค';
+      document.getElementById('info-raw-weight').innerText = `${parseFloat(p.weight_current).toFixed(2)} kg`;
+      document.getElementById('info-raw-sacks').innerText = `${p.sacks || p.unit || '-'}`;
+      document.getElementById('info-lot-code').innerText = p.lot_code || '-';
+
+      document.getElementById('sift-pallet-info').classList.remove('hidden');
+      calculateSiftingMath();
+      document.getElementById('sift_clean_weight').focus();
+    }
+
+    // 🌟 คำนวณคณิตศาสตร์การร่อนแบบเรียลไทม์ 🌟
+    function calculateSiftingMath() {
+      if(!selectedRawPallet) return;
+      const raw = parseFloat(selectedRawPallet.weight_current) || 0;
+      const clean = parseFloat(document.getElementById('sift_clean_weight').value) || 0;
+      const waste = parseFloat(document.getElementById('sift_waste_weight').value) || 0;
+
+      // คำนวณจำนวนถุง 30 kg
+      const bags = Math.floor(clean / 30);
+      const remainder = (clean % 30).toFixed(2);
+      document.getElementById('calc-sacks-hint').innerText = `แบ่ง 30 kg ได้: ${bags} ถุง (เศษ ${remainder} kg)`;
+
+      // คำนวณ % Waste
+      const wastePct = raw > 0 ? ((waste / raw) * 100).toFixed(2) : '0.00';
+      document.getElementById('math-waste-percent').innerText = `${wastePct}%`;
+
+      // คำนวณส่วนต่างระเหย (Shrinkage)
+      const diff = raw - (clean + waste);
+      document.getElementById('math-shrinkage').innerText = `${diff.toFixed(2)} kg`;
+    }
+
+    // 🌟 กดยืนยันบันทึกผลการร่อน 🌟
+    async function submitSiftingProcess() {
+      const palletId = document.getElementById('sift_pallet_id').value.trim();
+      const cleanWeight = parseFloat(document.getElementById('sift_clean_weight').value) || 0;
+      const wasteWeight = parseFloat(document.getElementById('sift_waste_weight').value) || 0;
+
+      if(!selectedRawPallet && palletId) {
+        selectedRawPallet = rawPalletsList.find(p => p.barcode_id === palletId || p.pallet_id === palletId);
+      }
+
+      if(!selectedRawPallet) return alert("กรุณาเลือกหรือสแกนพาเลทสารดิบก่อน");
+      if(cleanWeight <= 0) return alert("กรุณาระบุน้ำหนักสารสะอาดที่ได้");
+
+      const raw = parseFloat(selectedRawPallet.weight_current) || 0;
+      const diff = (raw - (cleanWeight + wasteWeight)).toFixed(2);
+
+      const confirmMsg = `ยืนยันบันทึกผลร่อนสาร [${selectedRawPallet.item_name}]?\n\n` +
+        `- สารดิบต้นทาง: ${raw} kg\n` +
+        `- สารสะอาดที่ได้: ${cleanWeight} kg (ย้ายเข้าคลัง RT)\n` +
+        `- ของเสีย/หิน (Waste): ${wasteWeight} kg\n` +
+        `- ส่วนต่างระเหย: ${diff} kg\n\n` +
+        `*พาเลทแม่เดิมจะถูกเคลียร์เป็น 0 เพื่อเปิดแร็คให้ว่างทันที*`;
+
+      if(!confirm(confirmMsg)) return;
+
+      const btn = document.getElementById('btn-submit-sift');
+      btn.innerText = "กำลังบันทึก...";
       btn.disabled = true;
 
       try {
-        const response = await fetch(API_URL, {
+        const res = await fetch(API_URL, {
           method: "POST",
-          body: JSON.stringify({ action: 'issue_wip', barcode_id: barcode, used_weight: parseFloat(qty), operator: localStorage.getItem('name') || "US" })
+          body: JSON.stringify({
+            action: 'process_sifting',
+            pallet_id: selectedRawPallet.barcode_id || selectedRawPallet.pallet_id,
+            bean_name: selectedRawPallet.item_name,
+            lot_code: selectedRawPallet.lot_code,
+            raw_weight: raw,
+            clean_weight: cleanWeight,
+            waste_weight: wasteWeight,
+            shrinkage: diff,
+            raw_location: selectedRawPallet.location,
+            operator: localStorage.getItem('name') || "Operator"
+          })
         });
-        const result = await response.json();
+        const result = await res.json();
+        alert(result.message);
 
-        msg.classList.remove('hidden');
-        if(result.success) {
-          msg.textContent = result.message;
-          msg.className = "text-xs font-bold text-center text-black block";
-          document.getElementById('show-stock').innerText = (currentStock - parseFloat(qty)).toFixed(2);
-          document.getElementById('issue-qty').value = '';
-          if((currentStock - parseFloat(qty)) <= 0) {
-            document.getElementById('item-info').classList.add('hidden');
-            document.getElementById('barcode').value = '';
-          }
-        }
-      } catch (error) {}
-      finally {
-        btn.innerText = "ตัดสต๊อกเบิกคั่ว";
+        // เพิ่มเข้าตารางประวัติด้านล่าง
+        addSiftHistoryRow(selectedRawPallet.item_name, selectedRawPallet.barcode_id, cleanWeight, wasteWeight);
+
+        // ล้างฟอร์ม
+        document.getElementById('sift_pallet_id').value = '';
+        document.getElementById('sift_clean_weight').value = '';
+        document.getElementById('sift_waste_weight').value = '';
+        document.getElementById('sift-pallet-info').classList.add('hidden');
+        selectedRawPallet = null;
+
+        loadSiftingData();
+      } catch(e) {
+        alert("เชื่อมต่อไม่สำเร็จ");
+      } finally {
+        btn.innerText = "บันทึกผลร่อนสารและย้ายเข้าคลัง RT";
         btn.disabled = false;
+      }
+    }
+
+    function addSiftHistoryRow(name, pallet, clean, waste) {
+      const tbody = document.getElementById('sift-history-tbody');
+      const tr = document.createElement('tr');
+      tr.className = "hover:bg-gray-50";
+      tr.innerHTML = `
+        <td class="py-2 px-3 font-bold text-black">${name}</td>
+        <td class="py-2 px-3 text-center font-mono font-bold">${pallet}</td>
+        <td class="py-2 px-3 text-right font-black text-black">${clean.toFixed(2)} kg</td>
+        <td class="py-2 px-3 text-right text-black font-semibold">${waste.toFixed(2)} kg</td>
+        <td class="py-2 px-3 text-center text-gray-500">${localStorage.getItem('name') || 'Admin'}</td>
+      `;
+      if(tbody.children[0] && tbody.children[0].children.length === 1) tbody.innerHTML = '';
+      tbody.prepend(tr);
+    }
+
+    // 📷 กล้องสแกน
+    function startScanner(targetInputId) {
+      activeTargetInputId = targetInputId;
+      document.getElementById('camera-modal').style.display = 'flex';
+
+      if (!html5QrScanner) {
+        html5QrScanner = new Html5Qrcode("scanner-view");
+      }
+
+      html5QrScanner.start(
+        { facingMode: "environment" },
+        { fps: 10, qrbox: { width: 220, height: 220 } },
+        (decodedText) => {
+          if (activeTargetInputId) {
+            document.getElementById(activeTargetInputId).value = decodedText.trim();
+            const found = rawPalletsList.find(p => p.barcode_id === decodedText.trim() || p.pallet_id === decodedText.trim());
+            if(found) setSiftPallet(found);
+          }
+          stopScanner();
+        },
+        (error) => {}
+      ).catch(err => {
+        alert("กรุณาอนุญาตสิทธิ์การเข้าถึงกล้องครับ");
+        stopScanner();
+      });
+    }
+
+    function stopScanner() {
+      if (html5QrScanner && html5QrScanner.isScanning) {
+        html5QrScanner.stop().then(() => {
+          document.getElementById('camera-modal').style.display = 'none';
+        }).catch(() => {
+          document.getElementById('camera-modal').style.display = 'none';
+        });
+      } else {
+        document.getElementById('camera-modal').style.display = 'none';
       }
     }
   </script>
