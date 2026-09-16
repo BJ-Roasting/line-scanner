@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>BJ Roaster - รับสินค้าเข้า</title>
+  <title>BJ Roaster - รับสินค้าเข้า & สแกนเนอร์ออฟไลน์</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/html5-qrcode"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -81,7 +81,7 @@
 
     <main class="w-full md:ml-64 relative flex flex-col min-h-screen">
       
-      <!-- 🌟 แถบเมนูด้านบน สไตล์ Binance Tab Header (ขาว-ดำ) 🌟 -->
+      <!-- 🌟 แถบเมนูด้านบน สไตล์ Binance Tab Header 🌟 -->
       <div class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-gray-200 no-print">
         <div class="flex items-center gap-2 overflow-x-auto px-4 md:px-8 py-2.5 snap-x">
           <button onclick="window.location.href='planner.html'" class="px-4 py-2 rounded-lg text-sm font-bold text-gray-400 hover:text-black hover:bg-gray-100 transition whitespace-nowrap">วางแผน</button>
@@ -89,7 +89,6 @@
           <button onclick="window.location.href='packing.html'" class="px-4 py-2 rounded-lg text-sm font-bold text-gray-400 hover:text-black hover:bg-gray-100 transition whitespace-nowrap">บรรจุสินค้า</button>
           <button onclick="window.location.href='shipping.html'" class="px-4 py-2 rounded-lg text-sm font-bold text-gray-400 hover:text-black hover:bg-gray-100 transition whitespace-nowrap">จัดส่ง</button>
           <button onclick="window.location.href='item_master.html'" class="px-4 py-2 rounded-lg text-sm font-bold text-gray-400 hover:text-black hover:bg-gray-100 transition whitespace-nowrap">เพิ่มข้อมูลใหม่</button>
-          <!-- Active Tab: รับสินค้าเข้า -->
           <button class="px-4 py-2 rounded-lg text-sm font-bold bg-black text-white whitespace-nowrap shadow-sm">รับสินค้าเข้า</button>
         </div>
       </div>
@@ -225,10 +224,9 @@
               </div>
             </div>
 
-            <!-- 2 ปุ่มแยกอิสระ -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
               <button type="button" onclick="previewA4Only()" class="w-full bg-white hover:bg-gray-100 text-black border-2 border-black font-bold py-3 rounded-lg text-sm transition active:scale-95 cursor-pointer">
-                พรีวิว A4 แนวนอน (ตรวจเช็ค/สั่งพิมพ์)
+                พรีวิว A4 แนวนอน
               </button>
 
               <button type="button" onclick="submitCreateWO()" id="btn-save-wo" class="w-full bg-black hover:bg-gray-800 text-white font-bold py-3 rounded-lg text-sm transition active:scale-95 cursor-pointer">
@@ -240,32 +238,46 @@
         </div>
 
         <!-- ========================================================================= -->
-        <!-- 🚚 โซนที่ 2: หน้าลานรับของ -->
+        <!-- 🚚 โซนที่ 2: หน้าลานรับของ (รองรับ OFFLINE SCANNER & LOCAL QUEUE 100%) -->
         <!-- ========================================================================= -->
-        <div id="zone-dock" class="hidden max-w-4xl space-y-6 no-print">
+        <div id="zone-dock" class="hidden max-w-4xl space-y-5 no-print">
           
-          <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-4">
-            <div class="flex flex-col md:flex-row justify-between md:items-center gap-2 border-b border-gray-100 pb-3">
-              <div>
-                <h2 class="text-base font-bold text-black">ยิงรับสารลงพาเลท</h2>
-                <span id="dock-counter" class="text-xs text-gray-500">บันทึกแล้ว 0 พาเลท</span>
-              </div>
-              <div>
-                <select id="dock_wo_select" onchange="onDockWOSelected()" class="border border-gray-300 rounded-lg px-3 py-1.5 font-bold text-xs bg-white cursor-pointer">
+          <!-- กล่องสถานะใบงานปัจจุบัน (สไตล์รูปที่ 1 และ 2 ของคุณ แต่เป็นธีม ขาว-ดำ) -->
+          <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-4">
+            
+            <!-- แถบบน: เลข WO ปัจจุบัน + สถานะเน็ต -->
+            <div class="flex justify-between items-center bg-gray-50 p-3 rounded-lg border border-gray-200">
+              <div class="flex items-center gap-2">
+                <span class="text-xs font-bold text-gray-500">ใบงานปัจจุบัน:</span>
+                <select id="dock_wo_select" onchange="onDockWOSelected()" class="bg-white border border-gray-300 rounded font-mono font-bold text-xs px-2 py-1 text-black cursor-pointer">
                   <option value="">-- เลือกใบงานรับเข้า --</option>
                 </select>
               </div>
+              <span id="net-status-badge" class="text-[10px] font-bold px-2 py-0.5 rounded bg-black text-white">ออนไลน์</span>
             </div>
 
-            <div class="space-y-3">
+            <!-- กล่องคู่: พิกัดพื้นที่ & พาเลทล่าสุด (สไตล์รูปที่ 1) -->
+            <div class="grid grid-cols-2 gap-3 text-center">
+              <div class="p-3 bg-gray-50 rounded-xl border border-gray-200">
+                <span class="text-[10px] font-bold text-gray-400 uppercase block mb-1">พื้นที่ (Location)</span>
+                <p id="dock-location-label" class="text-sm font-black text-black font-mono">DOCK-STAGE</p>
+              </div>
+              <div class="p-3 bg-gray-50 rounded-xl border border-gray-200">
+                <span class="text-[10px] font-bold text-gray-400 uppercase block mb-1">รหัสพาเลทล่าสุด</span>
+                <p id="dock-last-pallet-label" class="text-sm font-black text-black font-mono">-</p>
+              </div>
+            </div>
+
+            <!-- ช่องข้อมูลสแกน (ยืดหยุ่น กรอกมือหรือยิงกล้องได้ตลอดเวลา) -->
+            <div class="space-y-3 pt-1">
               <div>
                 <div class="flex justify-between items-center mb-1">
                   <label class="block text-xs font-bold text-gray-700">1. สแกน QR พาเลท *</label>
                   <span id="pallet-step-badge" class="text-xs font-bold text-black bg-gray-100 px-2 py-0.5 rounded">พาเลทที่ 1 / 10</span>
                 </div>
                 <div class="flex gap-2">
-                  <input type="text" id="dock_pallet" placeholder="เช่น PAL-2609-001" class="flex-1 px-3 py-2.5 border border-gray-300 rounded-lg font-mono font-bold text-black text-sm uppercase">
-                  <button type="button" onclick="startScanner('dock_pallet')" class="bg-black hover:bg-gray-800 text-white px-4 rounded-lg font-bold text-xs transition cursor-pointer">
+                  <input type="text" id="dock_pallet" placeholder="เช่น PAL-2609-001" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg font-mono font-bold text-black text-sm uppercase">
+                  <button type="button" onclick="startScanner('dock_pallet')" class="bg-black text-white px-4 rounded-lg font-bold text-xs hover:bg-gray-800 transition cursor-pointer">
                     เปิดกล้อง
                   </button>
                 </div>
@@ -274,8 +286,8 @@
               <div>
                 <label class="block text-xs font-bold text-gray-700 mb-1">2. สแกน QR Lot *</label>
                 <div class="flex gap-2">
-                  <input type="text" id="dock_lot" placeholder="สแกน QR Lot" class="flex-1 px-3 py-2.5 border border-gray-300 rounded-lg font-mono font-bold text-black text-sm uppercase">
-                  <button type="button" onclick="startScanner('dock_lot')" class="bg-black hover:bg-gray-800 text-white px-4 rounded-lg font-bold text-xs transition cursor-pointer">
+                  <input type="text" id="dock_lot" placeholder="สแกน QR Lot" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg font-mono font-bold text-black text-sm uppercase">
+                  <button type="button" onclick="startScanner('dock_lot')" class="bg-black text-white px-4 rounded-lg font-bold text-xs hover:bg-gray-800 transition cursor-pointer">
                     เปิดกล้อง
                   </button>
                 </div>
@@ -293,9 +305,10 @@
               </div>
             </div>
 
+            <!-- ปุ่มบันทึกรายการ (ทำงานได้แม้ออฟไลน์) -->
             <div class="space-y-2 pt-2">
-              <button type="button" onclick="submitDockPalletInstant()" id="btn-dock-save" class="w-full bg-black hover:bg-gray-800 text-white font-bold py-3.5 rounded-lg text-sm transition active:scale-95 cursor-pointer">
-                บันทึกพาเลทนี้ ➔ ถัดไป
+              <button type="button" onclick="submitDockPalletLocalFirst()" id="btn-dock-save" class="w-full bg-black hover:bg-gray-800 text-white font-bold py-3.5 rounded-lg text-sm transition active:scale-95 cursor-pointer">
+                บันทึกพาเลทนี้ลงเครื่อง (วนรับถัดไป)
               </button>
 
               <button type="button" onclick="forceCompleteWO()" class="w-full bg-white hover:bg-gray-50 text-gray-600 border border-gray-300 font-bold py-2 rounded-lg text-xs transition cursor-pointer">
@@ -304,11 +317,18 @@
             </div>
           </div>
 
-          <!-- ตารางสต๊อกพาเลท -->
+          <!-- 🌟 กล่องแสดงรายการที่สแกนแล้วและคิวรอซิงค์ (สไตล์รูปที่ 3) 🌟 -->
           <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden p-5 space-y-3">
             <div class="flex justify-between items-center border-b border-gray-100 pb-2">
-              <h3 class="font-bold text-black text-sm">พาเลทที่ยิงรับแล้ว</h3>
-              <span id="dock-pallet-count-badge" class="bg-gray-100 text-black text-xs font-bold px-2.5 py-0.5 rounded">0 พาเลท</span>
+              <div>
+                <h3 class="font-bold text-black text-sm">สแกนแล้ว ( <span id="dock-scanned-count">0</span> )</h3>
+                <p class="text-[11px] text-gray-400">รายการพาเลทที่บันทึกอยู่ในเครื่อง</p>
+              </div>
+              <!-- ปุ่มซิงค์ขึ้นระบบเมื่อมีเน็ต -->
+              <button type="button" onclick="syncOfflineQueueToCloud()" id="btn-sync-cloud" class="bg-black hover:bg-gray-800 text-white font-bold px-3 py-1.5 rounded-lg text-xs transition cursor-pointer flex items-center gap-1">
+                <span>⚡ ซิงค์ขึ้นระบบ</span>
+                <span id="unsynced-count-badge" class="bg-white text-black px-1.5 py-0.2 rounded-full text-[10px]">0</span>
+              </button>
             </div>
 
             <div class="overflow-x-auto">
@@ -320,11 +340,12 @@
                     <th class="py-2 px-3 text-left font-bold">Lot</th>
                     <th class="py-2 px-3 text-center font-bold">กระสอบ</th>
                     <th class="py-2 px-3 text-right font-bold">น้ำหนัก</th>
+                    <th class="py-2 px-3 text-center font-bold">สถานะซิงค์</th>
                     <th class="py-2 px-3 text-center font-bold">จัดการ</th>
                   </tr>
                 </thead>
                 <tbody id="dock-pallets-tbody" class="text-black divide-y divide-gray-100">
-                  <tr><td colspan="6" class="py-6 text-center text-gray-400">ยังไม่มีข้อมูล</td></tr>
+                  <tr><td colspan="7" class="py-6 text-center text-gray-400">ยังไม่มีข้อมูล</td></tr>
                 </tbody>
               </table>
             </div>
@@ -510,18 +531,27 @@
       }
     }
 
+    // 🌟 เช็คสถานะอินเทอร์เน็ตแบบเรียลไทม์ 🌟
+    window.addEventListener('online', updateNetworkStatus);
+    window.addEventListener('offline', updateNetworkStatus);
+
+    function updateNetworkStatus() {
+      const badge = document.getElementById('net-status-badge');
+      if (navigator.onLine) {
+        badge.className = "text-[10px] font-bold px-2 py-0.5 rounded bg-black text-white";
+        badge.innerText = "ออนไลน์";
+      } else {
+        badge.className = "text-[10px] font-bold px-2 py-0.5 rounded bg-gray-200 text-gray-700 border border-gray-300";
+        badge.innerText = "ออฟไลน์ (บันทึกลงเครื่อง)";
+      }
+    }
+
     window.onload = function() {
       document.getElementById('operator-name').innerText = localStorage.getItem('name') || "Admin";
-      
-      // ดึงจาก Local Storage มาแสดงทันทีเพื่อความเร็วบนมือถือ
-      const cachedWOs = localStorage.getItem('cached_all_wos');
-      if (cachedWOs) {
-        try {
-          allInboundWOs = JSON.parse(cachedWOs);
-          renderWOCards(allInboundWOs);
-          populateDockWOSelect();
-        } catch (e) {}
-      }
+      updateNetworkStatus();
+
+      // โหลดแคชพาเลทที่สแกนค้างไว้ในเครื่อง
+      loadLocalPalletQueue();
 
       loadAllWOs();
       loadBeanMasterOptions();
@@ -551,19 +581,19 @@
         if (tab === 'create') loadAllWOs();
         if (tab === 'dock') {
           populateDockWOSelect();
-          loadReceivedPallets();
+          loadLocalPalletQueue();
         }
       } catch (e) {}
     }
 
-      function generateWONumber() {
+    function generateWONumber() {
       const now = new Date();
       const yyyy = now.getFullYear();
       const mm = String(now.getMonth() + 1).padStart(2, '0');
       const prefix = `WO-${yyyy}${mm}-`;
 
       let maxSeq = 0;
-      if (Array.isArray(allInboundWOs) && allInboundWOs.length > 0) {
+      if (allInboundWOs && allInboundWOs.length > 0) {
         allInboundWOs.forEach(w => {
           if (w.wo_number && String(w.wo_number).startsWith(prefix)) {
             const numPart = String(w.wo_number).replace(prefix, '').replace(/[^0-9]/g, '');
@@ -576,19 +606,17 @@
       document.getElementById('wo_number').value = `${prefix}${nextSeq}`;
     }
 
-    async function loadAllWOs() {
+    async function loadBeanMasterOptions() {
       try {
-        const res = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'get_all_inbound_wos' }) });
+        const res = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'get_items' }) });
         const result = await res.json();
-        if(result.success && result.data) {
-          allInboundWOs = result.data;
-          generateWONumber();
-          populateDockWOSelect();
-          renderWOCards(allInboundWOs);
+        if(result.success && result.data && result.data.length > 0) {
+          masterBeans = result.data;
+          const select = document.getElementById('select_bean');
+          select.innerHTML = '<option value="">-- เลือกสารกาแฟ --</option>' + 
+            masterBeans.map((b, idx) => `<option value="${idx}">[${b.bean_code || b.product_code || 'CODE'}] ${b.bean_name || b.product_name}</option>`).join('');
         }
-      } catch (e) {
-        console.warn("กำลังโหลดข้อมูล...");
-      }
+      } catch (e) {}
     }
 
     function onBeanSelected() {
@@ -839,9 +867,6 @@
       document.getElementById('view-supplier').innerText = '-';
       document.getElementById('view-process').innerText = '-';
       document.getElementById('lot_code').value = '';
-      document.getElementById('qc_m1').value = ''; document.getElementById('qc_d1').value = '';
-      document.getElementById('qc_m2').value = ''; document.getElementById('qc_d2').value = '';
-      document.getElementById('qc_m3').value = ''; document.getElementById('qc_d3').value = '';
     }
 
     function renderA4LandscapePreview(woNum, lotCode, bean, palletCount, sackCount, totalWeight, qc) {
@@ -900,13 +925,13 @@
             <div class="col-span-6 grid grid-cols-2 gap-8 p-3 bg-white border-2 border-black rounded-xl">
               <div class="flex flex-col items-center justify-between p-2.5 border-2 border-dashed border-black rounded-xl">
                 <span class="text-xs font-black text-black uppercase">1. QR LOT</span>
-                <div id="prev-qr-lot-${p}" class="p-1.5 bg-white rounded-lg shadow-sm my-1"></div>
+                <div id="prev-qr-lot-${p}" class="p-1.5 my-1"></div>
                 <p class="text-[10px] font-mono font-bold text-black text-center break-all">${lotCode}</p>
               </div>
 
               <div class="flex flex-col items-center justify-between p-2.5 border-2 border-dashed border-black rounded-xl">
                 <span class="text-xs font-black text-black uppercase">2. QR PALLET</span>
-                <div id="prev-qr-pal-${p}" class="p-1.5 bg-white rounded-lg shadow-sm my-1"></div>
+                <div id="prev-qr-pal-${p}" class="p-1.5 my-1"></div>
                 <p class="text-[10px] font-mono font-bold text-black text-center break-all">${palletCode}</p>
               </div>
             </div>
@@ -945,7 +970,7 @@
     }
 
     // =========================================================================
-    // 🚚 หน้าลานรับของ
+    // 🚚 หน้าลานรับของ (ระบบ LOCAL QUEUE & OFFLINE FIRST)
     // =========================================================================
     function populateDockWOSelect() {
       const select = document.getElementById('dock_wo_select');
@@ -984,7 +1009,8 @@
       document.getElementById('pallet-step-badge').innerText = `พาเลทที่ ${currentPalletIndex} / ${totalTargetPallets}`;
     }
 
-    function submitDockPalletInstant() {
+    // 🌟 บันทึกพาเลทลงเครื่องทันที (Local-First 0.05 วิ ทำงานได้แม้ออฟไลน์) 🌟
+    function submitDockPalletLocalFirst() {
       const pallet = document.getElementById('dock_pallet').value.trim().toUpperCase();
       const lot = document.getElementById('dock_lot').value.trim().toUpperCase();
       const sacks = document.getElementById('dock_sacks').value || '0';
@@ -999,36 +1025,164 @@
         lot_code: lot,
         sacks: sacks,
         weight: parseFloat(weight).toFixed(2),
-        location: 'DOCK-STAGE'
+        location: 'DOCK-STAGE',
+        synced: false, // สถานะรอนำขึ้นคลาวด์
+        timestamp: new Date().toLocaleTimeString('th-TH')
       };
 
+      // 1. เพิ่มลงในรายการหน้าจอและ Local Storage ทันที
       receivedPalletsList.unshift(newPallet);
+      saveLocalPalletQueue();
       renderReceivedPalletsTable();
 
+      // อัปเดตป้ายพาเลทล่าสุด
+      document.getElementById('dock-last-pallet-label').innerText = pallet;
+
+      // ล้างช่องน้ำหนัก
       document.getElementById('dock_sacks').value = '';
       document.getElementById('dock_weight').value = '';
 
-      let isCompletedWO = false;
+      // เลื่อนไปพาเลทถัดไป
       if (currentPalletIndex < totalTargetPallets) {
         currentPalletIndex++;
         updatePalletInput();
         document.getElementById('dock_sacks').focus();
       } else {
-        isCompletedWO = true;
-        alert(`ครบถ้วนแล้ว! บันทึกครบทั้ง ${totalTargetPallets} พาเลทเรียบร้อย ปิดงานใบงาน [${woNum}] สำเร็จ`);
+        alert(`ครบถ้วนทั้ง ${totalTargetPallets} พาเลทแล้ว! อย่าลืมกดปุ่ม "⚡ ซิงค์ขึ้นระบบ" เพื่อส่งข้อมูลเข้าคลังนะครับ`);
         if (currentSelectedWO) {
           currentSelectedWO.status = 'Completed';
           renderWOCards(allInboundWOs);
           populateDockWOSelect();
         }
-        document.getElementById('dock_pallet').value = '';
-        document.getElementById('dock_lot').value = '';
       }
 
-      fetch(API_URL, {
-        method: "POST",
-        body: JSON.stringify({ action: 'receive_dock_pallet', ...newPallet, is_completed: isCompletedWO, operator: localStorage.getItem('name') || 'DockStaff' })
-      }).catch(e => {});
+      // ถ้ามีเน็ต ให้พยายามซิงค์เบื้องหลังอัตโนมัติ
+      if (navigator.onLine) {
+        syncSinglePalletSilently(newPallet);
+      }
+    }
+
+    // 🌟 ระบบคลังข้อมูลในเครื่อง (Local Storage Queue) 🌟
+    function saveLocalPalletQueue() {
+      localStorage.setItem('local_pallet_queue', JSON.stringify(receivedPalletsList));
+    }
+
+    function loadLocalPalletQueue() {
+      const saved = localStorage.getItem('local_pallet_queue');
+      if (saved) {
+        try {
+          receivedPalletsList = JSON.parse(saved);
+          renderReceivedPalletsTable();
+        } catch(e) {}
+      }
+    }
+
+    // 🌟 ฟังก์ชันกดซิงค์ข้อมูลทั้งหมดขึ้น Google Sheets เมื่อมีเน็ต 🌟
+    async function syncOfflineQueueToCloud() {
+      const unsyncedItems = receivedPalletsList.filter(p => !p.synced);
+      if (unsyncedItems.length === 0) return alert("ไม่มีข้อมูลที่ค้างซิงค์ ทุกรายการถูกบันทึกขึ้นระบบคลาวด์แล้วครับ");
+
+      if (!navigator.onLine) return alert("มือถือยังออฟไลน์อยู่ กรุณาเชื่อมต่อ Wi-Fi หรือสัญญาณเน็ตก่อนกดซิงค์ครับ");
+
+      const btn = document.getElementById('btn-sync-cloud');
+      btn.innerText = "กำลังซิงค์...";
+
+      let successCount = 0;
+      for (let item of unsyncedItems) {
+        try {
+          await fetch(API_URL, {
+            method: "POST",
+            body: JSON.stringify({ action: 'receive_dock_pallet', ...item, is_completed: false, operator: localStorage.getItem('name') || 'DockStaff' })
+          });
+          item.synced = true;
+          successCount++;
+        } catch(e) {
+          console.warn("ซิงค์ไม่สำเร็จ:", item.pallet_id);
+        }
+      }
+
+      saveLocalPalletQueue();
+      renderReceivedPalletsTable();
+      alert(`✅ ซิงค์ข้อมูลขึ้นระบบสำเร็จ ${successCount} พาเลทเรียบร้อยแล้ว!`);
+      btn.innerHTML = `<span>⚡ ซิงค์ขึ้นระบบ</span><span id="unsynced-count-badge" class="bg-white text-black px-1.5 py-0.2 rounded-full text-[10px]">0</span>`;
+    }
+
+    async function syncSinglePalletSilently(item) {
+      try {
+        await fetch(API_URL, {
+          method: "POST",
+          body: JSON.stringify({ action: 'receive_dock_pallet', ...item, is_completed: false, operator: localStorage.getItem('name') || 'DockStaff' })
+        });
+        item.synced = true;
+        saveLocalPalletQueue();
+        renderReceivedPalletsTable();
+      } catch(e) {}
+    }
+
+    function renderReceivedPalletsTable() {
+      const tbody = document.getElementById('dock-pallets-tbody');
+      const unsyncedCount = receivedPalletsList.filter(p => !p.synced).length;
+      
+      document.getElementById('dock-scanned-count').innerText = receivedPalletsList.length;
+      const unsyncedBadge = document.getElementById('unsynced-count-badge');
+      if (unsyncedBadge) unsyncedBadge.innerText = unsyncedCount;
+
+      if(receivedPalletsList.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" class="py-6 text-center text-gray-400">ยังไม่มีข้อมูล</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = receivedPalletsList.map((p, idx) => `
+        <tr class="hover:bg-gray-50">
+          <td class="py-2 px-3 font-mono font-bold text-black">${p.pallet_id || p.barcode_id || '-'}</td>
+          <td class="py-2 px-3 font-bold text-black">${p.wo_number || '-'}</td>
+          <td class="py-2 px-3 font-mono text-gray-600">${p.lot_code || '-'}</td>
+          <td class="py-2 px-3 text-center">${p.sacks || '-'}</td>
+          <td class="py-2 px-3 text-right font-bold text-black">${p.weight || 0} kg</td>
+          <td class="py-2 px-3 text-center">
+            <span class="text-[10px] font-bold px-2 py-0.5 rounded border ${p.synced ? 'border-gray-300 text-gray-400 bg-gray-50' : 'border-black bg-black text-white'}">
+              ${p.synced ? 'คลาวด์' : 'รอซิงค์'}
+            </span>
+          </td>
+          <td class="py-2 px-3 text-center space-x-2">
+            <button type="button" onclick="openEditPalletModal(${idx})" class="text-black hover:underline font-bold cursor-pointer">แก้ไข</button>
+            <button type="button" onclick="deleteReceivedPallet(${idx})" class="text-gray-400 hover:text-black font-bold cursor-pointer">ลบ</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function deleteReceivedPallet(idx) {
+      const p = receivedPalletsList[idx];
+      if(!confirm(`ต้องการลบพาเลท [${p.pallet_id || p.barcode_id}] ออกใช่หรือไม่?`)) return;
+      receivedPalletsList.splice(idx, 1);
+      saveLocalPalletQueue();
+      renderReceivedPalletsTable();
+    }
+
+    function openEditPalletModal(idx) {
+      const p = receivedPalletsList[idx];
+      document.getElementById('edit_pallet_id').value = p.pallet_id || p.barcode_id;
+      document.getElementById('edit_pallet_sacks').value = p.sacks || '';
+      document.getElementById('edit_pallet_weight').value = p.weight || '';
+      document.getElementById('edit-pallet-modal').style.display = 'flex';
+      document.getElementById('edit-pallet-modal').dataset.editIdx = idx;
+    }
+
+    function closeEditPalletModal() {
+      document.getElementById('edit-pallet-modal').style.display = 'none';
+    }
+
+    function saveEditedPallet() {
+      const idx = document.getElementById('edit-pallet-modal').dataset.editIdx;
+      if (idx !== undefined) {
+        receivedPalletsList[idx].sacks = document.getElementById('edit_pallet_sacks').value;
+        receivedPalletsList[idx].weight = parseFloat(document.getElementById('edit_pallet_weight').value).toFixed(2);
+        receivedPalletsList[idx].synced = false; // มาร์กให้ซิงค์ใหม่
+        saveLocalPalletQueue();
+        renderReceivedPalletsTable();
+        closeEditPalletModal();
+      }
     }
 
     function forceCompleteWO() {
@@ -1051,37 +1205,12 @@
       document.getElementById('dock_lot').value = '';
     }
 
-    function renderReceivedPalletsTable() {
-      const tbody = document.getElementById('dock-pallets-tbody');
-      document.getElementById('dock-pallet-count-badge').innerText = `${receivedPalletsList.length} พาเลท`;
-      document.getElementById('dock-counter').innerText = `บันทึกแล้ว ${receivedPalletsList.length} พาเลท`;
-
-      if(receivedPalletsList.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" class="py-6 text-center text-gray-400">ยังไม่มีข้อมูล</td></tr>`;
-        return;
-      }
-
-      tbody.innerHTML = receivedPalletsList.map((p, idx) => `
-        <tr class="hover:bg-gray-50">
-          <td class="py-2 px-3 font-mono font-bold text-black">${p.pallet_id || p.barcode_id || '-'}</td>
-          <td class="py-2 px-3 font-bold text-black">${p.wo_number || '-'}</td>
-          <td class="py-2 px-3 font-mono text-gray-600">${p.lot_code || '-'}</td>
-          <td class="py-2 px-3 text-center">${p.sacks || '-'}</td>
-          <td class="py-2 px-3 text-right font-bold text-black">${p.weight || p.weight_current || 0}</td>
-          <td class="py-2 px-3 text-center space-x-2">
-            <button type="button" onclick="openEditPalletModal(${idx})" class="text-black hover:underline font-bold cursor-pointer">แก้ไข</button>
-            <button type="button" onclick="deleteReceivedPallet(${idx})" class="text-gray-400 hover:text-black font-bold cursor-pointer">ลบ</button>
-          </td>
-        </tr>
-      `).join('');
-    }
-
     async function loadReceivedPallets() {
       try {
         const res = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'get_inventory' }) });
         const result = await res.json();
         if(result.success && result.data) {
-          receivedPalletsList = result.data
+          const cloudPallets = result.data
             .filter(i => i.location === 'DOCK-STAGE' || i.status === 'Loaded')
             .map(i => ({
               pallet_id: i.barcode_id || i.pallet_id,
@@ -1089,54 +1218,22 @@
               lot_code: i.lot_code || '-',
               sacks: i.unit === 'kg' ? '-' : i.unit,
               weight: i.weight_current,
-              location: i.location
+              location: i.location,
+              synced: true
             }));
+          
+          // ผสานข้อมูลคลาวด์เข้ากับข้อมูลที่ค้างอยู่ในเครื่อง
+          const localUnsynced = receivedPalletsList.filter(p => !p.synced);
+          receivedPalletsList = [...localUnsynced, ...cloudPallets];
+          saveLocalPalletQueue();
           renderReceivedPalletsTable();
         }
       } catch (e) {}
     }
 
-    let editingPalletIdx = null;
-
-    function openEditPalletModal(idx) {
-      editingPalletIdx = idx;
-      const p = receivedPalletsList[idx];
-      document.getElementById('edit_pallet_id').value = p.pallet_id || p.barcode_id;
-      document.getElementById('edit_pallet_sacks').value = p.sacks || '';
-      document.getElementById('edit_pallet_weight').value = p.weight || p.weight_current || '';
-      document.getElementById('edit-pallet-modal').style.display = 'flex';
-    }
-
-    function closeEditPalletModal() {
-      document.getElementById('edit-pallet-modal').style.display = 'none';
-    }
-
-    function saveEditedPallet() {
-      if(editingPalletIdx === null) return;
-      const p = receivedPalletsList[editingPalletIdx];
-      p.sacks = document.getElementById('edit_pallet_sacks').value;
-      p.weight = parseFloat(document.getElementById('edit_pallet_weight').value).toFixed(2);
-      renderReceivedPalletsTable();
-      closeEditPalletModal();
-
-      fetch(API_URL, {
-        method: "POST",
-        body: JSON.stringify({ action: 'update_inventory', barcode_id: p.pallet_id, new_weight: p.weight, new_location: 'DOCK-STAGE', new_status: 'Loaded' })
-      }).catch(e => {});
-    }
-
-    function deleteReceivedPallet(idx) {
-      const p = receivedPalletsList[idx];
-      if(!confirm(`ต้องการลบพาเลท [${p.pallet_id || p.barcode_id}] ออกใช่หรือไม่?`)) return;
-      receivedPalletsList.splice(idx, 1);
-      renderReceivedPalletsTable();
-
-      fetch(API_URL, {
-        method: "POST",
-        body: JSON.stringify({ action: 'delete_inventory', barcode_id: p.pallet_id || p.barcode_id })
-      }).catch(e => {});
-    }
-
+    // =========================================================================
+    // 🏢 รถโฟล์คลิฟต์ยิงพาเลทขึ้น Rack
+    // =========================================================================
     async function submitPutawayRack() {
       const pallet = document.getElementById('rack_pallet').value.trim().toUpperCase();
       const location = document.getElementById('rack_location').value.trim().toUpperCase();
@@ -1165,6 +1262,9 @@
       }
     }
 
+    // =========================================================================
+    // 📷 CAMERA SCANNER (ทำงานได้แม้ออฟไลน์ 100%)
+    // =========================================================================
     function startScanner(targetInputId) {
       activeTargetInputId = targetInputId;
       document.getElementById('camera-modal').style.display = 'flex';
