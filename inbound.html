@@ -1121,8 +1121,12 @@
 
       if(!pallet || !lot || !weight) return alert("กรุณาระบุ QR พาเลท, QR Lot และน้ำหนักชั่งสุทธิ");
 
+      // 🌟 ดึงชื่อสารกาแฟจริงจากใบงานที่เลือกอยู่ 🌟
+      const realBeanName = currentSelectedWO ? (currentSelectedWO.bean_name || currentSelectedWO.product_name) : "สารกาแฟ";
+
       const newPallet = {
         pallet_id: pallet,
+        bean_name: realBeanName, // 👈 เพิ่มบรรทัดนี้ลงไป
         wo_number: woNum,
         lot_code: lot,
         sacks: sacks,
