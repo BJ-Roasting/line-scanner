@@ -156,8 +156,10 @@
                 <label class="block text-xs font-bold text-gray-500 mb-1">ประเภทใบงาน</label>
                 <input type="text" id="wo_type" value="รับสินค้าเข้า" class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg font-bold text-gray-700 text-sm" readonly>
               </div>
+              
+              <!-- 🌟 ช่องเลือกสารกาแฟ (แสดงชื่อ Supplier ชัดเจน) 🌟 -->
               <div class="md:col-span-2">
-                <label class="block text-xs font-bold text-gray-700 mb-1">เลือกสารกาแฟ *</label>
+                <label class="block text-xs font-bold text-gray-700 mb-1">เลือกสารกาแฟ * (แสดงชื่อซัพพลายเออร์ต่อท้าย)</label>
                 <select id="select_bean" onchange="onBeanSelected()" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg bg-white font-bold text-black text-sm focus:border-black focus:outline-none">
                   <option value="">-- กำลังโหลดรายการสารกาแฟ --</option>
                 </select>
@@ -224,6 +226,7 @@
               </div>
             </div>
 
+            <!-- 2 ปุ่มแยกอิสระ -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
               <button type="button" onclick="previewA4Only()" class="w-full bg-white hover:bg-gray-100 text-black border-2 border-black font-bold py-3 rounded-lg text-sm transition active:scale-95 cursor-pointer">
                 พรีวิว A4 แนวนอน
@@ -238,14 +241,12 @@
         </div>
 
         <!-- ========================================================================= -->
-        <!-- 🚚 โซนที่ 2: หน้าลานรับของ (รองรับ OFFLINE SCANNER & LOCAL QUEUE 100%) -->
+        <!-- 🚚 โซนที่ 2: หน้าลานรับของ (รองรับ OFFLINE SCANNER) -->
         <!-- ========================================================================= -->
         <div id="zone-dock" class="hidden max-w-4xl space-y-5 no-print">
           
-          <!-- กล่องสถานะใบงานปัจจุบัน (สไตล์รูปที่ 1 และ 2 ของคุณ แต่เป็นธีม ขาว-ดำ) -->
           <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-4">
             
-            <!-- แถบบน: เลข WO ปัจจุบัน + สถานะเน็ต -->
             <div class="flex justify-between items-center bg-gray-50 p-3 rounded-lg border border-gray-200">
               <div class="flex items-center gap-2">
                 <span class="text-xs font-bold text-gray-500">ใบงานปัจจุบัน:</span>
@@ -256,7 +257,6 @@
               <span id="net-status-badge" class="text-[10px] font-bold px-2 py-0.5 rounded bg-black text-white">ออนไลน์</span>
             </div>
 
-            <!-- กล่องคู่: พิกัดพื้นที่ & พาเลทล่าสุด (สไตล์รูปที่ 1) -->
             <div class="grid grid-cols-2 gap-3 text-center">
               <div class="p-3 bg-gray-50 rounded-xl border border-gray-200">
                 <span class="text-[10px] font-bold text-gray-400 uppercase block mb-1">พื้นที่ (Location)</span>
@@ -268,7 +268,6 @@
               </div>
             </div>
 
-            <!-- ช่องข้อมูลสแกน (ยืดหยุ่น กรอกมือหรือยิงกล้องได้ตลอดเวลา) -->
             <div class="space-y-3 pt-1">
               <div>
                 <div class="flex justify-between items-center mb-1">
@@ -305,7 +304,6 @@
               </div>
             </div>
 
-            <!-- ปุ่มบันทึกรายการ (ทำงานได้แม้ออฟไลน์) -->
             <div class="space-y-2 pt-2">
               <button type="button" onclick="submitDockPalletLocalFirst()" id="btn-dock-save" class="w-full bg-black hover:bg-gray-800 text-white font-bold py-3.5 rounded-lg text-sm transition active:scale-95 cursor-pointer">
                 บันทึกพาเลทนี้ลงเครื่อง (วนรับถัดไป)
@@ -317,14 +315,12 @@
             </div>
           </div>
 
-          <!-- 🌟 กล่องแสดงรายการที่สแกนแล้วและคิวรอซิงค์ (สไตล์รูปที่ 3) 🌟 -->
           <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden p-5 space-y-3">
             <div class="flex justify-between items-center border-b border-gray-100 pb-2">
               <div>
                 <h3 class="font-bold text-black text-sm">สแกนแล้ว ( <span id="dock-scanned-count">0</span> )</h3>
                 <p class="text-[11px] text-gray-400">รายการพาเลทที่บันทึกอยู่ในเครื่อง</p>
               </div>
-              <!-- ปุ่มซิงค์ขึ้นระบบเมื่อมีเน็ต -->
               <button type="button" onclick="syncOfflineQueueToCloud()" id="btn-sync-cloud" class="bg-black hover:bg-gray-800 text-white font-bold px-3 py-1.5 rounded-lg text-xs transition cursor-pointer flex items-center gap-1">
                 <span>⚡ ซิงค์ขึ้นระบบ</span>
                 <span id="unsynced-count-badge" class="bg-white text-black px-1.5 py-0.2 rounded-full text-[10px]">0</span>
@@ -531,7 +527,6 @@
       }
     }
 
-    // 🌟 เช็คสถานะอินเทอร์เน็ตแบบเรียลไทม์ 🌟
     window.addEventListener('online', updateNetworkStatus);
     window.addEventListener('offline', updateNetworkStatus);
 
@@ -550,9 +545,7 @@
       document.getElementById('operator-name').innerText = localStorage.getItem('name') || "Admin";
       updateNetworkStatus();
 
-      // โหลดแคชพาเลทที่สแกนค้างไว้ในเครื่อง
       loadLocalPalletQueue();
-
       loadAllWOs();
       loadBeanMasterOptions();
       loadReceivedPallets();
@@ -606,6 +599,7 @@
       document.getElementById('wo_number').value = `${prefix}${nextSeq}`;
     }
 
+    // 🌟 แสดงชื่อและรหัส Supplier ในช่องเลือกสารกาแฟทันที 🌟
     async function loadBeanMasterOptions() {
       try {
         const res = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'get_items' }) });
@@ -614,7 +608,14 @@
           masterBeans = result.data;
           const select = document.getElementById('select_bean');
           select.innerHTML = '<option value="">-- เลือกสารกาแฟ --</option>' + 
-            masterBeans.map((b, idx) => `<option value="${idx}">[${b.bean_code || b.product_code || 'CODE'}] ${b.bean_name || b.product_name}</option>`).join('');
+            masterBeans.map((b, idx) => {
+              const code = b.bean_code || b.product_code || 'CODE';
+              const name = b.bean_name || b.product_name || 'สารกาแฟ';
+              const sup = b.supplier_name || b.supplier_code || '-';
+              return `<option value="${idx}">[${code}] ${name} | ซัพ: ${sup}</option>`;
+            }).join('');
+        } else {
+          document.getElementById('select_bean').innerHTML = '<option value="custom">-- เลือกสารกาแฟ --</option>';
         }
       } catch (e) {}
     }
@@ -625,7 +626,7 @@
       const bean = masterBeans[idx];
       document.getElementById('view-prod-code').innerText = bean.product_code || '-';
       document.getElementById('view-bean-name').innerText = bean.bean_name || '-';
-      document.getElementById('view-supplier').innerText = bean.supplier_name || '-';
+      document.getElementById('view-supplier').innerText = bean.supplier_name || bean.supplier_code || '-';
       document.getElementById('view-process').innerText = bean.process || '-';
 
       const now = new Date();
@@ -921,17 +922,16 @@
               </div>
             </div>
 
-            <!-- Dual QR Code แยกห่างกันชัดเจน -->
             <div class="col-span-6 grid grid-cols-2 gap-8 p-3 bg-white border-2 border-black rounded-xl">
               <div class="flex flex-col items-center justify-between p-2.5 border-2 border-dashed border-black rounded-xl">
                 <span class="text-xs font-black text-black uppercase">1. QR LOT</span>
-                <div id="prev-qr-lot-${p}" class="p-1.5 my-1"></div>
+                <div id="prev-qr-lot-${p}" class="p-1.5 bg-white rounded-lg shadow-sm my-1"></div>
                 <p class="text-[10px] font-mono font-bold text-black text-center break-all">${lotCode}</p>
               </div>
 
               <div class="flex flex-col items-center justify-between p-2.5 border-2 border-dashed border-black rounded-xl">
                 <span class="text-xs font-black text-black uppercase">2. QR PALLET</span>
-                <div id="prev-qr-pal-${p}" class="p-1.5 my-1"></div>
+                <div id="prev-qr-pal-${p}" class="p-1.5 bg-white rounded-lg shadow-sm my-1"></div>
                 <p class="text-[10px] font-mono font-bold text-black text-center break-all">${palletCode}</p>
               </div>
             </div>
@@ -969,9 +969,6 @@
       document.getElementById('preview-modal').style.display = 'none';
     }
 
-    // =========================================================================
-    // 🚚 หน้าลานรับของ (ระบบ LOCAL QUEUE & OFFLINE FIRST)
-    // =========================================================================
     function populateDockWOSelect() {
       const select = document.getElementById('dock_wo_select');
       const pendingList = Array.isArray(allInboundWOs) ? allInboundWOs.filter(w => w.status !== 'Completed') : [];
@@ -1009,7 +1006,6 @@
       document.getElementById('pallet-step-badge').innerText = `พาเลทที่ ${currentPalletIndex} / ${totalTargetPallets}`;
     }
 
-    // 🌟 บันทึกพาเลทลงเครื่องทันที (Local-First 0.05 วิ ทำงานได้แม้ออฟไลน์) 🌟
     function submitDockPalletLocalFirst() {
       const pallet = document.getElementById('dock_pallet').value.trim().toUpperCase();
       const lot = document.getElementById('dock_lot').value.trim().toUpperCase();
@@ -1026,23 +1022,18 @@
         sacks: sacks,
         weight: parseFloat(weight).toFixed(2),
         location: 'DOCK-STAGE',
-        synced: false, // สถานะรอนำขึ้นคลาวด์
+        synced: false,
         timestamp: new Date().toLocaleTimeString('th-TH')
       };
 
-      // 1. เพิ่มลงในรายการหน้าจอและ Local Storage ทันที
       receivedPalletsList.unshift(newPallet);
       saveLocalPalletQueue();
       renderReceivedPalletsTable();
 
-      // อัปเดตป้ายพาเลทล่าสุด
       document.getElementById('dock-last-pallet-label').innerText = pallet;
-
-      // ล้างช่องน้ำหนัก
       document.getElementById('dock_sacks').value = '';
       document.getElementById('dock_weight').value = '';
 
-      // เลื่อนไปพาเลทถัดไป
       if (currentPalletIndex < totalTargetPallets) {
         currentPalletIndex++;
         updatePalletInput();
@@ -1056,13 +1047,11 @@
         }
       }
 
-      // ถ้ามีเน็ต ให้พยายามซิงค์เบื้องหลังอัตโนมัติ
       if (navigator.onLine) {
         syncSinglePalletSilently(newPallet);
       }
     }
 
-    // 🌟 ระบบคลังข้อมูลในเครื่อง (Local Storage Queue) 🌟
     function saveLocalPalletQueue() {
       localStorage.setItem('local_pallet_queue', JSON.stringify(receivedPalletsList));
     }
@@ -1077,7 +1066,6 @@
       }
     }
 
-    // 🌟 ฟังก์ชันกดซิงค์ข้อมูลทั้งหมดขึ้น Google Sheets เมื่อมีเน็ต 🌟
     async function syncOfflineQueueToCloud() {
       const unsyncedItems = receivedPalletsList.filter(p => !p.synced);
       if (unsyncedItems.length === 0) return alert("ไม่มีข้อมูลที่ค้างซิงค์ ทุกรายการถูกบันทึกขึ้นระบบคลาวด์แล้วครับ");
@@ -1178,7 +1166,7 @@
       if (idx !== undefined) {
         receivedPalletsList[idx].sacks = document.getElementById('edit_pallet_sacks').value;
         receivedPalletsList[idx].weight = parseFloat(document.getElementById('edit_pallet_weight').value).toFixed(2);
-        receivedPalletsList[idx].synced = false; // มาร์กให้ซิงค์ใหม่
+        receivedPalletsList[idx].synced = false;
         saveLocalPalletQueue();
         renderReceivedPalletsTable();
         closeEditPalletModal();
@@ -1222,7 +1210,6 @@
               synced: true
             }));
           
-          // ผสานข้อมูลคลาวด์เข้ากับข้อมูลที่ค้างอยู่ในเครื่อง
           const localUnsynced = receivedPalletsList.filter(p => !p.synced);
           receivedPalletsList = [...localUnsynced, ...cloudPallets];
           saveLocalPalletQueue();
@@ -1231,9 +1218,6 @@
       } catch (e) {}
     }
 
-    // =========================================================================
-    // 🏢 รถโฟล์คลิฟต์ยิงพาเลทขึ้น Rack
-    // =========================================================================
     async function submitPutawayRack() {
       const pallet = document.getElementById('rack_pallet').value.trim().toUpperCase();
       const location = document.getElementById('rack_location').value.trim().toUpperCase();
@@ -1262,9 +1246,6 @@
       }
     }
 
-    // =========================================================================
-    // 📷 CAMERA SCANNER (ทำงานได้แม้ออฟไลน์ 100%)
-    // =========================================================================
     function startScanner(targetInputId) {
       activeTargetInputId = targetInputId;
       document.getElementById('camera-modal').style.display = 'flex';
