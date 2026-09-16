@@ -556,18 +556,19 @@
       } catch (e) {}
     }
 
-    function generateWONumber() {
+      function generateWONumber() {
       const now = new Date();
       const yyyy = now.getFullYear();
       const mm = String(now.getMonth() + 1).padStart(2, '0');
       const prefix = `WO-${yyyy}${mm}-`;
 
       let maxSeq = 0;
-      if (allInboundWOs && allInboundWOs.length > 0) {
+      if (Array.isArray(allInboundWOs) && allInboundWOs.length > 0) {
         allInboundWOs.forEach(w => {
-          if (w.wo_number && w.wo_number.startsWith(prefix)) {
-            const seqPart = parseInt(w.wo_number.replace(prefix, '')) || 0;
-            if (seqPart > maxSeq) maxSeq = seqPart;
+          if (w.wo_number && String(w.wo_number).startsWith(prefix)) {
+            const numPart = String(w.wo_number).replace(prefix, '').replace(/[^0-9]/g, '');
+            const seq = parseInt(numPart, 10) || 0;
+            if (seq > maxSeq) maxSeq = seq;
           }
         });
       }
@@ -575,19 +576,19 @@
       document.getElementById('wo_number').value = `${prefix}${nextSeq}`;
     }
 
-    async function loadBeanMasterOptions() {
+    async function loadAllWOs() {
       try {
-        const res = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'get_items' }) });
+        const res = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'get_all_inbound_wos' }) });
         const result = await res.json();
-        if(result.success && result.data && result.data.length > 0) {
-          masterBeans = result.data;
-          const select = document.getElementById('select_bean');
-          select.innerHTML = '<option value="">-- เลือกสารกาแฟ --</option>' + 
-            masterBeans.map((b, idx) => `<option value="${idx}">[${b.bean_code || b.product_code || 'CODE'}] ${b.bean_name || b.product_name}</option>`).join('');
-        } else {
-          document.getElementById('select_bean').innerHTML = '<option value="custom">-- เลือกสารกาแฟ --</option>';
+        if(result.success && result.data) {
+          allInboundWOs = result.data;
+          generateWONumber();
+          populateDockWOSelect();
+          renderWOCards(allInboundWOs);
         }
-      } catch (e) {}
+      } catch (e) {
+        console.warn("กำลังโหลดข้อมูล...");
+      }
     }
 
     function onBeanSelected() {
