@@ -112,25 +112,31 @@
         </div>
 
         <!-- ========================================================================= -->
-        <!-- 📥 โซนที่ 1: ออกใบงานรับเข้า & คลังการ์ด WO Inventory -->
+        <!-- 📥 โซนที่ 1: ออกใบงานรับเข้า & คลังการ์ด WO (🌟 ซ่อนใบงานที่เสร็จแล้วทันที 🌟) -->
         <!-- ========================================================================= -->
         <div id="zone-create" class="space-y-6">
 
-          <!-- คลังการ์ด WO INVENTORY ด้านบน -->
+          <!-- คลังการ์ด WO ด้านบน -->
           <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-4 no-print">
-            <div class="flex justify-between items-center border-b border-gray-100 pb-3">
+            <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-3 border-b border-gray-100 pb-3">
               <div>
                 <h3 class="font-bold text-gray-900 text-base flex items-center gap-2">
                   <span>รายการใบงานรับเข้า</span>
-                  <span id="wo-inventory-count" class="text-xs bg-gray-100 text-black font-bold px-2 py-0.5 rounded">0 รายการ</span>
+                  <span id="wo-inventory-count" class="text-xs bg-gray-100 text-black font-bold px-2 py-0.5 rounded">0</span>
                 </h3>
               </div>
 
-              <div class="flex items-center gap-2">
-                <button type="button" id="btn-manage-wo" onclick="toggleManageWOMode()" class="text-xs bg-white hover:bg-gray-100 text-black border border-gray-300 font-bold px-3 py-1.5 rounded-lg transition cursor-pointer">
+              <!-- 🌟 แถบสลับดู: [กำลังรอรับ (ใบงานเสร็จแล้วหายไป)] VS [เสร็จสิ้นแล้ว] 🌟 -->
+              <div class="flex items-center gap-1.5 bg-gray-100 p-1 rounded-lg">
+                <button type="button" id="filter-btn-pending" onclick="setWOViewFilter('Pending')" class="px-3 py-1 rounded-md text-xs font-bold bg-black text-white shadow-sm transition">
+                  กำลังรอรับ
+                </button>
+                <button type="button" id="filter-btn-completed" onclick="setWOViewFilter('Completed')" class="px-3 py-1 rounded-md text-xs font-bold text-gray-500 hover:text-black transition">
+                  เสร็จสิ้นแล้ว
+                </button>
+                <button type="button" id="btn-manage-wo" onclick="toggleManageWOMode()" class="ml-2 px-3 py-1 rounded-md text-xs font-bold bg-white text-black border border-gray-300 transition cursor-pointer">
                   จัดการ
                 </button>
-                <button type="button" onclick="loadAllWOs()" class="text-xs bg-gray-100 hover:bg-gray-200 text-black font-bold px-3 py-1.5 rounded-lg transition cursor-pointer">รีเฟรช</button>
               </div>
             </div>
 
@@ -158,14 +164,13 @@
               </div>
               
               <div class="md:col-span-2">
-                <label class="block text-xs font-bold text-gray-700 mb-1">เลือกสารกาแฟ *</label>
+                <label class="block text-xs font-bold text-gray-700 mb-1">เลือกสารกาแฟ * (แสดงชื่อซัพพลายเออร์ต่อท้าย)</label>
                 <select id="select_bean" onchange="onBeanSelected()" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg bg-white font-bold text-black text-sm focus:border-black focus:outline-none">
                   <option value="">-- กำลังโหลดรายการสารกาแฟ --</option>
                 </select>
               </div>
             </div>
 
-            <!-- ข้อมูลสาร -->
             <div class="grid grid-cols-2 md:grid-cols-4 gap-2 bg-gray-50 p-3 rounded-lg border border-gray-200 text-xs">
               <div><span class="text-gray-400">Product Code:</span><br><b id="view-prod-code" class="text-black">-</b></div>
               <div><span class="text-gray-400">ชื่อเรียกสาร:</span><br><b id="view-bean-name" class="text-black">-</b></div>
@@ -173,7 +178,6 @@
               <div><span class="text-gray-400">Process:</span><br><b id="view-process" class="text-black">-</b></div>
             </div>
 
-            <!-- Lot & พาเลท -->
             <div class="border-t border-gray-100 pt-4 space-y-3">
               <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
                 <div>
@@ -203,7 +207,6 @@
               </div>
             </div>
 
-            <!-- QC 3 ครั้ง -->
             <div class="border-t border-gray-100 pt-4 space-y-2">
               <span class="text-xs font-bold text-black block">สุ่มตรวจ QC 3 ครั้ง</span>
               <div class="grid grid-cols-3 gap-2 text-center text-xs">
@@ -225,7 +228,6 @@
               </div>
             </div>
 
-            <!-- 2 ปุ่มแยกอิสระ -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
               <button type="button" onclick="previewA4Only()" class="w-full bg-white hover:bg-gray-100 text-black border-2 border-black font-bold py-3 rounded-lg text-sm transition active:scale-95 cursor-pointer">
                 พรีวิว A4 แนวนอน
@@ -240,12 +242,11 @@
         </div>
 
         <!-- ========================================================================= -->
-        <!-- 🚚 โซนที่ 2: หน้าลานรับของ (รองรับ OFFLINE SCANNER) -->
+        <!-- 🚚 โซนที่ 2: หน้าลานรับของ -->
         <!-- ========================================================================= -->
         <div id="zone-dock" class="hidden max-w-4xl space-y-5 no-print">
           
           <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-4">
-            
             <div class="flex justify-between items-center bg-gray-50 p-3 rounded-lg border border-gray-200">
               <div class="flex items-center gap-2">
                 <span class="text-xs font-bold text-gray-500">ใบงานปัจจุบัน:</span>
@@ -349,12 +350,11 @@
         </div>
 
         <!-- ========================================================================= -->
-        <!-- 🏢 โซนที่ 3: รถโฟล์คลิฟต์ยิงพาเลทขึ้น Rack (🌟 อัปเกรด OFFLINE FIRST 100% 🌟) -->
+        <!-- 🏢 โซนที่ 3: รถโฟล์คลิฟต์ยิงพาเลทขึ้น Rack -->
         <!-- ========================================================================= -->
         <div id="zone-rack" class="hidden max-w-4xl space-y-5 no-print">
           
           <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-4">
-            
             <div class="flex justify-between items-center bg-gray-50 p-3 rounded-lg border border-gray-200">
               <div>
                 <h2 class="text-sm font-black text-black tracking-tight">ยิงพาเลทเข้า Location Rack (โฟล์คลิฟต์)</h2>
@@ -363,7 +363,6 @@
               <span id="net-status-badge-rack" class="text-[10px] font-bold px-2 py-0.5 rounded bg-black text-white">ออนไลน์</span>
             </div>
 
-            <!-- กล่องคู่: พิกัดแร็คล่าสุด & พาเลทล่าสุดที่เพิ่งย้าย -->
             <div class="grid grid-cols-2 gap-3 text-center">
               <div class="p-3 bg-gray-50 rounded-xl border border-gray-200">
                 <span class="text-[10px] font-bold text-gray-400 uppercase block mb-1">ช่อง Rack ล่าสุด</span>
@@ -397,13 +396,11 @@
               </div>
             </div>
 
-            <!-- ปุ่มบันทึกลงเครื่องทันที -->
             <button type="button" onclick="submitPutawayLocalFirst()" id="btn-rack-save" class="w-full bg-black hover:bg-gray-800 text-white font-bold py-3.5 rounded-lg text-sm transition active:scale-95 cursor-pointer">
               บันทึกเก็บเข้าแร็คลงเครื่อง (วนเก็บถัดไป)
             </button>
           </div>
 
-          <!-- 🌟 ตารางบันทึกพาเลทขึ้นแร็คในเครื่อง & ปุ่มซิงค์ 🌟 -->
           <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden p-5 space-y-3">
             <div class="flex justify-between items-center border-b border-gray-100 pb-2">
               <div>
@@ -567,6 +564,8 @@
     let html5QrScanner = null;
     let activeTargetInputId = null;
 
+    let currentWOViewFilter = 'Pending'; // 🌟 ค่าเริ่มต้น: กรองแสดงเฉพาะใบงานที่กำลังรอรับ (ใบงานเสร็จแล้วหายไปทันที)
+
     let currentPalletIndex = 1;
     let totalTargetPallets = 10;
 
@@ -577,7 +576,6 @@
       }
     }
 
-    // 🌟 เช็คสถานะอินเทอร์เน็ตแบบเรียลไทม์ 🌟
     window.addEventListener('online', updateNetworkStatus);
     window.addEventListener('offline', updateNetworkStatus);
 
@@ -706,29 +704,54 @@
       } catch (e) {}
     }
 
+    // 🌟 สลับมุมมองดูใบงาน: [กำลังรอรับ (Pending)] VS [เสร็จสิ้นแล้ว (Completed)] 🌟
+    function setWOViewFilter(filter) {
+      currentWOViewFilter = filter;
+      const btnPending = document.getElementById('filter-btn-pending');
+      const btnComp = document.getElementById('filter-btn-completed');
+
+      if (filter === 'Pending') {
+        btnPending.className = "px-3 py-1 rounded-md text-xs font-bold bg-black text-white shadow-sm transition";
+        btnComp.className = "px-3 py-1 rounded-md text-xs font-bold text-gray-500 hover:text-black transition";
+      } else {
+        btnComp.className = "px-3 py-1 rounded-md text-xs font-bold bg-black text-white shadow-sm transition";
+        btnPending.className = "px-3 py-1 rounded-md text-xs font-bold text-gray-500 hover:text-black transition";
+      }
+      renderWOCards(allInboundWOs);
+    }
+
     function toggleManageWOMode() {
       isManageWOMode = !isManageWOMode;
       const btn = document.getElementById('btn-manage-wo');
       if (isManageWOMode) {
-        btn.className = "text-xs bg-black text-white font-bold px-3 py-1.5 rounded-lg transition shadow-sm cursor-pointer";
+        btn.className = "ml-2 px-3 py-1 rounded-md text-xs font-bold bg-black text-white shadow-sm transition cursor-pointer";
         btn.innerHTML = "เสร็จสิ้น";
       } else {
-        btn.className = "text-xs bg-white hover:bg-gray-100 text-black border border-gray-300 font-bold px-3 py-1.5 rounded-lg transition shadow-sm cursor-pointer";
+        btn.className = "ml-2 px-3 py-1 rounded-md text-xs font-bold bg-white text-black border border-gray-300 transition cursor-pointer";
         btn.innerHTML = "จัดการ";
       }
       renderWOCards(allInboundWOs);
     }
 
+    // 🌟 เรนเดอร์การ์ดใบงาน (กรองใบงานที่เสร็จแล้วให้หายไปทันทีตามค่าตัวกรอง) 🌟
     function renderWOCards(data) {
       const grid = document.getElementById('wo-cards-grid');
-      document.getElementById('wo-inventory-count').innerText = `${data.length} รายการ`;
+      
+      // กรองข้อมูลตามแถบที่เลือก (ถ้าเลือก Pending จะซ่อน Completed ทั้งหมดทันที)
+      const filteredWOs = data.filter(wo => {
+        if (currentWOViewFilter === 'Pending') return wo.status !== 'Completed';
+        return wo.status === 'Completed';
+      });
 
-      if(!data || data.length === 0) {
-        grid.innerHTML = `<p class="col-span-full py-8 text-center text-gray-400 text-xs">ยังไม่มีการ์ดใบงานรับเข้า</p>`;
+      document.getElementById('wo-inventory-count').innerText = `${filteredWOs.length}`;
+
+      if(!filteredWOs || filteredWOs.length === 0) {
+        const emptyText = currentWOViewFilter === 'Pending' ? "ไม่มีใบงานค้างรับ (เสร็จสิ้นทั้งหมดแล้ว)" : "ไม่มีประวัติใบงานที่เสร็จแล้ว";
+        grid.innerHTML = `<p class="col-span-full py-8 text-center text-gray-400 text-xs">${emptyText}</p>`;
         return;
       }
 
-      grid.innerHTML = data.map(wo => `
+      grid.innerHTML = filteredWOs.map(wo => `
         <div class="p-5 bg-white rounded-2xl border-2 ${isManageWOMode ? 'border-black shadow-md' : 'border-gray-200 shadow-sm'} space-y-3 transition">
           <div class="flex justify-between items-start">
             <div>
@@ -748,26 +771,55 @@
           </div>
 
           ${isManageWOMode ? `
-            <div class="pt-2 border-t border-gray-200 flex gap-2">
-              <button type="button" onclick="printExistingWOTags('${wo.wo_number}')" class="flex-1 py-1.5 bg-black text-white rounded text-xs font-bold transition hover:bg-gray-800 cursor-pointer">
+            <div class="pt-2 border-t border-gray-200 flex flex-wrap gap-1.5">
+              ${wo.status !== 'Completed' ? `
+                <button type="button" onclick="markWOAsCompletedQuick('${wo.wo_number}')" class="flex-1 py-1.5 bg-black hover:bg-gray-800 text-white rounded text-xs font-bold transition cursor-pointer">
+                  ปิดจบงาน
+                </button>
+              ` : ''}
+              <button type="button" onclick="printExistingWOTags('${wo.wo_number}')" class="flex-1 py-1.5 border border-black hover:bg-gray-50 text-black rounded text-xs font-bold transition cursor-pointer">
                 พิมพ์ A4
               </button>
-              <button type="button" onclick="openEditInboundModal('${wo.wo_number}')" class="flex-1 py-1.5 border border-black text-black rounded text-xs font-bold transition hover:bg-gray-50 cursor-pointer">
+              <button type="button" onclick="openEditInboundModal('${wo.wo_number}')" class="px-3 py-1.5 border border-gray-300 text-black rounded text-xs font-bold hover:bg-gray-50 transition cursor-pointer">
                 แก้ไข
               </button>
-              <button type="button" onclick="deleteInboundWOItem('${wo.wo_number}')" class="flex-1 py-1.5 text-gray-400 hover:text-black text-xs font-bold transition cursor-pointer">
+              <button type="button" onclick="deleteInboundWOItem('${wo.wo_number}')" class="px-3 py-1.5 text-gray-400 hover:text-black text-xs font-bold transition cursor-pointer">
                 ลบ
               </button>
             </div>
           ` : `
             <div class="pt-1">
-              <button type="button" onclick="selectAndGoToDock('${wo.wo_number}')" class="w-full py-1.5 border border-gray-200 hover:border-black text-black rounded-lg font-bold text-xs transition cursor-pointer">
-                ไปหน้าลานรับของ
-              </button>
+              ${wo.status !== 'Completed' ? `
+                <button type="button" onclick="selectAndGoToDock('${wo.wo_number}')" class="w-full py-1.5 border border-gray-200 hover:border-black text-black rounded-lg font-bold text-xs transition cursor-pointer">
+                  ไปหน้าลานรับของ
+                </button>
+              ` : `
+                <button type="button" onclick="printExistingWOTags('${wo.wo_number}')" class="w-full py-1.5 border border-gray-200 text-gray-400 hover:text-black rounded-lg font-bold text-xs transition cursor-pointer">
+                  พิมพ์ป้าย A4 ย้อนหลัง
+                </button>
+              `}
             </div>
           `}
         </div>
       `).join('');
+    }
+
+    // 🌟 ปุ่มลัดกดปิดจบงานทันที 1 คลิก (ทำให้ WO นั้นหายไปจากหน้าจอทันที) 🌟
+    async function markWOAsCompletedQuick(woNum) {
+      if(!confirm(`ยืนยันปิดจบใบงาน [${woNum}] ทันทีใช่หรือไม่?\n(ใบงานนี้จะหายออกจากรายการกำลังรอรับ)`)) return;
+      
+      const wo = allInboundWOs.find(w => w.wo_number === woNum);
+      if(wo) wo.status = 'Completed';
+      
+      renderWOCards(allInboundWOs);
+      populateDockWOSelect();
+
+      try {
+        await fetch(API_URL, {
+          method: "POST",
+          body: JSON.stringify({ action: 'update_inbound_wo', wo_number: woNum, status: 'Completed' })
+        });
+      } catch(e) {}
     }
 
     function openEditInboundModal(woNum) {
@@ -802,6 +854,7 @@
         currentSelectedWO.weight = weight;
         currentSelectedWO.status = status;
         renderWOCards(allInboundWOs);
+        populateDockWOSelect();
         closeEditInboundModal();
       } catch (e) {
         alert("แก้ไขไม่สำเร็จ");
@@ -1019,10 +1072,11 @@
     }
 
     // =========================================================================
-    // 🚚 หน้าลานรับของ (ระบบ LOCAL QUEUE & OFFLINE FIRST)
+    // 🚚 หน้าลานรับของ (กรองใบงานที่เสร็จแล้วออก 100%)
     // =========================================================================
     function populateDockWOSelect() {
       const select = document.getElementById('dock_wo_select');
+      // 🌟 กรองเฉพาะใบงานที่ยังไม่เสร็จ (ไม่เอา Completed) 🌟
       const pendingList = Array.isArray(allInboundWOs) ? allInboundWOs.filter(w => w.status !== 'Completed') : [];
       if(!pendingList || pendingList.length === 0) {
         select.innerHTML = '<option value="">-- ไม่มีใบงานค้างรับ --</option>';
@@ -1091,11 +1145,16 @@
         updatePalletInput();
         document.getElementById('dock_sacks').focus();
       } else {
-        alert(`ครบถ้วนทั้ง ${totalTargetPallets} พาเลทแล้ว! อย่าลืมกดปุ่ม "⚡ ซิงค์ขึ้นระบบ" เพื่อส่งข้อมูลเข้าคลังนะครับ`);
+        alert(`ครบถ้วนทั้ง ${totalTargetPallets} พาเลทแล้ว! ปิดจบใบงาน [${woNum}] สำเร็จ`);
         if (currentSelectedWO) {
           currentSelectedWO.status = 'Completed';
           renderWOCards(allInboundWOs);
           populateDockWOSelect();
+          // ส่งคำสั่งปิดงานไปที่ระบบทันที
+          fetch(API_URL, {
+            method: "POST",
+            body: JSON.stringify({ action: 'update_inbound_wo', wo_number: currentSelectedWO.wo_number, status: 'Completed' })
+          }).catch(e => {});
         }
       }
 
@@ -1228,7 +1287,7 @@
     function forceCompleteWO() {
       if(!currentSelectedWO) return alert("กรุณาเลือกใบงาน WO ก่อน");
       const confirmedSacks = receivedPalletsList.filter(p => p.wo_number === currentSelectedWO.wo_number).length;
-      if(!confirm(`ยืนยันปิดจบใบงาน [${currentSelectedWO.wo_number}] ตามยอดจริงที่รับแล้ว ${confirmedSacks} พาเลท?`)) return;
+      if(!confirm(`ยืนยันปิดจบใบงาน [${currentSelectedWO.wo_number}] ทันที?`)) return;
 
       currentSelectedWO.status = 'Completed';
       currentSelectedWO.pallet_count = confirmedSacks;
@@ -1271,7 +1330,7 @@
     }
 
     // =========================================================================
-    // 🏢 โซนที่ 3: รถโฟล์คลิฟต์ยิงพาเลทขึ้น Rack (🌟 OFFLINE FIRST ENGINE 🌟)
+    // 🏢 รถโฟล์คลิฟต์ยิงพาเลทขึ้น Rack
     // =========================================================================
     function submitPutawayLocalFirst() {
       const pallet = document.getElementById('rack_pallet').value.trim().toUpperCase();
@@ -1290,16 +1349,13 @@
       saveLocalPutawayQueue();
       renderPutawayTable();
 
-      // อัปเดตป้ายพิกัดและพาเลทล่าสุด
       document.getElementById('rack-last-loc-label').innerText = location;
       document.getElementById('rack-last-pallet-label').innerText = pallet;
 
-      // ล้างช่องสแกนเพื่อให้ยิงตัวถัดไปได้ทันที
       document.getElementById('rack_pallet').value = '';
       document.getElementById('rack_location').value = '';
       document.getElementById('rack_pallet').focus();
 
-      // ถ้ามีเน็ต ให้พยายามซิงค์เบื้องหลังอัตโนมัติ
       if (navigator.onLine) {
         syncSinglePutawaySilently(newPutaway);
       }
