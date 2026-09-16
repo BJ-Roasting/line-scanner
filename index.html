@@ -8,44 +8,14 @@
   <style>
     ::-webkit-scrollbar { display: none; }
     body { -ms-overflow-style: none; scrollbar-width: none; }
-    .pb-safe { padding-bottom: env(safe-area-inset-bottom, 20px); }
+    .pb-safe { padding-bottom: env(safe-area-inset-bottom, 24px); }
   </style>
 </head>
 <body class="bg-white text-black font-sans antialiased selection:bg-gray-200">
 
-  <!-- หน้า LOGIN -->
-  <div id="login-card" class="min-h-screen flex flex-col justify-center items-center p-6 bg-white">
-    <div class="w-full max-w-sm space-y-6">
-      <div class="text-center">
-        <div class="w-12 h-12 bg-black text-white font-black flex items-center justify-center rounded-xl text-xl mx-auto mb-3">BJ</div>
-        <h1 class="text-2xl font-black text-black tracking-tight">BJ ROASTER</h1>
-        <p class="text-xs text-gray-400 mt-1 uppercase tracking-wider">ระบบจัดการคลังสารและโรงคั่วกาแฟ</p>
-      </div>
-
-      <div class="space-y-3 bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-        <div>
-          <label class="block text-xs font-bold text-gray-600 mb-1">ชื่อผู้ใช้งาน</label>
-          <input type="text" id="username" class="w-full px-3.5 py-2 bg-gray-50 border border-gray-300 rounded-lg text-sm font-bold text-black focus:border-black focus:outline-none" placeholder="admin">
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-gray-600 mb-1">รหัสผ่าน</label>
-          <input type="password" id="password" class="w-full px-3.5 py-2 bg-gray-50 border border-gray-300 rounded-lg text-sm font-bold text-black focus:border-black focus:outline-none" placeholder="••••">
-        </div>
-        <div class="flex items-center pt-1">
-          <input type="checkbox" id="remember-me" class="w-4 h-4 accent-black rounded">
-          <label for="remember-me" class="ml-2 text-xs text-gray-500 font-medium cursor-pointer">จำการเข้าสู่ระบบ</label>
-        </div>
-        <p id="error-msg" class="text-red-500 text-xs hidden text-center font-bold"></p>
-        <button onclick="handleLogin()" id="login-btn" class="w-full bg-black hover:bg-gray-800 text-white font-bold py-2.5 rounded-lg text-sm transition shadow-sm cursor-pointer">
-          เข้าสู่ระบบ
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- DASHBOARD -->
-  <div id="dashboard" class="hidden flex min-h-screen">
+  <div id="app-layout" class="flex min-h-screen">
     
+    <!-- 💻 Sidebar Desktop (ขาว-ดำ มีหัวข้อแบ่งหมวด) -->
     <aside class="hidden md:flex flex-col w-64 fixed left-0 top-0 h-screen bg-white border-r border-gray-200 pt-7 pb-6 px-4 z-40 shadow-sm no-print">
       <div class="px-2 mb-7">
         <div class="flex items-center gap-2.5">
@@ -62,16 +32,20 @@
           <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest px-3 mb-2">การปฏิบัติการ</p>
           <nav class="space-y-1">
             <a href="index.html" class="flex items-center gap-3 bg-black text-white px-3 py-2 rounded-lg font-bold text-xs transition shadow-sm">
-              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg> หน้าแรก
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg>
+              หน้าแรก
             </a>
             <a href="planner.html" class="flex items-center gap-3 text-gray-500 hover:text-black hover:bg-gray-100 px-3 py-2 rounded-lg font-bold text-xs transition">
-              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 011.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.56.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.893.149c-.425.07-.765.383-.93.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 01-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.397.165-.71.505-.78.929l-.15.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 01-.12-1.45l.527-.737c.25-.35.273-.806.108-1.204-.165-.397-.505-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.107-1.204l-.527-.738a1.125 1.125 0 01.12-1.45l.773-.773a1.125 1.125 0 011.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg> ทำงาน
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 011.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.56.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.893.149c-.425.07-.765.383-.93.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 01-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.397.165-.71.505-.78.929l-.15.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 01-.12-1.45l.527-.737c.25-.35.273-.806.108-1.204-.165-.397-.505-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.107-1.204l-.527-.738a1.125 1.125 0 01.12-1.45l.773-.773a1.125 1.125 0 011.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+              ทำงาน
             </a>
             <a href="stock.html" class="flex items-center gap-3 text-gray-500 hover:text-black hover:bg-gray-100 px-3 py-2 rounded-lg font-bold text-xs transition">
-              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" /></svg> สต๊อกสินค้า
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" /></svg>
+              สต๊อกสินค้า
             </a>
             <a href="report.html" class="flex items-center gap-3 text-gray-500 hover:text-black hover:bg-gray-100 px-3 py-2 rounded-lg font-bold text-xs transition">
-              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" /></svg> รายงาน
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" /></svg>
+              รายงาน
             </a>
           </nav>
         </div>
@@ -80,7 +54,8 @@
           <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest px-3 mb-2">การจัดการระบบ</p>
           <nav class="space-y-1">
             <a href="profile.html" class="flex items-center gap-3 text-gray-500 hover:text-black hover:bg-gray-100 px-3 py-2 rounded-lg font-bold text-xs transition">
-              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg> โปรไฟล์
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg>
+              โปรไฟล์
             </a>
           </nav>
         </div>
@@ -88,38 +63,89 @@
 
       <div class="pt-4 border-t border-gray-100">
         <button onclick="handleLogout()" class="w-full flex items-center gap-3 text-gray-400 hover:text-black hover:bg-gray-50 px-3 py-2 rounded-lg font-bold text-xs transition cursor-pointer">
-          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" /></svg> ออกจากระบบ
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" /></svg>
+          ออกจากระบบ
         </button>
       </div>
     </aside>
 
-    <main class="w-full md:ml-64 p-4 md:p-8 pb-28">
+    <!-- 📱 พื้นที่แสดงผล Dashboard หลัก -->
+    <main class="w-full md:ml-64 p-4 md:p-8 pb-32">
+      
+      <!-- Top Bar วันที่ และ ผู้ใช้งาน -->
       <div class="flex justify-between items-center mb-6 pb-4 border-b border-gray-100">
         <div>
           <span id="current-date" class="text-xs font-semibold text-gray-400 uppercase tracking-wider block"></span>
           <h1 class="text-xl font-black text-black tracking-tight mt-0.5">ภาพรวมระบบ</h1>
         </div>
-        <div class="w-8 h-8 bg-gray-100 border border-gray-300 rounded-full flex items-center justify-center font-bold text-xs text-black" id="profile-initial">AD</div>
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-bold text-black" id="user-display-name">Admin</span>
+          <div class="w-8 h-8 bg-black text-white rounded-full flex items-center justify-center font-bold text-xs" id="profile-initial">AD</div>
+        </div>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        <div class="bg-gray-50 p-5 rounded-xl border border-gray-200">
-          <span class="text-xs font-bold text-gray-400 uppercase block">รับสินค้าเข้า</span>
-          <p class="text-lg font-black text-black mt-2">พร้อมรับสารกาแฟ</p>
-          <a href="inbound.html" class="text-xs font-bold text-black underline mt-3 inline-block">ไปหน้ารับเข้า ➔</a>
+      <!-- ทางลัดระบบ 3 ส่วนหลัก -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
+        <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 flex justify-between items-center">
+          <div>
+            <span class="text-[10px] font-bold text-gray-400 uppercase block">รับสินค้าเข้า</span>
+            <p class="text-sm font-black text-black mt-0.5">ออก WO & ยิงรับพาเลท</p>
+          </div>
+          <a href="inbound.html" class="px-3 py-1.5 bg-black text-white text-xs font-bold rounded-lg hover:bg-gray-800 transition">เปิด ➔</a>
         </div>
-        <div class="bg-gray-50 p-5 rounded-xl border border-gray-200">
-          <span class="text-xs font-bold text-gray-400 uppercase block">แผนการผลิต</span>
-          <p class="text-lg font-black text-black mt-2">วางแผนคั่ว</p>
-          <a href="planner.html" class="text-xs font-bold text-black underline mt-3 inline-block">ไปหน้าวางแผน ➔</a>
+        <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 flex justify-between items-center">
+          <div>
+            <span class="text-[10px] font-bold text-gray-400 uppercase block">แผนการคั่ว</span>
+            <p class="text-sm font-black text-black mt-0.5">คิวงานเตาคั่ว</p>
+          </div>
+          <a href="planner.html" class="px-3 py-1.5 bg-black text-white text-xs font-bold rounded-lg hover:bg-gray-800 transition">เปิด ➔</a>
         </div>
-        <div class="bg-gray-50 p-5 rounded-xl border border-gray-200">
-          <span class="text-xs font-bold text-gray-400 uppercase block">สต๊อกคลังสินค้า</span>
-          <p class="text-lg font-black text-black mt-2">Rack I (65 ช่อง)</p>
-          <a href="stock.html" class="text-xs font-bold text-black underline mt-3 inline-block">ไปดูผังแร็ค ➔</a>
+        <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 flex justify-between items-center">
+          <div>
+            <span class="text-[10px] font-bold text-gray-400 uppercase block">ผังคลังสินค้า</span>
+            <p class="text-sm font-black text-black mt-0.5">Rack I (65 ช่อง)</p>
+          </div>
+          <a href="stock.html" class="px-3 py-1.5 bg-black text-white text-xs font-bold rounded-lg hover:bg-gray-800 transition">เปิด ➔</a>
         </div>
       </div>
+
+      <!-- 🌟 ส่วนแสดงรายการใบงานและงานที่สร้างไว้ (Live Work Queue บนมือถือ) 🌟 -->
+      <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-5 space-y-4">
+        <div class="flex justify-between items-center border-b border-gray-100 pb-3">
+          <div>
+            <h2 class="text-sm font-bold text-black">รายการใบงานรับเข้าที่รอตรวจรับ (Work Queue)</h2>
+            <p class="text-xs text-gray-400">ใบงานที่สร้างไว้และพร้อมนำไปยิงสแกนหน้างาน</p>
+          </div>
+          <button onclick="loadDashboardWork()" class="text-xs text-black font-bold bg-gray-100 hover:bg-gray-200 px-3 py-1 rounded-lg transition cursor-pointer">🔄 รีเฟรช</button>
+        </div>
+
+        <div id="dashboard-wo-list" class="space-y-2.5">
+          <p class="text-xs text-gray-400 text-center py-6">กำลังโหลดรายการใบงาน...</p>
+        </div>
+      </div>
+
     </main>
+  </div>
+
+  <!-- 📱 Bottom Navigation มือถือ (แสดงผลตลอดเวลา 100%) -->
+  <div id="bottom-nav" class="fixed bottom-0 w-full bg-white border-t border-gray-200 pb-safe z-50 md:hidden shadow-lg">
+    <div class="flex justify-around items-center pt-2.5 pb-1 px-1">
+      <div onclick="window.location.href='index.html'" class="flex flex-col items-center justify-center w-[20%] text-black cursor-pointer">
+        <svg class="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg><span class="text-[10px] font-bold">หน้าแรก</span>
+      </div>
+      <div onclick="window.location.href='planner.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-black cursor-pointer">
+        <svg class="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 011.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.56.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.893.149c-.425.07-.765.383-.93.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 01-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.397.165-.71.505-.78.929l-.15.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 01-.12-1.45l.527-.737c.25-.35.273-.806.108-1.204-.165-.397-.505-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.107-1.204l-.527-.738a1.125 1.125 0 01.12-1.45l.773-.773a1.125 1.125 0 011.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg><span class="text-[10px] font-medium">ทำงาน</span>
+      </div>
+      <div onclick="window.location.href='report.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-black cursor-pointer">
+        <svg class="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" /></svg><span class="text-[10px] font-medium">รายงาน</span>
+      </div>
+      <div onclick="window.location.href='stock.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-black cursor-pointer">
+        <svg class="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" /></svg><span class="text-[10px] font-medium">สต๊อก</span>
+      </div>
+      <div onclick="window.location.href='profile.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-black cursor-pointer">
+        <svg class="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg><span class="text-[10px] font-medium">โปรไฟล์</span>
+      </div>
+    </div>
   </div>
 
   <script>
@@ -129,46 +155,47 @@
     if (dateEl) dateEl.innerText = new Date().toLocaleDateString('th-TH', { weekday: 'long', day: 'numeric', month: 'long' });
 
     window.onload = function() {
-      if(localStorage.getItem('isLoggedIn') === 'true') showDashboard();
+      // จดจำสถานะผู้ใช้
+      const name = localStorage.getItem('name') || "Admin";
+      document.getElementById('user-display-name').innerText = name;
+      document.getElementById('profile-initial').innerText = name.substring(0, 2).toUpperCase();
+      loadDashboardWork();
     };
 
-    function showDashboard() {
-      document.getElementById('login-card').classList.add('hidden');
-      const db = document.getElementById('dashboard');
-      db.classList.remove('hidden');
-      db.classList.add('flex');
-      const name = localStorage.getItem('name') || "AD";
-      document.getElementById('profile-initial').innerText = name.substring(0, 2).toUpperCase();
-    }
-
-    async function handleLogin() {
-      const user = document.getElementById('username').value.trim();
-      const pass = document.getElementById('password').value.trim();
-      const remember = document.getElementById('remember-me').checked;
-      const btn = document.getElementById('login-btn');
-      const err = document.getElementById('error-msg');
-
-      if(!user || !pass) return alert("กรุณากรอกข้อมูลให้ครบ");
-      btn.innerText = "กำลังเข้าสู่ระบบ...";
-      btn.disabled = true;
-
+    // 🌟 ดึงรายการ Work Orders และงานที่สร้างไว้มาโชว์สดๆ บนมือถือ 🌟
+    async function loadDashboardWork() {
+      const list = document.getElementById('dashboard-wo-list');
       try {
-        const res = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'login', username: user, password: pass }) });
+        const res = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'get_all_inbound_wos' }) });
         const result = await res.json();
-        if(result.success) {
-          if(remember) localStorage.setItem('isLoggedIn', 'true');
-          localStorage.setItem('name', result.name || 'Admin');
-          showDashboard();
+        
+        if (result.success && result.data && result.data.length > 0) {
+          const pendingWOs = result.data.filter(w => w.status !== 'Completed');
+          
+          if (pendingWOs.length === 0) {
+            list.innerHTML = `<p class="text-xs text-gray-400 text-center py-6">ไม่มีใบงานค้างรับในขณะนี้ (เสร็จสิ้นทั้งหมดแล้ว)</p>`;
+            return;
+          }
+
+          list.innerHTML = pendingWOs.map(w => `
+            <div class="p-3.5 bg-gray-50 rounded-xl border border-gray-200 flex flex-col sm:flex-row justify-between sm:items-center gap-2">
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="font-mono font-bold text-xs bg-black text-white px-2 py-0.5 rounded">${w.wo_number}</span>
+                  <span class="text-xs font-bold text-black">${w.bean_name || w.product_name}</span>
+                </div>
+                <p class="text-[11px] text-gray-500 mt-1">Lot: <b class="text-black">${w.lot_code}</b> | จำนวน ${w.pallet_count || 1} พาเลท (${w.weight || 0} kg)</p>
+              </div>
+              <a href="inbound.html" class="self-end sm:self-center px-3.5 py-1.5 bg-black hover:bg-gray-800 text-white font-bold text-xs rounded-lg transition whitespace-nowrap">
+                ไปยิงรับพาเลท ➔
+              </a>
+            </div>
+          `).join('');
         } else {
-          err.innerText = result.message || "รหัสผ่านไม่ถูกต้อง";
-          err.classList.remove('hidden');
+          list.innerHTML = `<p class="text-xs text-gray-400 text-center py-6">ยังไม่มีใบงานในระบบ (สร้างใบงานได้ที่หน้ารับสินค้าเข้า)</p>`;
         }
       } catch (e) {
-        err.innerText = "เชื่อมต่อระบบไม่ได้";
-        err.classList.remove('hidden');
-      } finally {
-        btn.innerText = "เข้าสู่ระบบ";
-        btn.disabled = false;
+        list.innerHTML = `<p class="text-xs text-red-500 text-center py-4">เชื่อมต่อฐานข้อมูลไม่สำเร็จ กรุณากดรีเฟรช</p>`;
       }
     }
 
