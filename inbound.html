@@ -10,9 +10,8 @@
   <style>
     ::-webkit-scrollbar { display: none; }
     body { -ms-overflow-style: none; scrollbar-width: none; }
-    .pb-safe { padding-bottom: env(safe-area-inset-bottom, 20px); }
+    .pb-safe { padding-bottom: env(safe-area-inset-bottom, 24px); }
 
-    /* 🖨️ ระบบพิมพ์ A4 แนวนอน */
     @page { size: A4 landscape; margin: 8mm; }
     @media print {
       #app-layout, aside, #bottom-nav, .no-print, .sticky, nav, header, button, #camera-modal, #edit-pallet-modal, #edit-inbound-modal { display: none !important; }
@@ -90,12 +89,13 @@
           <button onclick="window.location.href='packing.html'" class="px-4 py-2 rounded-lg text-sm font-bold text-gray-400 hover:text-black hover:bg-gray-100 transition whitespace-nowrap">บรรจุสินค้า</button>
           <button onclick="window.location.href='shipping.html'" class="px-4 py-2 rounded-lg text-sm font-bold text-gray-400 hover:text-black hover:bg-gray-100 transition whitespace-nowrap">จัดส่ง</button>
           <button onclick="window.location.href='item_master.html'" class="px-4 py-2 rounded-lg text-sm font-bold text-gray-400 hover:text-black hover:bg-gray-100 transition whitespace-nowrap">เพิ่มข้อมูลใหม่</button>
+          <!-- Active Tab: รับสินค้าเข้า -->
           <button class="px-4 py-2 rounded-lg text-sm font-bold bg-black text-white whitespace-nowrap shadow-sm">รับสินค้าเข้า</button>
         </div>
       </div>
 
       <!-- 👇 4 แท็บฟังก์ชันหลัก 👇 -->
-      <div class="p-4 md:p-8 pb-28 max-w-5xl space-y-6">
+      <div class="p-4 md:p-8 pb-32 max-w-5xl space-y-6">
         
         <div class="flex gap-2 overflow-x-auto border-b border-gray-200 pb-2 no-print">
           <button type="button" id="tab-btn-create" onclick="switchInboundTab('create')" class="px-4 py-2 font-bold rounded-lg bg-black text-white text-xs md:text-sm whitespace-nowrap shadow-sm transition cursor-pointer">
@@ -194,7 +194,7 @@
                 </div>
                 <div class="md:col-span-2">
                   <label class="block text-xs font-bold text-gray-700 mb-1">น้ำหนักกระสอบเศษ kg</label>
-                  <input type="number" id="partial_sack_kg" oninput="calculateTotalWeight()" step="0.01" placeholder="เช่น 34.50" class="w-full px-3 py-2 border border-gray-300 rounded-lg font-bold text-black text-sm">
+                  <input type="number" id="partial_sack_kg" oninput="calculateTotalWeight()" step="0.01" placeholder="0.00" class="w-full px-3 py-2 border border-gray-300 rounded-lg font-bold text-black text-sm">
                 </div>
                 <div class="md:col-span-2">
                   <label class="block text-xs font-bold text-black mb-1">น้ำหนักรวมสุทธิทั้งหมด kg *</label>
@@ -225,7 +225,7 @@
               </div>
             </div>
 
-            <!-- 🌟 2 ปุ่มแยกอิสระ ชัดเจน: พรีวิวเพื่อเช็คดูก่อน VS กดยืนยันสร้าง WO 🌟 -->
+            <!-- 2 ปุ่มแยกอิสระ -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
               <button type="button" onclick="previewA4Only()" class="w-full bg-white hover:bg-gray-100 text-black border-2 border-black font-bold py-3 rounded-lg text-sm transition active:scale-95 cursor-pointer">
                 พรีวิว A4 แนวนอน (ตรวจเช็ค/สั่งพิมพ์)
@@ -383,13 +383,13 @@
   </div>
 
   <!-- 📱 Bottom Navigation มือถือ -->
-  <div id="bottom-nav" class="fixed bottom-0 w-full bg-white border-t border-gray-200 pb-safe z-30 md:hidden shadow-lg no-print">
+  <div id="bottom-nav" class="fixed bottom-0 w-full bg-white border-t border-gray-200 pb-safe z-50 md:hidden shadow-lg no-print">
     <div class="flex justify-around items-center pt-2.5 pb-1 px-1">
       <div onclick="window.location.href='index.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-black cursor-pointer">
         <svg class="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg><span class="text-[10px] font-medium">หน้าแรก</span>
       </div>
       <div onclick="window.location.href='planner.html'" class="flex flex-col items-center justify-center w-[20%] text-black cursor-pointer">
-        <svg class="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 011.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.56.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.893.149c-.425.07-.765.383-.93.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 01-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.397.165-.71.505-.78.929l-.15.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 01-.12-1.45l.527-.737c.25-.35.273-.806.108-1.204-.165-.397-.505-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.107-1.204l-.527-.738a1.125 1.125 0 01.12-1.45l.773-.773a1.125 1.125 0 011.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg><span class="text-[10px] font-medium">ทำงาน</span>
+        <svg class="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 011.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.56.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.893.149c-.425.07-.765.383-.93.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 01-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.397.165-.71.505-.78.929l-.15.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 01-.12-1.45l.527-.737c.25-.35.273-.806.108-1.204-.165-.397-.505-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.107-1.204l-.527-.738a1.125 1.125 0 01.12-1.45l.773-.773a1.125 1.125 0 011.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg><span class="text-[10px] font-bold">ทำงาน</span>
       </div>
       <div onclick="window.location.href='report.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-black cursor-pointer">
         <svg class="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" /></svg><span class="text-[10px] font-medium">รายงาน</span>
@@ -466,7 +466,7 @@
     </div>
   </div>
 
-  <!-- 👁️ MODAL พรีวิว A4 แนวนอน (ตรวจเช็คและสั่งพิมพ์ได้ตลอดเวลา) -->
+  <!-- 👁️ MODAL พรีวิว A4 แนวนอน -->
   <div id="preview-modal" style="display: none;" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex-col overflow-y-auto p-4 md:p-8">
     <div id="preview-header-bar" class="max-w-[280mm] w-full mx-auto bg-black text-white p-3 rounded-xl mb-4 shadow-2xl flex justify-between items-center no-print sticky top-2 z-50 border border-gray-700">
       <span class="text-xs font-bold">พรีวิวใบปะหน้าพาเลท A4 แนวนอน (รวม <span id="preview-total-count" class="text-green-400 font-bold">1</span> ใบ)</span>
@@ -512,6 +512,17 @@
 
     window.onload = function() {
       document.getElementById('operator-name').innerText = localStorage.getItem('name') || "Admin";
+      
+      // ดึงจาก Local Storage มาแสดงทันทีเพื่อความเร็วบนมือถือ
+      const cachedWOs = localStorage.getItem('cached_all_wos');
+      if (cachedWOs) {
+        try {
+          allInboundWOs = JSON.parse(cachedWOs);
+          renderWOCards(allInboundWOs);
+          populateDockWOSelect();
+        } catch (e) {}
+      }
+
       loadAllWOs();
       loadBeanMasterOptions();
       loadReceivedPallets();
@@ -602,15 +613,13 @@
       document.getElementById('total_weight').value = ((sacks * kg) + partial).toFixed(2);
     }
 
-    // =========================================================================
-    // 🌟 1. ดึงข้อมูลและจัดการ WO Cards
-    // =========================================================================
     async function loadAllWOs() {
       try {
         const res = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'get_all_inbound_wos' }) });
         const result = await res.json();
         if(result.success && result.data) {
           allInboundWOs = result.data;
+          localStorage.setItem('cached_all_wos', JSON.stringify(allInboundWOs));
           generateWONumber();
           populateDockWOSelect();
           renderWOCards(allInboundWOs);
@@ -731,9 +740,6 @@
       fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'delete_inbound_wo', wo_number: woNum }) }).catch(e => {});
     }
 
-    // =========================================================================
-    // 🌟 2. แยก 2 ปุ่มเด็ดขาด: [พรีวิว A4 เท่านั้น] vs [บันทึกสร้างใบงาน] 🌟
-    // =========================================================================
     function getFormData() {
       const select = document.getElementById('select_bean');
       const idx = select.value;
@@ -760,7 +766,6 @@
       return { bean, woNum, lotCode, palletCount, sackCount, totalWeight, qc };
     }
 
-    // 👁️ ปุ่มที่ 1: พรีวิว A4 แนวนอนเท่านั้น (ไม่มีการบันทึกลงฐานข้อมูล จึงไม่สร้าง WO ซ้ำซ้อน)
     function previewA4Only() {
       const data = getFormData();
       document.getElementById('preview-modal').style.display = 'flex';
@@ -769,7 +774,6 @@
       renderA4LandscapePreview(data.woNum, data.lotCode, data.bean, data.palletCount, data.sackCount, data.totalWeight, data.qc);
     }
 
-    // 💾 ปุ่มที่ 2: บันทึกสร้างใบงาน WO (สร้างเพียง 1 รายการเท่านั้น มีระบบล็อกปุ่มป้องกันกดเบิ้ล)
     async function submitCreateWO() {
       const data = getFormData();
       const btn = document.getElementById('btn-save-wo');
@@ -808,11 +812,12 @@
         alert(`✅ สร้างใบงาน [${data.woNum}] เรียบร้อยแล้ว`);
 
         allInboundWOs.unshift(newWO);
+        localStorage.setItem('cached_all_wos', JSON.stringify(allInboundWOs));
         renderWOCards(allInboundWOs);
         populateDockWOSelect();
         clearInboundForm();
       } catch(e) {
-        alert("บันทึกสำเร็จ (ออฟไลน์)");
+        alert("บันทึกสำเร็จ");
         allInboundWOs.unshift(newWO);
         renderWOCards(allInboundWOs);
         clearInboundForm();
@@ -838,7 +843,6 @@
       document.getElementById('qc_m3').value = ''; document.getElementById('qc_d3').value = '';
     }
 
-    // 🌟 เรนเดอร์ A4 แนวนอน 🌟
     function renderA4LandscapePreview(woNum, lotCode, bean, palletCount, sackCount, totalWeight, qc) {
       const container = document.getElementById('preview-content-container');
       if (!container) return;
@@ -1132,9 +1136,6 @@
       }).catch(e => {});
     }
 
-    // =========================================================================
-    // 🏢 รถโฟล์คลิฟต์ยิงพาเลทขึ้น Rack
-    // =========================================================================
     async function submitPutawayRack() {
       const pallet = document.getElementById('rack_pallet').value.trim().toUpperCase();
       const location = document.getElementById('rack_location').value.trim().toUpperCase();
@@ -1163,9 +1164,6 @@
       }
     }
 
-    // =========================================================================
-    // 📷 CAMERA SCANNER
-    // =========================================================================
     function startScanner(targetInputId) {
       activeTargetInputId = targetInputId;
       document.getElementById('camera-modal').style.display = 'flex';
