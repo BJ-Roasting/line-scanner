@@ -110,7 +110,7 @@
         </div>
 
         <!-- ========================================================================= -->
-        <!-- 🌾 กล่องที่ 1: เตรียมสาร & บันทึกสิ่งเจือปน (Sifting) 🌾 -->
+        <!-- 🌾 กล่องที่ 1: เตรียมสาร (Sifting) 🌾 -->
         <!-- ========================================================================= -->
         <div id="zone-sift" class="hidden space-y-6 no-print">
 
@@ -212,30 +212,57 @@
         </div>
 
         <!-- ========================================================================= -->
-        <!-- ☕ กล่องที่ 2: คั่วกาแฟหน้าเตา (🌟 สร้าง WO เปล่า & พิมพ์ชุด A4 & บันทึก QC 🌟) -->
+        <!-- ☕ กล่องที่ 2: คั่วกาแฟหน้าเตา (🌟 แยกปุ่มสร้าง/พิมพ์ & มีระบบลบใบงานเผื่อ 🌟) -->
         <!-- ========================================================================= -->
         <div id="zone-roast" class="space-y-6">
 
-          <!-- 🌟 1. การ์ดสร้างใบงานคั่วเปล่าตามจำนวนที่ต้องการ & สั่งพิมพ์ A4 รวดเดียว 🌟 -->
+          <!-- 🌟 1. การ์ดสร้างใบงานคั่วเปล่า & แยกปุ่มพิมพ์/สร้าง & ลบใบงานเผื่อ 🌟 -->
           <div class="bg-white p-6 rounded-xl border-2 border-black shadow-sm space-y-4 no-print">
             <div class="flex justify-between items-center border-b border-gray-100 pb-2">
               <div>
-                <h2 class="text-sm font-black text-black">สร้างใบงานคั่วเปล่าประจำวัน (Blank Roast WO Generator)</h2>
-                <p class="text-[11px] text-gray-400">รันเลขใบงานตามวันเดือนปี พิมพ์ A4 หนีบคลิปบอร์ดให้คนคั่วไปจดมือหน้าเตา</p>
+                <h2 class="text-sm font-black text-black">สร้างใบงานคั่วเปล่าประจำวัน (Blank Roast WO Hub)</h2>
+                <p class="text-[11px] text-gray-400">กำหนดจำนวนเพื่อออกเลข WO รันตามวันเดือนปี สั่งพิมพ์ A4 หรือลบใบงานเผื่อที่ไม่ใช้</p>
               </div>
               <span class="text-xs font-mono font-bold bg-gray-100 text-black px-2.5 py-1 rounded" id="today-date-badge">2026-09-16</span>
             </div>
 
-            <div class="flex flex-col sm:flex-row items-center gap-3 pt-1">
-              <div class="w-full sm:w-1/3">
-                <label class="block text-xs font-bold text-gray-700 mb-1">จำนวนใบงานคั่วที่ต้องการสร้าง *</label>
-                <input type="number" id="batch_wo_count_input" value="5" min="1" max="30" class="w-full px-3 py-2 border-2 border-black rounded-lg font-black text-black text-center text-sm focus:outline-none">
+            <!-- 4 คอลัมน์: จำนวน + ปุ่มสร้าง + ปุ่มพิมพ์ + ปุ่มล้างใบงานเผื่อ -->
+            <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 items-end pt-1">
+              <div>
+                <label class="block text-xs font-bold text-gray-700 mb-1">จำนวนใบงาน (ใบ) *</label>
+                <input type="number" id="batch_wo_count_input" oninput="updateWOPreviewBadges()" value="5" min="1" max="30" class="w-full px-3 py-2 border-2 border-black rounded-lg font-black text-black text-center text-sm focus:outline-none">
               </div>
 
-              <div class="w-full sm:w-2/3 flex items-end">
-                <button type="button" onclick="generateAndPrintBlankWOs()" class="w-full bg-black hover:bg-gray-800 text-white font-bold py-2.5 px-4 rounded-lg text-xs transition active:scale-95 cursor-pointer flex items-center justify-center gap-2">
-                  <span>🖨️ สร้างเลข WO & พิมพ์ใบนำงานคั่ว A4 เปล่า (ตามจำนวนที่เลือก)</span>
+              <!-- ปุ่มที่ 1: สร้างรหัส WO -->
+              <div>
+                <button type="button" onclick="createBlankWOsAction()" class="w-full bg-black hover:bg-gray-800 text-white font-bold py-2.5 px-3 rounded-lg text-xs transition active:scale-95 cursor-pointer">
+                  1. สร้างรหัส WO
                 </button>
+              </div>
+
+              <!-- ปุ่มที่ 2: พิมพ์ A4 (แยกอิสระ) -->
+              <div>
+                <button type="button" onclick="openA4PrintForActiveWOs()" class="w-full bg-white hover:bg-gray-100 text-black border-2 border-black font-bold py-2.5 px-3 rounded-lg text-xs transition active:scale-95 cursor-pointer">
+                  2. พิมพ์ใบนำงาน A4
+                </button>
+              </div>
+
+              <!-- ปุ่มที่ 3: ล้างใบงานที่ไม่ได้ใช้ -->
+              <div>
+                <button type="button" onclick="clearAllUnusedWOs()" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-600 font-bold py-2.5 px-3 rounded-lg text-xs transition cursor-pointer">
+                  ล้างใบงานที่ไม่ได้ใช้
+                </button>
+              </div>
+            </div>
+
+            <!-- กล่องแสดงช่วงและรายการเลข WO ที่สร้างขึ้นมา (มีปุ่มกากบาทกดลบทีละใบได้) -->
+            <div class="pt-2 border-t border-gray-100 space-y-2">
+              <div class="flex justify-between items-center text-xs">
+                <span class="text-[10px] font-bold text-gray-500 uppercase tracking-wider">รายการรหัส WO วันนี้ (คลิกเพื่อสแกน / กด ✕ เพื่อลบ):</span>
+                <span class="text-xs font-mono font-bold text-black" id="wo-range-label">ยังไม่มีการสร้าง WO วันนี้</span>
+              </div>
+              <div id="generated-wo-badges" class="flex flex-wrap gap-2 pt-0.5">
+                <!-- แสดงป้ายตัวเลข WO พร้อมปุ่มกากบาทลบ -->
               </div>
             </div>
           </div>
@@ -450,7 +477,7 @@
     </main>
   </div>
 
-  <!-- 🖨️ MODAL พิมพ์ชุดใบนำงานคั่ว A4 เปล่า (Blank Roast Production Travelers) -->
+  <!-- 🖨️ MODAL พิมพ์ชุดใบนำงานคั่ว A4 เปล่า -->
   <div id="a4-traveler-modal" style="display: none;" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex-col overflow-y-auto p-4 md:p-8">
     
     <div class="max-w-[194mm] w-full mx-auto bg-black text-white p-3 rounded-xl mb-4 shadow-2xl flex justify-between items-center no-print sticky top-2 z-50 border border-gray-700">
@@ -461,7 +488,6 @@
       </div>
     </div>
 
-    <!-- กล่องรวมแผ่น A4 ที่สร้างขึ้นตามจำนวน -->
     <div id="traveler-pages-container" class="space-y-6"></div>
   </div>
 
@@ -505,6 +531,7 @@
 
     let readyBeansList = [];
     let selectedReadyBean = null;
+    let activeWOPool = [];
 
     let html5QrScanner = null;
     let activeTargetInputId = null;
@@ -519,6 +546,7 @@
     window.onload = function() {
       const now = new Date();
       document.getElementById('today-date-badge').innerText = now.toISOString().split('T')[0];
+      loadSavedActiveWOs();
       loadSiftingData();
       loadRoastingData();
     };
@@ -541,26 +569,71 @@
     }
 
     // =========================================================================
-    // 🖨️ 1. สร้างใบงานคั่วเปล่า & สั่งพิมพ์ชุด A4 ตามจำนวนที่เลือก
+    // 🖨️ 1. สร้างรหัส WO & พิมพ์ A4 & จัดการลบใบงานเผื่อ
     // =========================================================================
-    function generateAndPrintBlankWOs() {
+    function loadSavedActiveWOs() {
+      const saved = localStorage.getItem('bj_active_roast_wos');
+      if (saved) {
+        try {
+          activeWOPool = JSON.parse(saved);
+        } catch(e) { activeWOPool = []; }
+      }
+      renderWOBadges();
+    }
+
+    function saveActiveWOs() {
+      localStorage.setItem('bj_active_roast_wos', JSON.stringify(activeWOPool));
+      renderWOBadges();
+    }
+
+    // 🌟 ปุ่มที่ 1: สร้างรหัส WO ประจำวัน 🌟
+    function createBlankWOsAction() {
       const count = parseInt(document.getElementById('batch_wo_count_input').value) || 1;
-      const container = document.getElementById('traveler-pages-container');
-      container.innerHTML = '';
-
-      document.getElementById('traveler-pages-count').innerText = count;
-
       const now = new Date();
       const yyyy = now.getFullYear();
       const mm = String(now.getMonth() + 1).padStart(2, '0');
       const dd = String(now.getDate()).padStart(2, '0');
-      const dateStr = `${dd}/${mm}/${yyyy + 543}`;
       const prefix = `WO-R${String(yyyy).slice(-2)}${mm}${dd}-`;
 
-      for (let i = 1; i <= count; i++) {
-        const seq = String(i).padStart(2, '0');
-        const woNum = `${prefix}${seq}`;
+      let maxSeq = 0;
+      activeWOPool.forEach(wo => {
+        if (wo.startsWith(prefix)) {
+          const numPart = parseInt(wo.replace(prefix, ''), 10) || 0;
+          if (numPart > maxSeq) maxSeq = numPart;
+        }
+      });
 
+      const newCreated = [];
+      for (let i = 1; i <= count; i++) {
+        const seq = String(maxSeq + i).padStart(2, '0');
+        const woNum = `${prefix}${seq}`;
+        if (!activeWOPool.includes(woNum)) {
+          activeWOPool.push(woNum);
+          newCreated.push(woNum);
+        }
+      }
+
+      saveActiveWOs();
+      alert(`สร้างรหัสใบงานคั่วใหม่ ${newCreated.length} ใบเรียบร้อยแล้ว!\nช่วงเลข: ${newCreated[0]} ถึง ${newCreated[newCreated.length - 1]}`);
+    }
+
+    // 🌟 ปุ่มที่ 2: สั่งพิมพ์ A4 ใบนำงานคั่ว 🌟
+    function openA4PrintForActiveWOs() {
+      if (activeWOPool.length === 0) {
+        return alert("ยังไม่มีรายการรหัส WO วันนี้ กรุณากด '1. สร้างรหัส WO' ก่อนครับ");
+      }
+
+      const container = document.getElementById('traveler-pages-container');
+      container.innerHTML = '';
+      document.getElementById('traveler-pages-count').innerText = activeWOPool.length;
+
+      const now = new Date();
+      const dd = String(now.getDate()).padStart(2, '0');
+      const mm = String(now.getMonth() + 1).padStart(2, '0');
+      const yyyy = now.getFullYear();
+      const dateStr = `${dd}/${mm}/${yyyy + 543}`;
+
+      activeWOPool.forEach((woNum, idx) => {
         const page = document.createElement('div');
         page.className = "a4-traveler-page shadow-2xl border-2 border-black bg-white rounded-lg p-6 mx-auto space-y-3 text-black text-xs";
         page.innerHTML = `
@@ -574,8 +647,8 @@
               </div>
             </div>
             <div class="text-right flex flex-col items-end">
-              <div id="tvl-qr-${i}" class="p-1 bg-white border border-black mb-1"></div>
-              <span class="font-mono font-black text-xs">${woNum}</span>
+              <div id="tvl-qr-${idx}" class="p-1 bg-white border border-black mb-1"></div>
+              <span class="font-mono font-black text-lg tracking-wider text-black">${woNum}</span>
             </div>
           </div>
 
@@ -662,20 +735,67 @@
         `;
         container.appendChild(page);
 
-        // สร้าง QR Code บนใบกระดาษ A4
         setTimeout(() => {
-          const qrBox = document.getElementById(`tvl-qr-${i}`);
+          const qrBox = document.getElementById(`tvl-qr-${idx}`);
           if (qrBox && typeof QRCode !== 'undefined') {
             new QRCode(qrBox, { text: woNum, width: 80, height: 80, correctLevel: QRCode.CorrectLevel.M });
           }
         }, 50);
-      }
+      });
 
       document.getElementById('a4-traveler-modal').style.display = 'flex';
     }
 
     function closeA4TravelerModal() {
       document.getElementById('a4-traveler-modal').style.display = 'none';
+    }
+
+    // 🌟 แสดงแถบตัวเลข WO พร้อมปุ่มกากบาทกดลบทีละใบ 🌟
+    function renderWOBadges() {
+      const container = document.getElementById('generated-wo-badges');
+      const rangeLabel = document.getElementById('wo-range-label');
+      if (!container) return;
+      container.innerHTML = '';
+
+      if (activeWOPool.length === 0) {
+        if (rangeLabel) rangeLabel.innerText = "ยังไม่มีการสร้าง WO วันนี้";
+        container.innerHTML = `<span class="text-gray-400 text-xs py-1">ยังไม่มีรหัส WO กดปุ่ม "1. สร้างรหัส WO" เพื่อเริ่มงาน</span>`;
+        return;
+      }
+
+      if (rangeLabel) {
+        rangeLabel.innerText = `${activeWOPool[0]} ➔ ${activeWOPool[activeWOPool.length - 1]} (${activeWOPool.length} ใบ)`;
+      }
+
+      activeWOPool.forEach((wo, idx) => {
+        const itemBox = document.createElement('div');
+        itemBox.className = "flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-300 rounded-lg shadow-sm hover:border-black transition";
+        itemBox.innerHTML = `
+          <span class="font-mono font-black text-xs cursor-pointer text-black hover:underline" title="คลิกเพื่อนำรหัสไปใส่ในช่องสแกนด้านล่าง">${wo}</span>
+          <button type="button" onclick="deleteSingleWO('${wo}')" class="text-gray-400 hover:text-black font-bold text-sm pl-1.5 border-l border-gray-200 cursor-pointer" title="ลบใบงานนี้">&times;</button>
+        `;
+        itemBox.children[0].onclick = () => {
+          document.getElementById('roast_wo_input').value = wo;
+          document.getElementById('roast_green_weight').focus();
+        };
+        container.appendChild(itemBox);
+      });
+    }
+
+    // 🌟 ลบใบงานทีละใบ 🌟
+    function deleteSingleWO(woNum) {
+      if (!confirm(`ต้องการลบใบงาน [${woNum}] ออกใช่หรือไม่?`)) return;
+      activeWOPool = activeWOPool.filter(w => w !== woNum);
+      saveActiveWOs();
+    }
+
+    // 🌟 ล้างใบงานเผื่อที่ไม่ได้ใช้ทั้งหมดในคลิกเดียว 🌟
+    function clearAllUnusedWOs() {
+      if (activeWOPool.length === 0) return alert("ไม่มีใบงานค้างอยู่ในรายการ");
+      if (!confirm(`ต้องการล้างใบงานที่สร้างเผื่อไว้ทั้งหมด (${activeWOPool.length} ใบ) ใช่หรือไม่?`)) return;
+      activeWOPool = [];
+      saveActiveWOs();
+      alert("ล้างรายการใบงานเผื่อเรียบร้อยแล้ว");
     }
 
     // =========================================================================
@@ -865,7 +985,6 @@
       const pre = parseFloat(document.getElementById('roast_presort_weight').value) || 0;
       const post = parseFloat(document.getElementById('roast_postsort_weight').value) || 0;
 
-      // 1. % Roast Loss
       if (green > 0 && pre > 0) {
         const rLoss = ((green - pre) / green) * 100;
         document.getElementById('math-roast-loss').innerText = `${rLoss.toFixed(2)}%`;
@@ -873,7 +992,6 @@
         document.getElementById('math-roast-loss').innerText = `0.00%`;
       }
 
-      // 2. % Sorter Loss
       if (pre > 0 && post > 0) {
         const sLoss = ((pre - post) / pre) * 100;
         document.getElementById('math-sorter-loss').innerText = `${sLoss.toFixed(2)}%`;
@@ -881,7 +999,6 @@
         document.getElementById('math-sorter-loss').innerText = `0.00%`;
       }
 
-      // 3. ค่าสีเฉลี่ย (Agtron)
       const c1 = parseFloat(document.getElementById('color_val_1').value);
       const c2 = parseFloat(document.getElementById('color_val_2').value);
       const c3 = parseFloat(document.getElementById('color_val_3').value);
@@ -971,6 +1088,10 @@
         const res = await fetch(API_URL, { method: "POST", body: JSON.stringify(payload) });
         const result = await res.json();
         alert(result.message);
+
+        // ตัด WO ที่ใช้แล้วออกจาก Pool บนหน้าจอ
+        activeWOPool = activeWOPool.filter(w => w !== woNum);
+        saveActiveWOs();
 
         addRoastHistoryRow(woNum, selectedReadyBean.item_name, lotCode, greenW, postW, colorAvg);
 
