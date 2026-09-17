@@ -12,17 +12,18 @@
     body { -ms-overflow-style: none; scrollbar-width: none; }
     .pb-safe { padding-bottom: env(safe-area-inset-bottom, 24px); }
 
-    /* 🌟 ระบบพิมพ์ใบนำงานคั่ว A4 🌟 */
+    /* 🌟 ระบบพิมพ์ใบนำงานคั่ว A4 เปล่า 🌟 */
     @page { size: A4 portrait; margin: 8mm; }
     @media print {
-      aside, #bottom-nav, .no-print, nav, button, header { display: none !important; }
+      #app-layout, aside, #bottom-nav, .no-print, nav, button, header { display: none !important; }
       html, body { background: white !important; margin: 0 !important; padding: 0 !important; width: 100% !important; overflow: visible !important; }
       #a4-traveler-modal { display: block !important; position: static !important; width: 100% !important; padding: 0 !important; background: transparent !important; }
       .a4-traveler-page {
         width: 194mm !important; height: 275mm !important; page-break-inside: avoid !important; break-inside: avoid !important;
-        border: 2px solid #000 !important; margin: 0 auto !important; padding: 10mm 12mm !important; background: white !important;
+        border: 2px solid #000 !important; margin: 0 auto 10mm auto !important; padding: 10mm 12mm !important; background: white !important;
         box-sizing: border-box !important; display: flex !important; flex-direction: column !important; justify-content: space-between !important;
       }
+      .a4-traveler-page:not(:last-child) { page-break-after: always !important; break-after: page !important; }
     }
   </style>
 </head>
@@ -211,64 +212,35 @@
         </div>
 
         <!-- ========================================================================= -->
-        <!-- ☕ กล่องที่ 2: คั่วกาแฟหน้าเตา (สร้าง WO + พิมพ์ A4 + บันทึก QC ครบวงจร) ☕ -->
+        <!-- ☕ กล่องที่ 2: คั่วกาแฟหน้าเตา (🌟 สร้าง WO เปล่า & พิมพ์ชุด A4 & บันทึก QC 🌟) -->
         <!-- ========================================================================= -->
         <div id="zone-roast" class="space-y-6">
 
-          <!-- 🌟 1. การ์ดสร้างใบงานคั่วใหม่ & สั่งพิมพ์ A4 หน้าเตา 🌟 -->
+          <!-- 🌟 1. การ์ดสร้างใบงานคั่วเปล่าตามจำนวนที่ต้องการ & สั่งพิมพ์ A4 รวดเดียว 🌟 -->
           <div class="bg-white p-6 rounded-xl border-2 border-black shadow-sm space-y-4 no-print">
             <div class="flex justify-between items-center border-b border-gray-100 pb-2">
               <div>
-                <h2 class="text-sm font-black text-black">ออกใบงานการคั่วใหม่ (Roast Work Order)</h2>
-                <p class="text-[11px] text-gray-400">ดึงออเดอร์จากหน้าวางแผน หรือระบุสูตรคั่วเพื่อพิมพ์ใบนำงาน A4</p>
+                <h2 class="text-sm font-black text-black">สร้างใบงานคั่วเปล่าประจำวัน (Blank Roast WO Generator)</h2>
+                <p class="text-[11px] text-gray-400">รันเลขใบงานตามวันเดือนปี พิมพ์ A4 หนีบคลิปบอร์ดให้คนคั่วไปจดมือหน้าเตา</p>
               </div>
-              <span class="text-xs font-mono font-bold bg-gray-100 text-black px-2.5 py-1 rounded" id="new-roast-wo-badge">WO-ROAST</span>
+              <span class="text-xs font-mono font-bold bg-gray-100 text-black px-2.5 py-1 rounded" id="today-date-badge">2026-09-16</span>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
-              <!-- ดึงแผนจาก Planner หรือเลือกลิสต์ -->
-              <div class="md:col-span-2">
-                <label class="block font-bold text-gray-700 mb-1">ดึงออเดอร์จากหน้าวางแผน (Planner)</label>
-                <select id="quick_plan_select" onchange="onQuickPlanSelected()" class="w-full px-3 py-2 border border-gray-300 rounded-lg font-bold bg-white text-black focus:outline-none">
-                  <option value="">-- กำลังโหลดรายการออเดอร์จากหน้าวางแผน --</option>
-                </select>
+            <div class="flex flex-col sm:flex-row items-center gap-3 pt-1">
+              <div class="w-full sm:w-1/3">
+                <label class="block text-xs font-bold text-gray-700 mb-1">จำนวนใบงานคั่วที่ต้องการสร้าง *</label>
+                <input type="number" id="batch_wo_count_input" value="5" min="1" max="30" class="w-full px-3 py-2 border-2 border-black rounded-lg font-black text-black text-center text-sm focus:outline-none">
               </div>
 
-              <div>
-                <label class="block font-bold text-gray-700 mb-1">ระดับการคั่ว *</label>
-                <select id="create_roast_level" class="w-full px-3 py-2 border border-gray-300 rounded-lg font-bold bg-white text-black focus:outline-none">
-                  <option value="L">Light (L)</option>
-                  <option value="M" selected>Medium (M)</option>
-                  <option value="MD">Medium Dark (MD)</option>
-                  <option value="D">Dark (D)</option>
-                </select>
+              <div class="w-full sm:w-2/3 flex items-end">
+                <button type="button" onclick="generateAndPrintBlankWOs()" class="w-full bg-black hover:bg-gray-800 text-white font-bold py-2.5 px-4 rounded-lg text-xs transition active:scale-95 cursor-pointer flex items-center justify-center gap-2">
+                  <span>🖨️ สร้างเลข WO & พิมพ์ใบนำงานคั่ว A4 เปล่า (ตามจำนวนที่เลือก)</span>
+                </button>
               </div>
-
-              <div>
-                <label class="block font-bold text-gray-700 mb-1">สารกาแฟที่ใช้ *</label>
-                <input type="text" id="create_bean_name" placeholder="เช่น บราซิล เซอร์ราโด" class="w-full px-3 py-2 border border-gray-300 rounded-lg font-medium text-black focus:outline-none">
-              </div>
-
-              <div>
-                <label class="block font-bold text-gray-700 mb-1">รหัส Lot *</label>
-                <input type="text" id="create_lot_code" placeholder="เช่น LOT-2609-AD05-01" class="w-full px-3 py-2 border border-gray-300 rounded-lg font-mono font-bold text-black focus:outline-none">
-              </div>
-
-              <div>
-                <label class="block font-bold text-gray-700 mb-1">น้ำหนักเป้าหมาย (kg) *</label>
-                <input type="number" id="create_target_weight" value="30.00" step="0.01" class="w-full px-3 py-2 border border-black rounded-lg font-black text-black focus:outline-none">
-              </div>
-            </div>
-
-            <!-- ปุ่มสั่งพิมพ์ A4 ใบนำงานคั่ว -->
-            <div class="pt-2">
-              <button type="button" onclick="previewAndPrintRoastTraveler()" class="w-full bg-black hover:bg-gray-800 text-white font-bold py-3 rounded-lg text-xs transition active:scale-95 cursor-pointer flex items-center justify-center gap-2">
-                <span>🖨️ ออกใบงาน & พิมพ์ใบนำงานคั่ว A4 (Roast Traveler Sheet)</span>
-              </button>
             </div>
           </div>
 
-          <!-- 🌟 2. ฟอร์มบันทึกผลการคั่วจริง & Post-Roast QC (เมื่อคั่วเสร็จแล้ว) 🌟 -->
+          <!-- 🌟 2. ฟอร์มสแกนใบงาน A4 & บันทึกผลการคั่วจริง (เมื่อคั่วเสร็จแล้ว) 🌟 -->
           <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-5 no-print">
             <div class="border-b border-gray-100 pb-3 flex justify-between items-center">
               <div>
@@ -279,16 +251,18 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <!-- สแกน QR บนใบ A4 -->
               <div>
                 <label class="block text-xs font-bold text-gray-700 mb-1">1. สแกน QR ใบงานคั่ว (จากกระดาษ A4) *</label>
                 <div class="flex gap-2">
-                  <input type="text" id="roast_wo_input" placeholder="สแกน QR บนใบ A4" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg font-mono font-bold text-black uppercase text-xs focus:border-black focus:outline-none">
+                  <input type="text" id="roast_wo_input" placeholder="สแกน QR บนใบ A4 เช่น WO-R260916-01" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg font-mono font-bold text-black uppercase text-xs focus:border-black focus:outline-none">
                   <button type="button" onclick="startScanner('roast_wo_input')" class="bg-black hover:bg-gray-800 text-white px-3.5 rounded-lg font-bold text-xs transition cursor-pointer">
                     เปิดกล้อง
                   </button>
                 </div>
               </div>
 
+              <!-- สแกนสารพร้อมคั่วจากคลัง RT -->
               <div>
                 <label class="block text-xs font-bold text-gray-700 mb-1">2. สแกนสารพร้อมคั่ว (คลัง RT) *</label>
                 <div class="flex gap-2">
@@ -298,7 +272,7 @@
                   </button>
                 </div>
                 <select id="roast_bean_select" onchange="onRoastBeanSelected()" class="w-full px-2.5 py-1.5 border border-gray-200 rounded-lg text-xs font-medium bg-gray-50 text-black mt-1.5 focus:outline-none">
-                  <option value="">-- หรือเลือกสารพร้อมคั่วในคลัง RT --</option>
+                  <option value="">-- หรือคลิกเลือกสารพร้อมคั่วในคลัง RT --</option>
                 </select>
               </div>
             </div>
@@ -308,7 +282,7 @@
               <div class="flex justify-between items-start">
                 <div>
                   <span class="text-[10px] text-gray-400 font-bold uppercase block">สารที่เบิกคั่ว</span>
-                  <h4 id="roast-info-name" class="text-sm font-black text-black">กรุณาเลือกสารกาแฟ</h4>
+                  <h4 id="roast-info-name" class="text-sm font-black text-black">กรุณาสแกนหรือเลือกสารกาแฟ</h4>
                 </div>
                 <span class="font-mono font-black text-black bg-white px-2 py-0.5 rounded border border-gray-200" id="roast-info-barcode">-</span>
               </div>
@@ -325,12 +299,12 @@
               <div class="flex justify-between items-center">
                 <span class="text-xs font-black text-black uppercase">พารามิเตอร์กราฟการคั่ว (Roast Profile)</span>
                 <div class="flex items-center gap-2">
-                  <span class="text-xs font-bold text-gray-500">ระดับคั่ว:</span>
+                  <span class="text-xs font-bold text-gray-500">ระดับคั่วจริง:</span>
                   <select id="roast_level_select" class="px-2 py-1 bg-gray-100 border border-gray-300 rounded font-bold text-xs text-black">
-                    <option value="L">L (คั่วอ่อน)</option>
-                    <option value="M" selected>M (คั่วกลาง)</option>
-                    <option value="MD">MD (คั่วกลางเข้ม)</option>
-                    <option value="D">D (คั่วเข้ม)</option>
+                    <option value="L">Light (L)</option>
+                    <option value="M" selected>Medium (M)</option>
+                    <option value="MD">Medium Dark (MD)</option>
+                    <option value="D">Dark (D)</option>
                   </select>
                 </div>
               </div>
@@ -454,7 +428,7 @@
               <table class="min-w-full text-xs">
                 <thead class="bg-gray-50 text-gray-500 border-b border-gray-200">
                   <tr>
-                    <th class="py-2 px-3 text-left font-bold">Batch ID / WO</th>
+                    <th class="py-2 px-3 text-left font-bold">WO ใบงานคั่ว</th>
                     <th class="py-2 px-3 text-left font-bold">สารกาแฟ</th>
                     <th class="py-2 px-3 text-center font-bold">รหัส Lot</th>
                     <th class="py-2 px-3 text-right font-bold">นน. สารดิบ</th>
@@ -476,110 +450,19 @@
     </main>
   </div>
 
-  <!-- 🖨️ MODAL พิมพ์ใบนำงานคั่ว A4 (Roast Traveler Sheet) -->
+  <!-- 🖨️ MODAL พิมพ์ชุดใบนำงานคั่ว A4 เปล่า (Blank Roast Production Travelers) -->
   <div id="a4-traveler-modal" style="display: none;" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex-col overflow-y-auto p-4 md:p-8">
     
     <div class="max-w-[194mm] w-full mx-auto bg-black text-white p-3 rounded-xl mb-4 shadow-2xl flex justify-between items-center no-print sticky top-2 z-50 border border-gray-700">
-      <span class="text-xs font-bold">พรีวิวใบนำงานคั่ว A4 (Roast Production Traveler)</span>
+      <span class="text-xs font-bold">พรีวิวใบนำงานคั่ว A4 เปล่า (รวม <span id="traveler-pages-count" class="text-green-400 font-bold">1</span> ใบ)</span>
       <div class="flex gap-2">
         <button type="button" onclick="window.print()" class="bg-white hover:bg-gray-100 text-black font-black px-4 py-1.5 rounded-lg text-xs transition active:scale-95 cursor-pointer">สั่งพิมพ์ A4</button>
         <button type="button" onclick="closeA4TravelerModal()" class="bg-gray-800 text-gray-300 px-3 py-1.5 rounded-lg text-xs cursor-pointer">ปิด</button>
       </div>
     </div>
 
-    <!-- แผ่นกระดาษ A4 แนวตั้ง -->
-    <div class="a4-traveler-page shadow-2xl border-2 border-black bg-white rounded-lg p-6 mx-auto space-y-4 text-black text-xs">
-      
-      <div class="flex justify-between items-start border-b-2 border-black pb-3">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 bg-black text-white font-black flex items-center justify-center rounded-lg text-lg">BJ</div>
-          <div>
-            <h1 class="text-lg font-black tracking-tight leading-none">BJ ROASTER - ใบนำงานการผลิตและคั่วกาแฟ</h1>
-            <p class="text-[10px] text-gray-600 font-bold mt-1">Roasting Production Traveler & QC Card</p>
-          </div>
-        </div>
-        <div class="text-right flex flex-col items-end">
-          <div id="traveler-qr-box" class="p-1 bg-white border border-black mb-1"></div>
-          <span class="font-mono font-black text-xs" id="tvl-batch-no">WO-ROAST</span>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-2 gap-3 border-2 border-black p-3 rounded-lg bg-gray-50">
-        <div>
-          <p class="font-bold">วันที่: <span class="font-normal" id="tvl-date">-</span></p>
-          <p class="font-bold">ชื่อสารกาแฟ: <span class="font-black text-sm" id="tvl-bean-name">-</span></p>
-          <p class="font-bold">รหัส Lot: <span class="font-black font-mono" id="tvl-lot-code">-</span></p>
-        </div>
-        <div>
-          <p class="font-bold">ระดับคั่วเป้าหมาย: <span class="font-black text-sm border-b-2 border-black" id="tvl-roast-level">Medium (M)</span></p>
-          <p class="font-bold">น้ำหนักเป้าหมาย: <span class="font-black text-sm" id="tvl-target-weight">30.00 kg</span></p>
-          <p class="font-bold">เลขอ้างอิงออเดอร์: <span class="font-mono font-normal" id="tvl-order-ref">-</span></p>
-        </div>
-      </div>
-
-      <div class="space-y-1">
-        <span class="font-black text-xs uppercase block border-b border-black pb-0.5">1. บันทึกอุณหภูมิและเวลาการคั่ว (Roast Profile Matrix)</span>
-        <table class="w-full border-collapse border border-black text-center text-[11px]">
-          <thead class="bg-gray-100 font-bold">
-            <tr>
-              <th class="border border-black p-1.5">CT อุณหภูมิชาร์จ</th>
-              <th class="border border-black p-1.5">TP จุดกลับตัว</th>
-              <th class="border border-black p-1.5">YE จุดสีเหลือง / เวลา</th>
-              <th class="border border-black p-1.5">FC แตกแรก / เวลา</th>
-              <th class="border border-black p-1.5">SC แตกสอง</th>
-              <th class="border border-black p-1.5">อุณหภูมิออก / เวลาออก</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="h-10">
-              <td class="border border-black p-1.5 font-bold">[ _________ °C ]</td>
-              <td class="border border-black p-1.5 font-bold">[ _________ °C ]</td>
-              <td class="border border-black p-1.5 font-bold">[ _____ °C / ___:___ ]</td>
-              <td class="border border-black p-1.5 font-bold">[ _____ °C / ___:___ ]</td>
-              <td class="border border-black p-1.5 font-bold">[ _________ °C ]</td>
-              <td class="border border-black p-1.5 font-bold">[ _____ °C / ___:___ ]</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="space-y-1">
-        <span class="font-black text-xs uppercase block border-b border-black pb-0.5">2. บันทึกน้ำหนักและผลตรวจวัดสี (Yield & Color QC)</span>
-        <div class="grid grid-cols-3 gap-2 text-center text-[11px] font-bold">
-          <div class="p-2 border-2 border-black rounded">นน. สารก่อนคั่ว:<br><span class="text-sm">[ ___________ kg ]</span></div>
-          <div class="p-2 border-2 border-black rounded">นน. ก่อนยิงสี (คั่วเสร็จ):<br><span class="text-sm">[ ___________ kg ]</span></div>
-          <div class="p-2 border-2 border-black rounded">นน. หลังยิงสี:<br><span class="text-sm">[ ___________ kg ]</span></div>
-        </div>
-
-        <table class="w-full border-collapse border border-black text-center text-[11px] mt-2">
-          <thead class="bg-gray-100 font-bold">
-            <tr>
-              <th class="border border-black p-1.5">วัดค่าสี ครั้งที่ 1</th>
-              <th class="border border-black p-1.5">วัดค่าสี ครั้งที่ 2</th>
-              <th class="border border-black p-1.5">วัดค่าสี ครั้งที่ 3</th>
-              <th class="border border-black p-1.5 bg-gray-200">ค่าสีหลังคั่วเฉลี่ย</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="h-8">
-              <td class="border border-black p-1.5">[ ____________ ]</td>
-              <td class="border border-black p-1.5">[ ____________ ]</td>
-              <td class="border border-black p-1.5">[ ____________ ]</td>
-              <td class="border border-black p-1.5 font-black bg-gray-50">[ ____________ ]</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="border-2 border-black rounded-lg p-3 space-y-2">
-        <p class="font-bold">หมายเหตุการผลิต: [ __________________________________________________________________________________ ]</p>
-        <div class="grid grid-cols-2 gap-4 pt-3 border-t border-gray-300 text-center font-bold">
-          <div>ผู้คั่วกาแฟ (Roaster): __________________________</div>
-          <div>ผู้รับมอบแผนก Packing: __________________________</div>
-        </div>
-      </div>
-
-    </div>
+    <!-- กล่องรวมแผ่น A4 ที่สร้างขึ้นตามจำนวน -->
+    <div id="traveler-pages-container" class="space-y-6"></div>
   </div>
 
   <!-- 📱 Bottom Navigation มือถือ -->
@@ -620,7 +503,6 @@
     let rawPalletsList = [];
     let selectedRawPallet = null;
 
-    let plannerOrdersList = [];
     let readyBeansList = [];
     let selectedReadyBean = null;
 
@@ -635,7 +517,8 @@
     }
 
     window.onload = function() {
-      generateRoastWONumber();
+      const now = new Date();
+      document.getElementById('today-date-badge').innerText = now.toISOString().split('T')[0];
       loadSiftingData();
       loadRoastingData();
     };
@@ -654,23 +537,149 @@
 
       if(tab === 'roast') {
         loadRoastingData();
-        generateRoastWONumber();
       }
     }
 
-    function generateRoastWONumber() {
+    // =========================================================================
+    // 🖨️ 1. สร้างใบงานคั่วเปล่า & สั่งพิมพ์ชุด A4 ตามจำนวนที่เลือก
+    // =========================================================================
+    function generateAndPrintBlankWOs() {
+      const count = parseInt(document.getElementById('batch_wo_count_input').value) || 1;
+      const container = document.getElementById('traveler-pages-container');
+      container.innerHTML = '';
+
+      document.getElementById('traveler-pages-count').innerText = count;
+
       const now = new Date();
       const yyyy = now.getFullYear();
       const mm = String(now.getMonth() + 1).padStart(2, '0');
       const dd = String(now.getDate()).padStart(2, '0');
-      const rnd = Math.floor(Math.random() * 900) + 100;
-      const woNum = `WO-R${yyyy}${mm}${dd}-${rnd}`;
-      document.getElementById('new-roast-wo-badge').innerText = woNum;
-      return woNum;
+      const dateStr = `${dd}/${mm}/${yyyy + 543}`;
+      const prefix = `WO-R${String(yyyy).slice(-2)}${mm}${dd}-`;
+
+      for (let i = 1; i <= count; i++) {
+        const seq = String(i).padStart(2, '0');
+        const woNum = `${prefix}${seq}`;
+
+        const page = document.createElement('div');
+        page.className = "a4-traveler-page shadow-2xl border-2 border-black bg-white rounded-lg p-6 mx-auto space-y-3 text-black text-xs";
+        page.innerHTML = `
+          <!-- หัวเอกสาร -->
+          <div class="flex justify-between items-start border-b-2 border-black pb-2.5">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 bg-black text-white font-black flex items-center justify-center rounded-lg text-lg">BJ</div>
+              <div>
+                <h1 class="text-base font-black tracking-tight leading-none">BJ ROASTER - ใบนำงานการผลิตและคั่วกาแฟ</h1>
+                <p class="text-[10px] text-gray-600 font-bold mt-1">Roasting Production Traveler & QC Card</p>
+              </div>
+            </div>
+            <div class="text-right flex flex-col items-end">
+              <div id="tvl-qr-${i}" class="p-1 bg-white border border-black mb-1"></div>
+              <span class="font-mono font-black text-xs">${woNum}</span>
+            </div>
+          </div>
+
+          <!-- ข้อมูลใบงานว่างรอจดมือ -->
+          <div class="border-2 border-black p-3 rounded-lg bg-gray-50 space-y-1.5">
+            <div class="grid grid-cols-2 gap-2">
+              <p class="font-bold">วันที่: <span class="font-normal">${dateStr}</span></p>
+              <p class="font-bold">ผู้คั่ว (Roaster): [ ____________________ ]</p>
+            </div>
+            <div class="grid grid-cols-2 gap-2 pt-1 border-t border-gray-200">
+              <p class="font-bold">ชื่อสารกาแฟ: [ _________________________________ ]</p>
+              <p class="font-bold">รหัส Lot: [ ________________________ ]</p>
+            </div>
+            <div class="pt-1 flex justify-between items-center">
+              <span class="font-bold">ระดับคั่วเป้าหมาย: &nbsp;&nbsp; [ &nbsp; ] Light &nbsp;&nbsp; [ &nbsp; ] Medium &nbsp;&nbsp; [ &nbsp; ] Medium-Dark &nbsp;&nbsp; [ &nbsp; ] Dark</span>
+              <span class="font-bold">นน. สารตั้งต้น: [ _________ kg ]</span>
+            </div>
+          </div>
+
+          <!-- ตารางจดกราฟอุณหภูมิ & เวลาหน้าเตา -->
+          <div class="space-y-1">
+            <span class="font-black text-xs uppercase block border-b border-black pb-0.5">1. บันทึกอุณหภูมิและเวลาการคั่ว (Roast Profile Matrix)</span>
+            <table class="w-full border-collapse border border-black text-center text-[11px]">
+              <thead class="bg-gray-100 font-bold">
+                <tr>
+                  <th class="border border-black p-1.5">CT อุณหภูมิชาร์จ</th>
+                  <th class="border border-black p-1.5">TP จุดกลับตัว</th>
+                  <th class="border border-black p-1.5">YE จุดสีเหลือง / เวลา</th>
+                  <th class="border border-black p-1.5">FC แตกแรก / เวลา</th>
+                  <th class="border border-black p-1.5">SC แตกสอง</th>
+                  <th class="border border-black p-1.5">อุณหภูมิออก / เวลาออก</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="h-10">
+                  <td class="border border-black p-1.5 font-bold">[ _________ °C ]</td>
+                  <td class="border border-black p-1.5 font-bold">[ _________ °C ]</td>
+                  <td class="border border-black p-1.5 font-bold">[ _____ °C / ___:___ ]</td>
+                  <td class="border border-black p-1.5 font-bold">[ _____ °C / ___:___ ]</td>
+                  <td class="border border-black p-1.5 font-bold">[ _________ °C ]</td>
+                  <td class="border border-black p-1.5 font-bold">[ _____ °C / ___:___ ]</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- ตารางจดน้ำหนักชั่งจริง & สุ่มวัดสี -->
+          <div class="space-y-1">
+            <span class="font-black text-xs uppercase block border-b border-black pb-0.5">2. บันทึกน้ำหนักและผลตรวจวัดสี (Yield & Color QC)</span>
+            <div class="grid grid-cols-3 gap-2 text-center text-[11px] font-bold">
+              <div class="p-2 border-2 border-black rounded">นน. สารก่อนคั่ว:<br><span class="text-sm">[ ___________ kg ]</span></div>
+              <div class="p-2 border-2 border-black rounded">นน. ก่อนยิงสี (คั่วเสร็จ):<br><span class="text-sm">[ ___________ kg ]</span></div>
+              <div class="p-2 border-2 border-black rounded">นน. หลังยิงสี:<br><span class="text-sm">[ ___________ kg ]</span></div>
+            </div>
+
+            <table class="w-full border-collapse border border-black text-center text-[11px] mt-1.5">
+              <thead class="bg-gray-100 font-bold">
+                <tr>
+                  <th class="border border-black p-1.5">วัดค่าสี ครั้งที่ 1</th>
+                  <th class="border border-black p-1.5">วัดค่าสี ครั้งที่ 2</th>
+                  <th class="border border-black p-1.5">วัดค่าสี ครั้งที่ 3</th>
+                  <th class="border border-black p-1.5 bg-gray-200">ค่าสีหลังคั่วเฉลี่ย</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="h-8">
+                  <td class="border border-black p-1.5">[ ____________ ]</td>
+                  <td class="border border-black p-1.5">[ ____________ ]</td>
+                  <td class="border border-black p-1.5">[ ____________ ]</td>
+                  <td class="border border-black p-1.5 font-black bg-gray-50">[ ____________ ]</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- หมายเหตุและลายเซ็นส่งมอบ -->
+          <div class="border-2 border-black rounded-lg p-2.5 space-y-2">
+            <p class="font-bold">หมายเหตุการผลิต: [ __________________________________________________________________________________ ]</p>
+            <div class="grid grid-cols-2 gap-4 pt-2 border-t border-gray-300 text-center font-bold">
+              <div>ลายเซ็นผู้คั่ว (Roaster): __________________________</div>
+              <div>ลายเซ็นผู้รับมอบ Packing: __________________________</div>
+            </div>
+          </div>
+        `;
+        container.appendChild(page);
+
+        // สร้าง QR Code บนใบกระดาษ A4
+        setTimeout(() => {
+          const qrBox = document.getElementById(`tvl-qr-${i}`);
+          if (qrBox && typeof QRCode !== 'undefined') {
+            new QRCode(qrBox, { text: woNum, width: 80, height: 80, correctLevel: QRCode.CorrectLevel.M });
+          }
+        }, 50);
+      }
+
+      document.getElementById('a4-traveler-modal').style.display = 'flex';
+    }
+
+    function closeA4TravelerModal() {
+      document.getElementById('a4-traveler-modal').style.display = 'none';
     }
 
     // =========================================================================
-    // 🌾 1. ร่อนเตรียมสาร
+    // 🌾 2. ร่อนเตรียมสาร
     // =========================================================================
     async function loadSiftingData() {
       try {
@@ -812,26 +821,9 @@
     }
 
     // =========================================================================
-    // ☕ 2. คั่วกาแฟหน้าเตา (ออก WO & พิมพ์ A4 & บันทึก QC)
+    // ☕ 3. คั่วกาแฟหน้าเตา & บันทึกผล QC จากใบงาน A4
     // =========================================================================
     async function loadRoastingData() {
-      // ดึงออเดอร์จากหน้าวางแผน (Planner)
-      try {
-        const resPlans = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'get_plans' }) });
-        const resultPlans = await resPlans.json();
-        if(resultPlans.success && resultPlans.data) {
-          plannerOrdersList = resultPlans.data.filter(p => p.status !== 'Completed');
-          const select = document.getElementById('quick_plan_select');
-          if(plannerOrdersList.length === 0) {
-            select.innerHTML = '<option value="">-- ไม่มีออเดอร์ค้างจากหน้าวางแผน --</option>';
-          } else {
-            select.innerHTML = '<option value="">-- เลือกออเดอร์จากหน้าวางแผน --</option>' + 
-              plannerOrdersList.map((p, idx) => `<option value="${idx}">[${p.plan_id}] ${p.item_name} (${p.roast_level}) - ${p.target_weight} kg [ออเดอร์: ${p.order_no || '-'}]</option>`).join('');
-          }
-        }
-      } catch(e) {}
-
-      // ดึงสารพร้อมคั่วในคลัง RT
       try {
         const resInv = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'get_inventory' }) });
         const resultInv = await resInv.json();
@@ -847,56 +839,6 @@
             readyBeansList.map((b, idx) => `<option value="${idx}">[${b.location}] ${b.item_name} (Lot: ${b.lot_code || '-'}) - ${b.weight_current} kg</option>`).join('');
         }
       } catch(e) {}
-    }
-
-    function onQuickPlanSelected() {
-      const idx = document.getElementById('quick_plan_select').value;
-      if(idx === "") return;
-      const plan = plannerOrdersList[idx];
-      document.getElementById('create_bean_name').value = plan.item_name || '';
-      document.getElementById('create_target_weight').value = plan.target_weight || '30.00';
-      if(plan.roast_level) {
-        document.getElementById('create_roast_level').value = plan.roast_level;
-      }
-    }
-
-    function previewAndPrintRoastTraveler() {
-      const woNum = document.getElementById('new-roast-wo-badge').innerText;
-      const beanName = document.getElementById('create_bean_name').value.trim();
-      const lotCode = document.getElementById('create_lot_code').value.trim() || 'LOT-ROAST-01';
-      const targetWeight = document.getElementById('create_target_weight').value || '30.00';
-      const roastLevel = document.getElementById('create_roast_level').value;
-
-      const idx = document.getElementById('quick_plan_select').value;
-      const orderRef = (idx !== "" && plannerOrdersList[idx]) ? (plannerOrdersList[idx].order_no || plannerOrdersList[idx].plan_id) : "-";
-
-      if(!beanName) return alert("กรุณาระบุชื่อสารกาแฟที่จะคั่ว");
-
-      document.getElementById('tvl-batch-no').innerText = woNum;
-      document.getElementById('tvl-date').innerText = new Date().toLocaleDateString('th-TH');
-      document.getElementById('tvl-bean-name').innerText = beanName;
-      document.getElementById('tvl-lot-code').innerText = lotCode;
-      document.getElementById('tvl-target-weight').innerText = `${targetWeight} kg`;
-      document.getElementById('tvl-roast-level').innerText = roastLevel;
-      document.getElementById('tvl-order-ref').innerText = orderRef;
-
-      // สร้าง QR Code บนใบนำงาน A4
-      const qrBox = document.getElementById('traveler-qr-box');
-      qrBox.innerHTML = '';
-      if(typeof QRCode !== 'undefined') {
-        new QRCode(qrBox, { text: woNum, width: 85, height: 85, correctLevel: QRCode.CorrectLevel.M });
-      }
-
-      // ใส่ค่าลงฟอร์มบันทึกผลรอไว้
-      document.getElementById('roast_wo_input').value = woNum;
-      document.getElementById('roast_green_weight').value = targetWeight;
-      document.getElementById('roast_level_select').value = roastLevel;
-
-      document.getElementById('a4-traveler-modal').style.display = 'flex';
-    }
-
-    function closeA4TravelerModal() {
-      document.getElementById('a4-traveler-modal').style.display = 'none';
     }
 
     function onRoastBeanSelected() {
@@ -962,7 +904,9 @@
       const postW = parseFloat(document.getElementById('roast_postsort_weight').value) || 0;
 
       const barcode = document.getElementById('roast_barcode_input').value.trim();
-      const woNum = document.getElementById('roast_wo_input').value.trim() || generateRoastWONumber();
+      const woNum = document.getElementById('roast_wo_input').value.trim();
+
+      if(!woNum) return alert("กรุณาระบุหรือสแกน QR รหัสใบงานคั่วจากกระดาษ A4");
 
       if(!selectedReadyBean && barcode) {
         selectedReadyBean = readyBeansList.find(b => b.barcode_id === barcode || b.pallet_id === barcode);
@@ -981,6 +925,7 @@
       const colorAvg = document.getElementById('color_val_avg').innerText;
 
       const confirmMsg = `ยืนยันบันทึกผลการคั่ว [${selectedReadyBean.item_name}]?\n\n` +
+        `- เลขใบงานคั่ว: ${woNum}\n` +
         `- รหัส Lot: ${lotCode}\n` +
         `- นน. สารก่อนคั่ว: ${greenW} kg (ตัดออกจากคลัง RT)\n` +
         `- นน. กาแฟคั่วสุก: ${postW} kg (ย้ายไปรอที่ RT-REST)\n` +
@@ -1052,7 +997,6 @@
         document.getElementById('roast_notes').value = '';
 
         selectedReadyBean = null;
-        generateRoastWONumber();
         loadRoastingData();
       } catch(e) {
         alert("เชื่อมต่อไม่สำเร็จ");
