@@ -41,7 +41,7 @@
               <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" /></svg> สต๊อกสินค้า
             </a>
             <a href="report.html" class="flex items-center gap-3 text-gray-500 hover:text-black hover:bg-gray-100 px-3 py-2 rounded-lg font-bold text-xs transition">
-              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625z" /></svg> รายงาน
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" /></svg> รายงาน
             </a>
           </nav>
         </div>
@@ -102,21 +102,19 @@
           </div>
         </div>
 
-        <!-- 🌟 ส่วนใหม่: สรุปสารกาแฟคงคลัง (แถบตารางแบบ Inventory แสดงรหัส/ชื่อสาร พร้อมช่องค้นหาตำแหน่ง) 🌟 -->
+        <!-- สรุปสารกาแฟคงคลัง -->
         <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-4">
           <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-3 border-b border-gray-100 pb-3">
             <div>
               <h2 class="text-sm font-black text-black tracking-tight">สรุปสารกาแฟคงคลัง</h2>
               <p class="text-[11px] text-gray-400">ยอดรวมน้ำหนักและจำนวนกระสอบแยกตามรหัสและชื่อสาร</p>
             </div>
-            <!-- 🔍 ช่องค้นหา รหัสสาร หรือ ชื่อสาร -->
             <div class="flex items-center gap-2">
               <input type="text" id="beanSearchInput" onkeyup="filterBeanSummary()" placeholder="ค้นหารหัสสาร หรือ ชื่อสาร..." class="px-3 py-1.5 border border-gray-300 rounded-lg text-xs w-60 focus:border-black focus:outline-none">
               <span id="bean-type-count-badge" class="text-xs font-bold bg-gray-100 text-black px-2.5 py-1 rounded-lg whitespace-nowrap">0 ชนิด</span>
             </div>
           </div>
 
-          <!-- แถบตารางสรุปยอดสารกาแฟ (ไม่แสดงตำแหน่ง) -->
           <div class="overflow-x-auto">
             <table class="min-w-full text-xs">
               <thead class="bg-gray-50 text-gray-500 border-b border-gray-200">
@@ -134,7 +132,6 @@
             </table>
           </div>
 
-          <!-- 📍 กล่องเจาะลึกแสดงตำแหน่งแร็คทั้งหมดเมื่อค้นหาหรือคลิกเลือกสาร 📍 -->
           <div id="bean-drilldown-box" class="hidden p-4 bg-gray-50 rounded-xl border-2 border-black space-y-3">
             <div class="flex justify-between items-center border-b border-gray-200 pb-2">
               <div>
@@ -156,15 +153,13 @@
                     <th class="py-2 px-3 text-center font-bold">สถานะ</th>
                   </tr>
                 </thead>
-                <tbody id="drilldown-tbody" class="divide-y divide-gray-100 text-black">
-                  <!-- แทรกรายการพาเลทและแร็ค -->
-                </tbody>
+                <tbody id="drilldown-tbody" class="divide-y divide-gray-100 text-black"></tbody>
               </table>
             </div>
           </div>
         </div>
 
-        <!-- แดชบอร์ดแจ้งเตือนจุดพักของค้างท่อ (เป้าหมาย: เคลียร์ให้เป็น 0) -->
+        <!-- แดชบอร์ดแจ้งเตือนจุดพักของค้างท่อ -->
         <div class="bg-white p-5 rounded-xl border-2 border-black shadow-sm space-y-3">
           <div class="flex justify-between items-center border-b border-gray-100 pb-2">
             <div>
@@ -175,7 +170,6 @@
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-1">
-            <!-- 1. ลานรับของ -->
             <div class="p-4 bg-gray-50 rounded-xl border border-gray-200 flex flex-col justify-between">
               <div>
                 <div class="flex justify-between items-start">
@@ -190,7 +184,6 @@
               </div>
             </div>
 
-            <!-- 2. ระหว่างคั่ว -->
             <div class="p-4 bg-gray-50 rounded-xl border border-gray-200 flex flex-col justify-between">
               <div>
                 <div class="flex justify-between items-start">
@@ -205,7 +198,6 @@
               </div>
             </div>
 
-            <!-- 3. ระหว่างบรรจุ -->
             <div class="p-4 bg-gray-50 rounded-xl border border-gray-200 flex flex-col justify-between">
               <div>
                 <div class="flex justify-between items-start">
@@ -222,7 +214,7 @@
           </div>
         </div>
 
-        <!-- ผังแร็ค BJ (สไตล์มินิมอล) -->
+        <!-- ผังแร็ค BJ -->
         <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-3">
           <div class="flex justify-between items-center border-b border-gray-100 pb-2">
             <h2 class="text-sm font-bold text-black">ผังแร็ค BJ</h2>
@@ -240,11 +232,11 @@
           </div>
         </div>
 
-        <!-- รายการสินค้าในสต๊อก -->
+        <!-- 🌟 รายการสินค้าในสต๊อก (เพิ่มคอลัมน์รหัส Lot ชัดเจน) 🌟 -->
         <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden p-5 space-y-3">
           <div class="flex justify-between items-center border-b border-gray-100 pb-3">
             <h2 class="text-sm font-bold text-black">รายการสินค้าในสต๊อก</h2>
-            <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="ค้นหาบาร์โค้ด สินค้า แร็ค..." class="px-3 py-1.5 border border-gray-300 rounded-lg text-xs w-56 focus:border-black focus:outline-none">
+            <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="ค้นหาบาร์โค้ด สินค้า Lot แร็ค..." class="px-3 py-1.5 border border-gray-300 rounded-lg text-xs w-60 focus:border-black focus:outline-none">
           </div>
 
           <div class="overflow-x-auto">
@@ -253,6 +245,7 @@
                 <tr>
                   <th class="py-2.5 px-3 text-left font-bold">บาร์โค้ด / พาเลท</th>
                   <th class="py-2.5 px-3 text-left font-bold">ชื่อสินค้า</th>
+                  <th class="py-2.5 px-3 text-center font-bold">รหัส Lot</th>
                   <th class="py-2.5 px-3 text-center font-bold">หมวดหมู่</th>
                   <th class="py-2.5 px-3 text-right font-bold">คงเหลือ</th>
                   <th class="py-2.5 px-3 text-center font-bold">Location</th>
@@ -260,7 +253,7 @@
                 </tr>
               </thead>
               <tbody id="table-body" class="text-black divide-y divide-gray-100">
-                <tr><td colspan="6" class="py-6 text-center text-gray-400">กำลังโหลด...</td></tr>
+                <tr><td colspan="7" class="py-6 text-center text-gray-400">กำลังโหลด...</td></tr>
               </tbody>
             </table>
           </div>
@@ -270,7 +263,7 @@
     </main>
   </div>
 
-  <!-- 🌟 ป๊อปการ์ดแสดงรายละเอียดแร็ค 🌟 -->
+  <!-- ป๊อปการ์ดแสดงรายละเอียดแร็ค -->
   <div id="rack-modal" style="display: none;" onclick="if(event.target === this) closeRackModal()" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 items-center justify-center p-4 no-print">
     <div class="bg-white max-w-sm w-full p-6 rounded-2xl shadow-2xl border-2 border-black space-y-4">
       <div class="flex justify-between items-start border-b border-gray-100 pb-3">
@@ -300,7 +293,7 @@
         </div>
 
         <div class="bg-gray-50 p-2.5 rounded-xl text-xs space-y-1 border border-gray-100">
-          <div class="flex justify-between"><span class="text-gray-400">รหัส Lot:</span><b class="text-black font-mono" id="modal-item-lot">-</b></div>
+          <div class="flex justify-between"><span class="text-gray-400">รหัส Lot:</span><b class="text-black font-mono font-black" id="modal-item-lot">-</b></div>
           <div class="flex justify-between"><span class="text-gray-400">อ้างอิงใบงาน:</span><b class="text-black font-mono" id="modal-item-wo">-</b></div>
         </div>
 
@@ -401,11 +394,8 @@
       } catch (e) {}
     }
 
-    // 🌟 จับคู่ดึง Bean Code และ Bean Name มาแสดงผล 🌟
     function resolveBeanDetails(item) {
       const rawName = item.item_name || '';
-      
-      // 1. ตรวจสอบกับตาราง Item_Master
       let matched = itemMasterData.find(m => 
         (m.bean_name && rawName.includes(m.bean_name)) ||
         (m.product_name && rawName.includes(m.product_name)) ||
@@ -419,7 +409,6 @@
         };
       }
 
-      // 2. ถ้ามีวงเล็บรหัส เช่น "[PK-01] ปางขอน"
       const match = rawName.match(/\[(.*?)\]\s*(.*)/);
       if (match) {
         return { code: match[1], name: match[2].split('|')[0].trim() };
@@ -428,7 +417,6 @@
       return { code: item.lot_code || '-', name: rawName || 'สารกาแฟ' };
     }
 
-    // 🌟 จัดกลุ่มสรุปยอดสารกาแฟ (แสดงแบบแถบตาราง ไม่แสดงตำแหน่ง) 🌟
     function processAndRenderBeanSummary() {
       const tbody = document.getElementById('bean-summary-tbody');
       const badge = document.getElementById('bean-type-count-badge');
@@ -490,7 +478,6 @@
       `).join('');
     }
 
-    // 🔍 ฟังก์ชันค้นหา รหัสสาร หรือ ชื่อสาร
     function filterBeanSummary() {
       const q = document.getElementById('beanSearchInput').value.toLowerCase().trim();
       const filtered = aggregatedBeanList.filter(b => 
@@ -499,13 +486,11 @@
       );
       renderBeanSummaryTable(filtered);
 
-      // ถ้าค้นหาเจอตรง 1 ชนิด ให้เปิดแสดงพิกัดจัดเก็บด้านล่างทันที
       if (filtered.length === 1 && q !== "") {
         showBeanDrilldownDirect(filtered[0]);
       }
     }
 
-    // 📍 เปิดแสดงพิกัดแร็คทั้งหมดของสารกาแฟชนิดนั้น
     function showBeanDrilldown(idx) {
       const b = aggregatedBeanList[idx];
       showBeanDrilldownDirect(b);
@@ -519,7 +504,7 @@
       tbody.innerHTML = b.pallets.map(p => {
         const weight = parseFloat(p.weight_current) || 0;
         const sacks = parseInt(p.sacks || p.unit) || Math.round(weight / 50) || 1;
-        const isRack = p.location && p.location.startsWith('BJI');
+        const isRack = p.location && (p.location.startsWith('BJI') || p.location.startsWith('RTA'));
         return `
           <tr class="hover:bg-gray-50">
             <td class="py-2 px-3 font-mono font-bold text-black">${p.barcode_id || p.pallet_id}</td>
@@ -528,10 +513,10 @@
             </td>
             <td class="py-2 px-3 text-right font-bold text-black">${weight.toFixed(1)} kg</td>
             <td class="py-2 px-3 text-center">${sacks} กระสอบ</td>
-            <td class="py-2 px-3 text-center font-mono text-gray-500">${p.lot_code || '-'}</td>
+            <td class="py-2 px-3 text-center font-mono font-bold text-black">${p.lot_code || '-'}</td>
             <td class="py-2 px-3 text-center">
               <span class="text-[10px] font-bold px-2 py-0.5 rounded ${isRack ? 'bg-black text-white' : 'bg-gray-100 text-gray-600'}">
-                ${isRack ? 'บนแร็ค' : 'ลานรับของ'}
+                ${isRack ? 'บนแร็ค' : 'ลานทำงาน'}
               </span>
             </td>
           </tr>
@@ -560,7 +545,7 @@
 
       const occupiedRacks = new Set(
         inventoryData
-          .filter(i => i.status === 'Active' && i.location && i.location.startsWith('BJI'))
+          .filter(i => i.status === 'Active' && i.location && (i.location.startsWith('BJI') || i.location.startsWith('RTA')))
           .map(i => i.location)
       );
       const rackInCount = occupiedRacks.size;
@@ -658,7 +643,6 @@
           cell.className = `flex-1 py-1.5 text-center rounded text-[10px] font-bold cursor-pointer transition ${colorClass}`;
           cell.innerText = `${bay}`;
           cell.title = `${locName} | ${status}`;
-          
           cell.onclick = () => openRackModal(locName, itemInRack, status);
 
           row.appendChild(cell);
@@ -703,17 +687,19 @@
       document.getElementById('rack-modal').style.display = 'none';
     }
 
+    // 🌟 เรนเดอร์ตารางสต๊อกสินค้าหลัก (แสดงคอลัมน์รหัส Lot ชัดเจน) 🌟
     function renderTable(data) {
       const tbody = document.getElementById('table-body');
       tbody.innerHTML = '';
       if(data.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" class="py-4 text-center text-gray-400">ไม่มีข้อมูล</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" class="py-4 text-center text-gray-400">ไม่มีข้อมูล</td></tr>`;
         return;
       }
       tbody.innerHTML = data.map(item => `
-        <tr class="hover:bg-gray-50">
+        <tr class="hover:bg-gray-50 transition">
           <td class="py-2 px-3 font-mono font-bold text-black">${item.barcode_id}</td>
           <td class="py-2 px-3 text-black font-medium">${item.item_name}</td>
+          <td class="py-2 px-3 text-center font-mono font-bold text-black">${item.lot_code || '-'}</td>
           <td class="py-2 px-3 text-center text-gray-500">${item.category || '-'}</td>
           <td class="py-2 px-3 text-right font-bold text-black">${item.weight_current} ${item.unit || 'kg'}</td>
           <td class="py-2 px-3 text-center font-mono font-bold text-black">${item.location}</td>
@@ -727,6 +713,7 @@
       const filtered = inventoryData.filter(item =>
         String(item.barcode_id).toLowerCase().includes(searchText) ||
         String(item.item_name).toLowerCase().includes(searchText) ||
+        String(item.lot_code || '').toLowerCase().includes(searchText) ||
         String(item.location).toLowerCase().includes(searchText)
       );
       renderTable(filtered);
