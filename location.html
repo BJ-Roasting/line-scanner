@@ -11,43 +11,51 @@
     body { -ms-overflow-style: none; scrollbar-width: none; }
     .pb-safe { padding-bottom: env(safe-area-inset-bottom, 24px); }
 
-    /* 🌟 ระบบตัดส่วนเกินตอนสั่งพิมพ์ ให้เหลือเฉพาะ QR + CODE เพียวๆ 🌟 */
-    @page { size: auto; margin: 4mm; }
+    /* 🌟 ระบบบังคับพิมพ์ 1 หน้าถ้วนเป๊ะ (1 of 1) 🌟 */
+    @page { size: auto; margin: 0; }
     @media print {
-      body * { visibility: hidden !important; }
-      #qr-print-modal, #qr-print-modal * { visibility: visible !important; }
+      html, body {
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        overflow: hidden !important;
+        background: white !important;
+      }
+      #app-layout, aside, #bottom-nav, .no-print, header, nav, button {
+        display: none !important;
+      }
       #qr-print-modal {
-        position: fixed !important;
-        left: 0 !important;
-        top: 0 !important;
+        display: flex !important;
+        position: static !important;
         width: 100vw !important;
         height: 100vh !important;
+        margin: 0 !important;
+        padding: 0 !important;
         background: white !important;
-        display: flex !important;
         align-items: center !important;
         justify-content: center !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        z-index: 99999 !important;
+        page-break-after: avoid !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
       }
-      .no-print { display: none !important; }
       #qr-print-card {
         border: 2px solid #000 !important;
         box-shadow: none !important;
         border-radius: 8px !important;
         padding: 10px !important;
+        margin: auto !important;
+        width: 65mm !important;
+        height: 65mm !important;
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
         justify-content: center !important;
-        width: 70mm !important;
-        height: 70mm !important;
-        margin: 0 auto !important;
         page-break-inside: avoid !important;
         break-inside: avoid !important;
       }
       #qr-modal-code {
-        font-size: 20pt !important;
+        font-size: 18pt !important;
         font-weight: 900 !important;
         margin-top: 6px !important;
         letter-spacing: 1px !important;
@@ -222,11 +230,11 @@
     </main>
   </div>
 
-  <!-- 🖨️ MODAL พิมพ์ป้าย QR Code (ตัดส่วนเกินออกทั้งหมด มีเฉพาะ QR + CODE เพียวๆ) -->
+  <!-- 🖨️ MODAL พิมพ์ป้าย QR Code (พิมพ์ 1 แผ่นถ้วน 100% ล็อคขนาดเป๊ะ) -->
   <div id="qr-print-modal" style="display: none;" onclick="if(event.target === this) closeQRModal()" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 items-center justify-center p-4">
-    <div id="qr-print-card" class="bg-white max-w-xs w-full p-6 rounded-2xl shadow-2xl border-2 border-black text-center flex flex-col items-center justify-center space-y-2">
+    <div id="qr-print-card" class="bg-white p-6 rounded-2xl shadow-2xl border-2 border-black text-center flex flex-col items-center justify-center space-y-2">
       
-      <!-- ปุ่มปิดหน้าต่าง (ซ่อนตอนสั่งพิมพ์อัตโนมัติ) -->
+      <!-- ปุ่มปิดหน้าต่าง -->
       <div class="w-full flex justify-end no-print">
         <button type="button" onclick="closeQRModal()" class="text-gray-400 hover:text-black font-bold text-lg leading-none">&times;</button>
       </div>
@@ -237,7 +245,7 @@
       <!-- 2. รหัสพิกัดตัวใหญ่หนาชัดเจน -->
       <h2 class="font-black text-black font-mono tracking-wider" id="qr-modal-code">BJI01A</h2>
 
-      <!-- ปุ่มกดสั่งพิมพ์และปิด (ซ่อนตอนสั่งพิมพ์อัตโนมัติ) -->
+      <!-- ปุ่มกดสั่งพิมพ์และปิด -->
       <div class="w-full pt-3 flex gap-2 no-print">
         <button type="button" onclick="window.print()" class="flex-1 bg-black hover:bg-gray-800 text-white font-bold py-2.5 rounded-lg text-xs transition cursor-pointer">
           สั่งพิมพ์สติ๊กเกอร์
@@ -454,14 +462,13 @@
       } catch(e) { alert("เชื่อมต่อไม่สำเร็จ"); }
     }
 
-    // 🌟 เปิดดูและสั่งพิมพ์ป้ายสติ๊กเกอร์ (เอาเฉพาะ QR Code + รหัสพิกัด) 🌟
     function openQRModal(code) {
       document.getElementById('qr-modal-code').innerText = code;
 
       const box = document.getElementById('qrcode-modal-box');
       box.innerHTML = '';
       if(typeof QRCode !== 'undefined') {
-        new QRCode(box, { text: code, width: 150, height: 150, correctLevel: QRCode.CorrectLevel.M });
+        new QRCode(box, { text: code, width: 130, height: 130, correctLevel: QRCode.CorrectLevel.M });
       }
 
       document.getElementById('qr-print-modal').style.display = 'flex';
