@@ -44,7 +44,6 @@
             <a href="planner.html" class="flex items-center gap-3 text-gray-500 hover:text-black hover:bg-gray-100 px-3 py-2 rounded-lg font-bold text-xs transition">
               <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 011.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.56.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.893.149c-.425.07-.765.383-.93.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 01-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.397.165-.71.505-.78.929l-.15.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 01-.12-1.45l.527-.737c.25-.35.273-.806.108-1.204-.165-.397-.505-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.107-1.204l-.527-.738a1.125 1.125 0 01.12-1.45l.773-.773a1.125 1.125 0 011.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg> ทำงาน
             </a>
-            <!-- สต๊อกสินค้า Active -->
             <a href="stock.html" class="flex items-center gap-3 bg-black text-white px-3 py-2 rounded-lg font-bold text-xs transition shadow-sm">
               <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" /></svg> สต๊อกสินค้า
             </a>
@@ -78,7 +77,7 @@
         <div class="flex justify-between items-center border-b border-gray-100 pb-4">
           <div>
             <h1 class="text-xl font-black text-black tracking-tight">จัดการพิกัดและผังคลังสินค้า</h1>
-            <p class="text-xs text-gray-400">สร้าง แก้ไข ลบ พิกัดแร็คและถังทำงานหมุนเวียน</p>
+            <p class="text-xs text-gray-400">สร้าง แก้ไข ลบ พิกัดแร็คและถังทำงานหมุนเวียน (เชื่อมสต๊อกจริง)</p>
           </div>
           <button onclick="window.location.href='stock.html'" class="px-3.5 py-2 border border-gray-300 text-black font-bold text-xs rounded-lg hover:bg-gray-50 transition cursor-pointer">
             กลับหน้าสต๊อก ➔
@@ -142,13 +141,13 @@
 
         </div>
 
-        <!-- ตารางจัดการพิกัดทั้งหมด (สร้างได้ ลบได้ พิมพ์ QR ได้) -->
+        <!-- 🌟 ตารางจัดการพิกัดทั้งหมด (เชื่อมสต๊อกจริง โชว์สินค้าและน้ำหนัก) 🌟 -->
         <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden p-5 space-y-4">
           
           <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-3 border-b border-gray-100 pb-3">
             <div>
               <h2 class="text-sm font-black text-black">รายการพิกัดทั้งหมดในระบบ</h2>
-              <span id="location-total-count" class="text-xs text-gray-400">0 พิกัด</span>
+              <span id="location-total-count" class="text-xs font-bold text-black bg-gray-100 px-2 py-0.5 rounded">กำลังคำนวณ...</span>
             </div>
 
             <!-- ตัวกรองตามคลัง -->
@@ -167,12 +166,13 @@
                   <th class="py-2.5 px-3 text-left font-bold">รหัสพิกัด (Location Code)</th>
                   <th class="py-2.5 px-3 text-center font-bold">คลัง (Zone)</th>
                   <th class="py-2.5 px-3 text-center font-bold">ประเภท (Type)</th>
+                  <th class="py-2.5 px-3 text-left font-bold">สินค้าที่จัดเก็บอยู่ (สต๊อกจริง)</th>
                   <th class="py-2.5 px-3 text-center font-bold">สถานะ</th>
                   <th class="py-2.5 px-3 text-center font-bold">จัดการ</th>
                 </tr>
               </thead>
               <tbody id="locations-table-body" class="text-black divide-y divide-gray-100">
-                <tr><td colspan="5" class="py-6 text-center text-gray-400">กำลังโหลดพิกัด...</td></tr>
+                <tr><td colspan="6" class="py-6 text-center text-gray-400">กำลังเชื่อมโยงพิกัดเข้ากับสต๊อก...</td></tr>
               </tbody>
             </table>
           </div>
@@ -235,6 +235,7 @@
   <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbxQywqP4da0BYdt_dHQtQl-kYlvGxmdJWNA59oqnZ_AM7SRyEESbMd73UD3Xx6VffQ/exec";
     let allLocations = [];
+    let allInventory = [];
     let currentFilter = 'ALL';
 
     function handleLogout() {
@@ -259,14 +260,25 @@
       }
     }
 
+    // 🌟 ดึงทั้ง Locations และ Inventory มาเชื่อมโยงกันแบบ Real-time 🌟
     async function loadAllLocations() {
       try {
-        const res = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'get_locations' }) });
-        const result = await res.json();
-        if(result.success && result.data) {
-          allLocations = result.data;
-          renderLocationsTable();
+        const [resLoc, resInv] = await Promise.all([
+          fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'get_locations' }) }),
+          fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'get_inventory' }) })
+        ]);
+
+        const dataLoc = await resLoc.json();
+        const dataInv = await resInv.json();
+
+        if(dataLoc.success && dataLoc.data) {
+          allLocations = dataLoc.data;
         }
+        if(dataInv.success && dataInv.data) {
+          allInventory = dataInv.data;
+        }
+
+        renderLocationsTable();
       } catch(e) {}
     }
 
@@ -300,20 +312,34 @@
         list = allLocations.filter(l => l.name && (l.name.startsWith('RT-') || l.type === 'Floor Staging'));
       }
 
-      document.getElementById('location-total-count').innerText = `${list.length} พิกัด`;
+      // นับยอดพิกัดที่มีของจริง vs พิกัดว่าง
+      let occupiedCount = 0;
+      allLocations.forEach(l => {
+        const hasItem = allInventory.some(i => i.location === l.name && i.status === 'Active' && parseFloat(i.weight_current) > 0);
+        if(hasItem) occupiedCount++;
+      });
+      document.getElementById('location-total-count').innerText = `ทั้งหมด ${allLocations.length} พิกัด (มีของ ${occupiedCount} / ว่าง ${allLocations.length - occupiedCount})`;
 
       if(list.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-gray-400">ยังไม่มีข้อมูลพิกัดในหมวดนี้</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="6" class="py-6 text-center text-gray-400">ยังไม่มีข้อมูลพิกัดในหมวดนี้</td></tr>`;
         return;
       }
 
       tbody.innerHTML = list.map((loc, idx) => {
-        const isOccupied = loc.status === 'In' || loc.status === 'Working' || loc.status === 'Occupied';
+        // 🌟 ตรวจสอบสต๊อกจริงจากชีท Inventory 🌟
+        const invItem = allInventory.find(i => i.location === loc.name && i.status === 'Active' && parseFloat(i.weight_current) > 0);
+        const isOccupied = !!invItem || loc.status === 'In' || loc.status === 'Working' || loc.status === 'Occupied';
+        
+        const stockDisplay = invItem 
+          ? `<b class="text-black font-bold">${invItem.item_name || 'สารกาแฟ'}</b> <span class="text-gray-500">(${parseFloat(invItem.weight_current).toFixed(1)} kg)</span>` 
+          : `<span class="text-gray-400">—</span>`;
+
         return `
-          <tr class="hover:bg-gray-50">
+          <tr class="hover:bg-gray-50 transition">
             <td class="py-2.5 px-3 font-mono font-black text-black text-sm">${loc.name}</td>
             <td class="py-2.5 px-3 text-center font-bold text-gray-600">${loc.zone || (loc.name.startsWith('BJI') ? 'BJ' : 'RT')}</td>
             <td class="py-2.5 px-3 text-center text-gray-500">${loc.type || (loc.name.startsWith('BJI') || loc.name.startsWith('RTA') ? 'Rack' : 'Floor Staging')}</td>
+            <td class="py-2.5 px-3 text-left">${stockDisplay}</td>
             <td class="py-2.5 px-3 text-center">
               <span class="text-[10px] font-bold px-2 py-0.5 rounded border ${isOccupied ? 'bg-black text-white border-black' : 'bg-gray-100 text-gray-600 border-gray-200'}">
                 ${isOccupied ? 'มีของ' : 'ว่าง'}
