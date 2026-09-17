@@ -11,10 +11,48 @@
     body { -ms-overflow-style: none; scrollbar-width: none; }
     .pb-safe { padding-bottom: env(safe-area-inset-bottom, 24px); }
 
+    /* 🌟 ระบบตัดส่วนเกินตอนสั่งพิมพ์ ให้เหลือเฉพาะ QR + CODE เพียวๆ 🌟 */
+    @page { size: auto; margin: 4mm; }
     @media print {
-      aside, #bottom-nav, .no-print, nav, button, header { display: none !important; }
-      html, body, #qr-print-modal { overflow: visible !important; height: auto !important; position: static !important; background: white !important; padding: 0 !important; }
-      #qr-print-card { border: 2px dashed #000 !important; box-shadow: none !important; margin: 0 auto !important; width: 80mm !important; height: 80mm !important; page-break-inside: avoid !important; }
+      body * { visibility: hidden !important; }
+      #qr-print-modal, #qr-print-modal * { visibility: visible !important; }
+      #qr-print-modal {
+        position: fixed !important;
+        left: 0 !important;
+        top: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        background: white !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        z-index: 99999 !important;
+      }
+      .no-print { display: none !important; }
+      #qr-print-card {
+        border: 2px solid #000 !important;
+        box-shadow: none !important;
+        border-radius: 8px !important;
+        padding: 10px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 70mm !important;
+        height: 70mm !important;
+        margin: 0 auto !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+      #qr-modal-code {
+        font-size: 20pt !important;
+        font-weight: 900 !important;
+        margin-top: 6px !important;
+        letter-spacing: 1px !important;
+        color: #000 !important;
+      }
     }
   </style>
 </head>
@@ -44,6 +82,7 @@
             <a href="planner.html" class="flex items-center gap-3 text-gray-500 hover:text-black hover:bg-gray-100 px-3 py-2 rounded-lg font-bold text-xs transition">
               <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 011.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.56.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.893.149c-.425.07-.765.383-.93.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 01-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.397.165-.71.505-.78.929l-.15.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 01-.12-1.45l.527-.737c.25-.35.273-.806.108-1.204-.165-.397-.505-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.107-1.204l-.527-.738a1.125 1.125 0 01.12-1.45l.773-.773a1.125 1.125 0 011.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg> ทำงาน
             </a>
+            <!-- สต๊อกสินค้า Active -->
             <a href="stock.html" class="flex items-center gap-3 bg-black text-white px-3 py-2 rounded-lg font-bold text-xs transition shadow-sm">
               <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" /></svg> สต๊อกสินค้า
             </a>
@@ -141,7 +180,7 @@
 
         </div>
 
-        <!-- 🌟 ตารางจัดการพิกัดทั้งหมด (เชื่อมสต๊อกจริง โชว์สินค้าและน้ำหนัก) 🌟 -->
+        <!-- ตารางจัดการพิกัดทั้งหมด -->
         <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden p-5 space-y-4">
           
           <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-3 border-b border-gray-100 pb-3">
@@ -183,24 +222,23 @@
     </main>
   </div>
 
-  <!-- 🖨️ MODAL พิมพ์ป้าย QR Code พิกัด -->
+  <!-- 🖨️ MODAL พิมพ์ป้าย QR Code (ตัดส่วนเกินออกทั้งหมด มีเฉพาะ QR + CODE เพียวๆ) -->
   <div id="qr-print-modal" style="display: none;" onclick="if(event.target === this) closeQRModal()" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 items-center justify-center p-4">
-    <div id="qr-print-card" class="bg-white max-w-xs w-full p-6 rounded-2xl shadow-2xl border-2 border-black text-center space-y-3">
-      <div class="flex justify-between items-center border-b border-gray-200 pb-2 no-print">
-        <span class="text-xs font-bold text-gray-500">ป้ายพิกัดตำแหน่งจัดเก็บ</span>
-        <button type="button" onclick="closeQRModal()" class="text-gray-400 hover:text-black font-bold text-lg">&times;</button>
+    <div id="qr-print-card" class="bg-white max-w-xs w-full p-6 rounded-2xl shadow-2xl border-2 border-black text-center flex flex-col items-center justify-center space-y-2">
+      
+      <!-- ปุ่มปิดหน้าต่าง (ซ่อนตอนสั่งพิมพ์อัตโนมัติ) -->
+      <div class="w-full flex justify-end no-print">
+        <button type="button" onclick="closeQRModal()" class="text-gray-400 hover:text-black font-bold text-lg leading-none">&times;</button>
       </div>
 
-      <div class="py-2">
-        <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest block" id="qr-modal-zone">WAREHOUSE BJ</span>
-        <h2 class="text-2xl font-black text-black font-mono tracking-wider mt-1" id="qr-modal-code">BJI01A</h2>
-      </div>
+      <!-- 1. ตัว QR Code ตรงกลาง -->
+      <div id="qrcode-modal-box" class="flex justify-center p-1 bg-white rounded-lg"></div>
 
-      <div id="qrcode-modal-box" class="flex justify-center p-2 bg-white rounded-lg"></div>
+      <!-- 2. รหัสพิกัดตัวใหญ่หนาชัดเจน -->
+      <h2 class="font-black text-black font-mono tracking-wider" id="qr-modal-code">BJI01A</h2>
 
-      <p class="text-[11px] text-gray-500 font-medium" id="qr-modal-type">Rack Location</p>
-
-      <div class="pt-2 flex gap-2 no-print">
+      <!-- ปุ่มกดสั่งพิมพ์และปิด (ซ่อนตอนสั่งพิมพ์อัตโนมัติ) -->
+      <div class="w-full pt-3 flex gap-2 no-print">
         <button type="button" onclick="window.print()" class="flex-1 bg-black hover:bg-gray-800 text-white font-bold py-2.5 rounded-lg text-xs transition cursor-pointer">
           สั่งพิมพ์สติ๊กเกอร์
         </button>
@@ -260,7 +298,6 @@
       }
     }
 
-    // 🌟 ดึงทั้ง Locations และ Inventory มาเชื่อมโยงกันแบบ Real-time 🌟
     async function loadAllLocations() {
       try {
         const [resLoc, resInv] = await Promise.all([
@@ -312,7 +349,6 @@
         list = allLocations.filter(l => l.name && (l.name.startsWith('RT-') || l.type === 'Floor Staging'));
       }
 
-      // นับยอดพิกัดที่มีของจริง vs พิกัดว่าง
       let occupiedCount = 0;
       allLocations.forEach(l => {
         const hasItem = allInventory.some(i => i.location === l.name && i.status === 'Active' && parseFloat(i.weight_current) > 0);
@@ -326,7 +362,6 @@
       }
 
       tbody.innerHTML = list.map((loc, idx) => {
-        // 🌟 ตรวจสอบสต๊อกจริงจากชีท Inventory 🌟
         const invItem = allInventory.find(i => i.location === loc.name && i.status === 'Active' && parseFloat(i.weight_current) > 0);
         const isOccupied = !!invItem || loc.status === 'In' || loc.status === 'Working' || loc.status === 'Occupied';
         
@@ -346,7 +381,7 @@
               </span>
             </td>
             <td class="py-2.5 px-3 text-center space-x-2">
-              <button type="button" onclick="openQRModal('${loc.name}', '${loc.zone || 'RT'}', '${loc.type || 'Rack'}')" class="text-black hover:underline font-bold cursor-pointer">
+              <button type="button" onclick="openQRModal('${loc.name}')" class="text-black hover:underline font-bold cursor-pointer">
                 พิมพ์ QR
               </button>
               <button type="button" onclick="deleteLocationAction('${loc.name}')" class="text-gray-400 hover:text-black font-bold cursor-pointer">
@@ -358,7 +393,6 @@
       }).join('');
     }
 
-    // 1. สร้างแร็ค BJ 65 ช่อง
     async function generateBJIAction() {
       const btn = document.getElementById('btn-gen-bji');
       btn.innerText = "กำลังสร้างแร็ค BJ...";
@@ -372,7 +406,6 @@
       finally { btn.innerText = "สร้างแร็ค BJ 65 ช่อง"; btn.disabled = false; }
     }
 
-    // 2. สร้างแร็ค RT 6 ช่อง
     async function generateRTRacksAction() {
       const btn = document.getElementById('btn-gen-rt');
       btn.innerText = "กำลังสร้างแร็ค RT...";
@@ -386,7 +419,6 @@
       finally { btn.innerText = "สร้างแร็ค RT 6 ช่อง"; btn.disabled = false; }
     }
 
-    // 3. สร้างถังร่อน S/M/L & พิกัดทำงานหมุนเวียน
     async function createCustomLocationsAction() {
       const prefix = document.getElementById('custom_prefix_input').value.trim().toUpperCase();
       const count = document.getElementById('custom_count_input').value;
@@ -408,7 +440,6 @@
       finally { btn.innerText = "สร้างพิกัดรันเลข"; btn.disabled = false; }
     }
 
-    // 4. ลบพิกัด (พร้อมระบบ Safety Lock ตรวจสอบของค้าง)
     async function deleteLocationAction(code) {
       if(!confirm(`ต้องการลบพิกัด [${code}] ออกจากระบบใช่หรือไม่?`)) return;
 
@@ -423,16 +454,14 @@
       } catch(e) { alert("เชื่อมต่อไม่สำเร็จ"); }
     }
 
-    // 🖨️ QR Code Modal
-    function openQRModal(code, zone, type) {
+    // 🌟 เปิดดูและสั่งพิมพ์ป้ายสติ๊กเกอร์ (เอาเฉพาะ QR Code + รหัสพิกัด) 🌟
+    function openQRModal(code) {
       document.getElementById('qr-modal-code').innerText = code;
-      document.getElementById('qr-modal-zone').innerText = `WAREHOUSE ${zone || 'RT'}`;
-      document.getElementById('qr-modal-type').innerText = type || 'Storage Location';
 
       const box = document.getElementById('qrcode-modal-box');
       box.innerHTML = '';
       if(typeof QRCode !== 'undefined') {
-        new QRCode(box, { text: code, width: 130, height: 130, correctLevel: QRCode.CorrectLevel.M });
+        new QRCode(box, { text: code, width: 150, height: 150, correctLevel: QRCode.CorrectLevel.M });
       }
 
       document.getElementById('qr-print-modal').style.display = 'flex';
