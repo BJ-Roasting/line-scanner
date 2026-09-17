@@ -92,7 +92,7 @@
         </div>
 
         <!-- ========================================================================= -->
-        <!-- 🌾 กล่องที่ 1: เตรียมสาร (Bean Preparation & Waste) 🌾 -->
+        <!-- 🌾 กล่องที่ 1: เตรียมสาร & บันทึกสิ่งเจือปน 🌾 -->
         <!-- ========================================================================= -->
         <div id="zone-sift" class="space-y-6">
 
@@ -119,7 +119,7 @@
               </select>
             </div>
 
-            <!-- กล่องแสดงรายละเอียดพาเลทต้นทาง -->
+            <!-- 🌟 กล่องแสดงรายละเอียดพาเลทต้นทาง (โชว์รหัส Lot ชัดเจน) 🌟 -->
             <div id="sift-pallet-info" class="hidden p-4 bg-gray-50 rounded-xl border border-gray-200 space-y-2 text-xs">
               <div class="flex justify-between items-start">
                 <div>
@@ -131,7 +131,7 @@
               <div class="grid grid-cols-3 gap-2 pt-1 border-t border-gray-200 text-center">
                 <div><span class="text-gray-400 block">น้ำหนักเดิม</span><b id="info-raw-weight" class="text-black font-bold">0.00 kg</b></div>
                 <div><span class="text-gray-400 block">จำนวนกระสอบ</span><b id="info-raw-sacks" class="text-black font-bold">0</b></div>
-                <div><span class="text-gray-400 block">รหัส Lot</span><b id="info-lot-code" class="text-black font-mono">-</b></div>
+                <div><span class="text-gray-400 block">รหัส Lot</span><b id="info-lot-code" class="text-black font-mono font-black">-</b></div>
               </div>
             </div>
 
@@ -166,7 +166,7 @@
             </button>
           </div>
 
-          <!-- ตารางประวัติการเตรียมสาร -->
+          <!-- 🌟 ตารางประวัติการเตรียมสาร (แสดงคอลัมน์รหัส Lot ชัดเจน) 🌟 -->
           <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden p-5 space-y-3">
             <div class="flex justify-between items-center border-b border-gray-100 pb-2">
               <h3 class="font-bold text-black text-sm">ประวัติการเตรียมสารล่าสุด</h3>
@@ -177,6 +177,7 @@
                 <thead class="bg-gray-50 text-gray-500 border-b border-gray-200">
                   <tr>
                     <th class="py-2 px-3 text-left font-bold">สารกาแฟ</th>
+                    <th class="py-2 px-3 text-center font-bold">รหัส Lot</th>
                     <th class="py-2 px-3 text-center font-bold">พาเลทต้นทาง</th>
                     <th class="py-2 px-3 text-right font-bold">สารพร้อมคั่ว</th>
                     <th class="py-2 px-3 text-right font-bold">สิ่งเจือปน</th>
@@ -184,7 +185,7 @@
                   </tr>
                 </thead>
                 <tbody id="sift-history-tbody" class="text-black divide-y divide-gray-100">
-                  <tr><td colspan="5" class="py-6 text-center text-gray-400">ยังไม่มีประวัติการเตรียมสาร</td></tr>
+                  <tr><td colspan="6" class="py-6 text-center text-gray-400">ยังไม่มีประวัติการเตรียมสาร</td></tr>
                 </tbody>
               </table>
             </div>
@@ -193,11 +194,10 @@
         </div>
 
         <!-- ========================================================================= -->
-        <!-- ☕ กล่องที่ 2: คั่วกาแฟหน้าเตา (Roast Batch Execution) ☕ -->
+        <!-- ☕ กล่องที่ 2: คั่วกาแฟหน้าเตา (แสดงรหัส Lot ทุกจุด) ☕ -->
         <!-- ========================================================================= -->
         <div id="zone-roast" class="hidden space-y-6">
 
-          <!-- ฟอร์มเบิกสารเข้าเตาคั่ว -->
           <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-5">
             <div class="border-b border-gray-100 pb-3 flex justify-between items-center">
               <div>
@@ -208,7 +208,7 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <!-- 1. เลือกใบงานแผนการคั่ว -->
+              <!-- เลือกใบงานแผนการคั่ว -->
               <div class="md:col-span-2">
                 <label class="block text-xs font-bold text-gray-700 mb-1">เลือกใบงานแผนการคั่ว *</label>
                 <select id="roast_plan_select" onchange="onRoastPlanSelected()" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-xs font-bold bg-white text-black focus:border-black focus:outline-none">
@@ -216,7 +216,7 @@
                 </select>
               </div>
 
-              <!-- 2. เลือก/สแกนสารพร้อมคั่ว (คลัง RT) -->
+              <!-- เลือก/สแกนสารพร้อมคั่ว -->
               <div class="md:col-span-2 space-y-1.5">
                 <label class="block text-xs font-bold text-gray-700">สแกนหรือเลือกสารพร้อมคั่ว (คลัง RT) *</label>
                 <div class="flex gap-2">
@@ -231,7 +231,7 @@
               </div>
             </div>
 
-            <!-- กล่องข้อมูลสารที่เลือกคั่ว -->
+            <!-- 🌟 กล่องข้อมูลสารที่เลือกคั่ว (โชว์รหัส Lot) 🌟 -->
             <div id="roast-bean-info" class="hidden p-4 bg-gray-50 rounded-xl border border-gray-200 space-y-2 text-xs">
               <div class="flex justify-between items-start">
                 <div>
@@ -242,11 +242,11 @@
               </div>
               <div class="grid grid-cols-2 gap-2 pt-1 border-t border-gray-200 text-center">
                 <div><span class="text-gray-400 block">คงเหลือในถัง/คลัง RT</span><b id="roast-info-stock" class="text-black font-bold">0.00 kg</b></div>
-                <div><span class="text-gray-400 block">รหัส Lot</span><b id="roast-info-lot" class="text-black font-mono">-</b></div>
+                <div><span class="text-gray-400 block">รหัส Lot</span><b id="roast-info-lot" class="text-black font-mono font-black">-</b></div>
               </div>
             </div>
 
-            <!-- 3. น้ำหนักลงเตา & แบทช์ -->
+            <!-- น้ำหนักลงเตา & แบทช์ -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
               <div>
                 <label class="block text-xs font-bold text-black mb-1">น้ำหนักชั่งลงเตาจริง (kg) *</label>
@@ -258,13 +258,12 @@
               </div>
             </div>
 
-            <!-- ปุ่มกดยืนยันตัดสต๊อกเข้าเตา -->
             <button type="button" onclick="submitRoastBatch()" id="btn-submit-roast" class="w-full bg-black hover:bg-gray-800 text-white font-bold py-3.5 rounded-lg text-sm transition active:scale-95 cursor-pointer">
               ตัดสต๊อกและบันทึกเริ่มคั่ว
             </button>
           </div>
 
-          <!-- ตารางประวัติการคั่ววันนี้ -->
+          <!-- 🌟 ตารางประวัติการตัดสต๊อกคั่ว (แสดงคอลัมน์รหัส Lot ชัดเจน) 🌟 -->
           <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden p-5 space-y-3">
             <div class="flex justify-between items-center border-b border-gray-100 pb-2">
               <h3 class="font-bold text-black text-sm">ประวัติการตัดสต๊อกคั่วล่าสุด</h3>
@@ -276,13 +275,14 @@
                   <tr>
                     <th class="py-2 px-3 text-left font-bold">Batch ID</th>
                     <th class="py-2 px-3 text-left font-bold">สารกาแฟ</th>
+                    <th class="py-2 px-3 text-center font-bold">รหัส Lot</th>
                     <th class="py-2 px-3 text-right font-bold">น้ำหนักคั่ว</th>
                     <th class="py-2 px-3 text-center font-bold">ระดับคั่ว</th>
                     <th class="py-2 px-3 text-center font-bold">ผู้คั่ว</th>
                   </tr>
                 </thead>
                 <tbody id="roast-history-tbody" class="text-black divide-y divide-gray-100">
-                  <tr><td colspan="5" class="py-6 text-center text-gray-400">ยังไม่มีประวัติการคั่ว</td></tr>
+                  <tr><td colspan="6" class="py-6 text-center text-gray-400">ยังไม่มีประวัติการคั่ว</td></tr>
                 </tbody>
               </table>
             </div>
@@ -294,7 +294,7 @@
     </main>
   </div>
 
-  <!-- 📱 Bottom Navigation มือถือ (5 ปุ่มหลัก สไตล์ Binance ขาว-ดำ) -->
+  <!-- 📱 Bottom Navigation มือถือ -->
   <div id="bottom-nav" class="fixed bottom-0 w-full bg-white border-t border-gray-200 pb-safe z-50 md:hidden shadow-lg no-print">
     <div class="flex justify-around items-center pt-2.5 pb-1 px-1">
       <div onclick="window.location.href='index.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-black cursor-pointer">
@@ -380,9 +380,7 @@
       document.getElementById('roast_batch_no').value = `B-${yyyy}${mm}${dd}-${rnd}`;
     }
 
-    // =========================================================================
-    // 🌾 ฟังก์ชันกล่องที่ 1: เตรียมสาร
-    // =========================================================================
+    // 🌾 1. ร่อนเตรียมสาร
     async function loadSiftingData() {
       try {
         const res = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'get_inventory' }) });
@@ -397,7 +395,7 @@
 
           const select = document.getElementById('sift_pallet_select');
           select.innerHTML = '<option value="">-- หรือคลิกเลือกพาเลทต้นทางที่มีในคลัง --</option>' + 
-            rawPalletsList.map((p, idx) => `<option value="${idx}">[${p.location || 'แร็ค'}] ${p.item_name} - ${p.barcode_id} (${p.weight_current} kg)</option>`).join('');
+            rawPalletsList.map((p, idx) => `<option value="${idx}">[${p.location || 'แร็ค'}] ${p.item_name} - ${p.barcode_id} (${p.lot_code || 'ไม่มี Lot'})</option>`).join('');
         }
       } catch(e) {}
     }
@@ -456,6 +454,7 @@
       const diff = (raw - (cleanWeight + wasteWeight)).toFixed(2);
 
       const confirmMsg = `ยืนยันบันทึกผลการเตรียมสาร [${selectedRawPallet.item_name}]?\n\n` +
+        `- รหัส Lot: ${selectedRawPallet.lot_code || '-'}\n` +
         `- สารต้นทาง: ${raw} kg\n` +
         `- สารพร้อมคั่ว: ${cleanWeight} kg (ย้ายเข้าคลัง RT)\n` +
         `- สิ่งเจือปนคัดทิ้ง: ${wasteWeight} kg\n` +
@@ -487,7 +486,7 @@
         const result = await res.json();
         alert(result.message);
 
-        addSiftHistoryRow(selectedRawPallet.item_name, selectedRawPallet.barcode_id, cleanWeight, wasteWeight);
+        addSiftHistoryRow(selectedRawPallet.item_name, selectedRawPallet.lot_code, selectedRawPallet.barcode_id, cleanWeight, wasteWeight);
 
         document.getElementById('sift_pallet_id').value = '';
         document.getElementById('sift_clean_weight').value = '';
@@ -505,13 +504,14 @@
       }
     }
 
-    function addSiftHistoryRow(name, pallet, clean, waste) {
+    function addSiftHistoryRow(name, lot, pallet, clean, waste) {
       const tbody = document.getElementById('sift-history-tbody');
       const tr = document.createElement('tr');
       tr.className = "hover:bg-gray-50";
       tr.innerHTML = `
         <td class="py-2 px-3 font-bold text-black">${name}</td>
-        <td class="py-2 px-3 text-center font-mono font-bold">${pallet}</td>
+        <td class="py-2 px-3 text-center font-mono font-bold text-black">${lot || '-'}</td>
+        <td class="py-2 px-3 text-center font-mono text-gray-500">${pallet}</td>
         <td class="py-2 px-3 text-right font-black text-black">${clean.toFixed(2)} kg</td>
         <td class="py-2 px-3 text-right text-black font-semibold">${waste.toFixed(2)} kg</td>
         <td class="py-2 px-3 text-center text-gray-500">${localStorage.getItem('name') || 'Admin'}</td>
@@ -520,11 +520,8 @@
       tbody.prepend(tr);
     }
 
-    // =========================================================================
-    // ☕ ฟังก์ชันกล่องที่ 2: คั่วกาแฟหน้าเตา
-    // =========================================================================
+    // ☕ 2. คั่วกาแฟหน้าเตา
     async function loadRoastingData() {
-      // 1. ดึงแผนการคั่ว
       try {
         const resPlans = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'get_plans' }) });
         const resultPlans = await resPlans.json();
@@ -540,12 +537,10 @@
         }
       } catch(e) {}
 
-      // 2. ดึงสารพร้อมคั่วในคลัง RT
       try {
         const resInv = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'get_inventory' }) });
         const resultInv = await resInv.json();
         if(resultInv.success && resultInv.data) {
-          // สารที่อยู่ที่คลัง RT หรือสารที่พร้อมคั่ว
           readyBeansList = resultInv.data.filter(i => 
             (i.location === 'RT' || i.category === 'Green Bean') && 
             i.status === 'Active' && 
@@ -554,7 +549,7 @@
 
           const selectBean = document.getElementById('roast_bean_select');
           selectBean.innerHTML = '<option value="">-- หรือคลิกเลือกสารพร้อมคั่วในคลัง RT --</option>' + 
-            readyBeansList.map((b, idx) => `<option value="${idx}">[${b.location}] ${b.item_name} - ${b.barcode_id} (${b.weight_current} kg)</option>`).join('');
+            readyBeansList.map((b, idx) => `<option value="${idx}">[${b.location}] ${b.item_name} (Lot: ${b.lot_code || '-'}) - ${b.weight_current} kg</option>`).join('');
         }
       } catch(e) {}
     }
@@ -603,8 +598,9 @@
 
       const planId = selectedRoastPlan ? selectedRoastPlan.plan_id : '-';
       const roastLevel = selectedRoastPlan ? selectedRoastPlan.roast_level : 'Medium';
+      const lotCode = selectedReadyBean.lot_code || '-';
 
-      if(!confirm(`ยืนยันตัดสต๊อกสาร [${selectedReadyBean.item_name}] จำนวน ${actualWeight} kg เข้าเตาคั่ว?\nแบทช์: ${batchNo}`)) return;
+      if(!confirm(`ยืนยันตัดสต๊อกสาร [${selectedReadyBean.item_name}] (Lot: ${lotCode}) จำนวน ${actualWeight} kg เข้าเตาคั่ว?\nแบทช์: ${batchNo}`)) return;
 
       const btn = document.getElementById('btn-submit-roast');
       btn.innerText = "กำลังตัดสต๊อก...";
@@ -617,6 +613,7 @@
             action: 'issue_roast_batch',
             plan_id: planId,
             barcode_id: selectedReadyBean.barcode_id || selectedReadyBean.pallet_id,
+            lot_code: lotCode,
             used_weight: actualWeight,
             roast_level: roastLevel,
             batch_no: batchNo,
@@ -626,10 +623,8 @@
         const result = await res.json();
         alert(result.message);
 
-        // เพิ่มตารางประวัติด้านล่าง
-        addRoastHistoryRow(batchNo, selectedReadyBean.item_name, actualWeight, roastLevel);
+        addRoastHistoryRow(batchNo, selectedReadyBean.item_name, lotCode, actualWeight, roastLevel);
 
-        // ล้างฟอร์ม
         document.getElementById('roast_barcode_input').value = '';
         document.getElementById('roast_actual_weight').value = '';
         document.getElementById('roast-bean-info').classList.add('hidden');
@@ -645,13 +640,14 @@
       }
     }
 
-    function addRoastHistoryRow(batch, name, weight, level) {
+    function addRoastHistoryRow(batch, name, lot, weight, level) {
       const tbody = document.getElementById('roast-history-tbody');
       const tr = document.createElement('tr');
       tr.className = "hover:bg-gray-50";
       tr.innerHTML = `
         <td class="py-2 px-3 font-mono font-bold text-black">${batch}</td>
         <td class="py-2 px-3 font-bold text-black">${name}</td>
+        <td class="py-2 px-3 text-center font-mono font-bold text-black">${lot || '-'}</td>
         <td class="py-2 px-3 text-right font-black text-black">${weight.toFixed(2)} kg</td>
         <td class="py-2 px-3 text-center">${level}</td>
         <td class="py-2 px-3 text-center text-gray-500">${localStorage.getItem('name') || 'Roaster'}</td>
@@ -660,9 +656,7 @@
       tbody.prepend(tr);
     }
 
-    // =========================================================================
     // 📷 CAMERA SCANNER
-    // =========================================================================
     function startScanner(targetInputId) {
       activeTargetInputId = targetInputId;
       document.getElementById('camera-modal').style.display = 'flex';
