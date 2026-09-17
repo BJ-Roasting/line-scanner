@@ -37,6 +37,7 @@
             <a href="planner.html" class="flex items-center gap-3 text-gray-500 hover:text-black hover:bg-gray-100 px-3 py-2 rounded-lg font-bold text-xs transition">
               <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 011.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.56.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.893.149c-.425.07-.765.383-.93.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 01-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.397.165-.71.505-.78.929l-.15.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 01-.12-1.45l.527-.737c.25-.35.273-.806.108-1.204-.165-.397-.505-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.107-1.204l-.527-.738a1.125 1.125 0 01.12-1.45l.773-.773a1.125 1.125 0 011.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg> ทำงาน
             </a>
+            <!-- สต๊อกสินค้า Active -->
             <a href="stock.html" class="flex items-center gap-3 bg-black text-white px-3 py-2 rounded-lg font-bold text-xs transition shadow-sm">
               <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" /></svg> สต๊อกสินค้า
             </a>
@@ -70,10 +71,10 @@
         <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-3 border-b border-gray-100 pb-4">
           <div>
             <h1 class="text-xl font-black text-black tracking-tight">ภาพรวมสต๊อกสินค้า</h1>
-            <p class="text-xs text-gray-400">คลัง BJ</p>
+            <p class="text-xs text-gray-400">คลัง BJ & คลัง RT</p>
           </div>
           <div class="flex gap-2">
-            <button onclick="window.location.href='location.html'" class="bg-black hover:bg-gray-800 text-white font-bold px-3.5 py-2 rounded-lg text-xs transition">ตั้งค่าผังแร็ค</button>
+            <button onclick="window.location.href='location.html'" class="bg-black hover:bg-gray-800 text-white font-bold px-3.5 py-2 rounded-lg text-xs transition">ตั้งค่าผังแร็ค & พิกัด</button>
             <button onclick="window.location.href='item_master.html'" class="bg-white border border-gray-300 text-black font-bold px-3.5 py-2 rounded-lg text-xs hover:bg-gray-100 transition">เพิ่มข้อมูลใหม่</button>
           </div>
         </div>
@@ -93,12 +94,120 @@
           <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
             <span class="text-xs font-bold text-gray-500 block">แร็คที่มีของ</span>
             <p class="text-2xl font-black text-black mt-1" id="stat-rack-in">0</p>
-            <span class="text-[10px] text-gray-400">จาก 65 ช่อง</span>
+            <span class="text-[10px] text-gray-400">จากทั้งหมด</span>
           </div>
           <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
             <span class="text-xs font-bold text-gray-500 block">แร็คว่าง</span>
             <p class="text-2xl font-black text-black mt-1" id="stat-rack-empty">65</p>
             <span class="text-[10px] text-gray-400">ช่อง</span>
+          </div>
+        </div>
+
+        <!-- 🌟 แดชบอร์ดพักรอจัดการ & Floor Staging Monitor (ครบทั้ง 6 โซนสายพานการผลิต) 🌟 -->
+        <div class="bg-white p-5 rounded-xl border-2 border-black shadow-sm space-y-4">
+          <div class="flex justify-between items-center border-b border-gray-100 pb-2">
+            <div>
+              <h2 class="text-sm font-black text-black tracking-tight">พักรอจัดการ (Floor Staging Monitor)</h2>
+              <p class="text-[11px] text-gray-400">สถานะจุดจอดพักของบนพื้นทุกโซน (เป้าหมายต้องเป็น 0)</p>
+            </div>
+            <button onclick="refreshAllStockData()" class="text-xs font-bold text-black bg-gray-100 hover:bg-gray-200 px-3 py-1 rounded-lg transition cursor-pointer">
+              รีเฟรชยอด
+            </button>
+          </div>
+
+          <!-- 6 การ์ดเรียงตามขั้นตอนกระบวนการผลิตจริง -->
+          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2.5 pt-1">
+            
+            <!-- 1. ลานรับของ -->
+            <div class="p-3 bg-gray-50 rounded-xl border border-gray-200 flex flex-col justify-between space-y-2">
+              <div>
+                <div class="flex justify-between items-start">
+                  <span class="text-[11px] font-black text-black">1. ลานรับของ</span>
+                  <span id="pipe-dock-badge" class="text-[9px] font-bold px-1.5 py-0.2 rounded bg-gray-100 text-gray-500 border border-gray-200">เรียบร้อย</span>
+                </div>
+                <p class="text-[10px] text-gray-400 font-mono mt-0.5">DOCK-STAGE</p>
+              </div>
+              <div class="border-t border-gray-200 pt-1.5">
+                <p class="text-sm font-black text-black"><span id="pipe-dock-count">0</span> <span class="text-[10px] font-normal text-gray-500">พาเลท</span></p>
+                <p class="text-[11px] font-mono font-bold text-black" id="pipe-dock-weight">0.0 kg</p>
+              </div>
+            </div>
+
+            <!-- 2. จุดร่อนสาร -->
+            <div class="p-3 bg-gray-50 rounded-xl border border-gray-200 flex flex-col justify-between space-y-2">
+              <div>
+                <div class="flex justify-between items-start">
+                  <span class="text-[11px] font-black text-black">2. จุดร่อนสาร</span>
+                  <span id="pipe-sift-badge" class="text-[9px] font-bold px-1.5 py-0.2 rounded bg-gray-100 text-gray-500 border border-gray-200">เรียบร้อย</span>
+                </div>
+                <p class="text-[10px] text-gray-400 font-mono mt-0.5 truncate" id="pipe-sift-locs">RT-SIFT</p>
+              </div>
+              <div class="border-t border-gray-200 pt-1.5">
+                <p class="text-sm font-black text-black"><span id="pipe-sift-count">0</span> <span class="text-[10px] font-normal text-gray-500">ถัง/จุด</span></p>
+                <p class="text-[11px] font-mono font-bold text-black" id="pipe-sift-weight">0.0 kg</p>
+              </div>
+            </div>
+
+            <!-- 3. หน้าเตาคั่ว -->
+            <div class="p-3 bg-gray-50 rounded-xl border border-gray-200 flex flex-col justify-between space-y-2">
+              <div>
+                <div class="flex justify-between items-start">
+                  <span class="text-[11px] font-black text-black">3. หน้าเตาคั่ว</span>
+                  <span id="pipe-roast-badge" class="text-[9px] font-bold px-1.5 py-0.2 rounded bg-gray-100 text-gray-500 border border-gray-200">เรียบร้อย</span>
+                </div>
+                <p class="text-[10px] text-gray-400 font-mono mt-0.5 truncate" id="pipe-roast-locs">RT-ROAST</p>
+              </div>
+              <div class="border-t border-gray-200 pt-1.5">
+                <p class="text-sm font-black text-black"><span id="pipe-roast-count">0</span> <span class="text-[10px] font-normal text-gray-500">ถัง 30kg</span></p>
+                <p class="text-[11px] font-mono font-bold text-black" id="pipe-roast-weight">0.0 kg</p>
+              </div>
+            </div>
+
+            <!-- 4. พักคลายก๊าซ -->
+            <div class="p-3 bg-gray-50 rounded-xl border border-gray-200 flex flex-col justify-between space-y-2">
+              <div>
+                <div class="flex justify-between items-start">
+                  <span class="text-[11px] font-black text-black">4. พักคลายก๊าซ</span>
+                  <span id="pipe-rest-badge" class="text-[9px] font-bold px-1.5 py-0.2 rounded bg-gray-100 text-gray-500 border border-gray-200">เรียบร้อย</span>
+                </div>
+                <p class="text-[10px] text-gray-400 font-mono mt-0.5 truncate" id="pipe-rest-locs">RT-REST</p>
+              </div>
+              <div class="border-t border-gray-200 pt-1.5">
+                <p class="text-sm font-black text-black"><span id="pipe-rest-count">0</span> <span class="text-[10px] font-normal text-gray-500">ถังพัก</span></p>
+                <p class="text-[11px] font-mono font-bold text-black" id="pipe-rest-weight">0.0 kg</p>
+              </div>
+            </div>
+
+            <!-- 5. จุดบรรจุถุง -->
+            <div class="p-3 bg-gray-50 rounded-xl border border-gray-200 flex flex-col justify-between space-y-2">
+              <div>
+                <div class="flex justify-between items-start">
+                  <span class="text-[11px] font-black text-black">5. จุดบรรจุถุง</span>
+                  <span id="pipe-pack-badge" class="text-[9px] font-bold px-1.5 py-0.2 rounded bg-gray-100 text-gray-500 border border-gray-200">เรียบร้อย</span>
+                </div>
+                <p class="text-[10px] text-gray-400 font-mono mt-0.5 truncate" id="pipe-pack-locs">RT-PACK</p>
+              </div>
+              <div class="border-t border-gray-200 pt-1.5">
+                <p class="text-sm font-black text-black"><span id="pipe-pack-count">0</span> <span class="text-[10px] font-normal text-gray-500">จุดแพ็ค</span></p>
+                <p class="text-[11px] font-mono font-bold text-black" id="pipe-pack-weight">0.0 kg</p>
+              </div>
+            </div>
+
+            <!-- 6. เตรียมจัดส่ง -->
+            <div class="p-3 bg-gray-50 rounded-xl border border-gray-200 flex flex-col justify-between space-y-2">
+              <div>
+                <div class="flex justify-between items-start">
+                  <span class="text-[11px] font-black text-black">6. เตรียมจัดส่ง</span>
+                  <span id="pipe-out-badge" class="text-[9px] font-bold px-1.5 py-0.2 rounded bg-gray-100 text-gray-500 border border-gray-200">เรียบร้อย</span>
+                </div>
+                <p class="text-[10px] text-gray-400 font-mono mt-0.5">RT-OUT</p>
+              </div>
+              <div class="border-t border-gray-200 pt-1.5">
+                <p class="text-sm font-black text-black"><span id="pipe-out-count">0</span> <span class="text-[10px] font-normal text-gray-500">ลัง/ออเดอร์</span></p>
+                <p class="text-[11px] font-mono font-bold text-black" id="pipe-out-weight">0.0 kg</p>
+              </div>
+            </div>
+
           </div>
         </div>
 
@@ -146,7 +255,7 @@
                 <thead class="bg-gray-100 text-gray-600 border-b border-gray-200">
                   <tr>
                     <th class="py-2 px-3 text-left font-bold">รหัสพาเลท</th>
-                    <th class="py-2 px-3 text-center font-bold">Location (ช่องแร็ค)</th>
+                    <th class="py-2 px-3 text-center font-bold">Location (ช่องแร็ค / ถัง)</th>
                     <th class="py-2 px-3 text-right font-bold">น้ำหนัก</th>
                     <th class="py-2 px-3 text-center font-bold">จำนวนกระสอบ</th>
                     <th class="py-2 px-3 text-center font-bold">รหัส Lot</th>
@@ -155,61 +264,6 @@
                 </thead>
                 <tbody id="drilldown-tbody" class="divide-y divide-gray-100 text-black"></tbody>
               </table>
-            </div>
-          </div>
-        </div>
-
-        <!-- แดชบอร์ดแจ้งเตือนจุดพักของค้างท่อ -->
-        <div class="bg-white p-5 rounded-xl border-2 border-black shadow-sm space-y-3">
-          <div class="flex justify-between items-center border-b border-gray-100 pb-2">
-            <div>
-              <h2 class="text-sm font-black text-black tracking-tight">พักรอจัดการ</h2>
-              <p class="text-[11px] text-gray-400">เป้าหมายต้องเป็น 0</p>
-            </div>
-            <button onclick="refreshAllStockData()" class="text-xs font-bold text-black bg-gray-100 hover:bg-gray-200 px-3 py-1 rounded-lg transition cursor-pointer">รีเฟรช</button>
-          </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-1">
-            <div class="p-4 bg-gray-50 rounded-xl border border-gray-200 flex flex-col justify-between">
-              <div>
-                <div class="flex justify-between items-start">
-                  <span class="text-xs font-bold text-black">ลานรับของ</span>
-                  <span id="pipe-dock-badge" class="text-[10px] font-bold px-2 py-0.5 rounded bg-gray-100 text-gray-500 border border-gray-200">เรียบร้อย</span>
-                </div>
-                <p class="text-xs text-gray-400 mt-1">รอยกขึ้นแร็ค</p>
-              </div>
-              <div class="mt-3 flex justify-between items-baseline border-t border-gray-200 pt-2">
-                <span class="text-xl font-black text-black"><span id="pipe-dock-count">0</span> <span class="text-xs font-normal text-gray-500">พาเลท</span></span>
-                <span class="text-xs font-bold text-black font-mono" id="pipe-dock-weight">0.0 kg</span>
-              </div>
-            </div>
-
-            <div class="p-4 bg-gray-50 rounded-xl border border-gray-200 flex flex-col justify-between">
-              <div>
-                <div class="flex justify-between items-start">
-                  <span class="text-xs font-bold text-black">ระหว่างคั่ว</span>
-                  <span id="pipe-wip-badge" class="text-[10px] font-bold px-2 py-0.5 rounded bg-gray-100 text-gray-500 border border-gray-200">เรียบร้อย</span>
-                </div>
-                <p class="text-xs text-gray-400 mt-1">สารหน้าเตาคั่ว</p>
-              </div>
-              <div class="mt-3 flex justify-between items-baseline border-t border-gray-200 pt-2">
-                <span class="text-xl font-black text-black"><span id="pipe-wip-count">0</span> <span class="text-xs font-normal text-gray-500">รายการ</span></span>
-                <span class="text-xs font-bold text-black font-mono" id="pipe-wip-weight">0.0 kg</span>
-              </div>
-            </div>
-
-            <div class="p-4 bg-gray-50 rounded-xl border border-gray-200 flex flex-col justify-between">
-              <div>
-                <div class="flex justify-between items-start">
-                  <span class="text-xs font-bold text-black">ระหว่างบรรจุ</span>
-                  <span id="pipe-pack-badge" class="text-[10px] font-bold px-2 py-0.5 rounded bg-gray-100 text-gray-500 border border-gray-200">เรียบร้อย</span>
-                </div>
-                <p class="text-xs text-gray-400 mt-1">รอแพ็คถุง</p>
-              </div>
-              <div class="mt-3 flex justify-between items-baseline border-t border-gray-200 pt-2">
-                <span class="text-xl font-black text-black"><span id="pipe-pack-count">0</span> <span class="text-xs font-normal text-gray-500">รายการ</span></span>
-                <span class="text-xs font-bold text-black font-mono" id="pipe-pack-desc">พร้อมส่ง</span>
-              </div>
             </div>
           </div>
         </div>
@@ -232,7 +286,7 @@
           </div>
         </div>
 
-        <!-- 🌟 รายการสินค้าในสต๊อก (เพิ่มคอลัมน์รหัส Lot ชัดเจน) 🌟 -->
+        <!-- รายการสินค้าในสต๊อก -->
         <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden p-5 space-y-3">
           <div class="flex justify-between items-center border-b border-gray-100 pb-3">
             <h2 class="text-sm font-bold text-black">รายการสินค้าในสต๊อก</h2>
@@ -324,10 +378,10 @@
         <svg class="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg><span class="text-[10px] font-medium">หน้าแรก</span>
       </div>
       <div onclick="window.location.href='planner.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-black cursor-pointer">
-        <svg class="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 011.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.56.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.893.149c-.425.07-.765.383-.93.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 01-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.397.165-.71.505-.78.929l-.15.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 01-.12-1.45l.527-.737c.25-.35.273-.806.108-1.204-.165-.397-.505-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.107-1.204l-.527-.738a1.125 1.125 0 01.12-1.45l.773-.773a1.125 1.125 0 011.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg><span class="text-[10px] font-medium">ทำงาน</span>
+        <svg class="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 011.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.56.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.893.149c-.425.07-.765.383-.93.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 01-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.397.165-.71.505-.78.929l-.15.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 01-.12-1.45l.527-.737c.25-.35.273-.806.108-1.204-.165-.397-.505-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.107-1.204l-.527-.738a1.125 1.125 0 01.12-1.45l.773-.773a1.125 1.125 0 011.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg><span class="text-[10px] font-medium">วางแผน</span>
       </div>
-      <div onclick="window.location.href='report.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-black cursor-pointer">
-        <svg class="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" /></svg><span class="text-[10px] font-medium">รายงาน</span>
+      <div onclick="window.location.href='wip.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-black cursor-pointer">
+        <svg class="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.362 5.214A8.252 8.252 0 0112 21 8.25 8.25 0 016.038 7.048 8.287 8.287 0 009 9.6a8.983 8.983 0 013.361-6.867 8.21 8.21 0 003 2.48z" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 18a3.75 3.75 0 00.495-7.467 5.99 5.99 0 00-1.925 3.546 5.974 5.974 0 01-2.133-1A3.75 3.75 0 0012 18z" /></svg><span class="text-[10px] font-medium">เบิกคั่ว</span>
       </div>
       <div onclick="window.location.href='stock.html'" class="flex flex-col items-center justify-center w-[20%] text-black cursor-pointer">
         <svg class="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" /></svg><span class="text-[10px] font-bold">สต๊อก</span>
@@ -498,7 +552,7 @@
 
     function showBeanDrilldownDirect(b) {
       if (!b) return;
-      document.getElementById('drilldown-title').innerText = `[${b.bean_code}] ${b.bean_name} (รวม ${b.pallets.length} พาเลท)`;
+      document.getElementById('drilldown-title').innerText = `[${b.bean_code}] ${b.bean_name} (รวม ${b.pallets.length} รายการ)`;
       const tbody = document.getElementById('drilldown-tbody');
       
       tbody.innerHTML = b.pallets.map(p => {
@@ -508,15 +562,15 @@
         return `
           <tr class="hover:bg-gray-50">
             <td class="py-2 px-3 font-mono font-bold text-black">${p.barcode_id || p.pallet_id}</td>
-            <td class="py-2 px-3 text-center font-mono font-black text-sm ${isRack ? 'text-black underline' : 'text-gray-500'}">
+            <td class="py-2 px-3 text-center font-mono font-black text-sm ${isRack ? 'text-black underline' : 'text-gray-600'}">
               ${p.location || 'DOCK-STAGE'}
             </td>
             <td class="py-2 px-3 text-right font-bold text-black">${weight.toFixed(1)} kg</td>
-            <td class="py-2 px-3 text-center">${sacks} กระสอบ</td>
+            <td class="py-2 px-3 text-center">${sacks}</td>
             <td class="py-2 px-3 text-center font-mono font-bold text-black">${p.lot_code || '-'}</td>
             <td class="py-2 px-3 text-center">
               <span class="text-[10px] font-bold px-2 py-0.5 rounded ${isRack ? 'bg-black text-white' : 'bg-gray-100 text-gray-600'}">
-                ${isRack ? 'บนแร็ค' : 'ลานทำงาน'}
+                ${isRack ? 'บนแร็ค' : 'จุดทำงาน'}
               </span>
             </td>
           </tr>
@@ -532,17 +586,21 @@
       document.getElementById('bean-drilldown-box').classList.add('hidden');
     }
 
+    // 🌟 คำนวณยอด 6 โซน Floor Staging แบบ Real-time 🌟
     function updateDashboardStats() {
+      // สารกาแฟในแร็ค
       const greenBeansInRack = inventoryData
         .filter(i => (i.category === 'Green Bean' || !i.category) && i.status === 'Active' && i.location !== 'DOCK-STAGE')
         .reduce((sum, item) => sum + (parseFloat(item.weight_current) || 0), 0);
       document.getElementById('stat-green').innerText = greenBeansInRack.toLocaleString('th-TH', { minimumFractionDigits: 2 });
 
+      // กาแฟคั่วพร้อมส่ง
       const roasted = inventoryData
         .filter(i => i.category === 'Finished Goods' && i.status === 'Active')
         .reduce((sum, item) => sum + (parseFloat(item.weight_current) || 0), 0);
       document.getElementById('stat-roasted').innerText = roasted.toLocaleString('th-TH');
 
+      // แร็คที่มีของ
       const occupiedRacks = new Set(
         inventoryData
           .filter(i => i.status === 'Active' && i.location && (i.location.startsWith('BJI') || i.location.startsWith('RTA')))
@@ -550,51 +608,57 @@
       );
       const rackInCount = occupiedRacks.size;
       document.getElementById('stat-rack-in').innerText = rackInCount;
-      document.getElementById('stat-rack-empty').innerText = (65 - rackInCount);
+      document.getElementById('stat-rack-empty').innerText = (71 - rackInCount);
 
+      // ==========================================
+      // 🌟 คำนวณยอด 6 โซน Floor Staging ละเอียด 🌟
+      // ==========================================
+      
+      // 1. ลานรับของ (DOCK-STAGE)
       const dockItems = inventoryData.filter(i => (i.location === 'DOCK-STAGE' || i.status === 'Loaded') && i.status !== 'Empty');
-      const dockCount = dockItems.length;
-      const dockWeight = dockItems.reduce((sum, item) => sum + (parseFloat(item.weight_current) || 0), 0);
-      document.getElementById('pipe-dock-count').innerText = dockCount;
-      document.getElementById('pipe-dock-weight').innerText = dockWeight.toFixed(1) + " kg";
-      const dockBadge = document.getElementById('pipe-dock-badge');
-      if (dockCount === 0) {
-        dockBadge.className = "text-[10px] font-bold px-2 py-0.5 rounded bg-gray-100 text-gray-500 border border-gray-200";
-        dockBadge.innerText = "เรียบร้อย";
-      } else {
-        dockBadge.className = "text-[10px] font-bold px-2 py-0.5 rounded bg-black text-white";
-        dockBadge.innerText = "รอยกขึ้นแร็ค";
-      }
+      updateStageCard('pipe-dock-count', 'pipe-dock-weight', 'pipe-dock-badge', dockItems.length, dockItems);
 
-      const wipLocs = locationsData.filter(l => l.status === 'Working').length;
-      const wipItems = inventoryData.filter(i => (i.status === 'Working' || i.location === 'WIP-ZONE') && i.status !== 'Empty');
-      const wipCount = wipLocs || wipItems.length;
-      const wipWeight = wipItems.reduce((sum, item) => sum + (parseFloat(item.weight_current) || 0), 0);
-      document.getElementById('pipe-wip-count').innerText = wipCount;
-      document.getElementById('pipe-wip-weight').innerText = wipWeight.toFixed(1) + " kg";
-      const wipBadge = document.getElementById('pipe-wip-badge');
-      if (wipCount === 0) {
-        wipBadge.className = "text-[10px] font-bold px-2 py-0.5 rounded bg-gray-100 text-gray-500 border border-gray-200";
-        wipBadge.innerText = "เรียบร้อย";
-      } else {
-        wipBadge.className = "text-[10px] font-bold px-2 py-0.5 rounded bg-black text-white";
-        wipBadge.innerText = "กำลังคั่ว";
-      }
+      // 2. จุดร่อนสาร (RT-SIFT)
+      const siftItems = inventoryData.filter(i => i.location && i.location.startsWith('RT-SIFT') && i.status !== 'Empty');
+      updateStageCard('pipe-sift-count', 'pipe-sift-weight', 'pipe-sift-badge', siftItems.length, siftItems, 'pipe-sift-locs', 'RT-SIFT');
 
-      const packLocs = locationsData.filter(l => l.status === 'Packing').length;
-      const packItems = inventoryData.filter(i => (i.status === 'Packing' || i.location === 'PACK-STAGE') && i.status !== 'Empty');
-      const packCount = packLocs || packItems.length;
-      document.getElementById('pipe-pack-count').innerText = packCount;
-      const packBadge = document.getElementById('pipe-pack-badge');
-      if (packCount === 0) {
-        packBadge.className = "text-[10px] font-bold px-2 py-0.5 rounded bg-gray-100 text-gray-500 border border-gray-200";
-        packBadge.innerText = "เรียบร้อย";
-      } else {
-        packBadge.className = "text-[10px] font-bold px-2 py-0.5 rounded bg-black text-white";
-        packBadge.innerText = "รอแพ็คถุง";
-      }
+      // 3. หน้าเตาคั่ว (RT-ROAST / RT)
+      const roastItems = inventoryData.filter(i => (i.location === 'RT' || (i.location && i.location.startsWith('RT-ROAST'))) && i.category === 'Green Bean' && i.status !== 'Empty');
+      updateStageCard('pipe-roast-count', 'pipe-roast-weight', 'pipe-roast-badge', roastItems.length, roastItems, 'pipe-roast-locs', 'RT-ROAST');
+
+      // 4. พักคลายก๊าซ (RT-REST)
+      const restItems = inventoryData.filter(i => i.location && i.location.startsWith('RT-REST') && i.status !== 'Empty');
+      updateStageCard('pipe-rest-count', 'pipe-rest-weight', 'pipe-rest-badge', restItems.length, restItems, 'pipe-rest-locs', 'RT-REST');
+
+      // 5. จุดบรรจุถุง (RT-PACK)
+      const packItems = inventoryData.filter(i => i.location && (i.location.startsWith('RT-PACK') || i.location === 'PACK-STAGE') && i.status !== 'Empty');
+      updateStageCard('pipe-pack-count', 'pipe-pack-weight', 'pipe-pack-badge', packItems.length, packItems, 'pipe-pack-locs', 'RT-PACK');
+
+      // 6. เตรียมจัดส่ง (RT-OUT)
+      const outItems = inventoryData.filter(i => i.location && (i.location.startsWith('RT-OUT') || i.location === 'OUTBOUND') && i.status !== 'Empty');
+      updateStageCard('pipe-out-count', 'pipe-out-weight', 'pipe-out-badge', outItems.length, outItems, null, 'RT-OUT');
 
       renderVisualRackMap(locationsData);
+    }
+
+    function updateStageCard(countId, weightId, badgeId, count, items, locsId, defaultLoc) {
+      const weight = items.reduce((sum, item) => sum + (parseFloat(item.weight_current) || 0), 0);
+      document.getElementById(countId).innerText = count;
+      document.getElementById(weightId).innerText = weight.toFixed(1) + " kg";
+      
+      const badge = document.getElementById(badgeId);
+      if (count === 0) {
+        badge.className = "text-[9px] font-bold px-1.5 py-0.2 rounded bg-gray-100 text-gray-500 border border-gray-200";
+        badge.innerText = "เรียบร้อย";
+      } else {
+        badge.className = "text-[9px] font-bold px-1.5 py-0.2 rounded bg-black text-white";
+        badge.innerText = `รอจัดการ (${count})`;
+      }
+
+      if (locsId) {
+        const uniqueLocs = Array.from(new Set(items.map(i => i.location))).filter(Boolean);
+        document.getElementById(locsId).innerText = uniqueLocs.length > 0 ? uniqueLocs.join(', ') : defaultLoc;
+      }
     }
 
     function renderVisualRackMap(locs) {
@@ -687,7 +751,6 @@
       document.getElementById('rack-modal').style.display = 'none';
     }
 
-    // 🌟 เรนเดอร์ตารางสต๊อกสินค้าหลัก (แสดงคอลัมน์รหัส Lot ชัดเจน) 🌟
     function renderTable(data) {
       const tbody = document.getElementById('table-body');
       tbody.innerHTML = '';
