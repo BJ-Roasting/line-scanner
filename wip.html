@@ -107,10 +107,37 @@
         </div>
 
         <!-- ========================================================================= -->
-        <!-- 🌾 กล่องที่ 1: เตรียมสาร & บันทึกสิ่งเจือปน (Sifting) 🌾 -->
+        <!-- 🌾 กล่องที่ 1: เตรียมสาร & สรุปผลผลิตร่อนประจำวัน (Sifting) 🌾 -->
         <!-- ========================================================================= -->
         <div id="zone-sift" class="hidden space-y-6 no-print">
 
+          <!-- 🌟 สรุปผลผลิตร่อนสารประจำวัน (Daily Sifting Summary) 🌟 -->
+          <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 space-y-2">
+            <div class="flex justify-between items-center border-b border-gray-200 pb-1.5">
+              <span class="text-xs font-black text-black">สรุปยอดเตรียมสารประจำวัน</span>
+              <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">SIFTING SHIFT KPI</span>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs">
+              <div class="p-2 bg-white rounded-lg border border-gray-200">
+                <span class="text-gray-400 block text-[10px]">รอบการร่อนวันนี้</span>
+                <b id="kpi-sift-count" class="text-base font-black text-black">0 รอบ</b>
+              </div>
+              <div class="p-2 bg-white rounded-lg border border-gray-200">
+                <span class="text-gray-400 block text-[10px]">สารดิบต้นทางรวม</span>
+                <b id="kpi-sift-raw-weight" class="text-base font-black text-black">0.0 kg</b>
+              </div>
+              <div class="p-2 bg-white rounded-lg border border-gray-200">
+                <span class="text-gray-400 block text-[10px]">สารพร้อมคั่วที่ได้รวม</span>
+                <b id="kpi-sift-clean-weight" class="text-base font-black text-black">0.0 kg</b>
+              </div>
+              <div class="p-2 bg-white rounded-lg border border-gray-200">
+                <span class="text-gray-400 block text-[10px]">สิ่งเจือปนคัดทิ้งรวม</span>
+                <b id="kpi-sift-waste-weight" class="text-base font-black text-black">0.0 kg</b>
+              </div>
+            </div>
+          </div>
+
+          <!-- ฟอร์มเตรียมสาร -->
           <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-5">
             <div class="border-b border-gray-100 pb-3 flex justify-between items-center">
               <div>
@@ -209,9 +236,35 @@
         </div>
 
         <!-- ========================================================================= -->
-        <!-- ☕ กล่องที่ 2: คั่วกาแฟหน้าเตา (🌟 บังคับสแกนสารจริง ป้องกันเลือกผิด 100% 🌟) -->
+        <!-- ☕ กล่องที่ 2: คั่วกาแฟ & สรุปผลผลิตคั่วประจำวัน (Roasting) ☕ -->
         <!-- ========================================================================= -->
         <div id="zone-roast" class="space-y-6">
+
+          <!-- 🌟 สรุปผลผลิตการคั่วประจำวัน (Daily Roasting Summary) 🌟 -->
+          <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 space-y-2">
+            <div class="flex justify-between items-center border-b border-gray-200 pb-1.5">
+              <span class="text-xs font-black text-black">สรุปยอดการคั่วประจำวัน</span>
+              <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">ROASTING SHIFT KPI</span>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs">
+              <div class="p-2 bg-white rounded-lg border border-gray-200">
+                <span class="text-gray-400 block text-[10px]">แบทช์ที่คั่ววันนี้</span>
+                <b id="kpi-roast-batches" class="text-base font-black text-black">0 แบทช์</b>
+              </div>
+              <div class="p-2 bg-white rounded-lg border border-gray-200">
+                <span class="text-gray-400 block text-[10px]">สารดิบเข้าเตารวม</span>
+                <b id="kpi-roast-green-weight" class="text-base font-black text-black">0.0 kg</b>
+              </div>
+              <div class="p-2 bg-white rounded-lg border border-gray-200">
+                <span class="text-gray-400 block text-[10px]">กาแฟคั่วสุกรวม</span>
+                <b id="kpi-roast-post-weight" class="text-base font-black text-black">0.0 kg</b>
+              </div>
+              <div class="p-2 bg-white rounded-lg border border-gray-200">
+                <span class="text-gray-400 block text-[10px]">Roast Loss เฉลี่ย</span>
+                <b id="kpi-roast-loss-avg" class="text-base font-black text-black">0.00%</b>
+              </div>
+            </div>
+          </div>
 
           <!-- 1. การ์ดสร้างใบงานคั่วเปล่า & กำหนดรหัสเริ่มต้นได้เอง -->
           <div class="bg-white p-6 rounded-xl border-2 border-black shadow-sm space-y-4 no-print">
@@ -262,7 +315,7 @@
             <div id="generated-wo-badges" class="flex flex-wrap gap-2 pt-0.5"></div>
           </div>
 
-          <!-- 2. ฟอร์มสแกนใบงาน A4 & บันทึกผลการคั่วจริง (🌟 บังคับสแกนสารจริง ตัด Dropdown ออก 🌟) -->
+          <!-- 2. ฟอร์มสแกนใบงาน A4 & บันทึกผลการคั่วจริง -->
           <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-5 no-print">
             <div class="border-b border-gray-100 pb-3 flex justify-between items-center">
               <div>
@@ -284,7 +337,7 @@
                 </div>
               </div>
 
-              <!-- 2. บังคับสแกนถังสารพร้อมคั่วจากคลัง RT (ตัด Dropdown ออกเพื่อป้องกันเลือกผิด) -->
+              <!-- 2. บังคับสแกนถังสารพร้อมคั่วจากคลัง RT -->
               <div>
                 <div class="flex justify-between items-center mb-1">
                   <label class="block text-xs font-bold text-black">2. สแกนสารพร้อมคั่ว (ถังจริงหน้าเตา) *</label>
@@ -299,7 +352,7 @@
               </div>
             </div>
 
-            <!-- กล่องข้อมูลสารที่เลือกคั่ว (แสดงอัตโนมัติเมื่อยิงสแกนถูกต้อง) -->
+            <!-- กล่องข้อมูลสารที่เลือกคั่ว -->
             <div id="roast-bean-info" class="p-4 bg-gray-50 rounded-xl border border-gray-200 space-y-2 text-xs">
               <div class="flex justify-between items-start">
                 <div>
@@ -518,11 +571,11 @@
       <div onclick="window.location.href='index.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-black cursor-pointer">
         <svg class="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg><span class="text-[10px] font-medium">หน้าแรก</span>
       </div>
-      <div onclick="window.location.href='planner.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-black cursor-pointer">
-        <svg class="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 011.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.56.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.893.149c-.425.07-.765.383-.93.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 01-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.397.165-.71.505-.78.929l-.15.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 01-.12-1.45l.527-.737c.25-.35.273-.806.108-1.204-.165-.397-.505-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.107-1.204l-.527-.738a1.125 1.125 0 01.12-1.45l.773-.773a1.125 1.125 0 011.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg><span class="text-[10px] font-medium">วางแผน</span>
+      <div onclick="window.location.href='planner.html'" class="flex flex-col items-center justify-center w-[20%] text-black cursor-pointer">
+        <svg class="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 011.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.56.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.893.149c-.425.07-.765.383-.93.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 01-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.397.165-.71.505-.78.929l-.15.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 01-.12-1.45l.527-.737c.25-.35.273-.806.108-1.204-.165-.397-.505-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.107-1.204l-.527-.738a1.125 1.125 0 01.12-1.45l.773-.773a1.125 1.125 0 011.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg><span class="text-[10px] font-medium">ทำงาน</span>
       </div>
-      <div onclick="window.location.href='wip.html'" class="flex flex-col items-center justify-center w-[20%] text-black cursor-pointer">
-        <svg class="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.362 5.214A8.252 8.252 0 0112 21 8.25 8.25 0 016.038 7.048 8.287 8.287 0 009 9.6a8.983 8.983 0 013.361-6.867 8.21 8.21 0 003 2.48z" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 18a3.75 3.75 0 00.495-7.467 5.99 5.99 0 00-1.925 3.546 5.974 5.974 0 01-2.133-1A3.75 3.75 0 0012 18z" /></svg><span class="text-[10px] font-bold">เบิกคั่ว</span>
+      <div onclick="window.location.href='report.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-black cursor-pointer">
+        <svg class="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" /></svg><span class="text-[10px] font-medium">รายงาน</span>
       </div>
       <div onclick="window.location.href='stock.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-black cursor-pointer">
         <svg class="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" /></svg><span class="text-[10px] font-medium">สต๊อก</span>
@@ -553,6 +606,10 @@
     let readyBeansList = [];
     let selectedReadyBean = null;
     let activeWOPool = [];
+
+    // ตัวแปรสะสมผลผลิตประจำวัน
+    let dailySiftRecords = [];
+    let dailyRoastRecords = [];
 
     let html5QrScanner = null;
     let activeTargetInputId = null;
@@ -956,6 +1013,10 @@
         const result = await res.json();
         alert(result.message);
 
+        // บันทึกลงตัวแปรสรุปยอดกะของวัน
+        dailySiftRecords.push({ raw: raw, clean: cleanWeight, waste: wasteWeight });
+        updateDailySiftSummary();
+
         addSiftHistoryRow(selectedRawPallet.item_name, selectedRawPallet.lot_code, selectedRawPallet.barcode_id, cleanWeight, wasteWeight);
 
         document.getElementById('sift_pallet_id').value = '';
@@ -972,6 +1033,21 @@
         btn.innerText = "บันทึกสารพร้อมคั่วและย้ายเข้าคลัง RT";
         btn.disabled = false;
       }
+    }
+
+    // 🌟 คำนวณสรุปผลผลิตร่อนสารประจำวัน 🌟
+    function updateDailySiftSummary() {
+      const count = dailySiftRecords.length;
+      const rawSum = dailySiftRecords.reduce((sum, r) => sum + r.raw, 0);
+      const cleanSum = dailySiftRecords.reduce((sum, r) => sum + r.clean, 0);
+      const wasteSum = dailySiftRecords.reduce((sum, r) => sum + r.waste, 0);
+
+      document.getElementById('kpi-sift-count').innerText = `${count} รอบ`;
+      document.getElementById('kpi-sift-raw-weight').innerText = `${rawSum.toFixed(1)} kg`;
+      document.getElementById('kpi-sift-clean-weight').innerText = `${cleanSum.toFixed(1)} kg`;
+      
+      const wastePct = rawSum > 0 ? ((wasteSum / rawSum) * 100).toFixed(1) : '0.0';
+      document.getElementById('kpi-sift-waste-weight').innerText = `${wasteSum.toFixed(1)} kg (${wastePct}%)`;
     }
 
     function addSiftHistoryRow(name, lot, pallet, clean, waste) {
@@ -1007,7 +1083,6 @@
       } catch(e) {}
     }
 
-    // 🌟 ฟังก์ชันค้นหาสารอัตโนมัติเมื่อพิมพ์หรือยิงสแกนบาร์โค้ดถังสาร 🌟
     function onRoastBarcodeInputChanged() {
       const val = document.getElementById('roast_barcode_input').value.trim();
       if(!val) return;
@@ -1105,6 +1180,7 @@
       const roastLevel = document.getElementById('roast_level_select').value;
       const lotCode = selectedReadyBean.lot_code || '-';
       const colorAvg = document.getElementById('color_val_avg').innerText;
+      const rLoss = greenW > 0 && preW > 0 ? ((greenW - preW) / greenW) * 100 : 0;
 
       const confirmMsg = `ยืนยันบันทึกผลการคั่ว [${selectedReadyBean.item_name}]?\n\n` +
         `- เลขใบงานคั่ว: ${woNum}\n` +
@@ -1155,11 +1231,17 @@
         const result = await res.json();
         alert(result.message);
 
+        // บันทึกลงตัวแปรสรุปยอดคั่วประจำวัน
+        dailyRoastRecords.push({ green: greenW, post: postW, loss: rLoss });
+        updateDailyRoastSummary();
+
+        // ตัด WO ที่ใช้แล้วออกจากรายการบนหน้าจอ
         activeWOPool = activeWOPool.filter(w => w !== woNum);
         saveActiveWOs();
 
         addRoastHistoryRow(woNum, selectedReadyBean.item_name, lotCode, destLocation, postW, colorAvg);
 
+        // ล้างฟอร์ม
         document.getElementById('roast_wo_input').value = '';
         document.getElementById('roast_barcode_input').value = '';
         document.getElementById('roast_green_weight').value = '';
@@ -1196,6 +1278,19 @@
         btn.innerText = "บันทึกจบงานคั่วและส่งต่อถังพักปลายทาง";
         btn.disabled = false;
       }
+    }
+
+    // 🌟 คำนวณสรุปผลผลิตการคั่วประจำวัน 🌟
+    function updateDailyRoastSummary() {
+      const count = dailyRoastRecords.length;
+      const greenSum = dailyRoastRecords.reduce((sum, r) => sum + r.green, 0);
+      const postSum = dailyRoastRecords.reduce((sum, r) => sum + r.post, 0);
+      const avgLoss = count > 0 ? (dailyRoastRecords.reduce((sum, r) => sum + r.loss, 0) / count).toFixed(2) : '0.00';
+
+      document.getElementById('kpi-roast-batches').innerText = `${count} แบทช์`;
+      document.getElementById('kpi-roast-green-weight').innerText = `${greenSum.toFixed(1)} kg`;
+      document.getElementById('kpi-roast-post-weight').innerText = `${postSum.toFixed(1)} kg`;
+      document.getElementById('kpi-roast-loss-avg').innerText = `${avgLoss}%`;
     }
 
     function addRoastHistoryRow(wo, name, lot, dest, post, color) {
