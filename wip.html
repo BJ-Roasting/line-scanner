@@ -111,7 +111,7 @@
         <!-- ========================================================================= -->
         <div id="zone-sift" class="hidden space-y-6 no-print">
 
-          <!-- 🌟 สรุปผลผลิตร่อนสารประจำวัน (Daily Sifting Summary) 🌟 -->
+          <!-- สรุปผลผลิตร่อนสารประจำวัน -->
           <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 space-y-2">
             <div class="flex justify-between items-center border-b border-gray-200 pb-1.5">
               <span class="text-xs font-black text-black">สรุปยอดเตรียมสารประจำวัน</span>
@@ -240,7 +240,7 @@
         <!-- ========================================================================= -->
         <div id="zone-roast" class="space-y-6">
 
-          <!-- 🌟 สรุปผลผลิตการคั่วประจำวัน (Daily Roasting Summary) 🌟 -->
+          <!-- สรุปผลผลิตการคั่วประจำวัน -->
           <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 space-y-2">
             <div class="flex justify-between items-center border-b border-gray-200 pb-1.5">
               <span class="text-xs font-black text-black">สรุปยอดการคั่วประจำวัน</span>
@@ -447,32 +447,6 @@
                 </div>
               </div>
 
-              <!-- พิกัดถังพักปลายทาง -->
-              <div class="p-3.5 bg-gray-50 rounded-xl border-2 border-black space-y-2 text-xs">
-                <div class="flex justify-between items-center">
-                  <label class="block font-black text-black">4. พิกัดถังพักกาแฟคั่วปลายทาง (Destination Bin) *</label>
-                  <span class="text-[10px] text-gray-500 font-bold">ยิง QR ป้ายข้างถัง</span>
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                  <div class="flex gap-2">
-                    <input type="text" id="roast_dest_location" value="RT-REST-01" placeholder="เช่น RT-REST-01" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg font-mono font-bold text-black uppercase text-xs focus:border-black focus:outline-none">
-                    <button type="button" onclick="startScanner('roast_dest_location')" class="bg-black hover:bg-gray-800 text-white px-3.5 rounded-lg font-bold text-xs transition cursor-pointer">
-                      เปิดกล้อง
-                    </button>
-                  </div>
-
-                  <select id="dest_location_select" onchange="onDestLocationSelected()" class="w-full px-2.5 py-2 border border-gray-300 rounded-lg font-bold bg-white text-black focus:outline-none">
-                    <option value="RT-REST-01">RT-REST-01 (ถังพักคลายก๊าซ 01)</option>
-                    <option value="RT-REST-02">RT-REST-02 (ถังพักคลายก๊าซ 02)</option>
-                    <option value="RT-REST-03">RT-REST-03 (ถังพักคลายก๊าซ 03)</option>
-                    <option value="RTA01A">RTA01A (แร็ค RT ชั้น 1 ช่อง A)</option>
-                    <option value="RTA01B">RTA01B (แร็ค RT ชั้น 1 ช่อง B)</option>
-                    <option value="RT-DEFECT-01">RT-DEFECT-01 (ถังพักเมล็ดคัดทิ้ง)</option>
-                  </select>
-                </div>
-              </div>
-
               <!-- สุ่มวัดค่าสี 3 จุด -->
               <div class="p-3 bg-gray-50 rounded-xl border border-gray-200 space-y-2 text-xs">
                 <span class="text-gray-500 font-bold block">สุ่มวัดค่าสี Agtron (3 ครั้ง):</span>
@@ -511,11 +485,27 @@
                 <label class="block text-xs font-bold text-gray-500 mb-0.5">หมายเหตุการคั่ว</label>
                 <input type="text" id="roast_notes" placeholder="เช่น เมล็ดขยายตัวดี, กลิ่นหอมช็อกโกแลต" class="w-full px-3 py-1.5 border border-gray-300 rounded text-xs">
               </div>
+
+              <!-- 🌟 3. ขั้นตอนสุดท้ายก่อนจบงาน: บังคับยิงสแกน QR ถังพักปลายทาง (ตัด Dropdown ออก 100%) 🌟 -->
+              <div class="p-4 bg-gray-50 rounded-xl border-2 border-black space-y-2 text-xs">
+                <div class="flex justify-between items-center">
+                  <label class="block font-black text-black text-sm">ขั้นตอนสุดท้าย: ยิงสแกน QR ถังพักกาแฟคั่ว (Destination Bin) *</label>
+                  <span class="text-[10px] text-gray-500 font-bold">ยิง QR ป้ายข้างถัง</span>
+                </div>
+                <div class="flex gap-2">
+                  <input type="text" id="roast_dest_location" placeholder="ยิงสแกน QR ป้ายข้างถังพัก เช่น RT-REST-01 หรือ RT-DEFECT-01" class="flex-1 px-3 py-2.5 border-2 border-black rounded-lg font-mono font-black text-black uppercase text-xs focus:outline-none">
+                  <button type="button" onclick="startScanner('roast_dest_location')" class="bg-black hover:bg-gray-800 text-white px-4 rounded-lg font-bold text-xs transition cursor-pointer">
+                    เปิดกล้อง
+                  </button>
+                </div>
+                <p class="text-[10px] text-gray-400">สแกนรหัสถังพักที่นำกาแฟคั่วไปเทใส่ เพื่อย้ายสต๊อกเข้าตำแหน่งจริงก่อนกดจบงาน</p>
+              </div>
+
             </div>
 
-            <!-- ปุ่มกดยืนยันตัดสต๊อกเข้าเตา -->
-            <button type="button" onclick="submitFullRoastBatch()" id="btn-submit-roast" class="w-full bg-black hover:bg-gray-800 text-white font-bold py-3.5 rounded-lg text-sm transition active:scale-95 cursor-pointer">
-              บันทึกจบงานคั่วและส่งต่อถังพักปลายทาง
+            <!-- ปุ่มกดยืนยันตัดสต๊อกและจบงาน (Done) -->
+            <button type="button" onclick="submitFullRoastBatch()" id="btn-submit-roast" class="w-full bg-black hover:bg-gray-800 text-white font-bold py-4 rounded-lg text-sm transition active:scale-95 cursor-pointer">
+              บันทึกจบงานคั่วและส่งต่อถังพักปลายทาง (Done)
             </button>
           </div>
 
@@ -571,11 +561,11 @@
       <div onclick="window.location.href='index.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-black cursor-pointer">
         <svg class="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg><span class="text-[10px] font-medium">หน้าแรก</span>
       </div>
-      <div onclick="window.location.href='planner.html'" class="flex flex-col items-center justify-center w-[20%] text-black cursor-pointer">
-        <svg class="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 011.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.56.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.893.149c-.425.07-.765.383-.93.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 01-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.397.165-.71.505-.78.929l-.15.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 01-.12-1.45l.527-.737c.25-.35.273-.806.108-1.204-.165-.397-.505-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.107-1.204l-.527-.738a1.125 1.125 0 01.12-1.45l.773-.773a1.125 1.125 0 011.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg><span class="text-[10px] font-medium">ทำงาน</span>
+      <div onclick="window.location.href='planner.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-black cursor-pointer">
+        <svg class="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 011.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.56.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.893.149c-.425.07-.765.383-.93.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 01-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.397.165-.71.505-.78.929l-.15.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 01-.12-1.45l.527-.737c.25-.35.273-.806.108-1.204-.165-.397-.505-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.107-1.204l-.527-.738a1.125 1.125 0 01.12-1.45l.773-.773a1.125 1.125 0 011.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg><span class="text-[10px] font-medium">วางแผน</span>
       </div>
-      <div onclick="window.location.href='report.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-black cursor-pointer">
-        <svg class="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" /></svg><span class="text-[10px] font-medium">รายงาน</span>
+      <div onclick="window.location.href='wip.html'" class="flex flex-col items-center justify-center w-[20%] text-black cursor-pointer">
+        <svg class="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.362 5.214A8.252 8.252 0 0112 21 8.25 8.25 0 016.038 7.048 8.287 8.287 0 009 9.6a8.983 8.983 0 013.361-6.867 8.21 8.21 0 003 2.48z" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 18a3.75 3.75 0 00.495-7.467 5.99 5.99 0 00-1.925 3.546 5.974 5.974 0 01-2.133-1A3.75 3.75 0 0012 18z" /></svg><span class="text-[10px] font-bold">เบิกคั่ว</span>
       </div>
       <div onclick="window.location.href='stock.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-black cursor-pointer">
         <svg class="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" /></svg><span class="text-[10px] font-medium">สต๊อก</span>
@@ -607,7 +597,6 @@
     let selectedReadyBean = null;
     let activeWOPool = [];
 
-    // ตัวแปรสะสมผลผลิตประจำวัน
     let dailySiftRecords = [];
     let dailyRoastRecords = [];
 
@@ -1013,7 +1002,6 @@
         const result = await res.json();
         alert(result.message);
 
-        // บันทึกลงตัวแปรสรุปยอดกะของวัน
         dailySiftRecords.push({ raw: raw, clean: cleanWeight, waste: wasteWeight });
         updateDailySiftSummary();
 
@@ -1035,7 +1023,6 @@
       }
     }
 
-    // 🌟 คำนวณสรุปผลผลิตร่อนสารประจำวัน 🌟
     function updateDailySiftSummary() {
       const count = dailySiftRecords.length;
       const rawSum = dailySiftRecords.reduce((sum, r) => sum + r.raw, 0);
@@ -1112,13 +1099,6 @@
       document.getElementById('roast_green_weight').focus();
     }
 
-    function onDestLocationSelected() {
-      const select = document.getElementById('dest_location_select');
-      if (select.value) {
-        document.getElementById('roast_dest_location').value = select.value;
-      }
-    }
-
     function calculateRoastYieldMath() {
       const green = parseFloat(document.getElementById('roast_green_weight').value) || 0;
       const pre = parseFloat(document.getElementById('roast_presort_weight').value) || 0;
@@ -1161,9 +1141,10 @@
 
       const barcode = document.getElementById('roast_barcode_input').value.trim();
       const woNum = document.getElementById('roast_wo_input').value.trim();
-      const destLocation = document.getElementById('roast_dest_location').value.trim() || 'RT-REST-01';
+      const destLocation = document.getElementById('roast_dest_location').value.trim();
 
       if(!woNum) return alert("กรุณาระบุหรือสแกน QR รหัสใบงานคั่วจากกระดาษ A4");
+      if(!destLocation) return alert("กรุณายิงสแกน QR ถังพักกาแฟคั่วปลายทาง (เช่น RT-REST-01 หรือ RT-DEFECT-01)");
 
       if(!selectedReadyBean && barcode) {
         selectedReadyBean = readyBeansList.find(b => b.barcode_id === barcode || b.pallet_id === barcode);
@@ -1186,7 +1167,7 @@
         `- เลขใบงานคั่ว: ${woNum}\n` +
         `- รหัส Lot: ${lotCode}\n` +
         `- นน. สารก่อนคั่ว: ${greenW} kg (ตัดออกจากคลัง RT)\n` +
-        `- นน. กาแฟคั่วสุก: ${postW} kg ➔ เข้าพิกัด [${destLocation}]\n` +
+        `- นน. กาแฟคั่วสุก: ${postW} kg ➔ เข้าถังพัก [${destLocation}]\n` +
         `- ระดับคั่ว: ${roastLevel} | ค่าสีเฉลี่ย: ${colorAvg}\n\n` +
         `*พร้อมส่งมอบใบนำงาน A4 ไปยังแผนก Packing*`;
 
@@ -1244,6 +1225,7 @@
         // ล้างฟอร์ม
         document.getElementById('roast_wo_input').value = '';
         document.getElementById('roast_barcode_input').value = '';
+        document.getElementById('roast_dest_location').value = '';
         document.getElementById('roast_green_weight').value = '';
         document.getElementById('roast_presort_weight').value = '';
         document.getElementById('roast_postsort_weight').value = '';
@@ -1275,12 +1257,11 @@
       } catch(e) {
         alert("เชื่อมต่อไม่สำเร็จ");
       } finally {
-        btn.innerText = "บันทึกจบงานคั่วและส่งต่อถังพักปลายทาง";
+        btn.innerText = "บันทึกจบงานคั่วและส่งต่อถังพักปลายทาง (Done)";
         btn.disabled = false;
       }
     }
 
-    // 🌟 คำนวณสรุปผลผลิตการคั่วประจำวัน 🌟
     function updateDailyRoastSummary() {
       const count = dailyRoastRecords.length;
       const greenSum = dailyRoastRecords.reduce((sum, r) => sum + r.green, 0);
