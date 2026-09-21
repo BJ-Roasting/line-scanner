@@ -12,7 +12,6 @@
     body { -ms-overflow-style: none; scrollbar-width: none; }
     .pb-safe { padding-bottom: env(safe-area-inset-bottom, 24px); }
 
-    /* 🌟 ระบบพิมพ์ใบนำงานคั่ว A4 เปล่า 🌟 */
     @page { size: A4 portrait; margin: 8mm; }
     @media print {
       #app-layout, aside, #bottom-nav, .no-print, nav, button, header { display: none !important; }
@@ -236,7 +235,7 @@
         </div>
 
         <!-- ========================================================================= -->
-        <!-- ☕ กล่องที่ 2: คั่วกาแฟ & สรุปผลผลิตคั่วประจำวัน (Roasting) ☕ -->
+        <!-- ☕ กล่องที่ 2: คั่วกาแฟหน้าเตา (🌟 4 ช่องน้ำหนัก + ผูกพาเลท Defect สะสมยอด 🌟) -->
         <!-- ========================================================================= -->
         <div id="zone-roast" class="space-y-6">
 
@@ -276,7 +275,6 @@
               <span class="text-xs font-mono font-bold bg-gray-100 text-black px-2.5 py-1 rounded" id="today-date-badge">2026-09-17</span>
             </div>
 
-            <!-- แถวตั้งค่า: รหัสเริ่มต้น + จำนวน + ปุ่มสร้าง + ปุ่มพิมพ์ -->
             <div class="grid grid-cols-1 sm:grid-cols-5 gap-3 items-end pt-1">
               <div class="sm:col-span-2">
                 <label class="block text-xs font-bold text-gray-700 mb-1">รหัส WO เริ่มต้น (แก้ไขได้) *</label>
@@ -301,7 +299,6 @@
               </div>
             </div>
 
-            <!-- แถบแสดงช่วงตัวเลขและปุ่มล้างใบงานเผื่อ -->
             <div class="pt-2 border-t border-gray-100 flex flex-col sm:flex-row justify-between sm:items-center gap-2 text-xs">
               <div>
                 <span class="text-[10px] font-bold text-gray-500 uppercase">ช่วงรหัสที่จะออก:</span>
@@ -428,23 +425,42 @@
               </div>
             </div>
 
-            <!-- น้ำหนักชั่งจริง & ยิงสี & สุ่มวัดสี -->
+            <!-- 🌟 ส่วนที่ 3: 4 ช่องน้ำหนัก + ผูกพาเลท Defect สะสมยอด 🌟 -->
             <div class="border-t border-gray-100 pt-3 space-y-3">
-              <span class="text-xs font-black text-black uppercase block">น้ำหนักผลผลิต & ตรวจวัดค่าสี (Yield & Color QC)</span>
+              <span class="text-xs font-black text-black uppercase block">น้ำหนักผลผลิต & ตรวจวัดค่าสี (Yield, Defect & Color QC)</span>
               
-              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
                 <div>
                   <label class="block text-black font-bold mb-0.5">1. นน. สารก่อนคั่ว (kg) *</label>
-                  <input type="number" id="roast_green_weight" oninput="calculateRoastYieldMath()" step="0.01" placeholder="30.00" class="w-full px-3 py-2 border border-black rounded-lg font-black text-base text-black focus:outline-none">
+                  <input type="number" id="roast_green_weight" oninput="calculateRoastYieldMath()" step="0.01" placeholder="30.00" class="w-full px-3 py-2 border border-black rounded-lg font-black text-sm text-black focus:outline-none">
                 </div>
                 <div>
                   <label class="block text-black font-bold mb-0.5">2. นน. ก่อนยิงสี (kg) *</label>
-                  <input type="number" id="roast_presort_weight" oninput="calculateRoastYieldMath()" step="0.01" placeholder="เช่น 25.50" class="w-full px-3 py-2 border border-gray-300 rounded-lg font-black text-base text-black focus:border-black focus:outline-none">
+                  <input type="number" id="roast_presort_weight" oninput="calculateRoastYieldMath()" step="0.01" placeholder="เช่น 25.50" class="w-full px-3 py-2 border border-gray-300 rounded-lg font-black text-sm text-black focus:border-black focus:outline-none">
                 </div>
                 <div>
-                  <label class="block text-black font-bold mb-0.5">3. นน. หลังยิงสี (kg) *</label>
-                  <input type="number" id="roast_postsort_weight" oninput="calculateRoastYieldMath()" step="0.01" placeholder="เช่น 25.20" class="w-full px-3 py-2 border-2 border-black rounded-lg font-black text-base text-black focus:outline-none">
+                  <label class="block text-black font-bold mb-0.5">3. นน. กาแฟดีหลังยิงสี (kg) *</label>
+                  <input type="number" id="roast_postsort_weight" oninput="calculateRoastYieldMath()" step="0.01" placeholder="เช่น 24.80" class="w-full px-3 py-2 border-2 border-black rounded-lg font-black text-sm text-black focus:outline-none">
                 </div>
+                <!-- 🌟 ช่องที่ 4: ชั่งน้ำหนัก Defect จริง 🌟 -->
+                <div>
+                  <label class="block text-black font-bold mb-0.5">4. นน. Defect ชั่งจริง (kg) *</label>
+                  <input type="number" id="roast_defect_weight" oninput="calculateRoastYieldMath()" step="0.01" value="0.00" placeholder="เช่น 0.50" class="w-full px-3 py-2 border-2 border-black rounded-lg font-black text-sm text-black focus:outline-none">
+                </div>
+              </div>
+
+              <!-- 🌟 เมนูเลือกพาเลท Defect ปลายทาง (กรองเฉพาะพาเลท Defect) 🌟 -->
+              <div class="p-3 bg-gray-50 rounded-xl border border-gray-200 flex flex-col sm:flex-row justify-between sm:items-center gap-2 text-xs">
+                <div>
+                  <span class="font-black text-black block">พาเลท/ถัง Defect สะสมยอด:</span>
+                  <span class="text-[10px] text-gray-400">เลือกถังที่จะนำเมล็ดเสียก้อนนี้ไปเทสะสมทบยอด</span>
+                </div>
+                <select id="select_defect_pallet" class="px-3 py-2 border-2 border-black rounded-lg font-bold bg-white text-black text-xs focus:outline-none">
+                  <!-- กรองพาเลท Defect อัตโนมัติ -->
+                  <option value="PAL-DEF-01">PAL-DEF-01 [พิกัด RT-DEFECT-01]</option>
+                  <option value="PAL-DEF-02">PAL-DEF-02 [พิกัด RT-DEFECT-02]</option>
+                  <option value="PAL-DEF-03">PAL-DEF-03 [พิกัด RT-DEFECT-03]</option>
+                </select>
               </div>
 
               <!-- สุ่มวัดค่าสี 3 จุด -->
@@ -470,14 +486,19 @@
                 </div>
               </div>
 
-              <div class="grid grid-cols-2 gap-2 text-center text-xs p-2.5 bg-gray-100 rounded-lg">
+              <!-- 🌟 แถบคำนวณ Auto 3 ค่า: Roast Loss + Defect Rate + เศษผงปลิวสูญหาย 🌟 -->
+              <div class="grid grid-cols-3 gap-2 text-center text-xs p-2.5 bg-gray-100 rounded-lg">
                 <div>
-                  <span class="text-gray-500 block font-medium">อัตราสูญเสียตอนคั่ว (% Roast Loss)</span>
+                  <span class="text-gray-500 block font-medium">Roast Loss</span>
                   <b id="math-roast-loss" class="text-sm font-black text-black">0.00%</b>
                 </div>
                 <div>
-                  <span class="text-gray-500 block font-medium">อัตราเมล็ดเสียที่คัดออก (% Sorter Loss)</span>
-                  <b id="math-sorter-loss" class="text-sm font-black text-black">0.00%</b>
+                  <span class="text-gray-500 block font-medium">สัดส่วน Defect</span>
+                  <b id="math-defect-rate" class="text-sm font-black text-black">0.00%</b>
+                </div>
+                <div>
+                  <span class="text-gray-500 block font-medium">เศษผงปลิวสูญหาย</span>
+                  <b id="math-dust-loss" class="text-sm font-black text-black">0.00 kg</b>
                 </div>
               </div>
 
@@ -486,14 +507,14 @@
                 <input type="text" id="roast_notes" placeholder="เช่น เมล็ดขยายตัวดี, กลิ่นหอมช็อกโกแลต" class="w-full px-3 py-1.5 border border-gray-300 rounded text-xs">
               </div>
 
-              <!-- 🌟 3. ขั้นตอนสุดท้ายก่อนจบงาน: บังคับยิงสแกน QR ถังพักปลายทาง (ตัด Dropdown ออก 100%) 🌟 -->
+              <!-- 🌟 4. ขั้นตอนสุดท้ายก่อนจบงาน: บังคับยิงสแกน QR ถังพักกาแฟดีปลายทาง 🌟 -->
               <div class="p-4 bg-gray-50 rounded-xl border-2 border-black space-y-2 text-xs">
                 <div class="flex justify-between items-center">
                   <label class="block font-black text-black text-sm">ขั้นตอนสุดท้าย: ยิงสแกน QR ถังพักกาแฟคั่ว (Destination Bin) *</label>
                   <span class="text-[10px] text-gray-500 font-bold">ยิง QR ป้ายข้างถัง</span>
                 </div>
                 <div class="flex gap-2">
-                  <input type="text" id="roast_dest_location" placeholder="ยิงสแกน QR ป้ายข้างถังพัก เช่น RT-REST-01 หรือ RT-DEFECT-01" class="flex-1 px-3 py-2.5 border-2 border-black rounded-lg font-mono font-black text-black uppercase text-xs focus:outline-none">
+                  <input type="text" id="roast_dest_location" placeholder="ยิงสแกน QR ป้ายข้างถังพักกาแฟดี เช่น RT-REST-01" class="flex-1 px-3 py-2.5 border-2 border-black rounded-lg font-mono font-black text-black uppercase text-xs focus:outline-none">
                   <button type="button" onclick="startScanner('roast_dest_location')" class="bg-black hover:bg-gray-800 text-white px-4 rounded-lg font-bold text-xs transition cursor-pointer">
                     เปิดกล้อง
                   </button>
@@ -522,14 +543,15 @@
                     <th class="py-2 px-3 text-left font-bold">WO ใบงานคั่ว</th>
                     <th class="py-2 px-3 text-left font-bold">สารกาแฟ</th>
                     <th class="py-2 px-3 text-center font-bold">รหัส Lot</th>
-                    <th class="py-2 px-3 text-center font-bold">ถังปลายทาง</th>
-                    <th class="py-2 px-3 text-right font-bold">นน. กาแฟคั่วสุก</th>
+                    <th class="py-2 px-3 text-center font-bold">ถังพักดี</th>
+                    <th class="py-2 px-3 text-right font-bold">นน. กาแฟดี</th>
+                    <th class="py-2 px-3 text-right font-bold">นน. Defect</th>
                     <th class="py-2 px-3 text-center font-bold">ค่าสีเฉลี่ย</th>
                     <th class="py-2 px-3 text-center font-bold">ผู้คั่ว</th>
                   </tr>
                 </thead>
                 <tbody id="roast-history-tbody" class="text-black divide-y divide-gray-100">
-                  <tr><td colspan="7" class="py-6 text-center text-gray-400">ยังไม่มีประวัติการคั่ว</td></tr>
+                  <tr><td colspan="8" class="py-6 text-center text-gray-400">ยังไม่มีประวัติการคั่ว</td></tr>
                 </tbody>
               </table>
             </div>
@@ -637,9 +659,6 @@
       }
     }
 
-    // =========================================================================
-    // 🖨️ 1. จัดการเลข WO & พิมพ์ A4 & ล้างใบงานเผื่อ
-    // =========================================================================
     function initDefaultStartWO() {
       const now = new Date();
       const yyyy = now.getFullYear();
@@ -1054,7 +1073,7 @@
     }
 
     // =========================================================================
-    // ☕ 3. คั่วกาแฟหน้าเตา & บังคับยิงสแกนสารจริง
+    // ☕ 3. คั่วกาแฟหน้าเตา & คำนวณ Defect จริง + ฝุ่นผงสูญหาย Auto
     // =========================================================================
     async function loadRoastingData() {
       try {
@@ -1099,11 +1118,14 @@
       document.getElementById('roast_green_weight').focus();
     }
 
+    // 🌟 คำนวณ Auto ทั้ง Roast Loss + Defect Rate + ฝุ่นผงปลิวสูญหาย 🌟
     function calculateRoastYieldMath() {
       const green = parseFloat(document.getElementById('roast_green_weight').value) || 0;
       const pre = parseFloat(document.getElementById('roast_presort_weight').value) || 0;
       const post = parseFloat(document.getElementById('roast_postsort_weight').value) || 0;
+      const defect = parseFloat(document.getElementById('roast_defect_weight').value) || 0;
 
+      // 1. % Roast Loss (ความชื้นระเหยในเตา)
       if (green > 0 && pre > 0) {
         const rLoss = ((green - pre) / green) * 100;
         document.getElementById('math-roast-loss').innerText = `${rLoss.toFixed(2)}%`;
@@ -1111,13 +1133,23 @@
         document.getElementById('math-roast-loss').innerText = `0.00%`;
       }
 
-      if (pre > 0 && post > 0) {
-        const sLoss = ((pre - post) / pre) * 100;
-        document.getElementById('math-sorter-loss').innerText = `${sLoss.toFixed(2)}%`;
+      // 2. % Defect Rate (สัดส่วนเมล็ดเสียจริง)
+      if (pre > 0 && defect > 0) {
+        const dRate = (defect / pre) * 100;
+        document.getElementById('math-defect-rate').innerText = `${dRate.toFixed(2)}%`;
       } else {
-        document.getElementById('math-sorter-loss').innerText = `0.00%`;
+        document.getElementById('math-defect-rate').innerText = `0.00%`;
       }
 
+      // 3. เศษผง/ฝุ่นปลิวสูญหาย (Dust Loss) = นน.ก่อนยิงสี - (นน.กาแฟดี + นน.Defect)
+      if (pre > 0) {
+        const dustDiff = pre - (post + defect);
+        document.getElementById('math-dust-loss').innerText = `${dustDiff.toFixed(2)} kg`;
+      } else {
+        document.getElementById('math-dust-loss').innerText = `0.00 kg`;
+      }
+
+      // 4. ค่าสีเฉลี่ย Agtron
       const c1 = parseFloat(document.getElementById('color_val_1').value);
       const c2 = parseFloat(document.getElementById('color_val_2').value);
       const c3 = parseFloat(document.getElementById('color_val_3').value);
@@ -1138,26 +1170,29 @@
       const greenW = parseFloat(document.getElementById('roast_green_weight').value) || 0;
       const preW = parseFloat(document.getElementById('roast_presort_weight').value) || 0;
       const postW = parseFloat(document.getElementById('roast_postsort_weight').value) || 0;
+      const defectW = parseFloat(document.getElementById('roast_defect_weight').value) || 0;
 
       const barcode = document.getElementById('roast_barcode_input').value.trim();
       const woNum = document.getElementById('roast_wo_input').value.trim();
       const destLocation = document.getElementById('roast_dest_location').value.trim();
+      const defectPallet = document.getElementById('select_defect_pallet').value;
 
       if(!woNum) return alert("กรุณาระบุหรือสแกน QR รหัสใบงานคั่วจากกระดาษ A4");
-      if(!destLocation) return alert("กรุณายิงสแกน QR ถังพักกาแฟคั่วปลายทาง (เช่น RT-REST-01 หรือ RT-DEFECT-01)");
+      if(!destLocation) return alert("กรุณายิงสแกน QR ถังพักกาแฟคั่วปลายทาง (เช่น RT-REST-01)");
 
       if(!selectedReadyBean && barcode) {
         selectedReadyBean = readyBeansList.find(b => b.barcode_id === barcode || b.pallet_id === barcode);
       }
 
       if(!selectedReadyBean) return alert("กรุณายิงสแกน QR ถังสารสะอาดที่ต้องการคั่วก่อน");
-      if(greenW <= 0 || postW <= 0) return alert("กรุณาระบุน้ำหนักสารก่อนคั่ว และน้ำหนักหลังยิงสี");
+      if(greenW <= 0 || postW <= 0) return alert("กรุณาระบุน้ำหนักสารก่อนคั่ว และน้ำหนักกาแฟดีหลังยิงสี");
 
       const stockNow = parseFloat(selectedReadyBean.weight_current) || 0;
       if(greenW > stockNow) {
         return alert(`สต๊อกสารพร้อมคั่วมีไม่พอ! (มีอยู่ ${stockNow} kg แต่จะเบิก ${greenW} kg)`);
       }
 
+      const dustLoss = (preW > 0 ? preW - (postW + defectW) : 0).toFixed(2);
       const roastLevel = document.getElementById('roast_level_select').value;
       const lotCode = selectedReadyBean.lot_code || '-';
       const colorAvg = document.getElementById('color_val_avg').innerText;
@@ -1167,7 +1202,9 @@
         `- เลขใบงานคั่ว: ${woNum}\n` +
         `- รหัส Lot: ${lotCode}\n` +
         `- นน. สารก่อนคั่ว: ${greenW} kg (ตัดออกจากคลัง RT)\n` +
-        `- นน. กาแฟคั่วสุก: ${postW} kg ➔ เข้าถังพัก [${destLocation}]\n` +
+        `- นน. กาแฟดีหลังยิงสี: ${postW} kg ➔ เข้าถัง [${destLocation}]\n` +
+        `- นน. Defect ชั่งจริง: ${defectW} kg ➔ เข้าพาเลท [${defectPallet}]\n` +
+        `- เศษผงปลิวสูญหาย: ${dustLoss} kg\n` +
         `- ระดับคั่ว: ${roastLevel} | ค่าสีเฉลี่ย: ${colorAvg}\n\n` +
         `*พร้อมส่งมอบใบนำงาน A4 ไปยังแผนก Packing*`;
 
@@ -1187,6 +1224,9 @@
         green_weight: greenW,
         presort_weight: preW,
         postsort_weight: postW,
+        defect_weight: defectW,
+        defect_pallet: defectPallet,
+        dust_loss: dustLoss,
         destination_location: destLocation,
         roast_level: roastLevel,
         color_1: document.getElementById('color_val_1').value || '-',
@@ -1220,7 +1260,7 @@
         activeWOPool = activeWOPool.filter(w => w !== woNum);
         saveActiveWOs();
 
-        addRoastHistoryRow(woNum, selectedReadyBean.item_name, lotCode, destLocation, postW, colorAvg);
+        addRoastHistoryRow(woNum, selectedReadyBean.item_name, lotCode, destLocation, postW, defectW, colorAvg);
 
         // ล้างฟอร์ม
         document.getElementById('roast_wo_input').value = '';
@@ -1229,10 +1269,14 @@
         document.getElementById('roast_green_weight').value = '';
         document.getElementById('roast_presort_weight').value = '';
         document.getElementById('roast_postsort_weight').value = '';
+        document.getElementById('roast_defect_weight').value = '0.00';
         document.getElementById('color_val_1').value = '';
         document.getElementById('color_val_2').value = '';
         document.getElementById('color_val_3').value = '';
         document.getElementById('color_val_avg').innerText = '-';
+        document.getElementById('math-roast-loss').innerText = '0.00%';
+        document.getElementById('math-defect-rate').innerText = '0.00%';
+        document.getElementById('math-dust-loss').innerText = '0.00 kg';
         document.getElementById('param_ct').value = '';
         document.getElementById('param_tp').value = '';
         document.getElementById('param_ye').value = '';
@@ -1274,7 +1318,7 @@
       document.getElementById('kpi-roast-loss-avg').innerText = `${avgLoss}%`;
     }
 
-    function addRoastHistoryRow(wo, name, lot, dest, post, color) {
+    function addRoastHistoryRow(wo, name, lot, dest, post, defect, color) {
       const tbody = document.getElementById('roast-history-tbody');
       const tr = document.createElement('tr');
       tr.className = "hover:bg-gray-50";
@@ -1284,6 +1328,7 @@
         <td class="py-2 px-3 text-center font-mono font-bold text-black">${lot}</td>
         <td class="py-2 px-3 text-center font-mono font-black text-black">${dest}</td>
         <td class="py-2 px-3 text-right font-black text-black">${post.toFixed(2)} kg</td>
+        <td class="py-2 px-3 text-right text-gray-500 font-bold">${defect.toFixed(2)} kg</td>
         <td class="py-2 px-3 text-center font-bold text-black">${color}</td>
         <td class="py-2 px-3 text-center text-gray-500">${localStorage.getItem('name') || 'Roaster'}</td>
       `;
