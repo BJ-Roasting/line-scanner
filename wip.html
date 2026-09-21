@@ -31,7 +31,7 @@
 
   <div id="app-layout" class="flex min-h-screen">
     
-    <!-- 💻 Sidebar Desktop (แก้ไขเมนูให้ถูกต้องตามมาสเตอร์) -->
+    <!-- 💻 Sidebar Desktop (แก้ไขเมนูให้ถูกต้องตามมาตรฐาน เป๊ะ 100%) -->
     <aside class="hidden md:flex flex-col w-64 fixed left-0 top-0 h-screen bg-white border-r border-gray-200 pt-7 pb-6 px-4 z-40 shadow-sm no-print">
       <div class="px-2 mb-7">
         <div class="flex items-center gap-2.5">
@@ -47,18 +47,19 @@
         <div>
           <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest px-3 mb-2">การปฏิบัติการ</p>
           <nav class="space-y-1">
+            <!-- 1. หน้าแรก -->
             <a href="index.html" class="flex items-center gap-3 text-gray-500 hover:text-black hover:bg-gray-100 px-3 py-2 rounded-lg font-bold text-xs transition">
               <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg> หน้าแรก
             </a>
-            <a href="planner.html" class="flex items-center gap-3 text-gray-500 hover:text-black hover:bg-gray-100 px-3 py-2 rounded-lg font-bold text-xs transition">
-              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 011.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.56.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.893.149c-.425.07-.765.383-.93.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 01-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.397.165-.71.505-.78.929l-.15.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 01-.12-1.45l.527-.737c.25-.35.273-.806.108-1.204-.165-.397-.505-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.107-1.204l-.527-.738a1.125 1.125 0 01.12-1.45l.773-.773a1.125 1.125 0 011.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg> วางแผน
+            <!-- 2. ทำงาน (Active สีดำ) -->
+            <a href="planner.html" class="flex items-center gap-3 bg-black text-white px-3 py-2 rounded-lg font-bold text-xs transition shadow-sm">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 011.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.56.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.893.149c-.425.07-.765.383-.93.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 01-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.397.165-.71.505-.78.929l-.15.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 01-.12-1.45l.527-.737c.25-.35.273-.806.108-1.204-.165-.397-.505-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.107-1.204l-.527-.738a1.125 1.125 0 01.12-1.45l.773-.773a1.125 1.125 0 011.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg> ทำงาน
             </a>
-            <a href="wip.html" class="flex items-center gap-3 bg-black text-white px-3 py-2 rounded-lg font-bold text-xs transition shadow-sm">
-              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.362 5.214A8.252 8.252 0 0112 21 8.25 8.25 0 016.038 7.048 8.287 8.287 0 009 9.6a8.983 8.983 0 013.361-6.867 8.21 8.21 0 003 2.48z" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 18a3.75 3.75 0 00.495-7.467 5.99 5.99 0 00-1.925 3.546 5.974 5.974 0 01-2.133-1A3.75 3.75 0 0012 18z" /></svg> เบิกคั่ว
-            </a>
+            <!-- 3. สต๊อกสินค้า -->
             <a href="stock.html" class="flex items-center gap-3 text-gray-500 hover:text-black hover:bg-gray-100 px-3 py-2 rounded-lg font-bold text-xs transition">
               <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" /></svg> สต๊อกสินค้า
             </a>
+            <!-- 4. รายงาน -->
             <a href="report.html" class="flex items-center gap-3 text-gray-500 hover:text-black hover:bg-gray-100 px-3 py-2 rounded-lg font-bold text-xs transition">
               <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" /></svg> รายงาน
             </a>
@@ -84,7 +85,7 @@
 
     <main class="w-full md:ml-64 relative flex flex-col min-h-screen">
       
-      <!-- 🌟 แถบเมนูด้านบน สไตล์ Binance Tab Header 🌟 -->
+      <!-- 🌟 แถบเมนูด้านบน สไตล์ Binance Tab Header (6 หัวข้อย่อยอยู่ตรงนี้ถูกต้องแล้ว) 🌟 -->
       <div class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-gray-200 no-print">
         <div class="flex items-center gap-2 overflow-x-auto px-4 md:px-8 py-2.5 snap-x">
           <button onclick="window.location.href='planner.html'" class="px-4 py-2 rounded-lg text-sm font-bold text-gray-400 hover:text-black hover:bg-gray-100 transition whitespace-nowrap">วางแผน</button>
@@ -212,11 +213,11 @@
         </div>
 
         <!-- ========================================================================= -->
-        <!-- ☕ กล่องที่ 2: คั่วกาแฟหน้าเตา (🌟 แยกปุ่มสร้าง/พิมพ์ & มีระบบลบใบงานเผื่อ 🌟) -->
+        <!-- ☕ กล่องที่ 2: คั่วกาแฟหน้าเตา (ออก WO & บันทึก QC ครบวงจร) ☕ -->
         <!-- ========================================================================= -->
         <div id="zone-roast" class="space-y-6">
 
-          <!-- 🌟 1. การ์ดสร้างใบงานคั่วเปล่า & แยกปุ่มพิมพ์/สร้าง & ลบใบงานเผื่อ 🌟 -->
+          <!-- 1. การ์ดสร้างใบงานคั่วเปล่า -->
           <div class="bg-white p-6 rounded-xl border-2 border-black shadow-sm space-y-4 no-print">
             <div class="flex justify-between items-center border-b border-gray-100 pb-2">
               <div>
@@ -233,21 +234,18 @@
                 <input type="number" id="batch_wo_count_input" oninput="updateWOPreviewBadges()" value="5" min="1" max="30" class="w-full px-3 py-2 border-2 border-black rounded-lg font-black text-black text-center text-sm focus:outline-none">
               </div>
 
-              <!-- ปุ่มที่ 1: สร้างรหัส WO -->
               <div>
                 <button type="button" onclick="createBlankWOsAction()" class="w-full bg-black hover:bg-gray-800 text-white font-bold py-2.5 px-3 rounded-lg text-xs transition active:scale-95 cursor-pointer">
                   1. สร้างรหัส WO
                 </button>
               </div>
 
-              <!-- ปุ่มที่ 2: พิมพ์ A4 (แยกอิสระ) -->
               <div>
                 <button type="button" onclick="openA4PrintForActiveWOs()" class="w-full bg-white hover:bg-gray-100 text-black border-2 border-black font-bold py-2.5 px-3 rounded-lg text-xs transition active:scale-95 cursor-pointer">
                   2. พิมพ์ใบนำงาน A4
                 </button>
               </div>
 
-              <!-- ปุ่มที่ 3: ล้างใบงานที่ไม่ได้ใช้ -->
               <div>
                 <button type="button" onclick="clearAllUnusedWOs()" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-600 font-bold py-2.5 px-3 rounded-lg text-xs transition cursor-pointer">
                   ล้างใบงานที่ไม่ได้ใช้
@@ -255,7 +253,6 @@
               </div>
             </div>
 
-            <!-- กล่องแสดงช่วงและรายการเลข WO ที่สร้างขึ้นมา -->
             <div class="pt-2 border-t border-gray-100 space-y-2">
               <div class="flex justify-between items-center text-xs">
                 <span class="text-[10px] font-bold text-gray-500 uppercase tracking-wider">รายการรหัส WO วันนี้ (คลิกเพื่อสแกน / กด ✕ เพื่อลบ):</span>
@@ -276,7 +273,7 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <!-- สแกน QR บนใบ A4 -->
+              <!-- 1. สแกน QR บนใบ A4 -->
               <div>
                 <label class="block text-xs font-bold text-gray-700 mb-1">1. สแกน QR ใบงานคั่ว (จากกระดาษ A4) *</label>
                 <div class="flex gap-2">
@@ -287,7 +284,7 @@
                 </div>
               </div>
 
-              <!-- สแกนสารพร้อมคั่วจากคลัง RT -->
+              <!-- 2. สแกนสารพร้อมคั่วจากคลัง RT -->
               <div>
                 <label class="block text-xs font-bold text-gray-700 mb-1">2. สแกนสารพร้อมคั่ว (คลัง RT) *</label>
                 <div class="flex gap-2">
@@ -521,11 +518,11 @@
       <div onclick="window.location.href='index.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-black cursor-pointer">
         <svg class="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg><span class="text-[10px] font-medium">หน้าแรก</span>
       </div>
-      <div onclick="window.location.href='planner.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-black cursor-pointer">
-        <svg class="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 011.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.56.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.893.149c-.425.07-.765.383-.93.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 01-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.397.165-.71.505-.78.929l-.15.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 01-.12-1.45l.527-.737c.25-.35.273-.806.108-1.204-.165-.397-.505-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.107-1.204l-.527-.738a1.125 1.125 0 01.12-1.45l.773-.773a1.125 1.125 0 011.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg><span class="text-[10px] font-medium">วางแผน</span>
+      <div onclick="window.location.href='planner.html'" class="flex flex-col items-center justify-center w-[20%] text-black cursor-pointer">
+        <svg class="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 011.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.56.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.893.149c-.425.07-.765.383-.93.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 01-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.397.165-.71.505-.78.929l-.15.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 01-.12-1.45l.527-.737c.25-.35.273-.806.108-1.204-.165-.397-.505-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.107-1.204l-.527-.738a1.125 1.125 0 01.12-1.45l.773-.773a1.125 1.125 0 011.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg><span class="text-[10px] font-bold">ทำงาน</span>
       </div>
-      <div onclick="window.location.href='wip.html'" class="flex flex-col items-center justify-center w-[20%] text-black cursor-pointer">
-        <svg class="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.362 5.214A8.252 8.252 0 0112 21 8.25 8.25 0 016.038 7.048 8.287 8.287 0 009 9.6a8.983 8.983 0 013.361-6.867 8.21 8.21 0 003 2.48z" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 18a3.75 3.75 0 00.495-7.467 5.99 5.99 0 00-1.925 3.546 5.974 5.974 0 01-2.133-1A3.75 3.75 0 0012 18z" /></svg><span class="text-[10px] font-bold">เบิกคั่ว</span>
+      <div onclick="window.location.href='report.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-black cursor-pointer">
+        <svg class="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" /></svg><span class="text-[10px] font-medium">รายงาน</span>
       </div>
       <div onclick="window.location.href='stock.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-black cursor-pointer">
         <svg class="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" /></svg><span class="text-[10px] font-medium">สต๊อก</span>
@@ -611,7 +608,6 @@
       renderWOBadges();
     }
 
-    // 🌟 ปุ่มที่ 1: สร้างรหัส WO ประจำวัน 🌟
     function createBlankWOsAction() {
       const count = parseInt(document.getElementById('batch_wo_count_input').value) || 1;
       const now = new Date();
@@ -642,7 +638,6 @@
       alert(`สร้างรหัสใบงานคั่วใหม่ ${newCreated.length} ใบเรียบร้อยแล้ว!\nช่วงเลข: ${newCreated[0]} ถึง ${newCreated[newCreated.length - 1]}`);
     }
 
-    // 🌟 ปุ่มที่ 2: สั่งพิมพ์ A4 ใบนำงานคั่ว 🌟
     function openA4PrintForActiveWOs() {
       if (activeWOPool.length === 0) {
         return alert("ยังไม่มีรายการรหัส WO วันนี้ กรุณากด '1. สร้างรหัส WO' ก่อนครับ");
@@ -662,7 +657,6 @@
         const page = document.createElement('div');
         page.className = "a4-traveler-page shadow-2xl border-2 border-black bg-white rounded-lg p-6 mx-auto space-y-3 text-black text-xs";
         page.innerHTML = `
-          <!-- หัวเอกสาร -->
           <div class="flex justify-between items-start border-b-2 border-black pb-2.5">
             <div class="flex items-center gap-3">
               <div class="w-10 h-10 bg-black text-white font-black flex items-center justify-center rounded-lg text-lg">BJ</div>
@@ -677,7 +671,6 @@
             </div>
           </div>
 
-          <!-- ข้อมูลใบงานว่างรอจดมือ -->
           <div class="border-2 border-black p-3 rounded-lg bg-gray-50 space-y-1.5">
             <div class="grid grid-cols-2 gap-2">
               <p class="font-bold">วันที่: <span class="font-normal">${dateStr}</span></p>
@@ -693,7 +686,6 @@
             </div>
           </div>
 
-          <!-- ตารางจดกราฟอุณหภูมิ & เวลาหน้าเตา -->
           <div class="space-y-1">
             <span class="font-black text-xs uppercase block border-b border-black pb-0.5">1. บันทึกอุณหภูมิและเวลาการคั่ว (Roast Profile Matrix)</span>
             <table class="w-full border-collapse border border-black text-center text-[11px]">
@@ -720,7 +712,6 @@
             </table>
           </div>
 
-          <!-- ตารางจดน้ำหนักชั่งจริง & สุ่มวัดสี -->
           <div class="space-y-1">
             <span class="font-black text-xs uppercase block border-b border-black pb-0.5">2. บันทึกน้ำหนักและผลตรวจวัดสี (Yield & Color QC)</span>
             <div class="grid grid-cols-3 gap-2 text-center text-[11px] font-bold">
@@ -749,7 +740,6 @@
             </table>
           </div>
 
-          <!-- หมายเหตุและลายเซ็นส่งมอบ -->
           <div class="border-2 border-black rounded-lg p-2.5 space-y-2">
             <p class="font-bold">หมายเหตุการผลิต: [ __________________________________________________________________________________ ]</p>
             <div class="grid grid-cols-2 gap-4 pt-2 border-t border-gray-300 text-center font-bold">
@@ -1120,6 +1110,7 @@
         const result = await res.json();
         alert(result.message);
 
+        // ตัด WO ที่ใช้แล้วออกจากรายการบนหน้าจอ
         activeWOPool = activeWOPool.filter(w => w !== woNum);
         saveActiveWOs();
 
