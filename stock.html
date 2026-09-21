@@ -15,7 +15,7 @@
 
   <div id="app-layout" class="flex min-h-screen">
 
-    <!-- 💻 Sidebar Desktop -->
+    <!-- 💻 Sidebar Desktop (ตัดเบิกคั่วออก เหลือ 4 เมนูมาตรฐานเป๊ะ 100%) -->
     <aside class="hidden md:flex flex-col w-64 fixed left-0 top-0 h-screen bg-white border-r border-gray-200 pt-7 pb-6 px-4 z-40 shadow-sm no-print">
       <div class="px-2 mb-7">
         <div class="flex items-center gap-2.5">
@@ -31,22 +31,19 @@
         <div>
           <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest px-3 mb-2">การปฏิบัติการ</p>
           <nav class="space-y-1">
+            <!-- 1. หน้าแรก -->
             <a href="index.html" class="flex items-center gap-3 text-gray-500 hover:text-black hover:bg-gray-100 px-3 py-2 rounded-lg font-bold text-xs transition">
               <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg> หน้าแรก
             </a>
+            <!-- 2. ทำงาน -->
             <a href="planner.html" class="flex items-center gap-3 text-gray-500 hover:text-black hover:bg-gray-100 px-3 py-2 rounded-lg font-bold text-xs transition">
-              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 011.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.56.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.893.149c-.425.07-.765.383-.93.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 01-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.397.165-.71.505-.78.929l-.15.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 01-.12-1.45l.527-.737c.25-.35.273-.806.108-1.204-.165-.397-.505-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.107-1.204l-.527-.738a1.125 1.125 0 01.12-1.45l.773-.773a1.125 1.125 0 011.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg> หน้าแรก
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 011.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.56.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.893.149c-.425.07-.765.383-.93.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 01-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.397.165-.71.505-.78.929l-.15.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 01-.12-1.45l.527-.737c.25-.35.273-.806.108-1.204-.165-.397-.505-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.107-1.204l-.527-.738a1.125 1.125 0 01.12-1.45l.773-.773a1.125 1.125 0 011.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg> ทำงาน
             </a>
-            <a href="planner.html" class="flex items-center gap-3 text-gray-500 hover:text-black hover:bg-gray-100 px-3 py-2 rounded-lg font-bold text-xs transition">
-              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 011.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.56.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.893.149c-.425.07-.765.383-.93.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 01-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.397.165-.71.505-.78.929l-.15.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 01-.12-1.45l.527-.737c.25-.35.273-.806.108-1.204-.165-.397-.505-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.107-1.204l-.527-.738a1.125 1.125 0 01.12-1.45l.773-.773a1.125 1.125 0 011.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg> วางแผน
-            </a>
-            <a href="wip.html" class="flex items-center gap-3 text-gray-500 hover:text-black hover:bg-gray-100 px-3 py-2 rounded-lg font-bold text-xs transition">
-              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.362 5.214A8.252 8.252 0 0112 21 8.25 8.25 0 016.038 7.048 8.287 8.287 0 009 9.6a8.983 8.983 0 013.361-6.867 8.21 8.21 0 003 2.48z" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 18a3.75 3.75 0 00.495-7.467 5.99 5.99 0 00-1.925 3.546 5.974 5.974 0 01-2.133-1A3.75 3.75 0 0012 18z" /></svg> เบิกคั่ว
-            </a>
-            <!-- สต๊อกสินค้า Active -->
+            <!-- 3. สต๊อกสินค้า (Active สีดำ) -->
             <a href="stock.html" class="flex items-center gap-3 bg-black text-white px-3 py-2 rounded-lg font-bold text-xs transition shadow-sm">
               <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" /></svg> สต๊อกสินค้า
             </a>
+            <!-- 4. รายงาน -->
             <a href="report.html" class="flex items-center gap-3 text-gray-500 hover:text-black hover:bg-gray-100 px-3 py-2 rounded-lg font-bold text-xs transition">
               <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" /></svg> รายงาน
             </a>
@@ -648,7 +645,6 @@
       document.getElementById('bean-drilldown-box').classList.add('hidden');
     }
 
-    // 🌟 คำนวณยอดทั้ง 2 กล่องแบบแยกหมวดหมู่ชัดเจน 🌟
     function updateDashboardStats() {
       // 1. สถิติด้านบน
       const greenBeansInRack = inventoryData
@@ -673,8 +669,6 @@
       // ==========================================
       // 🌟 2. กล่องที่ 1 (ของเดิม): พักรอจัดการ (เป้าหมายต้องเป็น 0) 🌟
       // ==========================================
-      
-      // ลานรับของ
       const dockItems = inventoryData.filter(i => (i.location === 'DOCK-STAGE' || i.status === 'Loaded') && i.status !== 'Empty');
       const dockWeight = dockItems.reduce((sum, item) => sum + (parseFloat(item.weight_current) || 0), 0);
       document.getElementById('pipe-dock-count').innerText = dockItems.length;
@@ -688,7 +682,6 @@
         dockBadge.innerText = "รอยกขึ้นแร็ค";
       }
 
-      // ระหว่างคั่ว
       const wipLocs = locationsData.filter(l => l.status === 'Working').length;
       const wipItems = inventoryData.filter(i => (i.status === 'Working' || i.location === 'WIP-ZONE') && i.status !== 'Empty');
       const wipCount = wipLocs || wipItems.length;
@@ -704,7 +697,6 @@
         wipBadge.innerText = "กำลังคั่ว";
       }
 
-      // ระหว่างบรรจุ
       const packLocs = locationsData.filter(l => l.status === 'Packing').length;
       const packItems = inventoryData.filter(i => (i.status === 'Packing' || i.location === 'PACK-STAGE') && i.status !== 'Empty');
       const packCount = packLocs || packItems.length;
@@ -721,28 +713,21 @@
       // ==========================================
       // 🌟 3. กล่องที่ 2 (ของใหม่): Floor Staging คลัง RT (6 จุด) 🌟
       // ==========================================
-      
-      // 1. สารทั้งหมดในคลัง RT
       const rtTotalItems = inventoryData.filter(i => i.location && (i.location.startsWith('RT') || i.location.startsWith('RTA')) && i.status !== 'Empty');
       updateStageCard('pipe-rt-total-count', 'pipe-rt-total-weight', 'pipe-rt-total-badge', rtTotalItems.length, rtTotalItems, null, 'รวมทุกจุดใน RT');
 
-      // 2. จุดร่อนสาร (RT-SIFT)
       const siftItems = inventoryData.filter(i => i.location && i.location.startsWith('RT-SIFT') && i.status !== 'Empty');
       updateStageCard('pipe-sift-count', 'pipe-sift-weight', 'pipe-sift-badge', siftItems.length, siftItems, 'pipe-sift-locs', 'RT-SIFT');
 
-      // 3. หน้าเตาคั่ว (RT-ROAST / RT)
       const roastItems = inventoryData.filter(i => (i.location === 'RT' || (i.location && i.location.startsWith('RT-ROAST'))) && i.category === 'Green Bean' && i.status !== 'Empty');
       updateStageCard('pipe-roast-count', 'pipe-roast-weight', 'pipe-roast-badge', roastItems.length, roastItems, 'pipe-roast-locs', 'RT-ROAST');
 
-      // 4. พักคลายก๊าซ (RT-REST)
       const restItems = inventoryData.filter(i => i.location && i.location.startsWith('RT-REST') && i.status !== 'Empty');
       updateStageCard('pipe-rest-count', 'pipe-rest-weight', 'pipe-rest-badge', restItems.length, restItems, 'pipe-rest-locs', 'RT-REST');
 
-      // 5. จุดบรรจุถุง (RT-PACK)
       const rtPackItems = inventoryData.filter(i => i.location && (i.location.startsWith('RT-PACK') || i.location === 'PACK-ZONE') && i.status !== 'Empty');
       updateStageCard('pipe-rtpack-count', 'pipe-rtpack-weight', 'pipe-rtpack-badge', rtPackItems.length, rtPackItems, 'pipe-rtpack-locs', 'RT-PACK');
 
-      // 6. เตรียมจัดส่ง (RT-OUT)
       const outItems = inventoryData.filter(i => i.location && (i.location.startsWith('RT-OUT') || i.location === 'OUTBOUND') && i.status !== 'Empty');
       updateStageCard('pipe-out-count', 'pipe-out-weight', 'pipe-out-badge', outItems.length, outItems, null, 'RT-OUT');
 
