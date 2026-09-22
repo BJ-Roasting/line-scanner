@@ -106,53 +106,77 @@
           </div>
         </div>
 
-        <!-- 🌟 ฟอร์มบันทึกการบรรจุสินค้า (OEM Focused: นับจำนวนถุงจริง) 🌟 -->
+        <!-- 🌟 ฟอร์มบันทึกการบรรจุสินค้า (OEM Focused & Remainder Check) 🌟 -->
         <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-5 no-print">
           <div class="border-b border-gray-100 pb-3 flex justify-between items-center">
             <div>
               <h2 class="text-base font-bold text-black">บันทึกผลการบรรจุสินค้า</h2>
-              <p class="text-xs text-gray-400">สแกน QR บนใบนำงาน A4 ระบุขนาดถุง และนับจำนวนถุงจริงเพื่อตัดยอด</p>
+              <p class="text-xs text-gray-400">สแกน QR บนใบนำงาน A4 ตรวจสอบถังคั่วใหม่และถังเศษก่อนนับถุง</p>
             </div>
             <span class="text-xs font-bold bg-black text-white px-2.5 py-1 rounded font-mono" id="today-date-badge">2026-09-17</span>
           </div>
 
-          <!-- 1. สแกนรับจากใบนำงาน A4 หรือ ถัง RT-REST -->
+          <!-- 1. สแกนรับจากใบนำงาน A4 -->
           <div class="space-y-1.5">
             <div class="flex justify-between items-center">
-              <label class="block text-xs font-bold text-black">1. สแกน QR ใบนำงานคั่ว A4 (หรือสแกนถังพัก RT-REST) *</label>
+              <label class="block text-xs font-bold text-black">1. สแกน QR บนใบนำงานคั่ว A4 *</label>
               <span class="text-[10px] text-gray-500 font-bold">ยิง QR จากใบ A4</span>
             </div>
             <div class="flex gap-2">
-              <input type="text" id="pack_scan_input" oninput="onPackScanInputChanged()" placeholder="ยิงสแกน QR บนใบ A4 เช่น WO-R260917-01 หรือ ROAST-..." class="flex-1 px-3 py-2.5 border-2 border-black rounded-lg font-mono font-black text-black uppercase text-xs focus:outline-none">
+              <input type="text" id="pack_scan_input" oninput="onPackScanInputChanged()" placeholder="ยิงสแกน QR บนใบ A4 เช่น WO-R260917-01" class="flex-1 px-3 py-2.5 border-2 border-black rounded-lg font-mono font-black text-black uppercase text-xs focus:outline-none">
               <button type="button" onclick="startScanner('pack_scan_input')" class="bg-black hover:bg-gray-800 text-white px-4 rounded-lg font-bold text-xs transition cursor-pointer">
                 เปิดกล้อง
               </button>
             </div>
           </div>
 
-          <!-- กล่องข้อมูลถังกาแฟคั่วที่สแกนพบ -->
+          <!-- ข้อมูลใบงานและถังคั่วใหม่ -->
           <div id="pack-bean-info" class="p-4 bg-gray-50 rounded-xl border border-gray-200 space-y-2 text-xs">
             <div class="flex justify-between items-start">
               <div>
-                <span class="text-[10px] text-gray-400 font-bold uppercase block">กาแฟคั่วที่ตรวจพบ</span>
+                <span class="text-[10px] text-gray-400 font-bold uppercase block">กาแฟคั่วในถังใหม่ (Fresh Roast)</span>
                 <h4 id="pack-info-name" class="text-sm font-black text-black">กรุณาสแกน QR Code จากใบนำงาน A4</h4>
               </div>
               <span class="font-mono font-black text-black bg-white px-2 py-0.5 rounded border border-gray-200" id="pack-info-location">-</span>
             </div>
             <div class="grid grid-cols-4 gap-2 pt-1 border-t border-gray-200 text-center">
-              <div><span class="text-gray-400 block">คงเหลือพร้อมแพ็ค</span><b id="pack-info-weight" class="text-black font-bold">0.00 kg</b></div>
-              <div><span class="text-gray-400 block">รหัส Lot ต้นทาง</span><b id="pack-info-lot" class="text-black font-mono font-bold">-</b></div>
+              <div><span class="text-gray-400 block">นน. ถังคั่วใหม่</span><b id="pack-info-fresh-weight" class="text-black font-bold">0.00 kg</b></div>
+              <div><span class="text-gray-400 block">รหัส Lot</span><b id="pack-info-lot" class="text-black font-mono font-bold">-</b></div>
               <div><span class="text-gray-400 block">ระดับคั่ว</span><b id="pack-info-roast-level" class="text-black font-bold">-</b></div>
-              <div><span class="text-gray-400 block">รหัส WO คั่ว</span><b id="pack-info-wo" class="text-black font-mono">-</b></div>
+              <div><span class="text-gray-400 block">รหัส WO</span><b id="pack-info-wo" class="text-black font-mono">-</b></div>
             </div>
           </div>
 
-          <!-- 2. กำหนดขนาดถุง & การบด & นับจำนวนถุงจริง -->
+          <!-- 🌟 2. กล่องตรวจจับและถามดึงเศษเก่า (Intelligent Remainder Card) 🌟 -->
+          <div id="remainder-check-card" class="hidden p-4 rounded-xl border-2 border-black bg-gray-50 space-y-2 text-xs">
+            <div class="flex justify-between items-center">
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-black"></span>
+                <span class="font-black text-black text-xs">ตรวจพบเศษกาแฟตัวเดียวกันรออยู่ที่ชั้นวาง RT-REM!</span>
+              </div>
+              <span class="text-[10px] font-mono font-bold bg-white px-2 py-0.5 rounded border border-gray-300" id="rem-lot-badge">Lot: -</span>
+            </div>
+            <p class="text-[11px] text-gray-600">มีเศษคงค้างอยู่จำนวน <b class="text-black font-black" id="rem-weight-val">0.00 kg</b> คุณต้องการดึงเศษนี้มารวมแพ็คในใบงานนี้หรือไม่?</p>
+            
+            <div class="flex gap-2 pt-1">
+              <button type="button" id="btn-merge-rem" onclick="toggleMergeRemainder(true)" class="flex-1 bg-black text-white hover:bg-gray-800 font-bold py-2 rounded-lg text-xs transition cursor-pointer">
+                ✔ ดึงเศษมารวมในรอบนี้
+              </button>
+              <button type="button" id="btn-skip-rem" onclick="toggleMergeRemainder(false)" class="flex-1 bg-white border border-gray-300 text-gray-600 hover:text-black font-bold py-2 rounded-lg text-xs transition cursor-pointer">
+                ✕ ข้าม ไม่รวม (เก็บไว้ที่ RT-REM)
+              </button>
+            </div>
+            <p id="rem-status-hint" class="text-[10px] text-gray-400 italic text-right">*สถานะ: ยังไม่ได้รวมเศษ</p>
+          </div>
+
+          <!-- 3. กำหนดขนาดถุง & การบด & นับจำนวนถุงจริง -->
           <div class="border-t border-gray-100 pt-3 space-y-3">
-            <span class="text-xs font-black text-black uppercase block">2. รายละเอียดบรรจุภัณฑ์และการนับจำนวนถุง</span>
+            <div class="flex justify-between items-center">
+              <span class="text-xs font-black text-black uppercase block">3. กำหนดขนาดและนับจำนวนถุง</span>
+              <span class="text-xs font-mono font-black text-black bg-gray-100 px-2 py-0.5 rounded">ยอดพร้อมแพ็คสุทธิ: <span id="math-total-available">0.00</span> kg</span>
+            </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
-              <!-- เลือกขนาดถุง -->
               <div>
                 <label class="block font-bold text-gray-700 mb-1">ขนาดบรรจุภัณฑ์ *</label>
                 <select id="select_bag_size" onchange="calculatePackingMath()" class="w-full px-3 py-2 border border-gray-300 rounded-lg font-bold bg-white text-black focus:outline-none">
@@ -163,7 +187,6 @@
                 </select>
               </div>
 
-              <!-- เลือกระดับการบด -->
               <div>
                 <label class="block font-bold text-gray-700 mb-1">ประเภทการบด *</label>
                 <select id="select_grind_type" class="w-full px-3 py-2 border border-gray-300 rounded-lg font-bold bg-white text-black focus:outline-none">
@@ -174,7 +197,6 @@
                 </select>
               </div>
 
-              <!-- กรอกจำนวนถุงที่นับได้จริง -->
               <div>
                 <label class="block font-bold text-black mb-1">จำนวนถุงที่นับได้จริง (ถุง) *</label>
                 <input type="number" id="input_actual_bags" oninput="calculatePackingMath()" min="1" placeholder="เช่น 49" class="w-full px-3 py-2 border-2 border-black rounded-lg font-black text-black text-base focus:outline-none">
@@ -188,39 +210,53 @@
                 <b id="math-used-weight" class="text-sm font-black text-black">0.00 kg</b>
               </div>
               <div>
-                <span class="text-gray-400 block font-medium">เศษคงเหลือในถัง</span>
+                <span class="text-gray-400 block font-medium">เศษคงเหลือรอบนี้</span>
                 <b id="math-remainder-weight" class="text-sm font-black text-black">0.00 kg</b>
               </div>
               <div>
-                <span class="text-gray-400 block font-medium">ความจุถังเดิม</span>
-                <b id="math-initial-weight" class="text-sm font-bold text-gray-600">0.00 kg</b>
+                <span class="text-gray-400 block font-medium">สถานะถังใหม่</span>
+                <b class="text-sm font-bold text-gray-800">เคลียร์ว่าง (Empty)</b>
               </div>
             </div>
           </div>
 
-          <!-- 3. พิกัดจัดส่งปลายทาง -->
-          <div class="border-t border-gray-100 pt-3 space-y-3">
-            <span class="text-xs font-black text-black uppercase block">3. พิกัดนำส่งสินค้า</span>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-              <div>
-                <label class="block font-bold text-gray-700 mb-1">พิกัดจัดเก็บสินค้าแพ็คเสร็จ *</label>
-                <select id="select_pack_dest" class="w-full px-3 py-2 border border-gray-300 rounded-lg font-bold bg-white text-black focus:outline-none">
-                  <option value="RT-OUT" selected>RT-OUT (ลานเตรียมจัดส่งสินค้า)</option>
-                  <option value="RT-PACK">RT-PACK (โซนพักถุงกาแฟคลัง RT)</option>
-                  <option value="BJI01A">BJI01A (ขึ้นแร็คคลังใหญ่ BJ)</option>
-                </select>
+          <!-- 🌟 4. ตัวเลือกจัดการเศษก้นถังรอบนี้ (กรณีเป็นล็อตสุดท้าย) 🌟 -->
+          <div id="remainder-action-box" class="border-t border-gray-100 pt-3 space-y-2 text-xs">
+            <label class="block font-black text-black">4. การจัดการเศษคงเหลือรอบนี้ (<span id="rem-action-weight-label">0.00 kg</span>) *</label>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <select id="select_remainder_action" class="w-full px-3 py-2 border border-gray-300 rounded-lg font-bold bg-white text-black focus:outline-none">
+                <option value="to_rem" selected>1. เก็บเป็นเศษรอสมทบ ➔ ส่งไปชั้นวาง RT-REM</option>
+                <option value="to_shelf">2. ล็อตสุดท้าย: ย้ายขึ้น Shelf เก็บระยะยาว ➔ RT-PACK-SHELF</option>
+                <option value="sample">3. ล็อตสุดท้าย: ตัดเป็นเมล็ดชิม / กาแฟพนักงาน ➔ เคลียร์ 0 kg</option>
+                <option value="waste">4. ล็อตสุดท้าย: ตัดทิ้งเป็น Waste / Defect ➔ เคลียร์ 0 kg</option>
+              </select>
+              <div class="flex items-center text-[10px] text-gray-400">
+                *ถ้ายังมีคั่วต่อให้เลือกข้อ 1, ถ้าไม่มีคั่วต่อแล้วให้เลือกข้อ 2, 3 หรือ 4
               </div>
+            </div>
+          </div>
 
-              <div class="flex items-end">
-                <p class="text-[11px] text-gray-400">เมื่อบันทึกเสร็จ นำกระดาษ A4 ใบเดิมวางบนกล่อง/ลัง แล้วส่งมอบไปยังลานจัดส่งได้ทันที</p>
+          <!-- 5. พิกัดนำส่งถุงสินค้าสำเร็จรูป -->
+          <div class="border-t border-gray-100 pt-3 space-y-2 text-xs">
+            <label class="block font-bold text-black">5. พิกัดจัดเก็บถุงสินค้าสำเร็จรูป *</label>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <select id="select_pack_dest" class="w-full px-3 py-2 border border-gray-300 rounded-lg font-bold bg-white text-black focus:outline-none">
+                <option value="RT-PACK-01" selected>RT-PACK-01 (ชั้นวางพักถุงกาแฟ ช่อง 01)</option>
+                <option value="RT-PACK-02">RT-PACK-02 (ชั้นวางพักถุงกาแฟ ช่อง 02)</option>
+                <option value="RT-PACK-03">RT-PACK-03 (ชั้นวางพักถุงกาแฟ ช่อง 03)</option>
+                <option value="RT-PACK-04">RT-PACK-04 (ชั้นวางพักถุงกาแฟ ช่อง 04)</option>
+                <option value="RT-PACK-05">RT-PACK-05 (ชั้นวางพักถุงกาแฟ ช่อง 05)</option>
+                <option value="RTA01A">RTA01A (แร็ค RT ชั้น 1 ช่อง A)</option>
+              </select>
+              <div class="flex items-center text-[10px] text-gray-400">
+                นำกระดาษ A4 ใบเดิมวางบนลัง แล้วยกไปวางที่ช่องชั้นวางนี้
               </div>
             </div>
           </div>
 
           <!-- ปุ่มกดยืนยันจบงานบรรจุ -->
           <button type="button" onclick="submitPackingJob()" id="btn-submit-pack" class="w-full bg-black hover:bg-gray-800 text-white font-bold py-4 rounded-lg text-sm transition active:scale-95 cursor-pointer">
-            บันทึกจบงานบรรจุสินค้าและย้ายเข้า RT-OUT (Done)
+            บันทึกจบงานบรรจุสินค้า (Done)
           </button>
         </div>
 
@@ -240,7 +276,7 @@
                   <th class="py-2 px-3 text-center font-bold">ประเภท</th>
                   <th class="py-2 px-3 text-right font-bold">จำนวนถุง</th>
                   <th class="py-2 px-3 text-right font-bold">นน. รวม</th>
-                  <th class="py-2 px-3 text-center font-bold">พิกัดจัดเก็บ</th>
+                  <th class="py-2 px-3 text-center font-bold">พิกัดชั้นวาง</th>
                   <th class="py-2 px-3 text-center font-bold">ผู้บรรจุ</th>
                 </tr>
               </thead>
@@ -290,8 +326,10 @@
 
   <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbxQywqP4da0BYdt_dHQtQl-kYlvGxmdJWNA59oqnZ_AM7SRyEESbMd73UD3Xx6VffQ/exec";
-    let roastedBeansList = [];
-    let selectedRoastedBean = null;
+    let inventoryData = [];
+    let selectedFreshRoast = null;
+    let foundRemainderItem = null;
+    let isRemainderMerged = false;
     let dailyPackRecords = [];
 
     let html5QrScanner = null;
@@ -315,57 +353,107 @@
         const res = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'get_inventory' }) });
         const result = await res.json();
         if(result.success && result.data) {
-          roastedBeansList = result.data.filter(i => 
-            (i.location && i.location.startsWith('RT-REST') || i.category === 'Finished Goods' || (i.barcode_id && i.barcode_id.startsWith('ROAST-'))) && 
-            i.status === 'Active' && 
-            parseFloat(i.weight_current) > 0
-          );
+          inventoryData = result.data;
         }
       } catch(e) {}
     }
 
+    // 🌟 สแกน QR บนใบนำงาน A4 🌟
     function onPackScanInputChanged() {
       const val = document.getElementById('pack_scan_input').value.trim();
       if(!val) return;
 
-      const found = roastedBeansList.find(b => 
-        b.barcode_id === val || 
-        b.pallet_id === val || 
-        b.wo_number === val || 
-        `ROAST-${b.wo_number}` === val
+      // 1. ค้นหากาแฟคั่วใหม่ในถัง RT-REST
+      selectedFreshRoast = inventoryData.find(i => 
+        (i.wo_number === val || i.barcode_id === val || i.barcode_id === `ROAST-${val}`) &&
+        (i.location && (i.location.startsWith('RT-REST') || i.location === 'RT')) &&
+        i.status === 'Active' &&
+        parseFloat(i.weight_current) > 0
       );
 
-      if (found) {
-        setRoastedBean(found);
+      if (selectedFreshRoast) {
+        setFreshRoastInfo(selectedFreshRoast);
+        checkMatchingRemainder(selectedFreshRoast);
       } else {
-        document.getElementById('pack-info-name').innerText = "ไม่พบข้อมูลกาแฟคั่วรหัสนี้ในคลัง RT-REST";
+        document.getElementById('pack-info-name').innerText = "ไม่พบกาแฟคั่วใหม่ของ WO นี้ในถัง RT-REST";
         document.getElementById('pack-info-location').innerText = "-";
-        document.getElementById('pack-info-weight').innerText = "0.00 kg";
+        document.getElementById('pack-info-fresh-weight').innerText = "0.00 kg";
         document.getElementById('pack-info-lot').innerText = "-";
         document.getElementById('pack-info-roast-level').innerText = "-";
         document.getElementById('pack-info-wo').innerText = "-";
-        selectedRoastedBean = null;
+        document.getElementById('remainder-check-card').classList.add('hidden');
+        selectedFreshRoast = null;
+        foundRemainderItem = null;
+        isRemainderMerged = false;
+        calculatePackingMath();
       }
     }
 
-    function setRoastedBean(b) {
-      selectedRoastedBean = b;
-      document.getElementById('pack_scan_input').value = b.barcode_id || b.pallet_id;
-      document.getElementById('pack-info-name').innerText = b.item_name || 'กาแฟคั่วสุก';
-      document.getElementById('pack-info-location').innerText = b.location || 'RT-REST-01';
-      document.getElementById('pack-info-weight').innerText = `${parseFloat(b.weight_current).toFixed(2)} kg`;
-      document.getElementById('pack-info-lot').innerText = b.lot_code || '-';
-      document.getElementById('pack-info-roast-level').innerText = b.item_name.includes('(') ? b.item_name.split('(')[1].replace(')', '') : 'Medium';
-      document.getElementById('pack-info-wo').innerText = b.wo_number || b.barcode_id;
-
-      document.getElementById('math-initial-weight').innerText = `${parseFloat(b.weight_current).toFixed(2)} kg`;
-      calculatePackingMath();
-      document.getElementById('input_actual_bags').focus();
+    function setFreshRoastInfo(item) {
+      document.getElementById('pack-info-name').innerText = item.item_name || 'กาแฟคั่วสุก';
+      document.getElementById('pack-info-location').innerText = item.location || 'RT-REST-01';
+      document.getElementById('pack-info-fresh-weight').innerText = `${parseFloat(item.weight_current).toFixed(2)} kg`;
+      document.getElementById('pack-info-lot').innerText = item.lot_code || '-';
+      document.getElementById('pack-info-roast-level').innerText = item.item_name.includes('(') ? item.item_name.split('(')[1].replace(')', '') : 'Medium';
+      document.getElementById('pack-info-wo').innerText = item.wo_number || item.barcode_id;
     }
 
+    // 🌟 ตรวจจับเศษเก่าที่พิกัด RT-REM อัตโนมัติ (เช็คตรงชื่อสาร + ระดับคั่ว + Lot) 🌟
+    function checkMatchingRemainder(freshItem) {
+      const cleanBeanName = freshItem.item_name.split('(')[0].trim();
+      const lotCode = freshItem.lot_code;
+
+      foundRemainderItem = inventoryData.find(i => 
+        i.location === 'RT-REM' &&
+        i.lot_code === lotCode &&
+        i.item_name.includes(cleanBeanName) &&
+        i.status === 'Active' &&
+        parseFloat(i.weight_current) > 0
+      );
+
+      const remCard = document.getElementById('remainder-check-card');
+      if (foundRemainderItem) {
+        document.getElementById('rem-lot-badge').innerText = `Lot: ${lotCode}`;
+        document.getElementById('rem-weight-val').innerText = `${parseFloat(foundRemainderItem.weight_current).toFixed(2)} kg`;
+        remCard.classList.remove('hidden');
+        toggleMergeRemainder(false); // เริ่มต้นตั้งเป็นยังไม่รวม
+      } else {
+        remCard.classList.add('hidden');
+        foundRemainderItem = null;
+        isRemainderMerged = false;
+        calculatePackingMath();
+      }
+    }
+
+    // กดเลือก "ดึงเศษมารวม" หรือ "ข้ามไม่รวม"
+    function toggleMergeRemainder(merge) {
+      isRemainderMerged = merge;
+      const btnMerge = document.getElementById('btn-merge-rem');
+      const btnSkip = document.getElementById('btn-skip-rem');
+      const hint = document.getElementById('rem-status-hint');
+
+      if (merge) {
+        btnMerge.className = "flex-1 bg-black text-white font-black py-2 rounded-lg text-xs transition cursor-pointer border-2 border-black";
+        btnSkip.className = "flex-1 bg-gray-100 text-gray-400 font-bold py-2 rounded-lg text-xs transition cursor-pointer border border-gray-200";
+        hint.innerText = "*สถานะ: ดึงเศษมารวมแล้ว (+ " + parseFloat(foundRemainderItem.weight_current).toFixed(2) + " kg)";
+      } else {
+        btnMerge.className = "flex-1 bg-gray-100 text-gray-500 font-bold py-2 rounded-lg text-xs transition cursor-pointer border border-gray-200";
+        btnSkip.className = "flex-1 bg-white text-black font-black py-2 rounded-lg text-xs transition cursor-pointer border-2 border-black";
+        hint.innerText = "*สถานะ: ข้าม ไม่รวมเศษ (เศษ 0.30 kg จะนอนรอที่ RT-REM ต่อไป)";
+      }
+
+      calculatePackingMath();
+    }
+
+    // คำนวณยอดน้ำหนักสุทธิและเศษก้นถัง
     function calculatePackingMath() {
-      if(!selectedRoastedBean) return;
-      const initialWeight = parseFloat(selectedRoastedBean.weight_current) || 0;
+      if(!selectedFreshRoast) return;
+      const freshWeight = parseFloat(selectedFreshRoast.weight_current) || 0;
+      const remWeight = (isRemainderMerged && foundRemainderItem) ? (parseFloat(foundRemainderItem.weight_current) || 0) : 0;
+      const totalAvailable = freshWeight + remWeight;
+
+      document.getElementById('math-total-available').innerText = totalAvailable.toFixed(2);
+
       const sizeStr = document.getElementById('select_bag_size').value;
       const bags = parseInt(document.getElementById('input_actual_bags').value) || 0;
 
@@ -376,24 +464,27 @@
       else if(sizeStr === '1000g') sizeKg = 1.0;
 
       const usedWeight = bags * sizeKg;
-      const remainder = initialWeight - usedWeight;
+      const remainder = totalAvailable - usedWeight;
 
       document.getElementById('math-used-weight').innerText = `${usedWeight.toFixed(2)} kg`;
       document.getElementById('math-remainder-weight').innerText = `${(remainder > 0 ? remainder : 0).toFixed(2)} kg`;
+      document.getElementById('rem-action-weight-label').innerText = `${(remainder > 0 ? remainder : 0).toFixed(2)} kg`;
     }
 
+    // 🌟 กดยืนยันบันทึกจบงานบรรจุสินค้า (Done) 🌟
     async function submitPackingJob() {
       const scanVal = document.getElementById('pack_scan_input').value.trim();
       const bags = parseInt(document.getElementById('input_actual_bags').value) || 0;
       const bagSize = document.getElementById('select_bag_size').value;
       const grindType = document.getElementById('select_grind_type').value;
       const destLocation = document.getElementById('select_pack_dest').value;
+      const remainderAction = document.getElementById('select_remainder_action').value;
 
-      if(!selectedRoastedBean && scanVal) {
+      if(!selectedFreshRoast && scanVal) {
         onPackScanInputChanged();
       }
 
-      if(!selectedRoastedBean) return alert("กรุณายิงสแกน QR บนใบนำงาน A4 หรือถังกาแฟคั่วก่อน");
+      if(!selectedFreshRoast) return alert("กรุณายิงสแกน QR บนใบนำงาน A4 ก่อน");
       if(bags <= 0) return alert("กรุณาระบุจำนวนถุงที่นับได้จริง");
 
       let sizeKg = 0.5;
@@ -402,25 +493,29 @@
       else if(bagSize === '500g') sizeKg = 0.5;
       else if(bagSize === '1000g') sizeKg = 1.0;
 
+      const freshWeight = parseFloat(selectedFreshRoast.weight_current) || 0;
+      const remWeight = (isRemainderMerged && foundRemainderItem) ? (parseFloat(foundRemainderItem.weight_current) || 0) : 0;
+      const totalAvailable = freshWeight + remWeight;
       const totalPackedWeight = bags * sizeKg;
-      const initialWeight = parseFloat(selectedRoastedBean.weight_current) || 0;
 
-      if(totalPackedWeight > initialWeight) {
-        return alert(`กาแฟคั่วในถังมีไม่พอ! (มีอยู่ ${initialWeight} kg แต่จะแพ็ค ${totalPackedWeight} kg)`);
+      if(totalPackedWeight > totalAvailable) {
+        return alert(`กาแฟที่มีไม่พอแพ็ค! (มีอยู่ ${totalAvailable.toFixed(2)} kg แต่จะแพ็ค ${totalPackedWeight.toFixed(2)} kg)`);
       }
 
-      const remainderWeight = (initialWeight - totalPackedWeight).toFixed(2);
+      const remainderWeight = (totalAvailable - totalPackedWeight).toFixed(2);
       const roastLevel = document.getElementById('pack-info-roast-level').innerText;
-      const lotCode = selectedRoastedBean.lot_code || '-';
-      const woNum = selectedRoastedBean.wo_number || selectedRoastedBean.barcode_id;
+      const lotCode = selectedFreshRoast.lot_code || '-';
+      const woNum = selectedFreshRoast.wo_number || selectedFreshRoast.barcode_id;
 
-      const confirmMsg = `ยืนยันบันทึกยอดบรรจุถุง [${selectedRoastedBean.item_name}]?\n\n` +
-        `- รหัส Lot ต้นทาง: ${lotCode}\n` +
-        `- ขนาดถุง: ${bagSize} | การบด: ${grindType}\n` +
+      const confirmMsg = `ยืนยันบันทึกการบรรจุ [${selectedFreshRoast.item_name}]?\n\n` +
+        `- รหัส Lot: ${lotCode}\n` +
+        `- ขนาดถุง: ${bagSize} | ${grindType}\n` +
         `- จำนวนถุงที่ได้: ${bags} ถุง (รวม ${totalPackedWeight.toFixed(2)} kg)\n` +
-        `- เศษกาแฟคงเหลือในถัง: ${remainderWeight} kg\n` +
-        `- ย้ายสต๊อกถุงสำเร็จรูปเข้าพิกัด: [${destLocation}]\n\n` +
-        `*พร้อมส่งมอบสินค้าและใบ A4 ไปยังแผนกจัดส่ง*`;
+        `- ดึงเศษเก่ามารวม: ${isRemainderMerged ? `ดึงมา ${remWeight.toFixed(2)} kg` : 'ไม่รวม'}\n` +
+        `- เศษเหลือก้นถังรอบนี้: ${remainderWeight} kg\n` +
+        `- การจัดการเศษรอบนี้: ${remainderAction}\n` +
+        `- ย้ายถุงสินค้าเข้าพิกัด: [${destLocation}]\n\n` +
+        `*พร้อมส่งมอบลังสินค้าและใบ A4 ไปยังแผนกจัดส่ง*`;
 
       if(!confirm(confirmMsg)) return;
 
@@ -429,10 +524,10 @@
       btn.disabled = true;
 
       const payload = {
-        action: 'issue_packing_job',
+        action: 'issue_packing_job_advanced',
         wo_number: woNum,
-        roasted_barcode: selectedRoastedBean.barcode_id || selectedRoastedBean.pallet_id,
-        bean_name: selectedRoastedBean.item_name.split('(')[0].trim(),
+        fresh_roasted_barcode: selectedFreshRoast.barcode_id || selectedFreshRoast.pallet_id,
+        bean_name: selectedFreshRoast.item_name.split('(')[0].trim(),
         roast_level: roastLevel,
         lot_code: lotCode,
         bag_size: bagSize,
@@ -440,6 +535,9 @@
         bags_count: bags,
         total_packed_weight: totalPackedWeight,
         remaining_weight: parseFloat(remainderWeight),
+        is_remainder_merged: isRemainderMerged,
+        merged_remainder_barcode: (isRemainderMerged && foundRemainderItem) ? foundRemainderItem.barcode_id : null,
+        remainder_action: remainderAction,
         destination_location: destLocation,
         operator: localStorage.getItem('name') || "Packer"
       };
@@ -452,27 +550,33 @@
         dailyPackRecords.push({ bags: bags, used: totalPackedWeight, remainder: parseFloat(remainderWeight) });
         updateDailyPackSummary();
 
-        addPackingHistoryRow(woNum, selectedRoastedBean.item_name, bagSize, grindType, bags, totalPackedWeight, destLocation);
+        addPackingHistoryRow(woNum, selectedFreshRoast.item_name, bagSize, grindType, bags, totalPackedWeight, destLocation);
 
+        // ล้างฟอร์ม
         document.getElementById('pack_scan_input').value = '';
         document.getElementById('input_actual_bags').value = '';
         document.getElementById('math-used-weight').innerText = '0.00 kg';
         document.getElementById('math-remainder-weight').innerText = '0.00 kg';
-        document.getElementById('math-initial-weight').innerText = '0.00 kg';
+        document.getElementById('math-total-available').innerText = '0.00';
+        document.getElementById('rem-action-weight-label').innerText = '0.00 kg';
 
         document.getElementById('pack-info-name').innerText = "กรุณาสแกน QR Code จากใบนำงาน A4";
         document.getElementById('pack-info-location').innerText = "-";
-        document.getElementById('pack-info-weight').innerText = "0.00 kg";
+        document.getElementById('pack-info-fresh-weight').innerText = "0.00 kg";
         document.getElementById('pack-info-lot').innerText = "-";
         document.getElementById('pack-info-roast-level').innerText = "-";
         document.getElementById('pack-info-wo').innerText = "-";
-        selectedRoastedBean = null;
+        document.getElementById('remainder-check-card').classList.add('hidden');
+
+        selectedFreshRoast = null;
+        foundRemainderItem = null;
+        isRemainderMerged = false;
 
         loadPackingData();
       } catch(e) {
         alert("เชื่อมต่อไม่สำเร็จ");
       } finally {
-        btn.innerText = "บันทึกจบงานบรรจุสินค้าและย้ายเข้า RT-OUT (Done)";
+        btn.innerText = "บันทึกจบงานบรรจุสินค้า (Done)";
         btn.disabled = false;
       }
     }
@@ -507,7 +611,6 @@
       tbody.prepend(tr);
     }
 
-    // 📷 Camera Scanner
     function startScanner(targetInputId) {
       activeTargetInputId = targetInputId;
       document.getElementById('camera-modal').style.display = 'flex';
