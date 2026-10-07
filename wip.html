@@ -106,7 +106,7 @@
         </div>
 
         <!-- ========================================================================= -->
-        <!-- 🌾 กล่องที่ 1: เตรียมสาร & สรุปผลผลิตร่อนประจำวัน (Sifting) 🌾 -->
+        <!-- 🌾 กล่องที่ 1: เตรียมสาร & ตัดเบิกบางกระสอบ (Sifting) 🌾 -->
         <!-- ========================================================================= -->
         <div id="zone-sift" class="hidden space-y-6 no-print">
 
@@ -141,7 +141,7 @@
             <div class="border-b border-gray-100 pb-3 flex justify-between items-center">
               <div>
                 <h2 class="text-base font-bold text-black">คัดกรองสารและบันทึกสิ่งเจือปน</h2>
-                <p class="text-xs text-gray-400">แบ่งหน่วยผลิตมาตรฐาน 30 kg และปิดยอดพาเลทต้นทาง</p>
+                <p class="text-xs text-gray-400">ระบุจำนวนกระสอบและน้ำหนักที่เบิกมาร่อนจริง</p>
               </div>
               <span class="text-xs font-bold bg-gray-100 text-black px-2.5 py-1 rounded">ย้ายเข้าคลัง RT</span>
             </div>
@@ -171,23 +171,34 @@
               </div>
               <div class="grid grid-cols-3 gap-2 pt-1 border-t border-gray-200 text-center">
                 <div><span class="text-gray-400 block">น้ำหนักเดิม</span><b id="info-raw-weight" class="text-black font-bold">0.00 kg</b></div>
-                <div><span class="text-gray-400 block">จำนวนกระสอบ</span><b id="info-raw-sacks" class="text-black font-bold">0</b></div>
+                <div><span class="text-gray-400 block">จำนวนกระสอบเดิม</span><b id="info-raw-sacks" class="text-black font-bold">0 กระสอบ</b></div>
                 <div><span class="text-gray-400 block">รหัส Lot</span><b id="info-lot-code" class="text-black font-mono font-black">-</b></div>
               </div>
             </div>
 
-            <!-- ผลลัพธ์การคัดกรอง -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
-              <div class="space-y-1">
-                <label class="block text-xs font-bold text-black">สารพร้อมคั่วทั้งหมด (kg) *</label>
-                <input type="number" id="sift_clean_weight" oninput="calculateSiftingMath()" step="0.01" placeholder="เช่น 482.00" class="w-full px-3 py-2.5 border-2 border-black rounded-lg font-black text-black text-base focus:outline-none">
+            <!-- 🌟 ระบุจำนวนกระสอบและน้ำหนักที่เบิกมาร่อนจริง 🌟 -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+              <div>
+                <label class="block text-xs font-bold text-black mb-1">จำนวนกระสอบที่เบิกมาร่อน (กระสอบ) *</label>
+                <input type="number" id="sift_picked_sacks" oninput="calculateSiftingMath()" placeholder="เช่น 2" class="w-full px-3 py-2.5 border-2 border-black rounded-lg font-black text-black text-base focus:outline-none">
+                <span class="text-[10px] text-gray-400 mt-0.5 block">กระสอบจะถูกหักออกจากแร็ค BJ ตามจำนวนนี้</span>
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-black mb-1">สารพร้อมคั่วที่ได้จริง (kg) *</label>
+                <input type="number" id="sift_clean_weight" oninput="calculateSiftingMath()" step="0.01" placeholder="เช่น 98.50" class="w-full px-3 py-2.5 border-2 border-black rounded-lg font-black text-black text-base focus:outline-none">
                 <span id="calc-sacks-hint" class="text-[11px] text-gray-500 font-medium block mt-0.5">แบ่งหน่วยคั่ว 30 kg ได้: 0 ถุง</span>
               </div>
+            </div>
 
-              <div class="space-y-1">
-                <label class="block text-xs font-bold text-black">สิ่งเจือปนคัดทิ้ง (kg) *</label>
-                <input type="number" id="sift_waste_weight" oninput="calculateSiftingMath()" step="0.01" placeholder="เช่น 12.00" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg font-black text-black text-base focus:border-black focus:outline-none">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-bold text-black mb-1">สิ่งเจือปนคัดทิ้ง (kg) *</label>
+                <input type="number" id="sift_waste_weight" oninput="calculateSiftingMath()" step="0.01" value="0.00" placeholder="เช่น 1.20" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg font-black text-black text-base focus:border-black focus:outline-none">
                 <span class="text-[11px] text-gray-400 block mt-0.5">น้ำหนักหินและเมล็ดเสียที่ชั่งทิ้ง</span>
+              </div>
+              <div class="p-3 bg-gray-50 rounded-xl border border-gray-200 flex flex-col justify-center text-center text-xs">
+                <span class="text-gray-400 block font-medium">จะเหลือกองอยู่บนแร็ค BJ:</span>
+                <b id="math-bj-remaining-label" class="text-sm font-black text-black">-</b>
               </div>
             </div>
 
@@ -220,13 +231,14 @@
                     <th class="py-2 px-3 text-left font-bold">สารกาแฟ</th>
                     <th class="py-2 px-3 text-center font-bold">รหัส Lot</th>
                     <th class="py-2 px-3 text-center font-bold">พาเลทต้นทาง</th>
-                    <th class="py-2 px-3 text-right font-bold">สารพร้อมคั่ว</th>
+                    <th class="py-2 px-3 text-right font-bold">เบิกมา (กระสอบ)</th>
+                    <th class="py-2 px-3 text-right font-bold">สารสะอาดที่ได้</th>
                     <th class="py-2 px-3 text-right font-bold">สิ่งเจือปน</th>
                     <th class="py-2 px-3 text-center font-bold">ผู้บันทึก</th>
                   </tr>
                 </thead>
                 <tbody id="sift-history-tbody" class="text-black divide-y divide-gray-100">
-                  <tr><td colspan="6" class="py-6 text-center text-gray-400">ยังไม่มีประวัติการเตรียมสาร</td></tr>
+                  <tr><td colspan="7" class="py-6 text-center text-gray-400">ยังไม่มีประวัติการเตรียมสาร</td></tr>
                 </tbody>
               </table>
             </div>
@@ -235,7 +247,7 @@
         </div>
 
         <!-- ========================================================================= -->
-        <!-- ☕ กล่องที่ 2: คั่วกาแฟหน้าเตา (🌟 4 ช่องน้ำหนัก + ผูกพาเลท Defect สะสมยอด 🌟) -->
+        <!-- ☕ กล่องที่ 2: คั่วกาแฟหน้าเตา (🌟 เบิกตรงแร็ค BJ + คุมสารเปิดค้าง 1 กระสอบ 🌟) -->
         <!-- ========================================================================= -->
         <div id="zone-roast" class="space-y-6">
 
@@ -317,7 +329,7 @@
             <div class="border-b border-gray-100 pb-3 flex justify-between items-center">
               <div>
                 <h2 class="text-base font-bold text-black">บันทึกผลการคั่ว & QC หน้าเตา</h2>
-                <p class="text-xs text-gray-400">สแกน QR บนใบ A4 กรอกพารามิเตอร์ความร้อน และผลตรวจสีกาแฟคั่ว</p>
+                <p class="text-xs text-gray-400">สแกน QR บนใบ A4 และสแกนสารพร้อมคั่ว (รองรับทั้งถัง RT และแร็ค BJ)</p>
               </div>
               <span class="text-xs font-bold bg-gray-100 text-black px-2.5 py-1 rounded">เตาคั่วหลัก</span>
             </div>
@@ -334,14 +346,14 @@
                 </div>
               </div>
 
-              <!-- 2. บังคับสแกนถังสารพร้อมคั่วจากคลัง RT -->
+              <!-- 2. สแกนสารพร้อมคั่ว (ถัง RT หรือ แร็ค BJ) -->
               <div>
                 <div class="flex justify-between items-center mb-1">
-                  <label class="block text-xs font-bold text-black">2. สแกนสารพร้อมคั่ว (ถังจริงหน้าเตา) *</label>
-                  <span class="text-[10px] text-gray-500 font-bold">ยิง QR ป้ายถังสาร</span>
+                  <label class="block text-xs font-bold text-black">2. สแกนสารที่จะคั่ว (ถัง RT หรือ พาเลท BJ) *</label>
+                  <span class="text-[10px] text-gray-500 font-bold">ยิง QR ป้ายถัง/พาเลท</span>
                 </div>
                 <div class="flex gap-2">
-                  <input type="text" id="roast_barcode_input" oninput="onRoastBarcodeInputChanged()" placeholder="ยิงสแกน QR ถังสารสะอาด เช่น CLEAN-..." class="flex-1 px-3 py-2.5 border-2 border-black rounded-lg font-mono font-black text-black uppercase text-xs focus:outline-none">
+                  <input type="text" id="roast_barcode_input" oninput="onRoastBarcodeInputChanged()" placeholder="ยิง QR ถัง RT หรือ พาเลท PAL-..." class="flex-1 px-3 py-2.5 border-2 border-black rounded-lg font-mono font-black text-black uppercase text-xs focus:outline-none">
                   <button type="button" onclick="startScanner('roast_barcode_input')" class="bg-black hover:bg-gray-800 text-white px-3.5 rounded-lg font-bold text-xs transition cursor-pointer">
                     เปิดกล้อง
                   </button>
@@ -349,20 +361,52 @@
               </div>
             </div>
 
-            <!-- กล่องข้อมูลสารที่เลือกคั่ว -->
+            <!-- กล่องข้อมูลสารที่ตรวจพบ -->
             <div id="roast-bean-info" class="p-4 bg-gray-50 rounded-xl border border-gray-200 space-y-2 text-xs">
               <div class="flex justify-between items-start">
                 <div>
                   <span class="text-[10px] text-gray-400 font-bold uppercase block">สารที่ตรวจพบจากบาร์โค้ด</span>
-                  <h4 id="roast-info-name" class="text-sm font-black text-black">กรุณาสแกน QR Code จากถังสารสะอาด</h4>
+                  <h4 id="roast-info-name" class="text-sm font-black text-black">กรุณาสแกน QR Code สารกาแฟ</h4>
                 </div>
                 <span class="font-mono font-black text-black bg-white px-2 py-0.5 rounded border border-gray-200" id="roast-info-barcode">-</span>
               </div>
               <div class="grid grid-cols-4 gap-2 pt-1 border-t border-gray-200 text-center">
-                <div><span class="text-gray-400 block">สต๊อกในคลัง RT</span><b id="roast-info-stock" class="text-black font-bold">0.00 kg</b></div>
+                <div><span class="text-gray-400 block">ตำแหน่งปัจจุบัน</span><b id="roast-info-location" class="text-black font-bold">-</b></div>
+                <div><span class="text-gray-400 block">สต๊อกคงเหลือ</span><b id="roast-info-stock" class="text-black font-bold">0.00 kg</b></div>
+                <div><span class="text-gray-400 block">จำนวนกระสอบ</span><b id="roast-info-sacks" class="text-black font-bold">0 กระสอบ</b></div>
                 <div><span class="text-gray-400 block">รหัส Lot</span><b id="roast-info-lot" class="text-black font-mono font-bold">-</b></div>
-                <div><span class="text-gray-400 block">ความชื้น</span><b id="roast-info-moisture" class="text-black font-bold">-</b></div>
-                <div><span class="text-gray-400 block">Density</span><b id="roast-info-density" class="text-black font-bold">-</b></div>
+              </div>
+            </div>
+
+            <!-- 🌟 ส่วนเบิกกระสอบ & คำนวณเศษเปิดค้าง 1 กระสอบ (กรณีเบิกจากแร็ค BJ) 🌟 -->
+            <div id="bj-pallet-pick-box" class="hidden p-4 rounded-xl border-2 border-black bg-gray-50 space-y-3 text-xs">
+              <div class="flex justify-between items-center border-b border-gray-200 pb-1.5">
+                <span class="font-black text-black">เบิกกระสอบตรงจากแร็ค BJ เข้าเตา</span>
+                <span class="text-[10px] font-bold text-gray-400 uppercase">DIRECT PALLET PICK</span>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label class="block font-bold text-black mb-1">จำนวนกระสอบที่ยกมา (กระสอบ) *</label>
+                  <input type="number" id="roast_picked_sacks" oninput="calculateRoastYieldMath()" min="1" placeholder="เช่น 2" class="w-full px-3 py-2 border-2 border-black rounded-lg font-black text-sm text-black">
+                </div>
+                <div>
+                  <label class="block font-bold text-black mb-1">นน. รวมกระสอบที่ยกมา (kg) *</label>
+                  <input type="number" id="roast_picked_weight" oninput="calculateRoastYieldMath()" step="0.01" placeholder="เช่น 100.00" class="w-full px-3 py-2 border-2 border-black rounded-lg font-black text-sm text-black">
+                </div>
+              </div>
+
+              <!-- กล่องแสดงสถานะเศษเปิดค้าง 1 กระสอบ -->
+              <div class="p-3 bg-white rounded-lg border border-gray-200 space-y-1">
+                <div class="flex justify-between items-center text-[11px]">
+                  <span class="text-gray-500">แร็ค BJ จะเหลือ:</span>
+                  <b id="bj-rack-remain-label" class="text-black font-black">-</b>
+                </div>
+                <div class="flex justify-between items-center text-[11px] border-t border-gray-100 pt-1">
+                  <span class="text-black font-bold">เกิดสารเปิดค้างหน้าเตา:</span>
+                  <b id="open-sack-remain-label" class="text-black font-black font-mono">0 กระสอบ (0.00 kg)</b>
+                </div>
+                <p class="text-[10px] text-gray-400">*เศษกระสอบที่กรีดแล้วนี้ จะถูกบันทึกเป็น 1 กระสอบ ย้ายเข้าพิกัด RT-OPEN-01 หน้าเตา</p>
               </div>
             </div>
 
@@ -425,41 +469,38 @@
               </div>
             </div>
 
-            <!-- 🌟 ส่วนที่ 3: 4 ช่องน้ำหนัก + ผูกพาเลท Defect สะสมยอด 🌟 -->
+            <!-- น้ำหนักผลผลิต & ตรวจวัดค่าสี -->
             <div class="border-t border-gray-100 pt-3 space-y-3">
               <span class="text-xs font-black text-black uppercase block">น้ำหนักผลผลิต & ตรวจวัดค่าสี (Yield, Defect & Color QC)</span>
               
               <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
                 <div>
-                  <label class="block text-black font-bold mb-0.5">1. นน. สารก่อนคั่ว (kg) *</label>
-                  <input type="number" id="roast_green_weight" oninput="calculateRoastYieldMath()" step="0.01" placeholder="30.00" class="w-full px-3 py-2 border border-black rounded-lg font-black text-sm text-black focus:outline-none">
+                  <label class="block text-black font-bold mb-0.5">1. นน. สารเทลงเตา (kg) *</label>
+                  <input type="number" id="roast_green_weight" oninput="calculateRoastYieldMath()" step="0.01" placeholder="เช่น 60.00" class="w-full px-3 py-2 border-2 border-black rounded-lg font-black text-sm text-black focus:outline-none">
                 </div>
                 <div>
                   <label class="block text-black font-bold mb-0.5">2. นน. ก่อนยิงสี (kg) *</label>
-                  <input type="number" id="roast_presort_weight" oninput="calculateRoastYieldMath()" step="0.01" placeholder="เช่น 25.50" class="w-full px-3 py-2 border border-gray-300 rounded-lg font-black text-sm text-black focus:border-black focus:outline-none">
+                  <input type="number" id="roast_presort_weight" oninput="calculateRoastYieldMath()" step="0.01" placeholder="เช่น 51.00" class="w-full px-3 py-2 border border-gray-300 rounded-lg font-black text-sm text-black focus:border-black focus:outline-none">
                 </div>
                 <div>
                   <label class="block text-black font-bold mb-0.5">3. นน. กาแฟดีหลังยิงสี (kg) *</label>
-                  <input type="number" id="roast_postsort_weight" oninput="calculateRoastYieldMath()" step="0.01" placeholder="เช่น 24.80" class="w-full px-3 py-2 border-2 border-black rounded-lg font-black text-sm text-black focus:outline-none">
+                  <input type="number" id="roast_postsort_weight" oninput="calculateRoastYieldMath()" step="0.01" placeholder="เช่น 49.80" class="w-full px-3 py-2 border-2 border-black rounded-lg font-black text-sm text-black focus:outline-none">
                 </div>
-                <!-- 🌟 ช่องที่ 4: ชั่งน้ำหนัก Defect จริง 🌟 -->
                 <div>
                   <label class="block text-black font-bold mb-0.5">4. นน. Defect ชั่งจริง (kg) *</label>
-                  <input type="number" id="roast_defect_weight" oninput="calculateRoastYieldMath()" step="0.01" value="0.00" placeholder="เช่น 0.50" class="w-full px-3 py-2 border-2 border-black rounded-lg font-black text-sm text-black focus:outline-none">
+                  <input type="number" id="roast_defect_weight" oninput="calculateRoastYieldMath()" step="0.01" value="0.00" placeholder="เช่น 0.80" class="w-full px-3 py-2 border-2 border-black rounded-lg font-black text-sm text-black focus:outline-none">
                 </div>
               </div>
 
-              <!-- 🌟 เมนูเลือกพาเลท Defect ปลายทาง (กรองเฉพาะพาเลท Defect) 🌟 -->
+              <!-- เมนูเลือกพาเลท Defect สะสมยอด -->
               <div class="p-3 bg-gray-50 rounded-xl border border-gray-200 flex flex-col sm:flex-row justify-between sm:items-center gap-2 text-xs">
                 <div>
                   <span class="font-black text-black block">พาเลท/ถัง Defect สะสมยอด:</span>
                   <span class="text-[10px] text-gray-400">เลือกถังที่จะนำเมล็ดเสียก้อนนี้ไปเทสะสมทบยอด</span>
                 </div>
                 <select id="select_defect_pallet" class="px-3 py-2 border-2 border-black rounded-lg font-bold bg-white text-black text-xs focus:outline-none">
-                  <!-- กรองพาเลท Defect อัตโนมัติ -->
                   <option value="PAL-DEF-01">PAL-DEF-01 [พิกัด RT-DEFECT-01]</option>
                   <option value="PAL-DEF-02">PAL-DEF-02 [พิกัด RT-DEFECT-02]</option>
-                  <option value="PAL-DEF-03">PAL-DEF-03 [พิกัด RT-DEFECT-03]</option>
                 </select>
               </div>
 
@@ -486,7 +527,7 @@
                 </div>
               </div>
 
-              <!-- 🌟 แถบคำนวณ Auto 3 ค่า: Roast Loss + Defect Rate + เศษผงปลิวสูญหาย 🌟 -->
+              <!-- คำนวณ Auto 3 ค่า -->
               <div class="grid grid-cols-3 gap-2 text-center text-xs p-2.5 bg-gray-100 rounded-lg">
                 <div>
                   <span class="text-gray-500 block font-medium">Roast Loss</span>
@@ -507,7 +548,7 @@
                 <input type="text" id="roast_notes" placeholder="เช่น เมล็ดขยายตัวดี, กลิ่นหอมช็อกโกแลต" class="w-full px-3 py-1.5 border border-gray-300 rounded text-xs">
               </div>
 
-              <!-- 🌟 4. ขั้นตอนสุดท้ายก่อนจบงาน: บังคับยิงสแกน QR ถังพักกาแฟดีปลายทาง 🌟 -->
+              <!-- ขั้นตอนสุดท้ายก่อนจบงาน: บังคับยิงสแกน QR ถังพักกาแฟดีปลายทาง -->
               <div class="p-4 bg-gray-50 rounded-xl border-2 border-black space-y-2 text-xs">
                 <div class="flex justify-between items-center">
                   <label class="block font-black text-black text-sm">ขั้นตอนสุดท้าย: ยิงสแกน QR ถังพักกาแฟคั่ว (Destination Bin) *</label>
@@ -524,7 +565,6 @@
 
             </div>
 
-            <!-- ปุ่มกดยืนยันตัดสต๊อกและจบงาน (Done) -->
             <button type="button" onclick="submitFullRoastBatch()" id="btn-submit-roast" class="w-full bg-black hover:bg-gray-800 text-white font-bold py-4 rounded-lg text-sm transition active:scale-95 cursor-pointer">
               บันทึกจบงานคั่วและส่งต่อถังพักปลายทาง (Done)
             </button>
@@ -565,7 +605,6 @@
 
   <!-- 🖨️ MODAL พิมพ์ชุดใบนำงานคั่ว A4 เปล่า -->
   <div id="a4-traveler-modal" style="display: none;" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex-col overflow-y-auto p-4 md:p-8">
-    
     <div class="max-w-[194mm] w-full mx-auto bg-black text-white p-3 rounded-xl mb-4 shadow-2xl flex justify-between items-center no-print sticky top-2 z-50 border border-gray-700">
       <span class="text-xs font-bold">พรีวิวใบนำงานคั่ว A4 เปล่า (รวม <span id="traveler-pages-count" class="text-green-400 font-bold">1</span> ใบ)</span>
       <div class="flex gap-2">
@@ -573,7 +612,6 @@
         <button type="button" onclick="closeA4TravelerModal()" class="bg-gray-800 text-gray-300 px-3 py-1.5 rounded-lg text-xs cursor-pointer">ปิด</button>
       </div>
     </div>
-
     <div id="traveler-pages-container" class="space-y-6"></div>
   </div>
 
@@ -583,11 +621,11 @@
       <div onclick="window.location.href='index.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-black cursor-pointer">
         <svg class="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg><span class="text-[10px] font-medium">หน้าแรก</span>
       </div>
-      <div onclick="window.location.href='planner.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-black cursor-pointer">
-        <svg class="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 011.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.56.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.893.149c-.425.07-.765.383-.93.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 01-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.397.165-.71.505-.78.929l-.15.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 01-.12-1.45l.527-.737c.25-.35.273-.806.108-1.204-.165-.397-.505-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.107-1.204l-.527-.738a1.125 1.125 0 01.12-1.45l.773-.773a1.125 1.125 0 011.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg><span class="text-[10px] font-medium">วางแผน</span>
+      <div onclick="window.location.href='planner.html'" class="flex flex-col items-center justify-center w-[20%] text-black cursor-pointer">
+        <svg class="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 011.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.56.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.893.149c-.425.07-.765.383-.93.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 01-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.397.165-.71.505-.78.929l-.15.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 01-.12-1.45l.527-.737c.25-.35.273-.806.108-1.204-.165-.397-.505-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.107-1.204l-.527-.738a1.125 1.125 0 01.12-1.45l.773-.773a1.125 1.125 0 011.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg><span class="text-[10px] font-bold">ทำงาน</span>
       </div>
-      <div onclick="window.location.href='wip.html'" class="flex flex-col items-center justify-center w-[20%] text-black cursor-pointer">
-        <svg class="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.362 5.214A8.252 8.252 0 0112 21 8.25 8.25 0 016.038 7.048 8.287 8.287 0 009 9.6a8.983 8.983 0 013.361-6.867 8.21 8.21 0 003 2.48z" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 18a3.75 3.75 0 00.495-7.467 5.99 5.99 0 00-1.925 3.546 5.974 5.974 0 01-2.133-1A3.75 3.75 0 0012 18z" /></svg><span class="text-[10px] font-bold">เบิกคั่ว</span>
+      <div onclick="window.location.href='report.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-black cursor-pointer">
+        <svg class="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" /></svg><span class="text-[10px] font-medium">รายงาน</span>
       </div>
       <div onclick="window.location.href='stock.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-black cursor-pointer">
         <svg class="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" /></svg><span class="text-[10px] font-medium">สต๊อก</span>
@@ -612,10 +650,9 @@
 
   <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbxQywqP4da0BYdt_dHQtQl-kYlvGxmdJWNA59oqnZ_AM7SRyEESbMd73UD3Xx6VffQ/exec";
-    let rawPalletsList = [];
+    let allInventoryData = [];
     let selectedRawPallet = null;
 
-    let readyBeansList = [];
     let selectedReadyBean = null;
     let activeWOPool = [];
 
@@ -673,17 +710,9 @@
       const trimmed = (inputStr || '').trim().toUpperCase();
       const match = trimmed.match(/^(.*?)(\d+)$/);
       if (match) {
-        return {
-          prefix: match[1],
-          startNum: parseInt(match[2], 10),
-          padLen: match[2].length
-        };
+        return { prefix: match[1], startNum: parseInt(match[2], 10), padLen: match[2].length };
       }
-      return {
-        prefix: trimmed + '-',
-        startNum: 1,
-        padLen: 2
-      };
+      return { prefix: trimmed + '-', startNum: 1, padLen: 2 };
     }
 
     function updateWOPreviewBadges() {
@@ -708,9 +737,7 @@
     function loadSavedActiveWOs() {
       const saved = localStorage.getItem('bj_active_roast_wos');
       if (saved) {
-        try {
-          activeWOPool = JSON.parse(saved);
-        } catch(e) { activeWOPool = []; }
+        try { activeWOPool = JSON.parse(saved); } catch(e) { activeWOPool = []; }
       }
       renderWOBadges();
     }
@@ -739,7 +766,6 @@
       }
 
       saveActiveWOs();
-
       const nextStartNum = parsed.startNum + count;
       document.getElementById('start_wo_input').value = `${parsed.prefix}${String(nextStartNum).padStart(parsed.padLen, '0')}`;
       updateWOPreviewBadges();
@@ -783,20 +809,20 @@
           <div class="border-2 border-black p-3 rounded-lg bg-gray-50 space-y-1.5">
             <div class="grid grid-cols-2 gap-2">
               <p class="font-bold">วันที่: <span class="font-normal">${dateStr}</span></p>
-              <p class="font-bold">ผู้คั่ว (Roaster): [ ____________________ ]</p>
+              <p class="font-bold">ผู้คั่ว: [ ____________________ ]</p>
             </div>
             <div class="grid grid-cols-2 gap-2 pt-1 border-t border-gray-200">
               <p class="font-bold">ชื่อสารกาแฟ: [ _________________________________ ]</p>
               <p class="font-bold">รหัส Lot: [ ________________________ ]</p>
             </div>
             <div class="pt-1 flex justify-between items-center">
-              <span class="font-bold">ระดับคั่วเป้าหมาย: &nbsp;&nbsp; [ &nbsp; ] Light &nbsp;&nbsp; [ &nbsp; ] Medium &nbsp;&nbsp; [ &nbsp; ] Medium-Dark &nbsp;&nbsp; [ &nbsp; ] Dark</span>
-              <span class="font-bold">นน. สารตั้งต้น: [ _________ kg ]</span>
+              <span class="font-bold">ระดับคั่ว: [ &nbsp; ] Light &nbsp;&nbsp; [ &nbsp; ] Medium &nbsp;&nbsp; [ &nbsp; ] Medium-Dark &nbsp;&nbsp; [ &nbsp; ] Dark</span>
+              <span class="font-bold">นน. สารเข้าเตา: [ _________ kg ]</span>
             </div>
           </div>
 
           <div class="space-y-1">
-            <span class="font-black text-xs uppercase block border-b border-black pb-0.5">1. บันทึกอุณหภูมิและเวลาการคั่ว (Roast Profile Matrix)</span>
+            <span class="font-black text-xs uppercase block border-b border-black pb-0.5">1. บันทึกอุณหภูมิและเวลาการคั่ว</span>
             <table class="w-full border-collapse border border-black text-center text-[11px]">
               <thead class="bg-gray-100 font-bold">
                 <tr>
@@ -822,24 +848,26 @@
           </div>
 
           <div class="space-y-1">
-            <span class="font-black text-xs uppercase block border-b border-black pb-0.5">2. บันทึกน้ำหนักและผลตรวจวัดสี (Yield & Color QC)</span>
+            <span class="font-black text-xs uppercase block border-b border-black pb-0.5">2. บันทึกน้ำหนักและผลตรวจวัดสี</span>
             <div class="grid grid-cols-3 gap-2 text-center text-[11px] font-bold">
-              <div class="p-2 border-2 border-black rounded">นน. สารก่อนคั่ว:<br><span class="text-sm">[ ___________ kg ]</span></div>
-              <div class="p-2 border-2 border-black rounded">นน. ก่อนยิงสี (คั่วเสร็จ):<br><span class="text-sm">[ ___________ kg ]</span></div>
-              <div class="p-2 border-2 border-black rounded">นน. หลังยิงสี:<br><span class="text-sm">[ ___________ kg ]</span></div>
+              <div class="p-2 border-2 border-black rounded">นน. สารเข้าเตา:<br><span class="text-sm">[ ___________ kg ]</span></div>
+              <div class="p-2 border-2 border-black rounded">นน. ก่อนยิงสี:<br><span class="text-sm">[ ___________ kg ]</span></div>
+              <div class="p-2 border-2 border-black rounded">นน. หลังยิงสี (กาแฟดี):<br><span class="text-sm">[ ___________ kg ]</span></div>
             </div>
 
             <table class="w-full border-collapse border border-black text-center text-[11px] mt-1.5">
               <thead class="bg-gray-100 font-bold">
                 <tr>
-                  <th class="border border-black p-1.5">วัดค่าสี ครั้งที่ 1</th>
-                  <th class="border border-black p-1.5">วัดค่าสี ครั้งที่ 2</th>
-                  <th class="border border-black p-1.5">วัดค่าสี ครั้งที่ 3</th>
-                  <th class="border border-black p-1.5 bg-gray-200">ค่าสีหลังคั่วเฉลี่ย</th>
+                  <th class="border border-black p-1.5">นน. Defect ชั่งจริง</th>
+                  <th class="border border-black p-1.5">วัดค่าสี 1</th>
+                  <th class="border border-black p-1.5">วัดค่าสี 2</th>
+                  <th class="border border-black p-1.5">วัดค่าสี 3</th>
+                  <th class="border border-black p-1.5 bg-gray-200">ค่าสีเฉลี่ย</th>
                 </tr>
               </thead>
               <tbody>
                 <tr class="h-8">
+                  <td class="border border-black p-1.5 font-bold">[ __________ kg ]</td>
                   <td class="border border-black p-1.5">[ ____________ ]</td>
                   <td class="border border-black p-1.5">[ ____________ ]</td>
                   <td class="border border-black p-1.5">[ ____________ ]</td>
@@ -852,7 +880,7 @@
           <div class="border-2 border-black rounded-lg p-2.5 space-y-2">
             <p class="font-bold">หมายเหตุการผลิต: [ __________________________________________________________________________________ ]</p>
             <div class="grid grid-cols-2 gap-4 pt-2 border-t border-gray-300 text-center font-bold">
-              <div>ลายเซ็นผู้คั่ว (Roaster): __________________________</div>
+              <div>ลายเซ็นผู้คั่ว: __________________________</div>
               <div>ลายเซ็นผู้รับมอบ Packing: __________________________</div>
             </div>
           </div>
@@ -914,87 +942,105 @@
     }
 
     // =========================================================================
-    // 🌾 2. ร่อนเตรียมสาร
+    // 🌾 2. ร่อนเตรียมสาร (ระบุกระสอบ + น้ำหนัก)
     // =========================================================================
     async function loadSiftingData() {
       try {
         const res = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'get_inventory' }) });
         const result = await res.json();
         if(result.success && result.data) {
-          rawPalletsList = result.data.filter(i => 
+          allInventoryData = result.data;
+          const rawPalletsList = allInventoryData.filter(i => 
             (i.category === 'Green Bean' || !i.category) && 
             i.status === 'Active' && 
-            i.location !== 'RT' &&
+            i.location && i.location.startsWith('BJI') &&
             parseFloat(i.weight_current) > 0
           );
 
           const select = document.getElementById('sift_pallet_select');
           select.innerHTML = '<option value="">-- หรือคลิกเลือกพาเลทต้นทางที่มีในคลัง --</option>' + 
-            rawPalletsList.map((p, idx) => `<option value="${idx}">[${p.location || 'แร็ค'}] ${p.item_name} - ${p.barcode_id} (${p.lot_code || 'ไม่มี Lot'})</option>`).join('');
+            rawPalletsList.map((p, idx) => `<option value="${p.barcode_id}">[${p.location}] ${p.item_name} - ${p.barcode_id} (${p.sacks || '-'} กระสอบ / ${p.weight_current} kg)</option>`).join('');
         }
       } catch(e) {}
     }
 
     function onSiftPalletSelected() {
-      const idx = document.getElementById('sift_pallet_select').value;
-      if(idx === "") return;
-      const p = rawPalletsList[idx];
-      setSiftPallet(p);
+      const palletId = document.getElementById('sift_pallet_select').value;
+      if(!palletId) return;
+      const p = allInventoryData.find(i => i.barcode_id === palletId);
+      if(p) setSiftPallet(p);
     }
 
     function setSiftPallet(p) {
       selectedRawPallet = p;
       document.getElementById('sift_pallet_id').value = p.barcode_id || p.pallet_id;
       document.getElementById('info-bean-name').innerText = p.item_name || 'สารกาแฟ';
-      document.getElementById('info-pallet-loc').innerText = p.location || 'แร็ค';
+      document.getElementById('info-pallet-loc').innerText = p.location || 'แร็ค BJ';
       document.getElementById('info-raw-weight').innerText = `${parseFloat(p.weight_current).toFixed(2)} kg`;
-      document.getElementById('info-raw-sacks').innerText = `${p.sacks || p.unit || '-'}`;
+      document.getElementById('info-raw-sacks').innerText = `${p.sacks || Math.round(parseFloat(p.weight_current)/50) || 1} กระสอบ`;
       document.getElementById('info-lot-code').innerText = p.lot_code || '-';
 
       document.getElementById('sift-pallet-info').classList.remove('hidden');
       calculateSiftingMath();
-      document.getElementById('sift_clean_weight').focus();
+      document.getElementById('sift_picked_sacks').focus();
     }
 
     function calculateSiftingMath() {
       if(!selectedRawPallet) return;
-      const raw = parseFloat(selectedRawPallet.weight_current) || 0;
-      const clean = parseFloat(document.getElementById('sift_clean_weight').value) || 0;
-      const waste = parseFloat(document.getElementById('sift_waste_weight').value) || 0;
+      const totalRawWeight = parseFloat(selectedRawPallet.weight_current) || 0;
+      const totalRawSacks = parseInt(selectedRawPallet.sacks) || Math.round(totalRawWeight / 50) || 1;
+      const avgSackWeight = totalRawSacks > 0 ? (totalRawWeight / totalRawSacks) : 50;
 
-      const bags = Math.floor(clean / 30);
-      const remainder = (clean % 30).toFixed(2);
+      const pickedSacks = parseInt(document.getElementById('sift_picked_sacks').value) || 0;
+      const cleanWeight = parseFloat(document.getElementById('sift_clean_weight').value) || 0;
+      const wasteWeight = parseFloat(document.getElementById('sift_waste_weight').value) || 0;
+
+      const pickedRawWeight = pickedSacks * avgSackWeight;
+      const remainSacks = totalRawSacks - pickedSacks;
+      const remainWeight = totalRawWeight - pickedRawWeight;
+
+      if (pickedSacks > 0) {
+        document.getElementById('math-bj-remaining-label').innerText = `${remainSacks > 0 ? remainSacks : 0} กระสอบ (${(remainWeight > 0 ? remainWeight : 0).toFixed(1)} kg)`;
+      } else {
+        document.getElementById('math-bj-remaining-label').innerText = `${totalRawSacks} กระสอบ (${totalRawWeight.toFixed(1)} kg)`;
+      }
+
+      const bags = Math.floor(cleanWeight / 30);
+      const remainder = (cleanWeight % 30).toFixed(2);
       document.getElementById('calc-sacks-hint').innerText = `แบ่งหน่วยคั่ว 30 kg ได้: ${bags} ถุง (เศษ ${remainder} kg)`;
 
-      const wastePct = raw > 0 ? ((waste / raw) * 100).toFixed(2) : '0.00';
+      const wastePct = pickedRawWeight > 0 ? ((wasteWeight / pickedRawWeight) * 100).toFixed(2) : '0.00';
       document.getElementById('math-waste-percent').innerText = `${wastePct}%`;
 
-      const diff = raw - (clean + waste);
+      const diff = pickedRawWeight - (cleanWeight + wasteWeight);
       document.getElementById('math-shrinkage').innerText = `${diff.toFixed(2)} kg`;
     }
 
     async function submitSiftingProcess() {
       const palletId = document.getElementById('sift_pallet_id').value.trim();
+      const pickedSacks = parseInt(document.getElementById('sift_picked_sacks').value) || 0;
       const cleanWeight = parseFloat(document.getElementById('sift_clean_weight').value) || 0;
       const wasteWeight = parseFloat(document.getElementById('sift_waste_weight').value) || 0;
 
       if(!selectedRawPallet && palletId) {
-        selectedRawPallet = rawPalletsList.find(p => p.barcode_id === palletId || p.pallet_id === palletId);
+        selectedRawPallet = allInventoryData.find(p => p.barcode_id === palletId);
       }
 
       if(!selectedRawPallet) return alert("กรุณาเลือกหรือสแกนพาเลทต้นทางก่อน");
+      if(pickedSacks <= 0) return alert("กรุณาระบุจำนวนกระสอบที่เบิกมาร่อน");
       if(cleanWeight <= 0) return alert("กรุณาระบุน้ำหนักสารพร้อมคั่ว");
 
-      const raw = parseFloat(selectedRawPallet.weight_current) || 0;
-      const diff = (raw - (cleanWeight + wasteWeight)).toFixed(2);
+      const totalRawWeight = parseFloat(selectedRawPallet.weight_current) || 0;
+      const totalRawSacks = parseInt(selectedRawPallet.sacks) || Math.round(totalRawWeight / 50) || 1;
+      const avgSackWeight = totalRawSacks > 0 ? (totalRawWeight / totalRawSacks) : 50;
+      const pickedRawWeight = pickedSacks * avgSackWeight;
 
       const confirmMsg = `ยืนยันบันทึกผลการเตรียมสาร [${selectedRawPallet.item_name}]?\n\n` +
-        `- รหัส Lot: ${selectedRawPallet.lot_code || '-'}\n` +
-        `- สารต้นทาง: ${raw} kg\n` +
-        `- สารพร้อมคั่ว: ${cleanWeight} kg (ย้ายเข้าคลัง RT)\n` +
+        `- พาเลทเดิมบนแร็ค BJ: ตัดเบิก ${pickedSacks} กระสอบ (หัก ${pickedRawWeight.toFixed(1)} kg)\n` +
+        `- สารสะอาดพร้อมคั่ว: ${cleanWeight} kg ➔ ย้ายเข้าคลัง RT\n` +
         `- สิ่งเจือปนคัดทิ้ง: ${wasteWeight} kg\n` +
-        `- ส่วนต่างระเหย: ${diff} kg\n\n` +
-        `*ระบบจะปิดยอดพาเลทต้นทางนี้เพื่อปลดล็อกพื้นที่จัดเก็บบนแร็คทันที*`;
+        `- จะเหลือกองบนแร็ค BJ: ${totalRawSacks - pickedSacks} กระสอบ (${(totalRawWeight - pickedRawWeight).toFixed(1)} kg)\n\n` +
+        `*สต๊อกบนแร็ค BJ จะถูกตัดลดจำนวนกระสอบและน้ำหนักตามจริง*`;
 
       if(!confirm(confirmMsg)) return;
 
@@ -1006,14 +1052,15 @@
         const res = await fetch(API_URL, {
           method: "POST",
           body: JSON.stringify({
-            action: 'process_sifting',
+            action: 'process_sifting_advanced',
             pallet_id: selectedRawPallet.barcode_id || selectedRawPallet.pallet_id,
             bean_name: selectedRawPallet.item_name,
             lot_code: selectedRawPallet.lot_code,
-            raw_weight: raw,
+            picked_sacks: pickedSacks,
+            picked_raw_weight: pickedRawWeight,
             clean_weight: cleanWeight,
             waste_weight: wasteWeight,
-            shrinkage: diff,
+            shrinkage: (pickedRawWeight - (cleanWeight + wasteWeight)).toFixed(2),
             raw_location: selectedRawPallet.location,
             operator: localStorage.getItem('name') || "Operator"
           })
@@ -1021,14 +1068,15 @@
         const result = await res.json();
         alert(result.message);
 
-        dailySiftRecords.push({ raw: raw, clean: cleanWeight, waste: wasteWeight });
+        dailySiftRecords.push({ raw: pickedRawWeight, clean: cleanWeight, waste: wasteWeight });
         updateDailySiftSummary();
 
-        addSiftHistoryRow(selectedRawPallet.item_name, selectedRawPallet.lot_code, selectedRawPallet.barcode_id, cleanWeight, wasteWeight);
+        addSiftHistoryRow(selectedRawPallet.item_name, selectedRawPallet.lot_code, selectedRawPallet.barcode_id, pickedSacks, cleanWeight, wasteWeight);
 
         document.getElementById('sift_pallet_id').value = '';
+        document.getElementById('sift_picked_sacks').value = '';
         document.getElementById('sift_clean_weight').value = '';
-        document.getElementById('sift_waste_weight').value = '';
+        document.getElementById('sift_waste_weight').value = '0.00';
         document.getElementById('sift-pallet-info').classList.add('hidden');
         selectedRawPallet = null;
 
@@ -1051,12 +1099,11 @@
       document.getElementById('kpi-sift-count').innerText = `${count} รอบ`;
       document.getElementById('kpi-sift-raw-weight').innerText = `${rawSum.toFixed(1)} kg`;
       document.getElementById('kpi-sift-clean-weight').innerText = `${cleanSum.toFixed(1)} kg`;
-      
       const wastePct = rawSum > 0 ? ((wasteSum / rawSum) * 100).toFixed(1) : '0.0';
       document.getElementById('kpi-sift-waste-weight').innerText = `${wasteSum.toFixed(1)} kg (${wastePct}%)`;
     }
 
-    function addSiftHistoryRow(name, lot, pallet, clean, waste) {
+    function addSiftHistoryRow(name, lot, pallet, sacks, clean, waste) {
       const tbody = document.getElementById('sift-history-tbody');
       const tr = document.createElement('tr');
       tr.className = "hover:bg-gray-50";
@@ -1064,6 +1111,7 @@
         <td class="py-2 px-3 font-bold text-black">${name}</td>
         <td class="py-2 px-3 text-center font-mono font-bold text-black">${lot || '-'}</td>
         <td class="py-2 px-3 text-center font-mono text-gray-500">${pallet}</td>
+        <td class="py-2 px-3 text-right font-black text-black">${sacks} กระสอบ</td>
         <td class="py-2 px-3 text-right font-black text-black">${clean.toFixed(2)} kg</td>
         <td class="py-2 px-3 text-right text-black font-semibold">${waste.toFixed(2)} kg</td>
         <td class="py-2 px-3 text-center text-gray-500">${localStorage.getItem('name') || 'Admin'}</td>
@@ -1073,97 +1121,125 @@
     }
 
     // =========================================================================
-    // ☕ 3. คั่วกาแฟหน้าเตา & คำนวณ Defect จริง + ฝุ่นผงสูญหาย Auto
+    // ☕ 3. คั่วกาแฟหน้าเตา (รองรับทั้งถัง RT และเบิกตรงจากแร็ค BJ)
     // =========================================================================
     async function loadRoastingData() {
       try {
         const resInv = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'get_inventory' }) });
         const resultInv = await resInv.json();
         if(resultInv.success && resultInv.data) {
-          readyBeansList = resultInv.data.filter(i => 
-            (i.location === 'RT' || i.category === 'Green Bean' || (i.location && i.location.startsWith('RT-SIFT'))) && 
-            i.status === 'Active' && 
-            parseFloat(i.weight_current) > 0
-          );
+          allInventoryData = resultInv.data;
         }
       } catch(e) {}
     }
 
+    // เมื่อยิงสแกนบาร์โค้ดสารกาแฟหน้าเตา (ถัง RT หรือ พาเลท BJ)
     function onRoastBarcodeInputChanged() {
       const val = document.getElementById('roast_barcode_input').value.trim();
       if(!val) return;
-      const foundBean = readyBeansList.find(b => b.barcode_id === val || b.pallet_id === val);
-      if (foundBean) {
-        setRoastBean(foundBean);
+
+      selectedReadyBean = allInventoryData.find(b => 
+        (b.barcode_id === val || b.pallet_id === val) &&
+        b.status === 'Active' &&
+        parseFloat(b.weight_current) > 0
+      );
+
+      const pickBox = document.getElementById('bj-pallet-pick-box');
+
+      if (selectedReadyBean) {
+        document.getElementById('roast-info-name').innerText = selectedReadyBean.item_name || 'สารกาแฟ';
+        document.getElementById('roast-info-barcode').innerText = selectedReadyBean.barcode_id;
+        document.getElementById('roast-info-location').innerText = selectedReadyBean.location || 'คลัง RT';
+        document.getElementById('roast-info-stock').innerText = `${parseFloat(selectedReadyBean.weight_current).toFixed(2)} kg`;
+        
+        const sacksCount = parseInt(selectedReadyBean.sacks) || Math.round(parseFloat(selectedReadyBean.weight_current)/50) || 1;
+        document.getElementById('roast-info-sacks').innerText = `${sacksCount} กระสอบ`;
+        document.getElementById('roast-info-lot').innerText = selectedReadyBean.lot_code || '-';
+
+        // ถ้ามาจากแร็ค BJ ➔ เปิดกล่องให้ระบุกระสอบที่ยกมา
+        if (selectedReadyBean.location && selectedReadyBean.location.startsWith('BJI')) {
+          pickBox.classList.remove('hidden');
+          const avgPerSack = parseFloat(selectedReadyBean.weight_current) / sacksCount;
+          document.getElementById('roast_picked_sacks').value = '1';
+          document.getElementById('roast_picked_weight').value = avgPerSack.toFixed(2);
+          document.getElementById('roast_green_weight').value = avgPerSack.toFixed(2);
+        } else {
+          pickBox.classList.add('hidden');
+          document.getElementById('roast_green_weight').value = parseFloat(selectedReadyBean.weight_current).toFixed(2);
+        }
+
+        calculateRoastYieldMath();
       } else {
-        document.getElementById('roast-info-name').innerText = "ไม่พบสารรหัสนี้ในคลัง RT";
+        document.getElementById('roast-info-name').innerText = "ไม่พบสารรหัสนี้ในระบบ";
         document.getElementById('roast-info-barcode').innerText = val;
+        document.getElementById('roast-info-location').innerText = "-";
         document.getElementById('roast-info-stock').innerText = "0.00 kg";
+        document.getElementById('roast-info-sacks').innerText = "0 กระสอบ";
         document.getElementById('roast-info-lot').innerText = "-";
-        document.getElementById('roast-info-moisture').innerText = "-";
-        document.getElementById('roast-info-density').innerText = "-";
+        pickBox.classList.add('hidden');
         selectedReadyBean = null;
       }
     }
 
-    function setRoastBean(b) {
-      selectedReadyBean = b;
-      document.getElementById('roast_barcode_input').value = b.barcode_id || b.pallet_id;
-      document.getElementById('roast-info-name').innerText = b.item_name || 'สารกาแฟ';
-      document.getElementById('roast-info-barcode').innerText = b.barcode_id || b.pallet_id;
-      document.getElementById('roast-info-stock').innerText = `${parseFloat(b.weight_current).toFixed(2)} kg`;
-      document.getElementById('roast-info-lot').innerText = b.lot_code || '-';
-      document.getElementById('roast-info-moisture').innerText = b.moisture ? `${b.moisture}%` : '-';
-      document.getElementById('roast-info-density').innerText = b.density || '-';
-      document.getElementById('roast_green_weight').focus();
-    }
-
-    // 🌟 คำนวณ Auto ทั้ง Roast Loss + Defect Rate + ฝุ่นผงปลิวสูญหาย 🌟
+    // 🌟 คำนวณเศษเปิดค้าง 1 กระสอบ + Loss + Defect อัตโนมัติ 🌟
     function calculateRoastYieldMath() {
-      const green = parseFloat(document.getElementById('roast_green_weight').value) || 0;
-      const pre = parseFloat(document.getElementById('roast_presort_weight').value) || 0;
-      const post = parseFloat(document.getElementById('roast_postsort_weight').value) || 0;
-      const defect = parseFloat(document.getElementById('roast_defect_weight').value) || 0;
+      const greenW = parseFloat(document.getElementById('roast_green_weight').value) || 0;
+      const preW = parseFloat(document.getElementById('roast_presort_weight').value) || 0;
+      const postW = parseFloat(document.getElementById('roast_postsort_weight').value) || 0;
+      const defectW = parseFloat(document.getElementById('roast_defect_weight').value) || 0;
 
-      // 1. % Roast Loss (ความชื้นระเหยในเตา)
-      if (green > 0 && pre > 0) {
-        const rLoss = ((green - pre) / green) * 100;
-        document.getElementById('math-roast-loss').innerText = `${rLoss.toFixed(2)}%`;
+      // 1. คำนวณเศษเปิดค้าง 1 กระสอบ (กรณีเบิกตรงจากแร็ค BJ)
+      if (selectedReadyBean && selectedReadyBean.location && selectedReadyBean.location.startsWith('BJI')) {
+        const totalBJWeight = parseFloat(selectedReadyBean.weight_current) || 0;
+        const totalBJSacks = parseInt(selectedReadyBean.sacks) || Math.round(totalBJWeight / 50) || 1;
+        
+        const pickedSacks = parseInt(document.getElementById('roast_picked_sacks').value) || 0;
+        const pickedWeight = parseFloat(document.getElementById('roast_picked_weight').value) || 0;
+
+        const remainBJSacks = totalBJSacks - pickedSacks;
+        const remainBJWeight = totalBJWeight - pickedWeight;
+
+        document.getElementById('bj-rack-remain-label').innerText = `${remainBJSacks > 0 ? remainBJSacks : 0} กระสอบ (${(remainBJWeight > 0 ? remainBJWeight : 0).toFixed(1)} kg)`;
+
+        const openSackWeight = pickedWeight - greenW;
+        if (openSackWeight > 0) {
+          document.getElementById('open-sack-remain-label').innerText = `1 กระสอบ (${openSackWeight.toFixed(2)} kg)`;
+        } else {
+          document.getElementById('open-sack-remain-label').innerText = `0 กระสอบ (0.00 kg)`;
+        }
+      }
+
+      // 2. Roast Loss
+      if (greenW > 0 && preW > 0) {
+        document.getElementById('math-roast-loss').innerText = `${(((greenW - preW) / greenW) * 100).toFixed(2)}%`;
       } else {
         document.getElementById('math-roast-loss').innerText = `0.00%`;
       }
 
-      // 2. % Defect Rate (สัดส่วนเมล็ดเสียจริง)
-      if (pre > 0 && defect > 0) {
-        const dRate = (defect / pre) * 100;
-        document.getElementById('math-defect-rate').innerText = `${dRate.toFixed(2)}%`;
+      // 3. Defect Rate
+      if (preW > 0 && defectW > 0) {
+        document.getElementById('math-defect-rate').innerText = `${((defectW / preW) * 100).toFixed(2)}%`;
       } else {
         document.getElementById('math-defect-rate').innerText = `0.00%`;
       }
 
-      // 3. เศษผง/ฝุ่นปลิวสูญหาย (Dust Loss) = นน.ก่อนยิงสี - (นน.กาแฟดี + นน.Defect)
-      if (pre > 0) {
-        const dustDiff = pre - (post + defect);
+      // 4. ฝุ่นผงปลิวสูญหาย
+      if (preW > 0) {
+        const dustDiff = preW - (postW + defectW);
         document.getElementById('math-dust-loss').innerText = `${dustDiff.toFixed(2)} kg`;
       } else {
         document.getElementById('math-dust-loss').innerText = `0.00 kg`;
       }
 
-      // 4. ค่าสีเฉลี่ย Agtron
+      // 5. ค่าสีเฉลี่ย Agtron
       const c1 = parseFloat(document.getElementById('color_val_1').value);
       const c2 = parseFloat(document.getElementById('color_val_2').value);
       const c3 = parseFloat(document.getElementById('color_val_3').value);
-
       let sum = 0, count = 0;
       if (!isNaN(c1)) { sum += c1; count++; }
       if (!isNaN(c2)) { sum += c2; count++; }
       if (!isNaN(c3)) { sum += c3; count++; }
-
-      if (count > 0) {
-        document.getElementById('color_val_avg').innerText = (sum / count).toFixed(1);
-      } else {
-        document.getElementById('color_val_avg').innerText = `-`;
-      }
+      document.getElementById('color_val_avg').innerText = count > 0 ? (sum / count).toFixed(1) : '-';
     }
 
     async function submitFullRoastBatch() {
@@ -1181,16 +1257,16 @@
       if(!destLocation) return alert("กรุณายิงสแกน QR ถังพักกาแฟคั่วปลายทาง (เช่น RT-REST-01)");
 
       if(!selectedReadyBean && barcode) {
-        selectedReadyBean = readyBeansList.find(b => b.barcode_id === barcode || b.pallet_id === barcode);
+        onRoastBarcodeInputChanged();
       }
 
-      if(!selectedReadyBean) return alert("กรุณายิงสแกน QR ถังสารสะอาดที่ต้องการคั่วก่อน");
-      if(greenW <= 0 || postW <= 0) return alert("กรุณาระบุน้ำหนักสารก่อนคั่ว และน้ำหนักกาแฟดีหลังยิงสี");
+      if(!selectedReadyBean) return alert("กรุณายิงสแกน QR ถังสารสะอาดหรือพาเลท BJ ก่อน");
+      if(greenW <= 0 || postW <= 0) return alert("กรุณาระบุน้ำหนักสารที่เทลงเตา และน้ำหนักกาแฟดีหลังยิงสี");
 
-      const stockNow = parseFloat(selectedReadyBean.weight_current) || 0;
-      if(greenW > stockNow) {
-        return alert(`สต๊อกสารพร้อมคั่วมีไม่พอ! (มีอยู่ ${stockNow} kg แต่จะเบิก ${greenW} kg)`);
-      }
+      const isDirectBJPick = selectedReadyBean.location && selectedReadyBean.location.startsWith('BJI');
+      const pickedSacks = isDirectBJPick ? (parseInt(document.getElementById('roast_picked_sacks').value) || 1) : 0;
+      const pickedWeight = isDirectBJPick ? (parseFloat(document.getElementById('roast_picked_weight').value) || greenW) : greenW;
+      const openSackWeight = (pickedWeight - greenW > 0) ? (pickedWeight - greenW).toFixed(2) : 0;
 
       const dustLoss = (preW > 0 ? preW - (postW + defectW) : 0).toFixed(2);
       const roastLevel = document.getElementById('roast_level_select').value;
@@ -1201,12 +1277,12 @@
       const confirmMsg = `ยืนยันบันทึกผลการคั่ว [${selectedReadyBean.item_name}]?\n\n` +
         `- เลขใบงานคั่ว: ${woNum}\n` +
         `- รหัส Lot: ${lotCode}\n` +
-        `- นน. สารก่อนคั่ว: ${greenW} kg (ตัดออกจากคลัง RT)\n` +
-        `- นน. กาแฟดีหลังยิงสี: ${postW} kg ➔ เข้าถัง [${destLocation}]\n` +
-        `- นน. Defect ชั่งจริง: ${defectW} kg ➔ เข้าพาเลท [${defectPallet}]\n` +
-        `- เศษผงปลิวสูญหาย: ${dustLoss} kg\n` +
-        `- ระดับคั่ว: ${roastLevel} | ค่าสีเฉลี่ย: ${colorAvg}\n\n` +
-        `*พร้อมส่งมอบใบนำงาน A4 ไปยังแผนก Packing*`;
+        `- นน. สารเข้าเตา: ${greenW} kg\n` +
+        `- นน. กาแฟดี: ${postW} kg ➔ เข้าถัง [${destLocation}]\n` +
+        `- นน. Defect: ${defectW} kg ➔ เข้าพาเลท [${defectPallet}]\n` +
+        (isDirectBJPick ? `- แร็ค BJ: ตัดเบิก ${pickedSacks} กระสอบ (${pickedWeight} kg)\n` : '') +
+        (openSackWeight > 0 ? `👉 สารเปิดค้างหน้าเตา: 1 กระสอบ (${openSackWeight} kg) ➔ เข้า RT-OPEN-01\n` : '') +
+        `\n*พร้อมส่งมอบใบนำงาน A4 ไปยังแผนก Packing*`;
 
       if(!confirm(confirmMsg)) return;
 
@@ -1215,12 +1291,16 @@
       btn.disabled = true;
 
       const payload = {
-        action: 'issue_roast_batch_full',
+        action: 'issue_roast_batch_super',
         wo_number: woNum,
         batch_no: woNum,
         barcode_id: selectedReadyBean.barcode_id || selectedReadyBean.pallet_id,
         bean_name: selectedReadyBean.item_name,
         lot_code: lotCode,
+        is_direct_bj_pick: isDirectBJPick,
+        picked_sacks: pickedSacks,
+        picked_weight: pickedWeight,
+        open_sack_weight: parseFloat(openSackWeight),
         green_weight: greenW,
         presort_weight: preW,
         postsort_weight: postW,
@@ -1252,11 +1332,9 @@
         const result = await res.json();
         alert(result.message);
 
-        // บันทึกลงตัวแปรสรุปยอดคั่วประจำวัน
         dailyRoastRecords.push({ green: greenW, post: postW, loss: rLoss });
         updateDailyRoastSummary();
 
-        // ตัด WO ที่ใช้แล้วออกจากรายการบนหน้าจอ
         activeWOPool = activeWOPool.filter(w => w !== woNum);
         saveActiveWOs();
 
@@ -1270,31 +1348,7 @@
         document.getElementById('roast_presort_weight').value = '';
         document.getElementById('roast_postsort_weight').value = '';
         document.getElementById('roast_defect_weight').value = '0.00';
-        document.getElementById('color_val_1').value = '';
-        document.getElementById('color_val_2').value = '';
-        document.getElementById('color_val_3').value = '';
-        document.getElementById('color_val_avg').innerText = '-';
-        document.getElementById('math-roast-loss').innerText = '0.00%';
-        document.getElementById('math-defect-rate').innerText = '0.00%';
-        document.getElementById('math-dust-loss').innerText = '0.00 kg';
-        document.getElementById('param_ct').value = '';
-        document.getElementById('param_tp').value = '';
-        document.getElementById('param_ye').value = '';
-        document.getElementById('param_ye_time').value = '';
-        document.getElementById('param_fc').value = '';
-        document.getElementById('param_fc_time').value = '';
-        document.getElementById('param_sc').value = '';
-        document.getElementById('param_drop_temp').value = '';
-        document.getElementById('param_drop_time').value = '';
-        document.getElementById('param_total_minutes').value = '';
-        document.getElementById('roast_notes').value = '';
-
-        document.getElementById('roast-info-name').innerText = "กรุณาสแกน QR Code จากถังสารสะอาด";
-        document.getElementById('roast-info-barcode').innerText = "-";
-        document.getElementById('roast-info-stock').innerText = "0.00 kg";
-        document.getElementById('roast-info-lot').innerText = "-";
-        document.getElementById('roast-info-moisture').innerText = "-";
-        document.getElementById('roast-info-density').innerText = "-";
+        document.getElementById('bj-pallet-pick-box').classList.add('hidden');
         selectedReadyBean = null;
 
         loadRoastingData();
@@ -1336,9 +1390,7 @@
       tbody.prepend(tr);
     }
 
-    // =========================================================================
     // 📷 CAMERA SCANNER
-    // =========================================================================
     function startScanner(targetInputId) {
       activeTargetInputId = targetInputId;
       document.getElementById('camera-modal').style.display = 'flex';
@@ -1356,7 +1408,7 @@
             document.getElementById(activeTargetInputId).value = val;
 
             if(activeTargetInputId === 'sift_pallet_id') {
-              const found = rawPalletsList.find(p => p.barcode_id === val || p.pallet_id === val);
+              const found = allInventoryData.find(p => p.barcode_id === val || p.pallet_id === val);
               if(found) setSiftPallet(found);
             } else if(activeTargetInputId === 'roast_barcode_input') {
               onRoastBarcodeInputChanged();
