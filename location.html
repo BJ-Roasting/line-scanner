@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>BJ Roaster - จัดการพิกัดและผังคลัง</title>
+  <title>BJ Roaster - ตั้งค่าผังแร็ค & พิกัดจัดเก็บ</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
@@ -11,55 +11,16 @@
     body { -ms-overflow-style: none; scrollbar-width: none; }
     .pb-safe { padding-bottom: env(safe-area-inset-bottom, 24px); }
 
-    /* 🌟 ระบบบังคับพิมพ์ 1 หน้าถ้วนเป๊ะ (1 of 1) 🌟 */
-    @page { size: auto; margin: 0; }
+    /* 🌟 ระบบพิมพ์สติ๊กเกอร์ QR พิกัด 1 แผ่นถ้วนเป๊ะ 🌟 */
+    @page { size: auto; margin: 4mm; }
     @media print {
-      html, body {
-        margin: 0 !important;
-        padding: 0 !important;
-        width: 100% !important;
-        height: 100% !important;
-        overflow: hidden !important;
-        background: white !important;
-      }
-      #app-layout, aside, #bottom-nav, .no-print, header, nav, button {
-        display: none !important;
-      }
-      #qr-print-modal {
-        display: flex !important;
-        position: static !important;
-        width: 100vw !important;
-        height: 100vh !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        background: white !important;
-        align-items: center !important;
-        justify-content: center !important;
-        page-break-after: avoid !important;
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
-      }
-      #qr-print-card {
-        border: 2px solid #000 !important;
-        box-shadow: none !important;
-        border-radius: 8px !important;
-        padding: 10px !important;
-        margin: auto !important;
-        width: 65mm !important;
-        height: 65mm !important;
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
-        justify-content: center !important;
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
-      }
-      #qr-modal-code {
-        font-size: 18pt !important;
-        font-weight: 900 !important;
-        margin-top: 6px !important;
-        letter-spacing: 1px !important;
-        color: #000 !important;
+      #app-layout, aside, #bottom-nav, .no-print, nav, button, header { display: none !important; }
+      html, body { background: white !important; margin: 0 !important; padding: 0 !important; width: 100% !important; overflow: visible !important; }
+      #qr-modal { display: block !important; position: static !important; width: 100% !important; padding: 0 !important; background: transparent !important; }
+      .qr-sticker-card {
+        width: 80mm !important; height: 60mm !important; page-break-inside: avoid !important; break-inside: avoid !important;
+        border: 2.5px solid #000 !important; margin: 0 auto !important; padding: 6mm !important; background: white !important;
+        box-sizing: border-box !important; display: flex !important; flex-direction: column !important; justify-content: space-between !important;
       }
     }
   </style>
@@ -68,7 +29,7 @@
 
   <div id="app-layout" class="flex min-h-screen">
     
-    <!-- 💻 Sidebar Desktop -->
+    <!-- 💻 Sidebar Desktop (4 เมนูมาตรฐาน สะอาด คลีน) -->
     <aside class="hidden md:flex flex-col w-64 fixed left-0 top-0 h-screen bg-white border-r border-gray-200 pt-7 pb-6 px-4 z-40 shadow-sm no-print">
       <div class="px-2 mb-7">
         <div class="flex items-center gap-2.5">
@@ -90,7 +51,6 @@
             <a href="planner.html" class="flex items-center gap-3 text-gray-500 hover:text-black hover:bg-gray-100 px-3 py-2 rounded-lg font-bold text-xs transition">
               <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 011.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.56.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.893.149c-.425.07-.765.383-.93.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 01-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.397.165-.71.505-.78.929l-.15.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 01-.12-1.45l.527-.737c.25-.35.273-.806.108-1.204-.165-.397-.505-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.107-1.204l-.527-.738a1.125 1.125 0 01.12-1.45l.773-.773a1.125 1.125 0 011.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg> ทำงาน
             </a>
-            <!-- สต๊อกสินค้า Active -->
             <a href="stock.html" class="flex items-center gap-3 bg-black text-white px-3 py-2 rounded-lg font-bold text-xs transition shadow-sm">
               <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" /></svg> สต๊อกสินค้า
             </a>
@@ -121,88 +81,99 @@
       <div class="p-4 md:p-8 pb-32 space-y-6 max-w-5xl">
         
         <!-- Header -->
-        <div class="flex justify-between items-center border-b border-gray-100 pb-4">
+        <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-3 border-b border-gray-100 pb-4 no-print">
           <div>
-            <h1 class="text-xl font-black text-black tracking-tight">จัดการพิกัดและผังคลังสินค้า</h1>
-            <p class="text-xs text-gray-400">สร้าง แก้ไข ลบ พิกัดแร็คและถังทำงานหมุนเวียน (เชื่อมสต๊อกจริง)</p>
+            <h1 class="text-xl font-black text-black tracking-tight">ตั้งค่าผังแร็ค & พิกัดจัดเก็บ</h1>
+            <p class="text-xs text-gray-400">จัดการช่องแร็คเหล็กและพิกัดทำงานบนพื้นโรงคั่ว (Floor Staging)</p>
           </div>
-          <button onclick="window.location.href='stock.html'" class="px-3.5 py-2 border border-gray-300 text-black font-bold text-xs rounded-lg hover:bg-gray-50 transition cursor-pointer">
-            กลับหน้าสต๊อก ➔
+          <button onclick="window.location.href='stock.html'" class="bg-black text-white font-bold px-4 py-2 rounded-lg text-xs hover:bg-gray-800 transition cursor-pointer self-start sm:self-auto">
+            ดูภาพรวมสต๊อก ➔
           </button>
         </div>
 
-        <!-- กล่องสร้างพิกัด 3 หมวดหมู่หลัก -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          
-          <!-- 1. แร็คคลัง BJ (65 ช่อง) -->
-          <div class="p-5 bg-white rounded-xl border border-gray-200 shadow-sm space-y-3 flex flex-col justify-between">
+        <!-- 🌟 การ์ดที่ 1: สร้างแร็คมาตรฐานอัตโนมัติ (BJ 65 ช่อง & RT 8 ช่อง) 🌟 -->
+        <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-4 no-print">
+          <div class="border-b border-gray-100 pb-2 flex justify-between items-center">
             <div>
-              <span class="text-[10px] font-bold text-gray-400 uppercase block">คลังใหญ่ BJ</span>
-              <h3 class="text-sm font-black text-black mt-0.5">แร็คจัดเก็บสารดิบ (Rack I)</h3>
-              <p class="text-xs text-gray-500 mt-1">65 ช่องมาตรฐาน BJI01A ถึง BJI05M</p>
+              <h2 class="text-sm font-black text-black">1. สร้างแร็คมาตรฐานอัตโนมัติ</h2>
+              <p class="text-[11px] text-gray-400">สร้างผังแร็คประจำคลังสินค้า ไม่สร้างซ้ำหากมีอยู่แล้วในระบบ</p>
             </div>
-            <button type="button" onclick="generateBJIAction()" id="btn-gen-bji" class="w-full py-2.5 bg-black hover:bg-gray-800 text-white font-bold rounded-lg text-xs transition cursor-pointer">
-              สร้างแร็ค BJ 65 ช่อง
-            </button>
+            <span class="text-xs font-mono font-bold bg-gray-100 text-black px-2.5 py-1 rounded">รวม 73 ช่อง</span>
           </div>
 
-          <!-- 2. แร็คคลัง RT (6 ช่อง) -->
-          <div class="p-5 bg-white rounded-xl border border-gray-200 shadow-sm space-y-3 flex flex-col justify-between">
-            <div>
-              <span class="text-[10px] font-bold text-gray-400 uppercase block">คลังโรงคั่ว RT</span>
-              <h3 class="text-sm font-black text-black mt-0.5">แร็คหน้าเตาคั่ว (Rack RT)</h3>
-              <p class="text-xs text-gray-500 mt-1">6 ช่อง RTA01A-D และ RTA02A-B</p>
-            </div>
-            <button type="button" onclick="generateRTRacksAction()" id="btn-gen-rt" class="w-full py-2.5 bg-black hover:bg-gray-800 text-white font-bold rounded-lg text-xs transition cursor-pointer">
-              สร้างแร็ค RT 6 ช่อง
-            </button>
-          </div>
-
-          <!-- 3. สร้างถังร่อน S/M/L & พิกัดทำงานหมุนเวียน (Dynamic Generator) -->
-          <div class="p-5 bg-white rounded-xl border-2 border-black shadow-sm space-y-3">
-            <div>
-              <span class="text-[10px] font-bold text-gray-400 uppercase block">สร้างถังและพิกัดทำงาน</span>
-              <h3 class="text-sm font-black text-black mt-0.5">ถังร่อนแยกขนาด / จุดจอด</h3>
-            </div>
-
-            <div class="space-y-2 text-xs">
-              <select id="preset_prefix_select" onchange="onPresetSelected()" class="w-full px-2.5 py-1.5 border border-gray-300 rounded font-bold bg-white text-black focus:outline-none">
-                <option value="RT-SIFT-L-">ถังร่อนเมล็ดใหญ่ (RT-SIFT-L-)</option>
-                <option value="RT-SIFT-M-">ถังร่อนเมล็ดกลาง (RT-SIFT-M-)</option>
-                <option value="RT-SIFT-S-">ถังร่อนเมล็ดเล็ก (RT-SIFT-S-)</option>
-                <option value="RT-SIFT-PB-">ถังร่อนพีเบอร์รี่ (RT-SIFT-PB-)</option>
-                <option value="RT-ROAST-">จุดพักถังหน้าเตา (RT-ROAST-)</option>
-                <option value="CUSTOM">กำหนดคำนำหน้าเอง...</option>
-              </select>
-
-              <div class="grid grid-cols-2 gap-2">
-                <input type="text" id="custom_prefix_input" value="RT-SIFT-L-" placeholder="คำนำหน้า" class="px-2.5 py-1.5 border border-gray-300 rounded font-mono font-bold uppercase text-xs">
-                <input type="number" id="custom_count_input" value="5" min="1" max="50" placeholder="จำนวน" class="px-2.5 py-1.5 border border-gray-300 rounded font-bold text-xs">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
+            <!-- ปุ่มสร้างแร็ค BJ 65 ช่อง -->
+            <div class="p-4 bg-gray-50 rounded-xl border border-gray-200 flex flex-col justify-between space-y-3">
+              <div>
+                <span class="text-xs font-black text-black block">คลังใหญ่ BJ (65 ช่อง)</span>
+                <p class="text-[11px] text-gray-400 mt-0.5">BJI01A ถึง BJI05M รวม 5 ชั้น x 13 ช่อง (A-M)</p>
               </div>
+              <button type="button" onclick="generateBJIRacksAction()" id="btn-gen-bji" class="w-full bg-black hover:bg-gray-800 text-white font-bold py-2.5 rounded-lg text-xs transition cursor-pointer active:scale-95">
+                สร้างผังแร็ค BJ (65 ช่อง)
+              </button>
             </div>
 
-            <button type="button" onclick="createCustomLocationsAction()" id="btn-gen-custom" class="w-full py-2.5 bg-black hover:bg-gray-800 text-white font-bold rounded-lg text-xs transition cursor-pointer">
-              สร้างพิกัดรันเลข
-            </button>
+            <!-- 🌟 ปุ่มสร้างแร็ค RT 8 ช่อง (อัปเดตข้อความเป็น 8 ช่องเรียบร้อย) 🌟 -->
+            <div class="p-4 bg-gray-50 rounded-xl border-2 border-black flex flex-col justify-between space-y-3">
+              <div>
+                <span class="text-xs font-black text-black block">คลังโรงคั่ว RT (8 ช่อง)</span>
+                <p class="text-[11px] text-gray-400 mt-0.5">RTA01A ถึง RTA02D รวม 8 ช่อง (2 ชั้น x 4 ช่อง A-D)</p>
+              </div>
+              <button type="button" onclick="generateRTRacksAction()" id="btn-gen-rt" class="w-full bg-black hover:bg-gray-800 text-white font-bold py-2.5 rounded-lg text-xs transition cursor-pointer active:scale-95">
+                สร้างผังแร็ค RT (8 ช่อง)
+              </button>
+            </div>
           </div>
-
         </div>
 
-        <!-- ตารางจัดการพิกัดทั้งหมด -->
-        <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden p-5 space-y-4">
-          
-          <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-3 border-b border-gray-100 pb-3">
-            <div>
-              <h2 class="text-sm font-black text-black">รายการพิกัดทั้งหมดในระบบ</h2>
-              <span id="location-total-count" class="text-xs font-bold text-black bg-gray-100 px-2 py-0.5 rounded">กำลังคำนวณ...</span>
+        <!-- 🌟 การ์ดที่ 2: สร้างถังทำงานและพิกัดบนพื้นรันเลขอัตโนมัติ (Floor Staging) 🌟 -->
+        <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-4 no-print">
+          <div class="border-b border-gray-100 pb-2">
+            <h2 class="text-sm font-black text-black">2. สร้างถังทำงานและพิกัดบนพื้น (Dynamic Floor Staging)</h2>
+            <p class="text-[11px] text-gray-400">สร้างถังร่อนแยกขนาด, ถังพักคลายก๊าซ, ถัง Defect หรือชั้นวางพักถุงกาแฟรันเลข</p>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 items-end pt-1">
+            <div class="sm:col-span-2">
+              <label class="block text-xs font-bold text-gray-700 mb-1">คำนำหน้าพิกัด *</label>
+              <input type="text" id="custom_prefix_input" value="RT-PACK-" placeholder="เช่น RT-PACK-, RT-SIFT-L-, RT-REST-" class="w-full px-3 py-2 border-2 border-black rounded-lg font-mono font-black text-black uppercase text-xs focus:outline-none">
             </div>
 
-            <!-- ตัวกรองตามคลัง -->
-            <div class="flex items-center gap-1.5 overflow-x-auto">
-              <button type="button" onclick="filterLocations('ALL')" id="flt-all" class="px-3 py-1 rounded text-xs font-bold bg-black text-white transition">ทั้งหมด</button>
-              <button type="button" onclick="filterLocations('BJ')" id="flt-bj" class="px-3 py-1 rounded text-xs font-bold text-gray-500 hover:text-black transition">คลัง BJ</button>
-              <button type="button" onclick="filterLocations('RT-RACK')" id="flt-rt-rack" class="px-3 py-1 rounded text-xs font-bold text-gray-500 hover:text-black transition">แร็ค RT</button>
-              <button type="button" onclick="filterLocations('RT-FLOOR')" id="flt-rt-floor" class="px-3 py-1 rounded text-xs font-bold text-gray-500 hover:text-black transition">ถังร่อน & พื้นที่ RT</button>
+            <div>
+              <label class="block text-xs font-bold text-gray-700 mb-1">จำนวนจุด/ถัง *</label>
+              <input type="number" id="custom_count_input" value="10" min="1" max="50" class="w-full px-3 py-2 border-2 border-black rounded-lg font-black text-black text-center text-xs focus:outline-none">
+            </div>
+
+            <div>
+              <button type="button" onclick="createCustomLocationsAction()" id="btn-gen-custom" class="w-full bg-black hover:bg-gray-800 text-white font-bold py-2.5 rounded-lg text-xs transition cursor-pointer active:scale-95">
+                สร้างพิกัดรันเลข
+              </button>
+            </div>
+          </div>
+
+          <!-- ตัวอย่างปุ่มคีย์ลัดสำหรับพิกัดยอดนิยม -->
+          <div class="pt-2 border-t border-gray-100 space-y-1.5 text-xs">
+            <span class="text-[10px] font-bold text-gray-400 uppercase">คีย์ลัดสร้างพิกัดยอดนิยม (คลิกเพื่อใส่คำนำหน้า):</span>
+            <div class="flex flex-wrap gap-1.5 pt-0.5">
+              <button type="button" onclick="setQuickPrefix('RT-PACK-', 10)" class="px-2.5 py-1 bg-gray-100 hover:bg-black hover:text-white rounded text-[11px] font-mono transition">RT-PACK- (10 ช่องชั้นวาง)</button>
+              <button type="button" onclick="setQuickPrefix('RT-REST-', 5)" class="px-2.5 py-1 bg-gray-100 hover:bg-black hover:text-white rounded text-[11px] font-mono transition">RT-REST- (5 ถังพัก)</button>
+              <button type="button" onclick="setQuickPrefix('RT-DEFECT-', 3)" class="px-2.5 py-1 bg-gray-100 hover:bg-black hover:text-white rounded text-[11px] font-mono transition">RT-DEFECT- (3 ถังขยะ)</button>
+              <button type="button" onclick="setQuickPrefix('RT-OPEN-', 3)" class="px-2.5 py-1 bg-gray-100 hover:bg-black hover:text-white rounded text-[11px] font-mono transition">RT-OPEN- (3 ถังสารเปิด)</button>
+              <button type="button" onclick="setQuickPrefix('RT-SIFT-L-', 5)" class="px-2.5 py-1 bg-gray-100 hover:bg-black hover:text-white rounded text-[11px] font-mono transition">RT-SIFT-L- (5 ถังเบอร์ใหญ่)</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 🌟 ตารางรายชื่อพิกัดทั้งหมดในระบบ 🌟 -->
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden p-5 space-y-3 no-print">
+          <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-2 border-b border-gray-100 pb-3">
+            <div>
+              <h3 class="font-bold text-black text-sm">รายการพิกัดทั้งหมดในระบบ</h3>
+              <p class="text-[11px] text-gray-400">ค้นหาพิกัด สั่งพิมพ์ป้าย QR Code หรือลบพิกัดที่ไม่ได้ใช้งาน</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <input type="text" id="locSearchInput" onkeyup="filterLocationsTable()" placeholder="ค้นหารหัสพิกัด เช่น RTA, RT-PACK..." class="px-3 py-1.5 border border-gray-300 rounded-lg text-xs w-56 focus:border-black focus:outline-none">
+              <span id="loc-total-badge" class="text-xs font-bold bg-gray-100 text-black px-2.5 py-1 rounded-lg">0 พิกัด</span>
             </div>
           </div>
 
@@ -211,48 +182,45 @@
               <thead class="bg-gray-50 text-gray-500 border-b border-gray-200">
                 <tr>
                   <th class="py-2.5 px-3 text-left font-bold">รหัสพิกัด (Location Code)</th>
-                  <th class="py-2.5 px-3 text-center font-bold">คลัง (Zone)</th>
-                  <th class="py-2.5 px-3 text-center font-bold">ประเภท (Type)</th>
-                  <th class="py-2.5 px-3 text-left font-bold">สินค้าที่จัดเก็บอยู่ (สต๊อกจริง)</th>
+                  <th class="py-2.5 px-3 text-center font-bold">โซน</th>
+                  <th class="py-2.5 px-3 text-center font-bold">ประเภท</th>
                   <th class="py-2.5 px-3 text-center font-bold">สถานะ</th>
                   <th class="py-2.5 px-3 text-center font-bold">จัดการ</th>
                 </tr>
               </thead>
-              <tbody id="locations-table-body" class="text-black divide-y divide-gray-100">
-                <tr><td colspan="6" class="py-6 text-center text-gray-400">กำลังเชื่อมโยงพิกัดเข้ากับสต๊อก...</td></tr>
+              <tbody id="locations-tbody" class="text-black divide-y divide-gray-100">
+                <tr><td colspan="5" class="py-6 text-center text-gray-400">กำลังโหลดรายการพิกัด...</td></tr>
               </tbody>
             </table>
           </div>
-
         </div>
 
       </div>
     </main>
   </div>
 
-  <!-- 🖨️ MODAL พิมพ์ป้าย QR Code (พิมพ์ 1 แผ่นถ้วน 100% ล็อคขนาดเป๊ะ) -->
-  <div id="qr-print-modal" style="display: none;" onclick="if(event.target === this) closeQRModal()" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 items-center justify-center p-4">
-    <div id="qr-print-card" class="bg-white p-6 rounded-2xl shadow-2xl border-2 border-black text-center flex flex-col items-center justify-center space-y-2">
-      
-      <!-- ปุ่มปิดหน้าต่าง -->
-      <div class="w-full flex justify-end no-print">
-        <button type="button" onclick="closeQRModal()" class="text-gray-400 hover:text-black font-bold text-lg leading-none">&times;</button>
+  <!-- 🖨️ MODAL พิมพ์สติ๊กเกอร์ QR Code ป้ายพิกัด (พิมพ์ 1 แผ่นถ้วนเป๊ะ) -->
+  <div id="qr-modal" style="display: none;" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex-col overflow-y-auto p-4 md:p-8">
+    <div class="max-w-xs w-full mx-auto bg-black text-white p-3 rounded-xl mb-4 shadow-2xl flex justify-between items-center no-print sticky top-2 z-50 border border-gray-700">
+      <span class="text-xs font-bold">พรีวิวป้ายพิกัด QR Code</span>
+      <div class="flex gap-2">
+        <button type="button" onclick="window.print()" class="bg-white hover:bg-gray-100 text-black font-black px-4 py-1.5 rounded-lg text-xs transition cursor-pointer active:scale-95">สั่งพิมพ์</button>
+        <button type="button" onclick="closeQRModal()" class="bg-gray-800 text-gray-300 px-3 py-1.5 rounded-lg text-xs cursor-pointer">ปิด</button>
+      </div>
+    </div>
+
+    <!-- บัตรสติ๊กเกอร์ขนาด 80x60 mm -->
+    <div class="qr-sticker-card shadow-2xl border-2 border-black bg-white rounded-xl p-4 mx-auto text-black flex flex-col justify-between items-center text-center space-y-2">
+      <div class="border-b-2 border-black pb-1 w-full">
+        <span class="text-[9px] font-black uppercase tracking-widest text-gray-500 block">BJ ROASTER WMS</span>
+        <h3 class="text-xl font-mono font-black text-black leading-none mt-0.5" id="qr-label-code">RTA01A</h3>
       </div>
 
-      <!-- 1. ตัว QR Code ตรงกลาง -->
-      <div id="qrcode-modal-box" class="flex justify-center p-1 bg-white rounded-lg"></div>
+      <div id="qr-box-container" class="p-1 bg-white border-2 border-black rounded"></div>
 
-      <!-- 2. รหัสพิกัดตัวใหญ่หนาชัดเจน -->
-      <h2 class="font-black text-black font-mono tracking-wider" id="qr-modal-code">BJI01A</h2>
-
-      <!-- ปุ่มกดสั่งพิมพ์และปิด -->
-      <div class="w-full pt-3 flex gap-2 no-print">
-        <button type="button" onclick="window.print()" class="flex-1 bg-black hover:bg-gray-800 text-white font-bold py-2.5 rounded-lg text-xs transition cursor-pointer">
-          สั่งพิมพ์สติ๊กเกอร์
-        </button>
-        <button type="button" onclick="closeQRModal()" class="px-4 py-2.5 border border-gray-300 text-black font-bold rounded-lg text-xs hover:bg-gray-50 transition cursor-pointer">
-          ปิด
-        </button>
+      <div class="w-full pt-1 border-t border-gray-300 flex justify-between items-center text-[9px] font-bold text-gray-500">
+        <span id="qr-label-zone">โซน: RT</span>
+        <span id="qr-label-type">Rack</span>
       </div>
     </div>
   </div>
@@ -266,11 +234,11 @@
       <div onclick="window.location.href='planner.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-black cursor-pointer">
         <svg class="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 011.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.56.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.893.149c-.425.07-.765.383-.93.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 01-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.397.165-.71.505-.78.929l-.15.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 01-.12-1.45l.527-.737c.25-.35.273-.806.108-1.204-.165-.397-.505-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.107-1.204l-.527-.738a1.125 1.125 0 01.12-1.45l.773-.773a1.125 1.125 0 011.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg><span class="text-[10px] font-medium">ทำงาน</span>
       </div>
-      <div onclick="window.location.href='report.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-black cursor-pointer">
-        <svg class="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" /></svg><span class="text-[10px] font-medium">รายงาน</span>
-      </div>
       <div onclick="window.location.href='stock.html'" class="flex flex-col items-center justify-center w-[20%] text-black cursor-pointer">
         <svg class="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" /></svg><span class="text-[10px] font-bold">สต๊อก</span>
+      </div>
+      <div onclick="window.location.href='report.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-black cursor-pointer">
+        <svg class="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" /></svg><span class="text-[10px] font-medium">รายงาน</span>
       </div>
       <div onclick="window.location.href='profile.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-black cursor-pointer">
         <svg class="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg><span class="text-[10px] font-medium">โปรไฟล์</span>
@@ -281,8 +249,7 @@
   <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbxQywqP4da0BYdt_dHQtQl-kYlvGxmdJWNA59oqnZ_AM7SRyEESbMd73UD3Xx6VffQ/exec";
     let allLocations = [];
-    let allInventory = [];
-    let currentFilter = 'ALL';
+    let inventoryData = [];
 
     function handleLogout() {
       if(confirm("ต้องการออกจากระบบใช่หรือไม่?")) {
@@ -292,145 +259,83 @@
     }
 
     window.onload = function() {
-      loadAllLocations();
+      loadInitialData();
     };
 
-    function onPresetSelected() {
-      const select = document.getElementById('preset_prefix_select');
-      const input = document.getElementById('custom_prefix_input');
-      if(select.value !== 'CUSTOM') {
-        input.value = select.value;
-      } else {
-        input.value = '';
-        input.focus();
-      }
+    async function loadInitialData() {
+      await Promise.all([loadLocations(), loadInventory()]);
+      renderLocationsTable(allLocations);
     }
 
-    async function loadAllLocations() {
+    async function loadLocations() {
       try {
-        const [resLoc, resInv] = await Promise.all([
-          fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'get_locations' }) }),
-          fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'get_inventory' }) })
-        ]);
-
-        const dataLoc = await resLoc.json();
-        const dataInv = await resInv.json();
-
-        if(dataLoc.success && dataLoc.data) {
-          allLocations = dataLoc.data;
+        const res = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'get_locations' }) });
+        const result = await res.json();
+        if(result.success && result.data) {
+          allLocations = result.data;
+          document.getElementById('loc-total-badge').innerText = `${allLocations.length} พิกัด`;
         }
-        if(dataInv.success && dataInv.data) {
-          allInventory = dataInv.data;
-        }
-
-        renderLocationsTable();
       } catch(e) {}
     }
 
-    function filterLocations(flt) {
-      currentFilter = flt;
-      ['all', 'bj', 'rt-rack', 'rt-floor'].forEach(f => {
-        const btn = document.getElementById(`flt-${f}`);
-        if(btn) btn.className = "px-3 py-1 rounded text-xs font-bold text-gray-500 hover:text-black transition";
-      });
-
-      let activeBtnId = 'flt-all';
-      if(flt === 'BJ') activeBtnId = 'flt-bj';
-      if(flt === 'RT-RACK') activeBtnId = 'flt-rt-rack';
-      if(flt === 'RT-FLOOR') activeBtnId = 'flt-rt-floor';
-      
-      const activeBtn = document.getElementById(activeBtnId);
-      if(activeBtn) activeBtn.className = "px-3 py-1 rounded text-xs font-bold bg-black text-white transition";
-
-      renderLocationsTable();
+    async function loadInventory() {
+      try {
+        const res = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'get_inventory' }) });
+        const result = await res.json();
+        if(result.success && result.data) {
+          inventoryData = result.data;
+        }
+      } catch(e) {}
     }
 
-    function renderLocationsTable() {
-      const tbody = document.getElementById('locations-table-body');
-      
-      let list = allLocations;
-      if (currentFilter === 'BJ') {
-        list = allLocations.filter(l => l.name && l.name.startsWith('BJI'));
-      } else if (currentFilter === 'RT-RACK') {
-        list = allLocations.filter(l => l.name && l.name.startsWith('RTA'));
-      } else if (currentFilter === 'RT-FLOOR') {
-        list = allLocations.filter(l => l.name && (l.name.startsWith('RT-') || l.type === 'Floor Staging'));
-      }
-
-      let occupiedCount = 0;
-      allLocations.forEach(l => {
-        const hasItem = allInventory.some(i => i.location === l.name && i.status === 'Active' && parseFloat(i.weight_current) > 0);
-        if(hasItem) occupiedCount++;
-      });
-      document.getElementById('location-total-count').innerText = `ทั้งหมด ${allLocations.length} พิกัด (มีของ ${occupiedCount} / ว่าง ${allLocations.length - occupiedCount})`;
-
-      if(list.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" class="py-6 text-center text-gray-400">ยังไม่มีข้อมูลพิกัดในหมวดนี้</td></tr>`;
-        return;
-      }
-
-      tbody.innerHTML = list.map((loc, idx) => {
-        const invItem = allInventory.find(i => i.location === loc.name && i.status === 'Active' && parseFloat(i.weight_current) > 0);
-        const isOccupied = !!invItem || loc.status === 'In' || loc.status === 'Working' || loc.status === 'Occupied';
-        
-        const stockDisplay = invItem 
-          ? `<b class="text-black font-bold">${invItem.item_name || 'สารกาแฟ'}</b> <span class="text-gray-500">(${parseFloat(invItem.weight_current).toFixed(1)} kg)</span>` 
-          : `<span class="text-gray-400">—</span>`;
-
-        return `
-          <tr class="hover:bg-gray-50 transition">
-            <td class="py-2.5 px-3 font-mono font-black text-black text-sm">${loc.name}</td>
-            <td class="py-2.5 px-3 text-center font-bold text-gray-600">${loc.zone || (loc.name.startsWith('BJI') ? 'BJ' : 'RT')}</td>
-            <td class="py-2.5 px-3 text-center text-gray-500">${loc.type || (loc.name.startsWith('BJI') || loc.name.startsWith('RTA') ? 'Rack' : 'Floor Staging')}</td>
-            <td class="py-2.5 px-3 text-left">${stockDisplay}</td>
-            <td class="py-2.5 px-3 text-center">
-              <span class="text-[10px] font-bold px-2 py-0.5 rounded border ${isOccupied ? 'bg-black text-white border-black' : 'bg-gray-100 text-gray-600 border-gray-200'}">
-                ${isOccupied ? 'มีของ' : 'ว่าง'}
-              </span>
-            </td>
-            <td class="py-2.5 px-3 text-center space-x-2">
-              <button type="button" onclick="openQRModal('${loc.name}')" class="text-black hover:underline font-bold cursor-pointer">
-                พิมพ์ QR
-              </button>
-              <button type="button" onclick="deleteLocationAction('${loc.name}')" class="text-gray-400 hover:text-black font-bold cursor-pointer">
-                ลบออก
-              </button>
-            </td>
-          </tr>
-        `;
-      }).join('');
-    }
-
-    async function generateBJIAction() {
+    // 🌟 สร้างแร็ค BJ 65 ช่อง 🌟
+    async function generateBJIRacksAction() {
+      if(!confirm("ยืนยันสร้างผังแร็คคลังใหญ่ BJ (65 ช่อง: BJI01A - BJI05M)?")) return;
       const btn = document.getElementById('btn-gen-bji');
-      btn.innerText = "กำลังสร้างแร็ค BJ...";
+      btn.innerText = "กำลังสร้าง...";
       btn.disabled = true;
+
       try {
         const res = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'generate_bji_racks' }) });
         const result = await res.json();
         alert(result.message);
-        loadAllLocations();
-      } catch(e) { alert("เชื่อมต่อไม่สำเร็จ"); }
-      finally { btn.innerText = "สร้างแร็ค BJ 65 ช่อง"; btn.disabled = false; }
+        loadInitialData();
+      } catch(e) {
+        alert("เชื่อมต่อไม่สำเร็จ");
+      } finally {
+        btn.innerText = "สร้างผังแร็ค BJ (65 ช่อง)";
+        btn.disabled = false;
+      }
     }
 
+    // 🌟 สร้างแร็ค RT 8 ช่อง (อัปเดตเป็น 8 ช่องเรียบร้อย) 🌟
     async function generateRTRacksAction() {
+      if(!confirm("ยืนยันสร้างผังแร็คคลัง RT (8 ช่อง: RTA01A - RTA02D)?")) return;
       const btn = document.getElementById('btn-gen-rt');
-      btn.innerText = "กำลังสร้างแร็ค RT...";
+      btn.innerText = "กำลังสร้าง...";
       btn.disabled = true;
+
       try {
         const res = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'generate_rt_racks' }) });
         const result = await res.json();
         alert(result.message);
-        loadAllLocations();
-      } catch(e) { alert("เชื่อมต่อไม่สำเร็จ"); }
-      finally { btn.innerText = "สร้างแร็ค RT 6 ช่อง"; btn.disabled = false; }
+        loadInitialData();
+      } catch(e) {
+        alert("เชื่อมต่อไม่สำเร็จ");
+      } finally {
+        btn.innerText = "สร้างผังแร็ค RT (8 ช่อง)";
+        btn.disabled = false;
+      }
     }
 
+    // 🌟 สร้างพิกัดถังร่อน / จุดจอดรันเลข 🌟
     async function createCustomLocationsAction() {
       const prefix = document.getElementById('custom_prefix_input').value.trim().toUpperCase();
-      const count = document.getElementById('custom_count_input').value;
-      if(!prefix) return alert("กรุณาระบุคำนำหน้าพิกัด");
+      const count = parseInt(document.getElementById('custom_count_input').value) || 1;
+
+      if(!prefix) return alert("กรุณาระบุคำนำหน้าพิกัด เช่น RT-PACK-");
+
+      if(!confirm(`ยืนยันสร้างพิกัด [${prefix}] จำนวน ${count} จุด?`)) return;
 
       const btn = document.getElementById('btn-gen-custom');
       btn.innerText = "กำลังสร้าง...";
@@ -439,17 +344,79 @@
       try {
         const res = await fetch(API_URL, {
           method: "POST",
-          body: JSON.stringify({ action: 'add_custom_locations', prefix: prefix, count: count, zone: 'RT', type: 'Floor Staging' })
+          body: JSON.stringify({
+            action: 'add_custom_locations',
+            prefix: prefix,
+            count: count,
+            zone: 'RT',
+            type: 'Floor Staging'
+          })
         });
         const result = await res.json();
         alert(result.message);
-        loadAllLocations();
-      } catch(e) { alert("เชื่อมต่อไม่สำเร็จ"); }
-      finally { btn.innerText = "สร้างพิกัดรันเลข"; btn.disabled = false; }
+        loadInitialData();
+      } catch(e) {
+        alert("เชื่อมต่อไม่สำเร็จ");
+      } finally {
+        btn.innerText = "สร้างพิกัดรันเลข";
+        btn.disabled = false;
+      }
     }
 
+    function setQuickPrefix(prefix, count) {
+      document.getElementById('custom_prefix_input').value = prefix;
+      document.getElementById('custom_count_input').value = count;
+    }
+
+    // แสดงตารางพิกัด
+    function renderLocationsTable(list) {
+      const tbody = document.getElementById('locations-tbody');
+      if(list.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-gray-400">ไม่พบข้อมูลพิกัด</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = list.map(loc => {
+        const itemInLoc = inventoryData.find(i => i.location === loc.name && i.status === 'Active' && parseFloat(i.weight_current) > 0);
+        const isOccupied = !!itemInLoc;
+
+        return `
+          <tr class="hover:bg-gray-50 transition">
+            <td class="py-2.5 px-3 font-mono font-black text-black text-sm">${loc.name}</td>
+            <td class="py-2.5 px-3 text-center text-gray-600 font-semibold">${loc.name.startsWith('BJI') ? 'BJ' : 'RT'}</td>
+            <td class="py-2.5 px-3 text-center text-gray-500">${loc.type || 'Rack'}</td>
+            <td class="py-2.5 px-3 text-center">
+              <span class="px-2.5 py-0.5 rounded text-[10px] font-bold ${isOccupied ? 'bg-black text-white' : 'bg-gray-100 text-gray-500 border border-gray-200'}">
+                ${isOccupied ? `มีของ (${parseFloat(itemInLoc.weight_current).toFixed(1)} kg)` : 'ว่าง'}
+              </span>
+            </td>
+            <td class="py-2.5 px-3 text-center">
+              <div class="flex justify-center items-center gap-1.5">
+                <button type="button" onclick="printQRLabel('${loc.name}', '${loc.name.startsWith('BJI') ? 'BJ' : 'RT'}', '${loc.type || 'Rack'}')" class="px-2.5 py-1 bg-white hover:bg-gray-100 text-black border border-gray-300 rounded text-xs font-bold transition cursor-pointer">
+                  🖨️ พิมพ์ QR
+                </button>
+                <button type="button" onclick="deleteLocationAction('${loc.name}')" class="px-2 py-1 bg-gray-100 hover:bg-black hover:text-white text-gray-500 rounded text-xs font-bold transition cursor-pointer" title="ลบพิกัดนี้">
+                  ✕
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function filterLocationsTable() {
+      const q = document.getElementById('locSearchInput').value.toLowerCase().trim();
+      const filtered = allLocations.filter(l => 
+        l.name.toLowerCase().includes(q) ||
+        (l.type && l.type.toLowerCase().includes(q))
+      );
+      renderLocationsTable(filtered);
+    }
+
+    // ลบพิกัด
     async function deleteLocationAction(code) {
-      if(!confirm(`ต้องการลบพิกัด [${code}] ออกจากระบบใช่หรือไม่?`)) return;
+      if(!confirm(`ต้องการลบพิกัด [${code}] ออกจากระบบใช่หรือไม่?\n\n*หมายเหตุ: หากยังมีสินค้าตกค้างอยู่ในพิกัดนี้ ระบบจะไม่อนุญาตให้ลบ*`)) return;
 
       try {
         const res = await fetch(API_URL, {
@@ -458,24 +425,29 @@
         });
         const result = await res.json();
         alert(result.message);
-        if(result.success) loadAllLocations();
-      } catch(e) { alert("เชื่อมต่อไม่สำเร็จ"); }
+        loadInitialData();
+      } catch(e) {
+        alert("เชื่อมต่อไม่สำเร็จ");
+      }
     }
 
-    function openQRModal(code) {
-      document.getElementById('qr-modal-code').innerText = code;
+    // 🖨️ พิมพ์สติ๊กเกอร์ QR Code 1 แผ่นถ้วนเป๊ะ
+    function printQRLabel(code, zone, type) {
+      document.getElementById('qr-label-code').innerText = code;
+      document.getElementById('qr-label-zone').innerText = `โซน: ${zone}`;
+      document.getElementById('qr-label-type').innerText = type;
 
-      const box = document.getElementById('qrcode-modal-box');
-      box.innerHTML = '';
+      const qrContainer = document.getElementById('qr-box-container');
+      qrContainer.innerHTML = '';
       if(typeof QRCode !== 'undefined') {
-        new QRCode(box, { text: code, width: 130, height: 130, correctLevel: QRCode.CorrectLevel.M });
+        new QRCode(qrContainer, { text: code, width: 120, height: 120, correctLevel: QRCode.CorrectLevel.H });
       }
 
-      document.getElementById('qr-print-modal').style.display = 'flex';
+      document.getElementById('qr-modal').style.display = 'flex';
     }
 
     function closeQRModal() {
-      document.getElementById('qr-print-modal').style.display = 'none';
+      document.getElementById('qr-modal').style.display = 'none';
     }
   </script>
 </body>
