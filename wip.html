@@ -12,6 +12,7 @@
     body { -ms-overflow-style: none; scrollbar-width: none; }
     .pb-safe { padding-bottom: env(safe-area-inset-bottom, 24px); }
 
+    /* 🌟 ระบบพิมพ์ใบนำงานคั่ว A4 เปล่า 🌟 */
     @page { size: A4 portrait; margin: 8mm; }
     @media print {
       #app-layout, aside, #bottom-nav, .no-print, nav, button, header { display: none !important; }
@@ -19,7 +20,7 @@
       #a4-traveler-modal { display: block !important; position: static !important; width: 100% !important; padding: 0 !important; background: transparent !important; }
       .a4-traveler-page {
         width: 194mm !important; height: 275mm !important; page-break-inside: avoid !important; break-inside: avoid !important;
-        border: 2px solid #000 !important; margin: 0 auto 10mm auto !important; padding: 10mm 12mm !important; background: white !important;
+        border: 2px solid #000 !important; margin: 0 auto !important; padding: 10mm 12mm !important; background: white !important;
         box-sizing: border-box !important; display: flex !important; flex-direction: column !important; justify-content: space-between !important;
       }
       .a4-traveler-page:not(:last-child) { page-break-after: always !important; break-after: page !important; }
@@ -493,7 +494,7 @@
         </div>
 
         <!-- ========================================================================= -->
-        <!-- 🌾 แท็บที่ 3: เตรียมสาร (🌟 สแกน QR ถังพักปลายทางก่อนจบงาน 🌟) 🌾 -->
+        <!-- 🌾 แท็บที่ 3: เตรียมสาร (🌟 สแกน QR พาเลทจริง 100% 🌟) 🌾 -->
         <!-- ========================================================================= -->
         <div id="zone-sift" class="hidden space-y-6 no-print">
 
@@ -506,25 +507,25 @@
               <span class="text-xs font-bold bg-gray-100 text-black px-2.5 py-1 rounded">ย้ายเข้าคลัง RT</span>
             </div>
 
-            <!-- เลือกพาเลทต้นทาง -->
-            <div class="space-y-2">
-              <label class="block text-xs font-bold text-gray-700">เลือกพาเลทต้นทาง *</label>
+            <!-- 🌟 1. บังคับยิงสแกน QR ป้ายพาเลทจริง (ตัด Dropdown ออกเรียบร้อย) 🌟 -->
+            <div class="space-y-1.5">
+              <div class="flex justify-between items-center">
+                <label class="block text-xs font-bold text-black">1. สแกน QR พาเลทต้นทาง (แร็ค BJ) *</label>
+                <span class="text-[10px] text-gray-500 font-bold">ยิง QR ป้ายพาเลทจริง</span>
+              </div>
               <div class="flex gap-2">
-                <input type="text" id="sift_pallet_id" placeholder="สแกน QR พาเลท หรือเลือกจากรายการ" class="flex-1 px-3 py-2.5 border border-gray-300 rounded-lg font-mono font-bold text-black uppercase text-sm focus:border-black focus:outline-none">
+                <input type="text" id="sift_pallet_id" oninput="onSiftPalletIdInputChanged()" placeholder="ยิงสแกน QR พาเลท เช่น PAL-..." class="flex-1 px-3 py-2.5 border-2 border-black rounded-lg font-mono font-black text-black uppercase text-xs focus:outline-none">
                 <button type="button" onclick="startScanner('sift_pallet_id')" class="bg-black hover:bg-gray-800 text-white px-4 rounded-lg font-bold text-xs transition cursor-pointer">
                   เปิดกล้อง
                 </button>
               </div>
-              <select id="sift_pallet_select" onchange="onSiftPalletSelected()" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-xs font-medium bg-gray-50 text-black focus:outline-none">
-                <option value="">-- หรือคลิกเลือกพาเลทต้นทางที่มีในคลัง --</option>
-              </select>
             </div>
 
-            <!-- กล่องแสดงรายละเอียดพาเลทต้นทาง -->
+            <!-- กล่องแสดงรายละเอียดพาเลทต้นทางที่สแกนพบ -->
             <div id="sift-pallet-info" class="hidden p-4 bg-gray-50 rounded-xl border border-gray-200 space-y-2 text-xs">
               <div class="flex justify-between items-start">
                 <div>
-                  <span class="text-[10px] text-gray-400 font-bold uppercase block">สารกาแฟ</span>
+                  <span class="text-[10px] text-gray-400 font-bold uppercase block">สารกาแฟที่ตรวจพบ</span>
                   <h4 id="info-bean-name" class="text-sm font-black text-black">-</h4>
                 </div>
                 <span id="info-pallet-loc" class="font-mono font-black text-black bg-white px-2 py-0.5 rounded border border-gray-200">-</span>
@@ -573,7 +574,7 @@
               </div>
             </div>
 
-            <!-- 🌟 ขั้นตอนสุดท้ายก่อนจบงานเตรียมสาร: ยิงสแกน QR ถังพักสารสะอาดปลายทาง 🌟 -->
+            <!-- ขั้นตอนสุดท้ายก่อนจบงานเตรียมสาร: ยิงสแกน QR ถังพักสารสะอาดปลายทาง -->
             <div class="p-4 bg-gray-50 rounded-xl border-2 border-black space-y-2 text-xs">
               <div class="flex justify-between items-center">
                 <label class="block font-black text-black text-sm">ขั้นตอนสุดท้าย: ยิงสแกน QR ถังพักสารสะอาดปลายทาง (Destination Bin) *</label>
@@ -970,7 +971,7 @@
     }
 
     // =========================================================================
-    // 🌾 ฟังก์ชันเตรียมสาร (แท็บ 3)
+    // 🌾 ฟังก์ชันเตรียมสาร (แท็บ 3: บังคับยิง QR พาเลทจริง 100%)
     // =========================================================================
     async function loadSiftingData() {
       try {
@@ -978,25 +979,31 @@
         const result = await res.json();
         if(result.success && result.data) {
           allInventoryData = result.data;
-          const rawPalletsList = allInventoryData.filter(i => 
-            (i.category === 'Green Bean' || !i.category) && 
-            i.status === 'Active' && 
-            i.location && i.location.startsWith('BJI') &&
-            parseFloat(i.weight_current) > 0
-          );
-
-          const select = document.getElementById('sift_pallet_select');
-          select.innerHTML = '<option value="">-- หรือคลิกเลือกพาเลทต้นทางที่มีในคลัง --</option>' + 
-            rawPalletsList.map((p, idx) => `<option value="${p.barcode_id}">[${p.location}] ${p.item_name} - ${p.barcode_id} (${p.sacks || '-'} กระสอบ / ${p.weight_current} kg)</option>`).join('');
         }
       } catch(e) {}
     }
 
-    function onSiftPalletSelected() {
-      const palletId = document.getElementById('sift_pallet_select').value;
-      if(!palletId) return;
-      const p = allInventoryData.find(i => i.barcode_id === palletId);
-      if(p) setSiftPallet(p);
+    // 🌟 ตรวจจับพาเลทจริงเมื่อยิง QR หรือพิมพ์รหัส 🌟
+    function onSiftPalletIdInputChanged() {
+      const val = document.getElementById('sift_pallet_id').value.trim();
+      if(!val) {
+        document.getElementById('sift-pallet-info').classList.add('hidden');
+        selectedRawPallet = null;
+        return;
+      }
+
+      selectedRawPallet = allInventoryData.find(p => 
+        (p.barcode_id === val || p.pallet_id === val) &&
+        p.status === 'Active' &&
+        parseFloat(p.weight_current) > 0
+      );
+
+      if (selectedRawPallet) {
+        setSiftPallet(selectedRawPallet);
+      } else {
+        document.getElementById('sift-pallet-info').classList.add('hidden');
+        selectedRawPallet = null;
+      }
     }
 
     function setSiftPallet(p) {
@@ -1052,10 +1059,10 @@
       const destLocation = document.getElementById('sift_dest_location').value.trim();
 
       if(!selectedRawPallet && palletId) {
-        selectedRawPallet = allInventoryData.find(p => p.barcode_id === palletId);
+        onSiftPalletIdInputChanged();
       }
 
-      if(!selectedRawPallet) return alert("กรุณาเลือกหรือสแกนพาเลทต้นทางก่อน");
+      if(!selectedRawPallet) return alert("กรุณายิงสแกน QR ป้ายพาเลทต้นทางก่อน");
       if(pickedSacks <= 0) return alert("กรุณาระบุจำนวนกระสอบที่เบิกมาร่อน");
       if(cleanWeight <= 0) return alert("กรุณาระบุน้ำหนักสารพร้อมคั่ว");
       if(!destLocation) return alert("กรุณายิงสแกน QR ถังพักสารสะอาดปลายทาง (เช่น RT-SIFT-L-01 หรือ RT-ROAST-01)");
@@ -1432,8 +1439,7 @@
             document.getElementById(activeTargetInputId).value = val;
 
             if(activeTargetInputId === 'sift_pallet_id') {
-              const found = allInventoryData.find(p => p.barcode_id === val || p.pallet_id === val);
-              if(found) setSiftPallet(found);
+              onSiftPalletIdInputChanged();
             } else if(activeTargetInputId === 'roast_barcode_input') {
               onRoastBarcodeInputChanged();
             }
