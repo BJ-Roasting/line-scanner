@@ -15,7 +15,7 @@
 
   <div id="app-layout" class="flex min-h-screen">
 
-    <!-- 💻 Sidebar Desktop (ตัดเบิกคั่วออก เหลือ 4 เมนูมาตรฐานเป๊ะ 100%) -->
+    <!-- 💻 Sidebar Desktop (4 เมนูมาตรฐาน สะอาด คลีน) -->
     <aside class="hidden md:flex flex-col w-64 fixed left-0 top-0 h-screen bg-white border-r border-gray-200 pt-7 pb-6 px-4 z-40 shadow-sm no-print">
       <div class="px-2 mb-7">
         <div class="flex items-center gap-2.5">
@@ -31,19 +31,15 @@
         <div>
           <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest px-3 mb-2">การปฏิบัติการ</p>
           <nav class="space-y-1">
-            <!-- 1. หน้าแรก -->
             <a href="index.html" class="flex items-center gap-3 text-gray-500 hover:text-black hover:bg-gray-100 px-3 py-2 rounded-lg font-bold text-xs transition">
               <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg> หน้าแรก
             </a>
-            <!-- 2. ทำงาน -->
             <a href="planner.html" class="flex items-center gap-3 text-gray-500 hover:text-black hover:bg-gray-100 px-3 py-2 rounded-lg font-bold text-xs transition">
               <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 011.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.56.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.893.149c-.425.07-.765.383-.93.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 01-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.397.165-.71.505-.78.929l-.15.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 01-.12-1.45l.527-.737c.25-.35.273-.806.108-1.204-.165-.397-.505-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.107-1.204l-.527-.738a1.125 1.125 0 01.12-1.45l.773-.773a1.125 1.125 0 011.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg> ทำงาน
             </a>
-            <!-- 3. สต๊อกสินค้า (Active สีดำ) -->
             <a href="stock.html" class="flex items-center gap-3 bg-black text-white px-3 py-2 rounded-lg font-bold text-xs transition shadow-sm">
               <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" /></svg> สต๊อกสินค้า
             </a>
-            <!-- 4. รายงาน -->
             <a href="report.html" class="flex items-center gap-3 text-gray-500 hover:text-black hover:bg-gray-100 px-3 py-2 rounded-lg font-bold text-xs transition">
               <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" /></svg> รายงาน
             </a>
@@ -82,7 +78,7 @@
           </div>
         </div>
 
-        <!-- 4 สถิติภาพรวมคงคลัง -->
+        <!-- 4 สถิติภาพรวมคงคลัง (คำนวณรวม 73 ช่องแร็ค) -->
         <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
           <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
             <span class="text-xs font-bold text-gray-500 block">สารกาแฟในแร็ค</span>
@@ -97,16 +93,16 @@
           <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
             <span class="text-xs font-bold text-gray-500 block">แร็คที่มีของ</span>
             <p class="text-2xl font-black text-black mt-1" id="stat-rack-in">0</p>
-            <span class="text-[10px] text-gray-400">จากทั้งหมด</span>
+            <span class="text-[10px] text-gray-400">จาก 73 ช่อง</span>
           </div>
           <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
             <span class="text-xs font-bold text-gray-500 block">แร็คว่าง</span>
-            <p class="text-2xl font-black text-black mt-1" id="stat-rack-empty">71</p>
+            <p class="text-2xl font-black text-black mt-1" id="stat-rack-empty">73</p>
             <span class="text-[10px] text-gray-400">ช่อง</span>
           </div>
         </div>
 
-        <!-- 🌟 1. กล่องเดิม: พักรอจัดการ (เป้าหมายต้องเป็น 0) สำหรับคลังใหญ่ BJ 🌟 -->
+        <!-- 🌟 1. กล่องเดิม: พักรอจัดการ (เป้าหมายต้องเป็น 0) 🌟 -->
         <div class="bg-white p-5 rounded-xl border-2 border-black shadow-sm space-y-3">
           <div class="flex justify-between items-center border-b border-gray-100 pb-2">
             <div>
@@ -164,7 +160,7 @@
           </div>
         </div>
 
-        <!-- 🌟 2. กล่องใหม่: Floor Staging พิกัดทำงานโรงคั่ว RT (6 จุดครบวงจร) 🌟 -->
+        <!-- 🌟 2. Floor Staging คลัง RT (6 จุดสายพานผลิต) 🌟 -->
         <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-4">
           <div class="flex justify-between items-center border-b border-gray-100 pb-2">
             <div>
@@ -174,9 +170,7 @@
             <span class="text-xs font-bold text-black bg-gray-100 px-2.5 py-1 rounded">โรงคั่ว RT</span>
           </div>
 
-          <!-- 6 การ์ดเรียงตามขั้นตอนกระบวนการผลิตจริงของ RT -->
           <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2.5 pt-1">
-            
             <!-- 1. จำนวนสารทั้งหมดในคลัง RT -->
             <div class="p-3 bg-gray-50 rounded-xl border border-gray-200 flex flex-col justify-between space-y-2">
               <div>
@@ -266,7 +260,46 @@
                 <p class="text-[11px] font-mono font-bold text-black" id="pipe-out-weight">0.0 kg</p>
               </div>
             </div>
+          </div>
+        </div>
 
+        <!-- 🌟 3. ผังแร็คคลัง RT (8 ช่อง: 2 ชั้น x 4 ช่อง A-D) [เพิ่มใหม่ตามสั่ง] 🌟 -->
+        <div class="bg-white p-5 rounded-xl border-2 border-black shadow-sm space-y-3">
+          <div class="flex justify-between items-center border-b border-gray-100 pb-2">
+            <div>
+              <h2 class="text-sm font-black text-black">ผังแร็คโรงคั่ว RT (8 ช่อง)</h2>
+              <p class="text-[11px] text-gray-400">RTA01A ถึง RTA02D (คลิกที่ช่องเพื่อดูสารกาแฟและน้ำหนัก)</p>
+            </div>
+            <div class="flex gap-3 text-xs">
+              <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded bg-black inline-block"></span> มีของ</span>
+              <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded border border-gray-300 bg-white inline-block"></span> ว่าง</span>
+            </div>
+          </div>
+
+          <div class="overflow-x-auto pb-1">
+            <div id="rack-rt-grid" class="max-w-xl mx-auto space-y-2 py-1">
+              <p class="text-center py-4 text-gray-400 text-xs">กำลังโหลดผังแร็ค RT...</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 🌟 4. ผังแร็คคลังใหญ่ BJ (65 ช่อง: 5 ชั้น x 13 ช่อง A-M) 🌟 -->
+        <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-3">
+          <div class="flex justify-between items-center border-b border-gray-100 pb-2">
+            <div>
+              <h2 class="text-sm font-bold text-black">ผังแร็คคลังใหญ่ BJ (65 ช่อง)</h2>
+              <p class="text-[11px] text-gray-400">BJI01A ถึง BJI05M (คลิกที่ช่องเพื่อดูสารกาแฟและน้ำหนัก)</p>
+            </div>
+            <div class="flex gap-3 text-xs">
+              <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded bg-black inline-block"></span> มีของ</span>
+              <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded border border-gray-300 bg-white inline-block"></span> ว่าง</span>
+            </div>
+          </div>
+
+          <div class="overflow-x-auto pb-1">
+            <div id="rack-grid" class="min-w-[800px] space-y-1.5">
+              <p class="text-center py-6 text-gray-400 text-xs">กำลังโหลดผังแร็ค BJ...</p>
+            </div>
           </div>
         </div>
 
@@ -327,24 +360,6 @@
           </div>
         </div>
 
-        <!-- ผังแร็ค BJ -->
-        <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-3">
-          <div class="flex justify-between items-center border-b border-gray-100 pb-2">
-            <h2 class="text-sm font-bold text-black">ผังแร็ค BJ</h2>
-            <div class="flex gap-3 text-xs">
-              <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded bg-black inline-block"></span> มีของ</span>
-              <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded bg-gray-400 inline-block"></span> ใช้งาน</span>
-              <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded border border-gray-300 bg-white inline-block"></span> ว่าง</span>
-            </div>
-          </div>
-
-          <div class="overflow-x-auto pb-1">
-            <div id="rack-grid" class="min-w-[800px] space-y-1.5">
-              <p class="text-center py-6 text-gray-400 text-xs">กำลังโหลดผังแร็ค...</p>
-            </div>
-          </div>
-        </div>
-
         <!-- รายการสินค้าในสต๊อก -->
         <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden p-5 space-y-3">
           <div class="flex justify-between items-center border-b border-gray-100 pb-3">
@@ -376,7 +391,7 @@
     </main>
   </div>
 
-  <!-- ป๊อปการ์ดแสดงรายละเอียดแร็ค -->
+  <!-- ป๊อปการ์ดแสดงรายละเอียดแร็ค (รองรับทั้งแร็ค BJ และแร็ค RT) -->
   <div id="rack-modal" style="display: none;" onclick="if(event.target === this) closeRackModal()" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 items-center justify-center p-4 no-print">
     <div class="bg-white max-w-sm w-full p-6 rounded-2xl shadow-2xl border-2 border-black space-y-4">
       <div class="flex justify-between items-start border-b border-gray-100 pb-3">
@@ -453,7 +468,8 @@
 
   <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbxQywqP4da0BYdt_dHQtQl-kYlvGxmdJWNA59oqnZ_AM7SRyEESbMd73UD3Xx6VffQ/exec";
-    const BAYS = ['A','B','C','D','E','F','G','H','I','J','K','L','M'];
+    const BAYS_BJ = ['A','B','C','D','E','F','G','H','I','J','K','L','M'];
+    const BAYS_RT = ['A','B','C','D'];
     let inventoryData = [];
     let locationsData = [];
     let itemMasterData = [];
@@ -645,6 +661,7 @@
       document.getElementById('bean-drilldown-box').classList.add('hidden');
     }
 
+    // 🌟 คำนวณยอดสถิติภาพรวมสต๊อก (รวม 73 แร็ค: 65 BJ + 8 RT) 🌟
     function updateDashboardStats() {
       // 1. สถิติด้านบน
       const greenBeansInRack = inventoryData
@@ -664,11 +681,12 @@
       );
       const rackInCount = occupiedRacks.size;
       document.getElementById('stat-rack-in').innerText = rackInCount;
-      document.getElementById('stat-rack-empty').innerText = (71 - rackInCount);
+      
+      // รวม 73 ช่องแร็ค (65 ช่อง BJ + 8 ช่อง RT)
+      const totalAllRacks = 73;
+      document.getElementById('stat-rack-empty').innerText = (totalAllRacks - rackInCount);
 
-      // ==========================================
-      // 🌟 2. กล่องที่ 1 (ของเดิม): พักรอจัดการ (เป้าหมายต้องเป็น 0) 🌟
-      // ==========================================
+      // 2. กล่องที่ 1: พักรอจัดการ (เป้าหมาย 0)
       const dockItems = inventoryData.filter(i => (i.location === 'DOCK-STAGE' || i.status === 'Loaded') && i.status !== 'Empty');
       const dockWeight = dockItems.reduce((sum, item) => sum + (parseFloat(item.weight_current) || 0), 0);
       document.getElementById('pipe-dock-count').innerText = dockItems.length;
@@ -710,9 +728,7 @@
         packBadge.innerText = "รอแพ็คถุง";
       }
 
-      // ==========================================
-      // 🌟 3. กล่องที่ 2 (ของใหม่): Floor Staging คลัง RT (6 จุด) 🌟
-      // ==========================================
+      // 3. กล่องที่ 2: Floor Staging คลัง RT (6 จุด)
       const rtTotalItems = inventoryData.filter(i => i.location && (i.location.startsWith('RT') || i.location.startsWith('RTA')) && i.status !== 'Empty');
       updateStageCard('pipe-rt-total-count', 'pipe-rt-total-weight', 'pipe-rt-total-badge', rtTotalItems.length, rtTotalItems, null, 'รวมทุกจุดใน RT');
 
@@ -731,6 +747,7 @@
       const outItems = inventoryData.filter(i => i.location && (i.location.startsWith('RT-OUT') || i.location === 'OUTBOUND') && i.status !== 'Empty');
       updateStageCard('pipe-out-count', 'pipe-out-weight', 'pipe-out-badge', outItems.length, outItems, null, 'RT-OUT');
 
+      // วาดผังแร็คทั้ง 2 จุด
       renderVisualRackMap(locationsData);
     }
 
@@ -758,22 +775,21 @@
       }
     }
 
+    // 🌟 วาดผังแร็ค BJ (65 ช่อง) และ แร็ค RT (8 ช่อง) 🌟
     function renderVisualRackMap(locs) {
+      renderBJRackMap(locs);
+      renderRTRackMap(locs);
+    }
+
+    // วาดแร็ค BJ (65 ช่อง: 5 ชั้น x 13 ช่อง)
+    function renderBJRackMap(locs) {
       const container = document.getElementById('rack-grid');
       container.innerHTML = '';
-
-      const COLOR_MAP = {
-        'In': 'bg-black text-white hover:bg-gray-800',
-        'Working': 'bg-gray-500 text-white',
-        'Packing': 'bg-gray-700 text-white',
-        'Out': 'border border-gray-400 text-black',
-        'Empty': 'bg-white border border-gray-200 text-gray-400 hover:bg-gray-50'
-      };
 
       const colHeader = document.createElement('div');
       colHeader.className = "flex items-center gap-1 mb-1";
       colHeader.innerHTML = `<div class="w-12 text-center font-bold text-[10px] text-gray-400">ชั้น\\ช่อง</div>` +
-        BAYS.map(b => `<div class="flex-1 text-center font-bold text-[10px] text-black bg-gray-100 py-0.5 rounded">${b}</div>`).join('');
+        BAYS_BJ.map(b => `<div class="flex-1 text-center font-bold text-[10px] text-black bg-gray-100 py-0.5 rounded">${b}</div>`).join('');
       container.appendChild(colHeader);
 
       for(let level = 5; level >= 1; level--) {
@@ -786,25 +802,54 @@
         label.innerText = `ชั้น ${levelStr}`;
         row.appendChild(label);
 
-        BAYS.forEach(bay => {
+        BAYS_BJ.forEach(bay => {
           const locName = `BJI${levelStr}${bay}`;
           const itemInRack = inventoryData.find(i => i.location === locName && i.status === 'Active');
-          const loc = locs.find(l => l.name === locName);
-
-          let status = 'Empty';
-          if (itemInRack) {
-            status = 'In';
-          } else if (loc) {
-            status = loc.status;
-          }
-
-          const colorClass = COLOR_MAP[status] || COLOR_MAP['Empty'];
+          const isOccupied = !!itemInRack;
 
           const cell = document.createElement('div');
-          cell.className = `flex-1 py-1.5 text-center rounded text-[10px] font-bold cursor-pointer transition ${colorClass}`;
+          cell.className = `flex-1 py-1.5 text-center rounded text-[10px] font-bold cursor-pointer transition ${isOccupied ? 'bg-black text-white hover:bg-gray-800' : 'bg-white border border-gray-200 text-gray-400 hover:bg-gray-50'}`;
           cell.innerText = `${bay}`;
-          cell.title = `${locName} | ${status}`;
-          cell.onclick = () => openRackModal(locName, itemInRack, status);
+          cell.title = `${locName} | ${isOccupied ? 'มีของ' : 'ว่าง'}`;
+          cell.onclick = () => openRackModal(locName, itemInRack, isOccupied ? 'In' : 'Empty');
+
+          row.appendChild(cell);
+        });
+        container.appendChild(row);
+      }
+    }
+
+    // 🌟 วาดแร็ค RT (8 ช่อง: 2 ชั้น x 4 ช่อง A, B, C, D) 🌟
+    function renderRTRackMap(locs) {
+      const container = document.getElementById('rack-rt-grid');
+      container.innerHTML = '';
+
+      const colHeader = document.createElement('div');
+      colHeader.className = "flex items-center gap-1.5 mb-1";
+      colHeader.innerHTML = `<div class="w-14 text-center font-bold text-[10px] text-gray-400">ชั้น\\ช่อง</div>` +
+        BAYS_RT.map(b => `<div class="flex-1 text-center font-bold text-xs text-black bg-gray-100 py-1 rounded-lg">${b}</div>`).join('');
+      container.appendChild(colHeader);
+
+      for(let level = 2; level >= 1; level--) {
+        const levelStr = String(level).padStart(2, '0');
+        const row = document.createElement('div');
+        row.className = "flex items-center gap-1.5";
+
+        const label = document.createElement('div');
+        label.className = "w-14 text-xs font-bold text-gray-600 text-right pr-1";
+        label.innerText = `ชั้น ${levelStr}`;
+        row.appendChild(label);
+
+        BAYS_RT.forEach(bay => {
+          const locName = `RTA${levelStr}${bay}`;
+          const itemInRack = inventoryData.find(i => i.location === locName && i.status === 'Active');
+          const isOccupied = !!itemInRack;
+
+          const cell = document.createElement('div');
+          cell.className = `flex-1 py-3 text-center rounded-lg text-xs font-black cursor-pointer transition border-2 ${isOccupied ? 'bg-black text-white border-black hover:bg-gray-800' : 'bg-white border-gray-300 text-gray-400 hover:bg-gray-50'}`;
+          cell.innerText = `${locName}`;
+          cell.title = `${locName} | ${isOccupied ? 'มีของ' : 'ว่าง'}`;
+          cell.onclick = () => openRackModal(locName, itemInRack, isOccupied ? 'In' : 'Empty');
 
           row.appendChild(cell);
         });
