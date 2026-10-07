@@ -12,7 +12,6 @@
     body { -ms-overflow-style: none; scrollbar-width: none; }
     .pb-safe { padding-bottom: env(safe-area-inset-bottom, 24px); }
 
-    /* 🌟 ระบบพิมพ์ใบนำงานคั่ว A4 เปล่า 🌟 */
     @page { size: A4 portrait; margin: 8mm; }
     @media print {
       #app-layout, aside, #bottom-nav, .no-print, nav, button, header { display: none !important; }
@@ -96,7 +95,7 @@
       <!-- 👇 พื้นที่ทำงาน 3 แท็บหลัก 👇 -->
       <div class="p-4 md:p-8 pb-32 max-w-5xl space-y-6">
         
-        <!-- 🌟 แถบสลับ 3 แท็บหลักตามสั่ง 🌟 -->
+        <!-- แถบสลับ 3 แท็บหลัก -->
         <div class="flex gap-2 overflow-x-auto border-b border-gray-200 pb-2 no-print">
           <button type="button" id="tab-btn-hub" onclick="switchWIPTab('hub')" class="px-4 py-2 font-bold rounded-lg bg-black text-white text-xs md:text-sm whitespace-nowrap shadow-sm transition cursor-pointer">
             1. ใบงาน & สรุปยอด
@@ -110,11 +109,10 @@
         </div>
 
         <!-- ========================================================================= -->
-        <!-- 📋 แท็บที่ 1: ใบงาน & สรุปยอด (Blank Roast WO Hub + Shift KPI) 📋 -->
+        <!-- 📋 แท็บที่ 1: ใบงาน & สรุปยอด 📋 -->
         <!-- ========================================================================= -->
         <div id="zone-hub" class="space-y-6 no-print">
 
-          <!-- สรุปผลผลิตประจำวันคู่กันทั้งฝั่งคั่วและฝั่งร่อน -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <!-- KPI คั่วกาแฟ -->
             <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 space-y-2">
@@ -169,7 +167,7 @@
             </div>
           </div>
 
-          <!-- การ์ดสร้างใบงานคั่วเปล่าประจำวัน (Blank Roast WO Hub) -->
+          <!-- การ์ดสร้างใบงานคั่วเปล่าประจำวัน -->
           <div class="bg-white p-6 rounded-xl border-2 border-black shadow-sm space-y-4">
             <div class="flex justify-between items-center border-b border-gray-100 pb-2">
               <div>
@@ -219,7 +217,7 @@
         </div>
 
         <!-- ========================================================================= -->
-        <!-- 🔥 แท็บที่ 2: คั่วกาแฟหน้าเตา (Roasting Execution) 🔥 -->
+        <!-- 🔥 แท็บที่ 2: คั่วกาแฟหน้าเตา 🔥 -->
         <!-- ========================================================================= -->
         <div id="zone-roast" class="hidden space-y-6 no-print">
 
@@ -233,7 +231,6 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <!-- 1. สแกน QR บนใบ A4 -->
               <div>
                 <label class="block text-xs font-bold text-gray-700 mb-1">1. สแกน QR ใบงานคั่ว (จากกระดาษ A4) *</label>
                 <div class="flex gap-2">
@@ -244,7 +241,6 @@
                 </div>
               </div>
 
-              <!-- 2. สแกนสารพร้อมคั่ว (ถัง RT หรือ พาเลท BJ) -->
               <div>
                 <div class="flex justify-between items-center mb-1">
                   <label class="block text-xs font-bold text-black">2. สแกนสารที่จะคั่ว (ถัง RT หรือ พาเลท BJ) *</label>
@@ -276,7 +272,7 @@
               </div>
             </div>
 
-            <!-- ส่วนเบิกกระสอบ & คำนวณเศษเปิดค้าง 1 กระสอบ (กรณีเบิกจากแร็ค BJ) -->
+            <!-- ส่วนเบิกกระสอบ BJ & คำนวณเศษเปิดค้าง 1 กระสอบ -->
             <div id="bj-pallet-pick-box" class="hidden p-4 rounded-xl border-2 border-black bg-gray-50 space-y-3 text-xs">
               <div class="flex justify-between items-center border-b border-gray-200 pb-1.5">
                 <span class="font-black text-black">เบิกกระสอบตรงจากแร็ค BJ เข้าเตา</span>
@@ -445,14 +441,14 @@
                 <input type="text" id="roast_notes" placeholder="เช่น เมล็ดขยายตัวดี, กลิ่นหอมช็อกโกแลต" class="w-full px-3 py-1.5 border border-gray-300 rounded text-xs">
               </div>
 
-              <!-- ขั้นตอนสุดท้ายก่อนจบงาน: บังคับยิงสแกน QR ถังพักกาแฟดีปลายทาง -->
+              <!-- ขั้นตอนสุดท้าย: บังคับยิงสแกน QR ถังพักกาแฟดีปลายทาง -->
               <div class="p-4 bg-gray-50 rounded-xl border-2 border-black space-y-2 text-xs">
                 <div class="flex justify-between items-center">
                   <label class="block font-black text-black text-sm">ขั้นตอนสุดท้าย: ยิงสแกน QR ถังพักกาแฟคั่ว (Destination Bin) *</label>
                   <span class="text-[10px] text-gray-500 font-bold">ยิง QR ป้ายข้างถัง</span>
                 </div>
                 <div class="flex gap-2">
-                  <input type="text" id="roast_dest_location" placeholder="ยิงสแกน QR ป้ายข้างถังพักกาแฟดี เช่น RT-REST-01" class="flex-1 px-3 py-2.5 border-2 border-black rounded-lg font-mono font-black text-black uppercase text-xs focus:outline-none">
+                  <input type="text" id="roast_dest_location" placeholder="ยิงสแกน QR ป้ายข้างถังพัก เช่น RT-REST-01" class="flex-1 px-3 py-2.5 border-2 border-black rounded-lg font-mono font-black text-black uppercase text-xs focus:outline-none">
                   <button type="button" onclick="startScanner('roast_dest_location')" class="bg-black hover:bg-gray-800 text-white px-4 rounded-lg font-bold text-xs transition cursor-pointer">
                     เปิดกล้อง
                   </button>
@@ -497,7 +493,7 @@
         </div>
 
         <!-- ========================================================================= -->
-        <!-- 🌾 แท็บที่ 3: เตรียมสาร (Sifting & Preparation) 🌾 -->
+        <!-- 🌾 แท็บที่ 3: เตรียมสาร (🌟 สแกน QR ถังพักปลายทางก่อนจบงาน 🌟) 🌾 -->
         <!-- ========================================================================= -->
         <div id="zone-sift" class="hidden space-y-6 no-print">
 
@@ -505,7 +501,7 @@
             <div class="border-b border-gray-100 pb-3 flex justify-between items-center">
               <div>
                 <h2 class="text-base font-bold text-black">คัดกรองสารและบันทึกสิ่งเจือปน</h2>
-                <p class="text-xs text-gray-400">ระบุจำนวนกระสอบและน้ำหนักที่เบิกมาร่อนจริง</p>
+                <p class="text-xs text-gray-400">ระบุจำนวนกระสอบและน้ำหนักที่เบิกมาร่อนจริง พร้อมระบุถังพักปลายทาง</p>
               </div>
               <span class="text-xs font-bold bg-gray-100 text-black px-2.5 py-1 rounded">ย้ายเข้าคลัง RT</span>
             </div>
@@ -577,8 +573,23 @@
               </div>
             </div>
 
+            <!-- 🌟 ขั้นตอนสุดท้ายก่อนจบงานเตรียมสาร: ยิงสแกน QR ถังพักสารสะอาดปลายทาง 🌟 -->
+            <div class="p-4 bg-gray-50 rounded-xl border-2 border-black space-y-2 text-xs">
+              <div class="flex justify-between items-center">
+                <label class="block font-black text-black text-sm">ขั้นตอนสุดท้าย: ยิงสแกน QR ถังพักสารสะอาดปลายทาง (Destination Bin) *</label>
+                <span class="text-[10px] text-gray-500 font-bold">ยิง QR ป้ายข้างถัง</span>
+              </div>
+              <div class="flex gap-2">
+                <input type="text" id="sift_dest_location" placeholder="ยิงสแกน QR ป้ายข้างถัง เช่น RT-SIFT-L-01 หรือ RT-ROAST-01" class="flex-1 px-3 py-2.5 border-2 border-black rounded-lg font-mono font-black text-black uppercase text-xs focus:outline-none">
+                <button type="button" onclick="startScanner('sift_dest_location')" class="bg-black hover:bg-gray-800 text-white px-4 rounded-lg font-bold text-xs transition cursor-pointer">
+                  เปิดกล้อง
+                </button>
+              </div>
+              <p class="text-[10px] text-gray-400">สแกนรหัสถังพักที่นำสารสะอาดไปเทใส่ เพื่อย้ายสต๊อกเข้าตำแหน่งจริงก่อนกดจบงาน</p>
+            </div>
+
             <button type="button" onclick="submitSiftingProcess()" id="btn-submit-sift" class="w-full bg-black hover:bg-gray-800 text-white font-bold py-3.5 rounded-lg text-sm transition active:scale-95 cursor-pointer">
-              บันทึกสารพร้อมคั่วและย้ายเข้าคลัง RT
+              บันทึกสารพร้อมคั่วและย้ายเข้าถังพัก RT (Done)
             </button>
           </div>
 
@@ -595,14 +606,15 @@
                     <th class="py-2 px-3 text-left font-bold">สารกาแฟ</th>
                     <th class="py-2 px-3 text-center font-bold">รหัส Lot</th>
                     <th class="py-2 px-3 text-center font-bold">พาเลทต้นทาง</th>
-                    <th class="py-2 px-3 text-right font-bold">เบิกมา (กระสอบ)</th>
+                    <th class="py-2 px-3 text-center font-bold">ถังปลายทาง</th>
+                    <th class="py-2 px-3 text-right font-bold">เบิกมา</th>
                     <th class="py-2 px-3 text-right font-bold">สารสะอาดที่ได้</th>
                     <th class="py-2 px-3 text-right font-bold">สิ่งเจือปน</th>
                     <th class="py-2 px-3 text-center font-bold">ผู้บันทึก</th>
                   </tr>
                 </thead>
                 <tbody id="sift-history-tbody" class="text-black divide-y divide-gray-100">
-                  <tr><td colspan="7" class="py-6 text-center text-gray-400">ยังไม่มีประวัติการเตรียมสาร</td></tr>
+                  <tr><td colspan="8" class="py-6 text-center text-gray-400">ยังไม่มีประวัติการเตรียมสาร</td></tr>
                 </tbody>
               </table>
             </div>
@@ -689,7 +701,6 @@
       loadRoastingData();
     };
 
-    // 🌟 ฟังก์ชันสลับ 3 แท็บหลัก 🌟
     function switchWIPTab(tab) {
       document.getElementById('zone-hub').classList.toggle('hidden', tab !== 'hub');
       document.getElementById('zone-roast').classList.toggle('hidden', tab !== 'roast');
@@ -1038,6 +1049,7 @@
       const pickedSacks = parseInt(document.getElementById('sift_picked_sacks').value) || 0;
       const cleanWeight = parseFloat(document.getElementById('sift_clean_weight').value) || 0;
       const wasteWeight = parseFloat(document.getElementById('sift_waste_weight').value) || 0;
+      const destLocation = document.getElementById('sift_dest_location').value.trim();
 
       if(!selectedRawPallet && palletId) {
         selectedRawPallet = allInventoryData.find(p => p.barcode_id === palletId);
@@ -1046,6 +1058,7 @@
       if(!selectedRawPallet) return alert("กรุณาเลือกหรือสแกนพาเลทต้นทางก่อน");
       if(pickedSacks <= 0) return alert("กรุณาระบุจำนวนกระสอบที่เบิกมาร่อน");
       if(cleanWeight <= 0) return alert("กรุณาระบุน้ำหนักสารพร้อมคั่ว");
+      if(!destLocation) return alert("กรุณายิงสแกน QR ถังพักสารสะอาดปลายทาง (เช่น RT-SIFT-L-01 หรือ RT-ROAST-01)");
 
       const totalRawWeight = parseFloat(selectedRawPallet.weight_current) || 0;
       const totalRawSacks = parseInt(selectedRawPallet.sacks) || Math.round(totalRawWeight / 50) || 1;
@@ -1054,10 +1067,10 @@
 
       const confirmMsg = `ยืนยันบันทึกผลการเตรียมสาร [${selectedRawPallet.item_name}]?\n\n` +
         `- พาเลทเดิมบนแร็ค BJ: ตัดเบิก ${pickedSacks} กระสอบ (หัก ${pickedRawWeight.toFixed(1)} kg)\n` +
-        `- สารสะอาดพร้อมคั่ว: ${cleanWeight} kg ➔ ย้ายเข้าคลัง RT\n` +
+        `- สารสะอาดพร้อมคั่ว: ${cleanWeight} kg ➔ ย้ายเข้าถัง [${destLocation}]\n` +
         `- สิ่งเจือปนคัดทิ้ง: ${wasteWeight} kg\n` +
         `- จะเหลือกองบนแร็ค BJ: ${totalRawSacks - pickedSacks} กระสอบ (${(totalRawWeight - pickedRawWeight).toFixed(1)} kg)\n\n` +
-        `*สต๊อกบนแร็ค BJ จะถูกตัดลดจำนวนกระสอบและน้ำหนักตามจริง*`;
+        `*สต๊อกบนแร็ค BJ และถังปลายทางจะถูกอัปเดตตามจริง*`;
 
       if(!confirm(confirmMsg)) return;
 
@@ -1078,6 +1091,7 @@
             clean_weight: cleanWeight,
             waste_weight: wasteWeight,
             shrinkage: (pickedRawWeight - (cleanWeight + wasteWeight)).toFixed(2),
+            destination_location: destLocation,
             raw_location: selectedRawPallet.location,
             operator: localStorage.getItem('name') || "Operator"
           })
@@ -1088,12 +1102,13 @@
         dailySiftRecords.push({ raw: pickedRawWeight, clean: cleanWeight, waste: wasteWeight });
         updateDailySiftSummary();
 
-        addSiftHistoryRow(selectedRawPallet.item_name, selectedRawPallet.lot_code, selectedRawPallet.barcode_id, pickedSacks, cleanWeight, wasteWeight);
+        addSiftHistoryRow(selectedRawPallet.item_name, selectedRawPallet.lot_code, selectedRawPallet.barcode_id, destLocation, pickedSacks, cleanWeight, wasteWeight);
 
         document.getElementById('sift_pallet_id').value = '';
         document.getElementById('sift_picked_sacks').value = '';
         document.getElementById('sift_clean_weight').value = '';
         document.getElementById('sift_waste_weight').value = '0.00';
+        document.getElementById('sift_dest_location').value = '';
         document.getElementById('sift-pallet-info').classList.add('hidden');
         selectedRawPallet = null;
 
@@ -1102,7 +1117,7 @@
       } catch(e) {
         alert("เชื่อมต่อไม่สำเร็จ");
       } finally {
-        btn.innerText = "บันทึกสารพร้อมคั่วและย้ายเข้าคลัง RT";
+        btn.innerText = "บันทึกสารพร้อมคั่วและย้ายเข้าถังพัก RT (Done)";
         btn.disabled = false;
       }
     }
@@ -1120,7 +1135,7 @@
       document.getElementById('kpi-sift-waste-weight').innerText = `${wasteSum.toFixed(1)} kg (${wastePct}%)`;
     }
 
-    function addSiftHistoryRow(name, lot, pallet, sacks, clean, waste) {
+    function addSiftHistoryRow(name, lot, pallet, dest, sacks, clean, waste) {
       const tbody = document.getElementById('sift-history-tbody');
       const tr = document.createElement('tr');
       tr.className = "hover:bg-gray-50";
@@ -1128,6 +1143,7 @@
         <td class="py-2 px-3 font-bold text-black">${name}</td>
         <td class="py-2 px-3 text-center font-mono font-bold text-black">${lot || '-'}</td>
         <td class="py-2 px-3 text-center font-mono text-gray-500">${pallet}</td>
+        <td class="py-2 px-3 text-center font-mono font-black text-black">${dest}</td>
         <td class="py-2 px-3 text-right font-black text-black">${sacks} กระสอบ</td>
         <td class="py-2 px-3 text-right font-black text-black">${clean.toFixed(2)} kg</td>
         <td class="py-2 px-3 text-right text-black font-semibold">${waste.toFixed(2)} kg</td>
