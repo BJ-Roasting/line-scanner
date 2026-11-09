@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>BJ Roaster - วางแผน & ระบบจองคั่ว</title>
+  <title>BJ Roaster - แผนการผลิต & คุมออเดอร์ลูกค้า</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     ::-webkit-scrollbar { display: none; }
@@ -77,14 +77,14 @@
         </div>
       </div>
 
-      <!-- 👇 พื้นที่ทำงานวางแผน & จองคั่ว 👇 -->
+      <!-- 👇 พื้นที่ทำงานวางแผน & กระดานคุมออเดอร์ 👇 -->
       <div class="p-4 md:p-8 pb-32 max-w-5xl space-y-6">
         
         <!-- Header & ปุ่มเปิดคู่มือ SOP ประจำหน้าจอ -->
         <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-3 border-b border-gray-100 pb-3 no-print">
           <div>
-            <h1 class="text-xl font-black text-black tracking-tight">ระบบจองคั่ว & แผนผลิต OEM (Multi-Items & Blend)</h1>
-            <p class="text-xs text-gray-400">บันทึกออเดอร์ลูกค้า ➔ คำนวณสารดิบ & แบทช์อัตโนมัติ ➔ ส่งเข้าเตาคั่ว หรือยกเลิกใบงาน</p>
+            <h1 class="text-xl font-black text-black tracking-tight">กระดานคุมออเดอร์ & แผนผลิตลูกค้า</h1>
+            <p class="text-xs text-gray-400">บันทึกเป้าหมายออเดอร์ลูกค้า ➔ ติดตามความคืบหน้าการบรรจุจริง (อิสระหน้าเตาคั่ว 100%)</p>
           </div>
           <!-- ปุ่มเปิดคู่มือหลัก -->
           <button type="button" onclick="toggleGlobalSOPGuide()" class="flex items-center gap-1.5 px-3 py-1.5 bg-black hover:bg-gray-800 text-white rounded-lg text-xs font-bold transition cursor-pointer self-start sm:self-auto shadow-sm">
@@ -97,24 +97,24 @@
         <div id="sop-guide-drawer" class="hidden p-5 bg-gray-50 rounded-2xl border-2 border-black space-y-4 no-print transition-all">
           <div class="flex justify-between items-center border-b border-gray-200 pb-2">
             <div>
-              <span class="text-[10px] font-black uppercase tracking-widest text-gray-400 block">ROAST BOOKING & DISPATCH SOP</span>
-              <h3 class="text-sm font-black text-black">คู่มือการรับออเดอร์, ส่งเข้าเตาคั่ว และยกเลิกใบจอง</h3>
+              <span class="text-[10px] font-black uppercase tracking-widest text-gray-400 block">PRODUCTION PLANNING & ORDER SOP</span>
+              <h3 class="text-sm font-black text-black">คู่มือกระดานคุมออเดอร์และการตัดยอดความคืบหน้า</h3>
             </div>
             <button type="button" onclick="toggleGlobalSOPGuide()" class="text-gray-400 hover:text-black font-bold text-lg leading-none">&times;</button>
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
             <div class="p-3.5 bg-white rounded-xl border border-gray-200 space-y-1.5">
-              <span class="font-black text-black text-xs block">1. รับออเดอร์เดี่ยว หรือ Blend</span>
-              <p class="text-[11px] text-gray-500">เลือกสารกาแฟ และระดับคั่วเดี่ยว (L, M, MD, D, DD, F) หรือเลือก <b>B (Blend 68:32)</b> ระบบจะแตกแบทช์คำนวณสารดิบให้ทันที</p>
+              <span class="font-black text-black text-xs block">1. บันทึกออเดอร์ลูกค้า (Demand)</span>
+              <p class="text-[11px] text-gray-500">บันทึกยอดที่ลูกค้าสั่ง (คุณลี, พี่กานต์, เนิส) เลือกสารและระดับคั่ว (รองรับ Blend) เพื่อเป็นเป้าหมายรวม</p>
             </div>
             <div class="p-3.5 bg-white rounded-xl border border-gray-200 space-y-1.5">
-              <span class="font-black text-black text-xs block">2. ส่งเข้าเตาคั่ว ➔ wip.html</span>
-              <p class="text-[11px] text-gray-500">กดปุ่ม <b>ส่งเข้าเตาคั่ว ➔</b> รหัสใบงานจะถูกส่งต่อไปเปิดหน้าเตาคั่วให้อัตโนมัติ พร้อมเปลี่ยนสถานะเป็น In Progress</p>
+              <span class="font-black text-black text-xs block">2. หน้าเตาคั่วทำงานอย่างอิสระ</span>
+              <p class="text-[11px] text-gray-500">คนคั่วเบิกสารหน้าเตาตามความสะดวก คั่วรวมล็อตใหญ่ได้ ไม่มีการล็อคใบงานหน้าเตาให้เสียเวลา</p>
             </div>
             <div class="p-3.5 bg-white rounded-xl border border-gray-200 space-y-1.5">
-              <span class="font-black text-black text-xs block">3. การยกเลิกใบสั่งจอง</span>
-              <p class="text-[11px] text-gray-500">หากลูกค้าเปลี่ยนใจหรือคีย์ผิด กดปุ่ม <b>ยกเลิก</b> ระบบจะลบรายการออกจากฐานข้อมูลหลังบ้านทันที</p>
+              <span class="font-black text-black text-xs block">3. แผนกแพ็คเป็นคนตัดยอดส่งมอบ</span>
+              <p class="text-[11px] text-gray-500">เมื่อแพ็คใส่ถุงเสร็จ คนแพ็คจะเลือกตัดยอดส่งมอบให้ออเดอร์ลูกค้าในระบบ กระดานนี้จะคำนวณยอดคงเหลือทันที</p>
             </div>
           </div>
         </div>
@@ -122,43 +122,43 @@
         <!-- แดชบอร์ดสรุปยอดแผนจองคั่ว -->
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center text-xs">
           <div class="p-3.5 bg-gray-50 rounded-xl border border-gray-200">
-            <span class="text-gray-400 block text-[10px]">ยอดจองคั่วรวม</span>
+            <span class="text-gray-400 block text-[10px]">เป้าหมายสั่งคั่วรวม</span>
             <b id="kpi-booked-roasted" class="text-base font-black text-black">0.0 kg</b>
             <span class="text-[10px] text-gray-400 mt-0.5 block" id="kpi-booked-orders">0 รายการ</span>
           </div>
           <div class="p-3.5 bg-gray-50 rounded-xl border border-gray-200">
-            <span class="text-gray-400 block text-[10px]">สารดิบที่ต้องใช้</span>
+            <span class="text-gray-400 block text-[10px]">บรรจุเสร็จแล้ว</span>
+            <b id="kpi-fulfilled-weight" class="text-base font-black text-black">0.0 kg</b>
+            <span class="text-[10px] text-gray-400 mt-0.5 block" id="kpi-fulfillment-pct">0% ของเป้าหมาย</span>
+          </div>
+          <div class="p-3.5 bg-gray-50 rounded-xl border border-gray-200">
+            <span class="text-gray-400 block text-[10px]">คงเหลือรอผลิต</span>
+            <b id="kpi-pending-weight" class="text-base font-black text-black">0.0 kg</b>
+            <span class="text-[10px] text-gray-400 mt-0.5 block">ยอดที่ยังค้างส่ง</span>
+          </div>
+          <div class="p-3.5 bg-gray-50 rounded-xl border border-gray-200">
+            <span class="text-gray-400 block text-[10px]">สารดิบที่ต้องใช้รวม</span>
             <b id="kpi-est-green" class="text-base font-black text-black">0.0 kg</b>
             <span class="text-[10px] text-gray-400 mt-0.5 block">Factor 1.25x</span>
           </div>
-          <div class="p-3.5 bg-gray-50 rounded-xl border border-gray-200">
-            <span class="text-gray-400 block text-[10px]">จำนวนแบทช์คั่ว</span>
-            <b id="kpi-total-batches" class="text-base font-black text-black">0 แบทช์</b>
-            <span class="text-[10px] text-gray-400 mt-0.5 block">ขนาด 25 kg/เตา</span>
-          </div>
-          <div class="p-3.5 bg-gray-50 rounded-xl border border-gray-200">
-            <span class="text-gray-400 block text-[10px]">เวลาเตาคั่วที่ต้องใช้</span>
-            <b id="kpi-roast-hours" class="text-base font-black text-black">0:00 ชม.</b>
-            <span class="text-[10px] text-gray-400 mt-0.5 block">~20 นาที/แบทช์</span>
-          </div>
         </div>
 
-        <!-- 📝 ฟอร์มลงทะเบียนจองคั่วหลายรายการสารในใบเดียว 📝 -->
+        <!-- 📝 ฟอร์มลงทะเบียนบันทึกออเดอร์เป้าหมายลูกค้า (Multi-Item Order Form) 📝 -->
         <div class="bg-white p-6 rounded-xl border-2 border-black shadow-sm space-y-5">
           <div class="border-b border-gray-100 pb-3 flex justify-between items-center">
             <div>
-              <h2 class="text-base font-bold text-black">ใบสั่งจองคั่วของลูกค้า (Customer Roast Booking Order)</h2>
-              <p class="text-xs text-gray-400">ระบุชื่อลูกค้าและเพิ่มรายการสารกาแฟที่ต้องการคั่วในออเดอร์นี้ได้หลายรายการ (รองรับสูตร Blend 68:32)</p>
+              <h2 class="text-base font-bold text-black">ลงทะเบียนออเดอร์ลูกค้า (Customer Roast Order)</h2>
+              <p class="text-xs text-gray-400">บันทึกความต้องการสั่งผลิตของลูกค้าเป็นชุดข้อมูลเป้าหมาย (รองรับสูตร Blend 68:32)</p>
             </div>
             <span class="text-xs font-mono font-bold bg-gray-100 text-black px-2.5 py-1 rounded" id="today-date-badge">2026-09-17</span>
           </div>
 
           <form id="form-create-booking" onsubmit="event.preventDefault(); submitCreateMultiBooking();" class="space-y-5 text-xs">
             
-            <!-- ส่วนหัวใบจอง: ข้อมูลลูกค้า & สัปดาห์ & วันนัดรับ -->
+            <!-- ส่วนหัวออเดอร์ -->
             <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 bg-gray-50 p-4 rounded-xl border border-gray-200">
               <div>
-                <label class="block font-bold text-black mb-1">รหัสใบจอง (Booking ID) *</label>
+                <label class="block font-bold text-black mb-1">รหัสออเดอร์ (Order ID) *</label>
                 <input type="text" id="order_booking_id" required class="w-full px-3 py-2 border-2 border-black rounded-lg font-mono font-black text-black uppercase focus:outline-none">
               </div>
 
@@ -245,17 +245,17 @@
             </div>
 
             <button type="submit" id="btn-save-multi-booking" class="w-full bg-black hover:bg-gray-800 text-white font-bold py-4 rounded-lg text-sm transition active:scale-95 cursor-pointer">
-              บันทึกใบสั่งจองคั่วของลูกค้า (Save Multi-Item Booking)
+              บันทึกออเดอร์เป้าหมายการผลิต (Save Production Order)
             </button>
           </form>
         </div>
 
-        <!-- 📋 กระดานคิวจองคั่วประจำสัปดาห์ (พร้อมปุ่มส่งเข้าเตาคั่ว & ปุ่มยกเลิก) 📋 -->
+        <!-- 📋 กระดานคุมออเดอร์ลูกค้า & ติดตามความคืบหน้าการส่งมอบ 📋 -->
         <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden p-5 space-y-3">
           <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-2 border-b border-gray-100 pb-2">
             <div>
-              <h3 class="font-bold text-black text-sm">กระดานคิวจองคั่ว & แผนการผลิต</h3>
-              <p class="text-[11px] text-gray-400">รายการสั่งผลิตแบ่งตามลูกค้า พร้อมปุ่มส่งเข้าเตาและปุ่มยกเลิก</p>
+              <h3 class="font-bold text-black text-sm">กระดานคุมออเดอร์ & ติดตามความคืบหน้า (Fulfillment Tracker)</h3>
+              <p class="text-[11px] text-gray-400">แสดงความคืบหน้าการบรรจุจริงเทียบกับยอดสั่งของลูกค้า</p>
             </div>
             <div class="flex gap-2">
               <select id="filter_week_select" onchange="renderBookingTable()" class="px-2.5 py-1 bg-gray-50 border border-gray-200 rounded text-xs font-bold text-black">
@@ -274,20 +274,20 @@
             <table class="min-w-full text-xs">
               <thead class="bg-gray-50 text-gray-500 border-b border-gray-200">
                 <tr>
-                  <th class="py-2.5 px-3 text-left font-bold">รหัสใบจอง</th>
+                  <th class="py-2.5 px-3 text-left font-bold">รหัสออเดอร์</th>
                   <th class="py-2.5 px-3 text-left font-bold">ลูกค้า / สัปดาห์</th>
                   <th class="py-2.5 px-3 text-left font-bold">สารกาแฟ & ระดับคั่ว</th>
-                  <th class="py-2.5 px-3 text-center font-bold">ขนาดถุง</th>
-                  <th class="py-2.5 px-3 text-right font-bold">ยอดสั่งคั่ว</th>
-                  <th class="py-2.5 px-3 text-right font-bold">สารดิบที่ใช้</th>
-                  <th class="py-2.5 px-3 text-center font-bold">แบทช์ / เวลา</th>
+                  <th class="py-2.5 px-3 text-right font-bold">เป้าหมาย (kg)</th>
+                  <th class="py-2.5 px-3 text-right font-bold">บรรจุแล้ว (kg)</th>
+                  <th class="py-2.5 px-3 text-right font-bold">ค้างผลิต (kg)</th>
+                  <th class="py-2.5 px-3 text-center font-bold">ความคืบหน้า</th>
                   <th class="py-2.5 px-3 text-center font-bold">นัดรับด่วน</th>
                   <th class="py-2.5 px-3 text-center font-bold">สถานะ</th>
                   <th class="py-2.5 px-3 text-center font-bold">การจัดการ</th>
                 </tr>
               </thead>
               <tbody id="booking-plans-tbody" class="text-black divide-y divide-gray-100">
-                <tr><td colspan="10" class="py-6 text-center text-gray-400">กำลังโหลดรายการจองคั่ว...</td></tr>
+                <tr><td colspan="10" class="py-6 text-center text-gray-400">กำลังโหลดรายการออเดอร์...</td></tr>
               </tbody>
             </table>
           </div>
@@ -368,7 +368,7 @@
       const mm = String(now.getMonth() + 1).padStart(2, '0');
       const dd = String(now.getDate()).padStart(2, '0');
       const rand = String(now.getTime()).slice(-4);
-      document.getElementById('order_booking_id').value = `BK-${String(yyyy).slice(-2)}${mm}${dd}-${rand}`;
+      document.getElementById('order_booking_id').value = `ORD-${String(yyyy).slice(-2)}${mm}${dd}-${rand}`;
     }
 
     async function loadInitialPlannerData() {
@@ -512,20 +512,14 @@
           if (levelVal === 'BLEND_68_32') {
             const darkRoasted = targetW * 0.68;
             const mdRoasted = targetW * 0.32;
-
-            const darkGreen = darkRoasted * 1.25;
-            const mdGreen = mdRoasted * 1.25;
-            const rowTotalGreen = darkGreen + mdGreen;
-
-            const darkBatches = Math.ceil(darkGreen / 25);
-            const mdBatches = Math.ceil(mdGreen / 25);
-            const rowBatches = darkBatches + mdBatches;
+            const rowTotalGreen = (darkRoasted * 1.25) + (mdRoasted * 1.25);
+            const rowBatches = Math.ceil((darkRoasted * 1.25) / 25) + Math.ceil((mdRoasted * 1.25) / 25);
 
             document.getElementById(`row_green_${i}`).innerText = `${rowTotalGreen.toFixed(1)} kg`;
-            document.getElementById(`row_batch_${i}`).innerText = `${rowBatches} แบทช์ (D:${darkBatches}, MD:${mdBatches})`;
+            document.getElementById(`row_batch_${i}`).innerText = `${rowBatches} แบทช์ (D+MD)`;
 
             if (hint) {
-              hint.innerText = `Dark (68%): ${darkRoasted.toFixed(1)}kg (สาร ${darkGreen.toFixed(1)}kg) | MD (32%): ${mdRoasted.toFixed(1)}kg (สาร ${mdGreen.toFixed(1)}kg)`;
+              hint.innerText = `Dark (68%): ${darkRoasted.toFixed(1)}kg | MD (32%): ${mdRoasted.toFixed(1)}kg`;
             }
 
             totalRoasted += targetW;
@@ -562,7 +556,7 @@
       const dueDate = document.getElementById('order_due_date').value;
 
       if(!bookingId || !customer) {
-        return alert("กรุณาระบุรหัสใบจองและชื่อลูกค้า");
+        return alert("กรุณาระบุรหัสออเดอร์และชื่อลูกค้า");
       }
 
       const itemsToBook = [];
@@ -575,30 +569,12 @@
             const levelVal = document.getElementById(`row_level_${i}`).value;
             const sizeVal = document.getElementById(`row_size_${i}`).value;
 
-            if (levelVal === 'BLEND_68_32') {
-              const darkW = parseFloat((targetW * 0.68).toFixed(2));
-              const mdW = parseFloat((targetW * 0.32).toFixed(2));
-
-              itemsToBook.push({
-                bean: beanName,
-                level: 'Dark (Blend 68%)',
-                size: sizeVal,
-                target_weight: darkW
-              });
-              itemsToBook.push({
-                bean: beanName,
-                level: 'Medium Dark (Blend 32%)',
-                size: sizeVal,
-                target_weight: mdW
-              });
-            } else {
-              itemsToBook.push({
-                bean: beanName,
-                level: levelVal,
-                size: sizeVal,
-                target_weight: targetW
-              });
-            }
+            itemsToBook.push({
+              bean: beanName,
+              level: levelVal === 'BLEND_68_32' ? 'Blend (D68:MD32)' : levelVal,
+              size: sizeVal,
+              target_weight: targetW
+            });
           }
         }
       }
@@ -608,13 +584,13 @@
       }
 
       const totalW = itemsToBook.reduce((s, it) => s + it.target_weight, 0);
-      const confirmMsg = `ยืนยันบันทึกใบสั่งจองคั่วของ [${customer}]?\n\n` +
-        `- รหัสใบจอง: ${bookingId} (${week})\n` +
-        `- วันรับด่วน: ${dueDate}\n` +
-        `- แตกคิวเข้าเตารวม: ${itemsToBook.length} แบทช์\n` +
-        `- น้ำหนักสั่งคั่วรวม: ${totalW.toFixed(1)} kg\n\n` +
+      const confirmMsg = `ยืนยันบันทึกออเดอร์เป้าหมายของ [${customer}]?\n\n` +
+        `- รหัสออเดอร์: ${bookingId} (${week})\n` +
+        `- วันนัดรับ: ${dueDate}\n` +
+        `- จำนวนรายการสาร: ${itemsToBook.length} รายการ\n` +
+        `- น้ำหนักสั่งรวม: ${totalW.toFixed(1)} kg\n\n` +
         itemsToBook.map((it, idx) => `  ${idx+1}. ${it.bean} [${it.level}] = ${it.target_weight} kg`).join('\n') +
-        `\n\n*ระบบจะแตกแบทช์เตาคั่วและส่งลงกระดานแผนการผลิตทันที*`;
+        `\n\n*ระบบจะบันทึกลงกระดานเป้าหมายเพื่อรอแผนกแพ็คตัดยอดส่งมอบ*`;
 
       if(!confirm(confirmMsg)) return;
 
@@ -645,12 +621,13 @@
             plan_date: dueDate,
             product_name: `${customer} | ${it.bean} (${it.level}) [${week}]`,
             target_weight: it.target_weight,
-            status: 'Planned',
+            fulfilled_weight: 0, // ยอดที่แพ็คตัดส่งแล้ว
+            status: 'Open',
             operator: localStorage.getItem('name') || "Planner"
           });
         }
 
-        alert(`บันทึกใบสั่งจองคั่วของ [${customer}] รวม ${itemsToBook.length} แบทช์สำเร็จเรียบร้อย!`);
+        alert(`บันทึกออเดอร์เป้าหมายของ [${customer}] สำเร็จเรียบร้อย!`);
 
         renderBookingTable();
         initDefaultBookingID();
@@ -661,11 +638,12 @@
       } catch(e) {
         alert("เชื่อมต่อไม่สำเร็จ หรือบันทึกบางรายการไม่สำเร็จ");
       } finally {
-        btn.innerText = "บันทึกใบสั่งจองคั่วของลูกค้า (Save Multi-Item Booking)";
+        btn.innerText = "บันทึกออเดอร์เป้าหมายการผลิต (Save Production Order)";
         btn.disabled = false;
       }
     }
 
+    // 🌟 แสดงตารางกระดานคุมออเดอร์ & ความคืบหน้าการส่งมอบ 🌟
     function renderBookingTable() {
       const tbody = document.getElementById('booking-plans-tbody');
       const weekFilter = document.getElementById('filter_week_select').value;
@@ -675,21 +653,22 @@
         filtered = bookingPlansList.filter(p => p.product_name && p.product_name.includes(`[${weekFilter}]`));
       }
 
-      const totalRoasted = filtered.reduce((s, p) => s + (parseFloat(p.target_weight) || 0), 0);
-      const totalGreen = totalRoasted * 1.25;
-      const totalBatches = totalGreen > 0 ? Math.ceil(totalGreen / 25) : 0;
-      const totalMinutes = totalBatches * 20;
-      const hours = Math.floor(totalMinutes / 60);
-      const mins = totalMinutes % 60;
+      // คำนวณยอดเป้าหมายรวม และยอดที่แพ็คตัดส่งมอบแล้ว
+      const totalTarget = filtered.reduce((s, p) => s + (parseFloat(p.target_weight) || 0), 0);
+      const totalFulfilled = filtered.reduce((s, p) => s + (parseFloat(p.fulfilled_weight) || 0), 0);
+      const totalPending = totalTarget - totalFulfilled;
+      const fulfillPct = totalTarget > 0 ? ((totalFulfilled / totalTarget) * 100).toFixed(1) : 0;
+      const totalGreen = totalTarget * 1.25;
 
-      document.getElementById('kpi-booked-roasted').innerText = `${totalRoasted.toFixed(1)} kg`;
+      document.getElementById('kpi-booked-roasted').innerText = `${totalTarget.toFixed(1)} kg`;
       document.getElementById('kpi-booked-orders').innerText = `${filtered.length} รายการ`;
+      document.getElementById('kpi-fulfilled-weight').innerText = `${totalFulfilled.toFixed(1)} kg`;
+      document.getElementById('kpi-fulfillment-pct').innerText = `${fulfillPct}% ของเป้าหมาย`;
+      document.getElementById('kpi-pending-weight').innerText = `${(totalPending > 0 ? totalPending : 0).toFixed(1)} kg`;
       document.getElementById('kpi-est-green').innerText = `${totalGreen.toFixed(1)} kg`;
-      document.getElementById('kpi-total-batches').innerText = `${totalBatches} แบทช์`;
-      document.getElementById('kpi-roast-hours').innerText = `${hours}:${String(mins).padStart(2, '0')} ชม.`;
 
       if(filtered.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="10" class="py-6 text-center text-gray-400">ไม่มีรายการจองคั่วในสัปดาห์นี้</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="10" class="py-6 text-center text-gray-400">ไม่มีรายการออเดอร์ในสัปดาห์นี้</td></tr>`;
         return;
       }
 
@@ -698,16 +677,15 @@
         const customerPart = parts[0] ? parts[0].trim() : 'ลูกค้า';
         const beanPart = parts[1] ? parts[1].trim() : p.product_name;
         const targetW = parseFloat(p.target_weight) || 0;
-        const greenW = targetW * 1.25;
-        const batches = Math.ceil(greenW / 25);
-        const estTime = `${Math.floor((batches * 20)/60)}:${String((batches * 20)%60).padStart(2, '0')}`;
+        const fulfilledW = parseFloat(p.fulfilled_weight) || 0;
+        const pendingW = (targetW - fulfilledW) > 0 ? (targetW - fulfilledW) : 0;
+        const pct = targetW > 0 ? Math.min(100, Math.round((fulfilledW / targetW) * 100)) : 0;
 
-        // สถานะและสี
-        let statusBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-gray-100 text-black border border-gray-300">Planned</span>`;
-        if (p.status === 'In Progress') {
-          statusBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-gray-800 text-white">In Progress</span>`;
-        } else if (p.status === 'Completed') {
-          statusBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-black text-white">Completed</span>`;
+        let statusBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-gray-100 text-black border border-gray-300">รอผลิต</span>`;
+        if (pct >= 100) {
+          statusBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-black text-white">ครบยอดแล้ว</span>`;
+        } else if (fulfilledW > 0) {
+          statusBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-gray-800 text-white">ทยอยผลิต</span>`;
         }
 
         return `
@@ -715,50 +693,31 @@
             <td class="py-2.5 px-3 font-mono font-black text-black">${p.plan_id}</td>
             <td class="py-2.5 px-3 font-bold text-black">${customerPart}</td>
             <td class="py-2.5 px-3 text-black font-medium">${beanPart}</td>
-            <td class="py-2.5 px-3 text-center text-gray-600 font-semibold">250g / 500g</td>
             <td class="py-2.5 px-3 text-right font-black text-black">${targetW.toFixed(1)} kg</td>
-            <td class="py-2.5 px-3 text-right font-black text-black">${greenW.toFixed(1)} kg</td>
-            <td class="py-2.5 px-3 text-center font-mono font-bold text-gray-700">${batches} แบทช์ (${estTime})</td>
+            <td class="py-2.5 px-3 text-right font-bold text-gray-600">${fulfilledW.toFixed(1)} kg</td>
+            <td class="py-2.5 px-3 text-right font-black ${pendingW > 0 ? 'text-black' : 'text-gray-400'}">${pendingW.toFixed(1)} kg</td>
+            <td class="py-2.5 px-3 text-center">
+              <div class="w-full bg-gray-200 rounded-full h-1.5 mb-1 overflow-hidden">
+                <div class="bg-black h-1.5 rounded-full" style="width: ${pct}%"></div>
+              </div>
+              <span class="font-mono text-[10px] font-bold text-gray-600">${pct}%</span>
+            </td>
             <td class="py-2.5 px-3 text-center font-mono font-bold text-black">${p.plan_date || '-'}</td>
             <td class="py-2.5 px-3 text-center">
               ${statusBadge}
             </td>
             <td class="py-2.5 px-3 text-center">
-              <div class="flex items-center justify-center gap-1.5">
-                <button type="button" onclick="dispatchPlanToRoaster('${p.plan_id}', '${customerPart}', '${beanPart}', ${targetW})" class="px-2.5 py-1 bg-black hover:bg-gray-800 text-white rounded text-xs font-bold transition cursor-pointer" title="ส่งเข้าเตาคั่ว">
-                  ส่งเข้าเตา ➔
-                </button>
-                <button type="button" onclick="cancelBookingPlan('${p.plan_id}', '${customerPart}')" class="px-2 py-1 bg-white hover:bg-gray-100 text-gray-400 hover:text-black border border-gray-300 rounded text-xs font-bold transition cursor-pointer" title="ยกเลิกใบจอง">
-                  ยกเลิก
-                </button>
-              </div>
+              <button type="button" onclick="cancelBookingPlan('${p.plan_id}', '${customerPart}')" class="px-2.5 py-1 bg-white hover:bg-gray-100 text-gray-500 hover:text-black border border-gray-300 rounded text-xs font-bold transition cursor-pointer" title="ยกเลิกออเดอร์นี้">
+                ยกเลิก
+              </button>
             </td>
           </tr>
         `;
       }).join('');
     }
 
-    // 🌟 ส่งยอดจองคั่วไปหน้าเตาคั่ว (wip.html) 🌟
-    async function dispatchPlanToRoaster(planId, customer, bean, weight) {
-      if(!confirm(`ต้องการส่งใบจองคั่ว [${planId}] ของ [${customer}]\nรายการ: [${bean}] (${weight} kg)\nเข้าสู่หน้าเตาคั่วใช่หรือไม่?`)) return;
-      
-      // ปรับสถานะเป็น In Progress ในฐานข้อมูล
-      try {
-        fetch(API_URL, {
-          method: "POST",
-          body: JSON.stringify({ action: 'update_plan_status', plan_id: planId, status: 'In Progress' })
-        });
-      } catch(e) {}
-
-      // ส่งรหัสใบงานข้ามไปยังหน้า wip.html
-      localStorage.setItem('bj_active_dispatch_wo', planId);
-      alert(`ส่งใบสั่งผลิต [${planId}] เรียบร้อย!\nกำลังนำทางไปยังหน้าเตาคั่ว...`);
-      window.location.href = 'wip.html';
-    }
-
-    // 🌟 ยกเลิกใบสั่งจองคั่ว (Cancel / Delete Plan) 🌟
     async function cancelBookingPlan(planId, customer) {
-      if(!confirm(`ยืนยันต้องการ "ยกเลิก" ใบสั่งจองคั่ว [${planId}] ของ [${customer}] ใช่หรือไม่?\n*ข้อมูลจะถูกลบออกจากแผนการผลิตทันที*`)) return;
+      if(!confirm(`ยืนยันต้องการ "ยกเลิก" ออเดอร์ [${planId}] ของ [${customer}] ใช่หรือไม่?\n*ข้อมูลจะถูกลบออกจากแผนเป้าหมายทันที*`)) return;
 
       try {
         const res = await fetch(API_URL, {
@@ -766,9 +725,8 @@
           body: JSON.stringify({ action: 'delete_plan', plan_id: planId })
         });
         const result = await res.json();
-        alert(result.message || "ยกเลิกใบสั่งจองเรียบร้อย");
+        alert(result.message || "ยกเลิกออเดอร์เรียบร้อย");
 
-        // ตัดออกจากหน้าจอทันที
         bookingPlansList = bookingPlansList.filter(p => p.plan_id !== planId);
         renderBookingTable();
       } catch(e) {
