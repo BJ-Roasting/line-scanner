@@ -83,8 +83,8 @@
         <!-- Header & ปุ่มเปิดคู่มือ SOP ประจำหน้าจอ -->
         <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-3 border-b border-gray-100 pb-3 no-print">
           <div>
-            <h1 class="text-xl font-black text-black tracking-tight">ระบบจองคั่ว & แผนผลิต OEM (รองรับสูตร Blend)</h1>
-            <p class="text-xs text-gray-400">บันทึกออเดอร์ลูกค้าชุดเดียวได้หลายรายการ ➔ รองรับสูตร Blend แตกแบทช์เตาคั่วอัตโนมัติ</p>
+            <h1 class="text-xl font-black text-black tracking-tight">ระบบจองคั่ว & แผนผลิต OEM (Multi-Items & Blend)</h1>
+            <p class="text-xs text-gray-400">บันทึกออเดอร์ลูกค้า ➔ คำนวณสารดิบ & แบทช์อัตโนมัติ ➔ ส่งเข้าเตาคั่ว หรือยกเลิกใบงาน</p>
           </div>
           <!-- ปุ่มเปิดคู่มือหลัก -->
           <button type="button" onclick="toggleGlobalSOPGuide()" class="flex items-center gap-1.5 px-3 py-1.5 bg-black hover:bg-gray-800 text-white rounded-lg text-xs font-bold transition cursor-pointer self-start sm:self-auto shadow-sm">
@@ -97,24 +97,24 @@
         <div id="sop-guide-drawer" class="hidden p-5 bg-gray-50 rounded-2xl border-2 border-black space-y-4 no-print transition-all">
           <div class="flex justify-between items-center border-b border-gray-200 pb-2">
             <div>
-              <span class="text-[10px] font-black uppercase tracking-widest text-gray-400 block">MULTI-ITEM & BLEND BOOKING SOP</span>
-              <h3 class="text-sm font-black text-black">คู่มือการรับออเดอร์คั่วเดี่ยว & ออเดอร์สูตรผสม (Blend Flow)</h3>
+              <span class="text-[10px] font-black uppercase tracking-widest text-gray-400 block">ROAST BOOKING & DISPATCH SOP</span>
+              <h3 class="text-sm font-black text-black">คู่มือการรับออเดอร์, ส่งเข้าเตาคั่ว และยกเลิกใบจอง</h3>
             </div>
             <button type="button" onclick="toggleGlobalSOPGuide()" class="text-gray-400 hover:text-black font-bold text-lg leading-none">&times;</button>
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
             <div class="p-3.5 bg-white rounded-xl border border-gray-200 space-y-1.5">
-              <span class="font-black text-black text-xs block">1. เลือกลูกค้า & สัปดาห์ผลิต</span>
-              <p class="text-[11px] text-gray-500">ระบุชื่อลูกค้า เช่น คุณลี, พี่กานต์, เนิส, คุณโอ๊ค พร้อมสัปดาห์ (W1 - W5) และวันนัดรับด่วน</p>
+              <span class="font-black text-black text-xs block">1. รับออเดอร์เดี่ยว หรือ Blend</span>
+              <p class="text-[11px] text-gray-500">เลือกสารกาแฟ และระดับคั่วเดี่ยว (L, M, MD, D, DD, F) หรือเลือก <b>B (Blend 68:32)</b> ระบบจะแตกแบทช์คำนวณสารดิบให้ทันที</p>
             </div>
             <div class="p-3.5 bg-white rounded-xl border border-gray-200 space-y-1.5">
-              <span class="font-black text-black text-xs block">2. รองรับสูตร Blend แตกอัตโนมัติ</span>
-              <p class="text-[11px] text-gray-500">หากเลือกระดับคั่วเป็น <b>B (Blend: Dark 68% + MD 32%)</b> กรอกแค่น้ำหนักรวม ระบบจะแตกเป็น 2 แบทช์เตาคั่วให้อัตโนมัติทันที</p>
+              <span class="font-black text-black text-xs block">2. ส่งเข้าเตาคั่ว ➔ wip.html</span>
+              <p class="text-[11px] text-gray-500">กดปุ่ม <b>ส่งเข้าเตาคั่ว ➔</b> รหัสใบงานจะถูกส่งต่อไปเปิดหน้าเตาคั่วให้อัตโนมัติ พร้อมเปลี่ยนสถานะเป็น In Progress</p>
             </div>
             <div class="p-3.5 bg-white rounded-xl border border-gray-200 space-y-1.5">
-              <span class="font-black text-black text-xs block">3. คำนวณรวม & ปล่อยคิวเข้าเตา</span>
-              <p class="text-[11px] text-gray-500">ระบบจะรวมสารดิบที่ต้องใช้ทั้งหมด (Factor 1.25x) และจำนวนแบทช์เตาให้ทันที พร้อมกดส่งเข้าเตาคั่ว</p>
+              <span class="font-black text-black text-xs block">3. การยกเลิกใบสั่งจอง</span>
+              <p class="text-[11px] text-gray-500">หากลูกค้าเปลี่ยนใจหรือคีย์ผิด กดปุ่ม <b>ยกเลิก</b> ระบบจะลบรายการออกจากฐานข้อมูลหลังบ้านทันที</p>
             </div>
           </div>
         </div>
@@ -143,12 +143,12 @@
           </div>
         </div>
 
-        <!-- 📝 ฟอร์มลงทะเบียนจองคั่วหลายรายการสารในใบเดียว (Multi-Item Booking Form) 📝 -->
+        <!-- 📝 ฟอร์มลงทะเบียนจองคั่วหลายรายการสารในใบเดียว 📝 -->
         <div class="bg-white p-6 rounded-xl border-2 border-black shadow-sm space-y-5">
           <div class="border-b border-gray-100 pb-3 flex justify-between items-center">
             <div>
               <h2 class="text-base font-bold text-black">ใบสั่งจองคั่วของลูกค้า (Customer Roast Booking Order)</h2>
-              <p class="text-xs text-gray-400">ระบุชื่อลูกค้าและเพิ่มรายการสารกาแฟที่ต้องการคั่วในออเดอร์นี้ได้หลายรายการ (รองรับสูตรผสม Blend)</p>
+              <p class="text-xs text-gray-400">ระบุชื่อลูกค้าและเพิ่มรายการสารกาแฟที่ต้องการคั่วในออเดอร์นี้ได้หลายรายการ (รองรับสูตร Blend 68:32)</p>
             </div>
             <span class="text-xs font-mono font-bold bg-gray-100 text-black px-2.5 py-1 rounded" id="today-date-badge">2026-09-17</span>
           </div>
@@ -195,7 +195,7 @@
               </div>
             </div>
 
-            <!-- 🌟 ตารางรายการสารที่จะคั่วในออเดอร์นี้ (เพิ่มได้หลายตัว) 🌟 -->
+            <!-- ตารางรายการสารที่จะคั่วในออเดอร์นี้ -->
             <div class="space-y-3">
               <div class="flex justify-between items-center">
                 <span class="font-black text-black uppercase text-xs">รายการสารกาแฟที่สั่งคั่วในออเดอร์นี้ (Order Items & Blends)</span>
@@ -218,7 +218,7 @@
                     </tr>
                   </thead>
                   <tbody id="booking-items-tbody" class="divide-y divide-gray-200 bg-white">
-                    <!-- แถวจะถูกเพิ่มเข้ามาที่นี่ด้วย JavaScript -->
+                    <!-- แถวจะถูกเพิ่มเข้ามาที่นี่ -->
                   </tbody>
                 </table>
               </div>
@@ -244,19 +244,18 @@
               </div>
             </div>
 
-            <!-- ปุ่มบันทึกออเดอร์ -->
             <button type="submit" id="btn-save-multi-booking" class="w-full bg-black hover:bg-gray-800 text-white font-bold py-4 rounded-lg text-sm transition active:scale-95 cursor-pointer">
               บันทึกใบสั่งจองคั่วของลูกค้า (Save Multi-Item Booking)
             </button>
           </form>
         </div>
 
-        <!-- 📋 กระดานคิวจองคั่วประจำสัปดาห์ (Production Booking Board) 📋 -->
+        <!-- 📋 กระดานคิวจองคั่วประจำสัปดาห์ (พร้อมปุ่มส่งเข้าเตาคั่ว & ปุ่มยกเลิก) 📋 -->
         <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden p-5 space-y-3">
           <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-2 border-b border-gray-100 pb-2">
             <div>
               <h3 class="font-bold text-black text-sm">กระดานคิวจองคั่ว & แผนการผลิต</h3>
-              <p class="text-[11px] text-gray-400">รายการสั่งผลิตแบ่งตามลูกค้า พร้อมปุ่มส่งเข้าเตาคั่ว</p>
+              <p class="text-[11px] text-gray-400">รายการสั่งผลิตแบ่งตามลูกค้า พร้อมปุ่มส่งเข้าเตาและปุ่มยกเลิก</p>
             </div>
             <div class="flex gap-2">
               <select id="filter_week_select" onchange="renderBookingTable()" class="px-2.5 py-1 bg-gray-50 border border-gray-200 rounded text-xs font-bold text-black">
@@ -322,7 +321,6 @@
   <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbxQywqP4da0BYdt_dHQtQl-kYlvGxmdJWNA59oqnZ_AM7SRyEESbMd73UD3Xx6VffQ/exec";
     
-    // รายการสารกาแฟมาตรฐานโรงงาน (Preset สำรอง รับประกันมีตัวเลือกให้เลือกทันที 100%)
     const PRESET_BEANS = [
       "PY พะเยา (GB01)",
       "AD05 ปางขอน",
@@ -353,8 +351,6 @@
       document.getElementById('order_due_date').value = now.toISOString().split('T')[0];
       initDefaultBookingID();
       loadInitialPlannerData();
-      
-      // เพิ่มแถวเริ่มต้น 1 แถว
       addNewBookingItemRow();
     };
 
@@ -410,7 +406,6 @@
       }
     }
 
-    // 🌟 เพิ่มแถวรายการสาร (รองรับระดับคั่วเดี่ยว และ B: สูตร Blend 68:32) 🌟
     function addNewBookingItemRow() {
       rowCounter++;
       const tbody = document.getElementById('booking-items-tbody');
@@ -497,7 +492,6 @@
       }
     }
 
-    // 🌟 คำนวณยอดรวมทั้งออเดอร์ (รองรับการแตกสูตร Blend 68:32) 🌟
     function calculateGrandTotals() {
       let totalItems = 0;
       let totalRoasted = 0;
@@ -516,7 +510,6 @@
           if (targetW > 0) totalItems++;
 
           if (levelVal === 'BLEND_68_32') {
-            // สูตร Blend: แตกออกเป็น 2 เตาคั่ว
             const darkRoasted = targetW * 0.68;
             const mdRoasted = targetW * 0.32;
 
@@ -539,7 +532,6 @@
             totalGreen += rowTotalGreen;
             totalBatches += rowBatches;
           } else {
-            // คั่วระดับเดี่ยวปกติ
             const greenW = targetW * 1.25;
             const batches = greenW > 0 ? Math.ceil(greenW / 25) : 0;
 
@@ -563,7 +555,6 @@
       document.getElementById('grand-total-time').innerText = `${hrs}:${String(mins).padStart(2, '0')} ชม.`;
     }
 
-    // 🌟 บันทึกออเดอร์ (ถ้าเจอ Blend จะแตก 2 แถวให้เตาคั่วอัตโนมัติ) 🌟
     async function submitCreateMultiBooking() {
       const bookingId = document.getElementById('order_booking_id').value.trim();
       const customer = document.getElementById('order_customer_name').value.trim();
@@ -585,7 +576,6 @@
             const sizeVal = document.getElementById(`row_size_${i}`).value;
 
             if (levelVal === 'BLEND_68_32') {
-              // แตกเป็น 2 รายการสำหรับหน้าเตาคั่ว
               const darkW = parseFloat((targetW * 0.68).toFixed(2));
               const mdW = parseFloat((targetW * 0.32).toFixed(2));
 
@@ -593,26 +583,20 @@
                 bean: beanName,
                 level: 'Dark (Blend 68%)',
                 size: sizeVal,
-                target_weight: darkW,
-                is_blend: true,
-                parent_booking: bookingId
+                target_weight: darkW
               });
               itemsToBook.push({
                 bean: beanName,
                 level: 'Medium Dark (Blend 32%)',
                 size: sizeVal,
-                target_weight: mdW,
-                is_blend: true,
-                parent_booking: bookingId
+                target_weight: mdW
               });
             } else {
               itemsToBook.push({
                 bean: beanName,
                 level: levelVal,
                 size: sizeVal,
-                target_weight: targetW,
-                is_blend: false,
-                parent_booking: bookingId
+                target_weight: targetW
               });
             }
           }
@@ -718,6 +702,14 @@
         const batches = Math.ceil(greenW / 25);
         const estTime = `${Math.floor((batches * 20)/60)}:${String((batches * 20)%60).padStart(2, '0')}`;
 
+        // สถานะและสี
+        let statusBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-gray-100 text-black border border-gray-300">Planned</span>`;
+        if (p.status === 'In Progress') {
+          statusBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-gray-800 text-white">In Progress</span>`;
+        } else if (p.status === 'Completed') {
+          statusBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-black text-white">Completed</span>`;
+        }
+
         return `
           <tr class="hover:bg-gray-50 transition">
             <td class="py-2.5 px-3 font-mono font-black text-black">${p.plan_id}</td>
@@ -729,23 +721,59 @@
             <td class="py-2.5 px-3 text-center font-mono font-bold text-gray-700">${batches} แบทช์ (${estTime})</td>
             <td class="py-2.5 px-3 text-center font-mono font-bold text-black">${p.plan_date || '-'}</td>
             <td class="py-2.5 px-3 text-center">
-              <span class="px-2 py-0.5 rounded text-[10px] font-bold ${p.status === 'Completed' ? 'bg-black text-white' : 'bg-gray-100 text-black'}">${p.status || 'Planned'}</span>
+              ${statusBadge}
             </td>
             <td class="py-2.5 px-3 text-center">
-              <button type="button" onclick="dispatchPlanToRoaster('${p.plan_id}', '${customerPart}', '${beanPart}', ${targetW})" class="px-2.5 py-1 bg-black hover:bg-gray-800 text-white rounded text-xs font-bold transition cursor-pointer">
-                ส่งเข้าเตาคั่ว ➔
-              </button>
+              <div class="flex items-center justify-center gap-1.5">
+                <button type="button" onclick="dispatchPlanToRoaster('${p.plan_id}', '${customerPart}', '${beanPart}', ${targetW})" class="px-2.5 py-1 bg-black hover:bg-gray-800 text-white rounded text-xs font-bold transition cursor-pointer" title="ส่งเข้าเตาคั่ว">
+                  ส่งเข้าเตา ➔
+                </button>
+                <button type="button" onclick="cancelBookingPlan('${p.plan_id}', '${customerPart}')" class="px-2 py-1 bg-white hover:bg-gray-100 text-gray-400 hover:text-black border border-gray-300 rounded text-xs font-bold transition cursor-pointer" title="ยกเลิกใบจอง">
+                  ยกเลิก
+                </button>
+              </div>
             </td>
           </tr>
         `;
       }).join('');
     }
 
-    function dispatchPlanToRoaster(planId, customer, bean, weight) {
-      if(!confirm(`ต้องการส่งใบจองคั่ว [${planId}] ของ [${customer}] เข้าสู่หน้าเตาคั่วใช่หรือไม่?`)) return;
+    // 🌟 ส่งยอดจองคั่วไปหน้าเตาคั่ว (wip.html) 🌟
+    async function dispatchPlanToRoaster(planId, customer, bean, weight) {
+      if(!confirm(`ต้องการส่งใบจองคั่ว [${planId}] ของ [${customer}]\nรายการ: [${bean}] (${weight} kg)\nเข้าสู่หน้าเตาคั่วใช่หรือไม่?`)) return;
+      
+      // ปรับสถานะเป็น In Progress ในฐานข้อมูล
+      try {
+        fetch(API_URL, {
+          method: "POST",
+          body: JSON.stringify({ action: 'update_plan_status', plan_id: planId, status: 'In Progress' })
+        });
+      } catch(e) {}
+
+      // ส่งรหัสใบงานข้ามไปยังหน้า wip.html
       localStorage.setItem('bj_active_dispatch_wo', planId);
-      alert(`ส่งใบสั่งผลิต [${planId}] เรียบร้อย! กำลังนำทางไปยังหน้าเบิกคั่ว...`);
+      alert(`ส่งใบสั่งผลิต [${planId}] เรียบร้อย!\nกำลังนำทางไปยังหน้าเตาคั่ว...`);
       window.location.href = 'wip.html';
+    }
+
+    // 🌟 ยกเลิกใบสั่งจองคั่ว (Cancel / Delete Plan) 🌟
+    async function cancelBookingPlan(planId, customer) {
+      if(!confirm(`ยืนยันต้องการ "ยกเลิก" ใบสั่งจองคั่ว [${planId}] ของ [${customer}] ใช่หรือไม่?\n*ข้อมูลจะถูกลบออกจากแผนการผลิตทันที*`)) return;
+
+      try {
+        const res = await fetch(API_URL, {
+          method: "POST",
+          body: JSON.stringify({ action: 'delete_plan', plan_id: planId })
+        });
+        const result = await res.json();
+        alert(result.message || "ยกเลิกใบสั่งจองเรียบร้อย");
+
+        // ตัดออกจากหน้าจอทันที
+        bookingPlansList = bookingPlansList.filter(p => p.plan_id !== planId);
+        renderBookingTable();
+      } catch(e) {
+        alert("เชื่อมต่อไม่สำเร็จ หรือยกเลิกไม่สำเร็จ");
+      }
     }
   </script>
 </body>
