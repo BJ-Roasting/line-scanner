@@ -83,8 +83,8 @@
         <!-- Header & ปุ่มเปิดคู่มือ SOP ประจำหน้าจอ -->
         <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-3 border-b border-gray-100 pb-3 no-print">
           <div>
-            <h1 class="text-xl font-black text-black tracking-tight">ระบบจองคั่ว & วางแผนผลิต OEM (Multi-Items)</h1>
-            <p class="text-xs text-gray-400">บันทึกออเดอร์ลูกค้าชุดเดียวได้หลายรายการสาร ➔ คำนวณสารดิบ & แบทช์อัตโนมัติ</p>
+            <h1 class="text-xl font-black text-black tracking-tight">ระบบจองคั่ว & แผนผลิต OEM (รองรับสูตร Blend)</h1>
+            <p class="text-xs text-gray-400">บันทึกออเดอร์ลูกค้าชุดเดียวได้หลายรายการ ➔ รองรับสูตร Blend แตกแบทช์เตาคั่วอัตโนมัติ</p>
           </div>
           <!-- ปุ่มเปิดคู่มือหลัก -->
           <button type="button" onclick="toggleGlobalSOPGuide()" class="flex items-center gap-1.5 px-3 py-1.5 bg-black hover:bg-gray-800 text-white rounded-lg text-xs font-bold transition cursor-pointer self-start sm:self-auto shadow-sm">
@@ -97,20 +97,20 @@
         <div id="sop-guide-drawer" class="hidden p-5 bg-gray-50 rounded-2xl border-2 border-black space-y-4 no-print transition-all">
           <div class="flex justify-between items-center border-b border-gray-200 pb-2">
             <div>
-              <span class="text-[10px] font-black uppercase tracking-widest text-gray-400 block">MULTI-ITEM ROAST BOOKING SOP</span>
-              <h3 class="text-sm font-black text-black">คู่มือการรับออเดอร์จองคั่วหลายรายการในชุดเดียว</h3>
+              <span class="text-[10px] font-black uppercase tracking-widest text-gray-400 block">MULTI-ITEM & BLEND BOOKING SOP</span>
+              <h3 class="text-sm font-black text-black">คู่มือการรับออเดอร์คั่วเดี่ยว & ออเดอร์สูตรผสม (Blend Flow)</h3>
             </div>
             <button type="button" onclick="toggleGlobalSOPGuide()" class="text-gray-400 hover:text-black font-bold text-lg leading-none">&times;</button>
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
             <div class="p-3.5 bg-white rounded-xl border border-gray-200 space-y-1.5">
-              <span class="font-black text-black text-xs block">1. ระบุชื่อลูกค้า & สัปดาห์ผลิต</span>
-              <p class="text-[11px] text-gray-500">ใส่ชื่อลูกค้า เช่น คุณลี, พี่กานต์, เนิส พร้อมระบุสัปดาห์ (W1 - W5) และวันนัดรับ</p>
+              <span class="font-black text-black text-xs block">1. เลือกลูกค้า & สัปดาห์ผลิต</span>
+              <p class="text-[11px] text-gray-500">ระบุชื่อลูกค้า เช่น คุณลี, พี่กานต์, เนิส, คุณโอ๊ค พร้อมสัปดาห์ (W1 - W5) และวันนัดรับด่วน</p>
             </div>
             <div class="p-3.5 bg-white rounded-xl border border-gray-200 space-y-1.5">
-              <span class="font-black text-black text-xs block">2. กดเพิ่มรายการสารตามออเดอร์</span>
-              <p class="text-[11px] text-gray-500">กดปุ่ม <b>+ เพิ่มรายการสาร</b> เพื่อใส่สารตัวที่ 1, 2, 3... ระบุระดับคั่ว ขนาดถุง และน้ำหนักได้พร้อมกันในออเดอร์เดียว</p>
+              <span class="font-black text-black text-xs block">2. รองรับสูตร Blend แตกอัตโนมัติ</span>
+              <p class="text-[11px] text-gray-500">หากเลือกระดับคั่วเป็น <b>B (Blend: Dark 68% + MD 32%)</b> กรอกแค่น้ำหนักรวม ระบบจะแตกเป็น 2 แบทช์เตาคั่วให้อัตโนมัติทันที</p>
             </div>
             <div class="p-3.5 bg-white rounded-xl border border-gray-200 space-y-1.5">
               <span class="font-black text-black text-xs block">3. คำนวณรวม & ปล่อยคิวเข้าเตา</span>
@@ -148,7 +148,7 @@
           <div class="border-b border-gray-100 pb-3 flex justify-between items-center">
             <div>
               <h2 class="text-base font-bold text-black">ใบสั่งจองคั่วของลูกค้า (Customer Roast Booking Order)</h2>
-              <p class="text-xs text-gray-400">ระบุชื่อลูกค้าและเพิ่มรายการสารกาแฟที่ต้องการคั่วในออเดอร์นี้ได้หลายรายการ</p>
+              <p class="text-xs text-gray-400">ระบุชื่อลูกค้าและเพิ่มรายการสารกาแฟที่ต้องการคั่วในออเดอร์นี้ได้หลายรายการ (รองรับสูตรผสม Blend)</p>
             </div>
             <span class="text-xs font-mono font-bold bg-gray-100 text-black px-2.5 py-1 rounded" id="today-date-badge">2026-09-17</span>
           </div>
@@ -198,7 +198,7 @@
             <!-- 🌟 ตารางรายการสารที่จะคั่วในออเดอร์นี้ (เพิ่มได้หลายตัว) 🌟 -->
             <div class="space-y-3">
               <div class="flex justify-between items-center">
-                <span class="font-black text-black uppercase text-xs">รายการสารกาแฟที่สั่งคั่วในออเดอร์นี้ (Order Items)</span>
+                <span class="font-black text-black uppercase text-xs">รายการสารกาแฟที่สั่งคั่วในออเดอร์นี้ (Order Items & Blends)</span>
                 <button type="button" onclick="addNewBookingItemRow()" class="px-3 py-1.5 bg-black hover:bg-gray-800 text-white font-bold rounded-lg text-xs transition cursor-pointer shadow-sm">
                   + เพิ่มรายการสาร
                 </button>
@@ -208,10 +208,10 @@
                 <table class="min-w-full text-xs">
                   <thead class="bg-gray-100 text-black border-b border-gray-300 font-bold">
                     <tr>
-                      <th class="py-2.5 px-3 text-left w-64">สารกาแฟ *</th>
-                      <th class="py-2.5 px-3 text-center w-36">ระดับคั่ว *</th>
-                      <th class="py-2.5 px-3 text-center w-36">ขนาดถุง *</th>
-                      <th class="py-2.5 px-3 text-right w-36">สั่งคั่วสุก (kg) *</th>
+                      <th class="py-2.5 px-3 text-left w-52">สารกาแฟ *</th>
+                      <th class="py-2.5 px-3 text-center w-48">ระดับคั่ว / สูตร Blend *</th>
+                      <th class="py-2.5 px-3 text-center w-28">ขนาดถุง *</th>
+                      <th class="py-2.5 px-3 text-right w-32">สั่งคั่วสุก (kg) *</th>
                       <th class="py-2.5 px-3 text-right w-32">สารดิบใช้ (kg)</th>
                       <th class="py-2.5 px-3 text-center w-28">แบทช์เตา</th>
                       <th class="py-2.5 px-3 text-center w-12">ลบ</th>
@@ -322,12 +322,12 @@
   <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbxQywqP4da0BYdt_dHQtQl-kYlvGxmdJWNA59oqnZ_AM7SRyEESbMd73UD3Xx6VffQ/exec";
     
-    // รายการสารกาแฟมาตรฐานโรงงาน (Preset สำรอง รับประกันว่าเปิดมามีตัวเลือกให้เลือกทันที 100%)
+    // รายการสารกาแฟมาตรฐานโรงงาน (Preset สำรอง รับประกันมีตัวเลือกให้เลือกทันที 100%)
     const PRESET_BEANS = [
+      "PY พะเยา (GB01)",
       "AD05 ปางขอน",
       "AD05 (P) สาร 3 สี",
       "AD05 (PB) ดอยช้าง",
-      "PY พะเยา (GB01)",
       "L ลาวโบลาเวน",
       "BS บราซิลซานโตส",
       "BC บราซิลเซราโด้",
@@ -354,7 +354,7 @@
       initDefaultBookingID();
       loadInitialPlannerData();
       
-      // เพิ่มแถวรายการสารเริ่มต้น 1 แถวทันที
+      // เพิ่มแถวเริ่มต้น 1 แถว
       addNewBookingItemRow();
     };
 
@@ -375,10 +375,8 @@
       document.getElementById('order_booking_id').value = `BK-${String(yyyy).slice(-2)}${mm}${dd}-${rand}`;
     }
 
-    // 🌟 ดึงสารกาแฟจากทั้ง Master + Inventory + Presets รวมกันเพื่อไม่ให้ค่าว่าง 🌟
     async function loadInitialPlannerData() {
       try {
-        // 1. ดึงสารจาก Master
         const resItem = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'get_items' }) });
         const resItemJson = await resItem.json();
         if(resItemJson.success && resItemJson.data && resItemJson.data.length > 0) {
@@ -388,7 +386,6 @@
           });
         }
 
-        // 2. ดึงสารจาก Inventory
         const resInv = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'get_inventory' }) });
         const resInvJson = await resInv.json();
         if(resInvJson.success && resInvJson.data && resInvJson.data.length > 0) {
@@ -400,10 +397,8 @@
           });
         }
 
-        // อัปเดต dropdown ของแถวที่เปิดอยู่
         refreshAllBeanDropdowns();
 
-        // 3. ดึงรายการจองคั่วที่มีอยู่แล้ว
         const resPlans = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'get_plans' }) });
         const resPlansJson = await resPlans.json();
         if(resPlansJson.success && resPlansJson.data) {
@@ -411,12 +406,11 @@
           renderBookingTable();
         }
       } catch(e) {
-        // ถึงเน็ตหลุด ก็ยังมี PRESET_BEANS ให้เลือกทำงานได้ทันที
         refreshAllBeanDropdowns();
       }
     }
 
-    // 🌟 เพิ่มแถวรายการสารใหม่ (Add Multi-Item Row) 🌟
+    // 🌟 เพิ่มแถวรายการสาร (รองรับระดับคั่วเดี่ยว และ B: สูตร Blend 68:32) 🌟
     function addNewBookingItemRow() {
       rowCounter++;
       const tbody = document.getElementById('booking-items-tbody');
@@ -431,15 +425,19 @@
           <select id="row_bean_${rowCounter}" onchange="calculateGrandTotals()" class="w-full px-2 py-1.5 border border-gray-300 rounded font-bold text-xs bg-white text-black focus:outline-none">
             ${beanOptions}
           </select>
+          <div id="blend_sub_hint_${rowCounter}" class="hidden text-[10px] text-gray-500 font-bold mt-1 bg-gray-50 p-1 rounded border border-gray-200">
+            สูตรผสม: Dark (68%) + MD (32%)
+          </div>
         </td>
         <td class="py-2 px-2 text-center">
-          <select id="row_level_${rowCounter}" class="w-full px-1.5 py-1.5 border border-gray-300 rounded font-bold text-xs bg-white text-black text-center focus:outline-none">
-            <option value="L">L (อ่อน)</option>
-            <option value="M" selected>M (กลาง)</option>
+          <select id="row_level_${rowCounter}" onchange="onRoastLevelChanged(${rowCounter})" class="w-full px-1.5 py-1.5 border border-gray-300 rounded font-bold text-xs bg-white text-black text-center focus:outline-none">
+            <option value="L">L (คั่วอ่อน)</option>
+            <option value="M" selected>M (คั่วกลาง)</option>
             <option value="MD">MD (กลางเข้ม)</option>
-            <option value="D">D (เข้ม)</option>
+            <option value="D">D (คั่วเข้ม)</option>
             <option value="DD">DD (เข้มมาก)</option>
             <option value="F">F (Filter)</option>
+            <option value="BLEND_68_32" class="font-black text-black bg-gray-100">B (Blend 68:32)</option>
           </select>
         </td>
         <td class="py-2 px-2 text-center">
@@ -456,7 +454,7 @@
         <td class="py-2 px-2 text-right font-black text-black" id="row_green_${rowCounter}">
           0.0 kg
         </td>
-        <td class="py-2 px-2 text-center font-mono font-bold text-gray-600" id="row_batch_${rowCounter}">
+        <td class="py-2 px-2 text-center font-mono font-bold text-gray-700" id="row_batch_${rowCounter}">
           0 แบทช์
         </td>
         <td class="py-2 px-2 text-center">
@@ -465,6 +463,17 @@
       `;
 
       tbody.appendChild(tr);
+      calculateGrandTotals();
+    }
+
+    function onRoastLevelChanged(id) {
+      const levelVal = document.getElementById(`row_level_${id}`).value;
+      const hint = document.getElementById(`blend_sub_hint_${id}`);
+      if(levelVal === 'BLEND_68_32') {
+        hint.classList.remove('hidden');
+      } else {
+        hint.classList.add('hidden');
+      }
       calculateGrandTotals();
     }
 
@@ -488,7 +497,7 @@
       }
     }
 
-    // 🌟 คำนวณยอดรวมทั้งออเดอร์ (Grand Total Math) 🌟
+    // 🌟 คำนวณยอดรวมทั้งออเดอร์ (รองรับการแตกสูตร Blend 68:32) 🌟
     function calculateGrandTotals() {
       let totalItems = 0;
       let totalRoasted = 0;
@@ -497,24 +506,53 @@
 
       for (let i = 1; i <= rowCounter; i++) {
         const targetInput = document.getElementById(`row_target_${i}`);
-        if (targetInput) {
+        const levelSel = document.getElementById(`row_level_${i}`);
+
+        if (targetInput && levelSel) {
           const targetW = parseFloat(targetInput.value) || 0;
+          const levelVal = levelSel.value;
+          const hint = document.getElementById(`blend_sub_hint_${i}`);
+
           if (targetW > 0) totalItems++;
 
-          // สารดิบ 1.25x
-          const greenW = targetW * 1.25;
-          const batches = greenW > 0 ? Math.ceil(greenW / 25) : 0;
+          if (levelVal === 'BLEND_68_32') {
+            // สูตร Blend: แตกออกเป็น 2 เตาคั่ว
+            const darkRoasted = targetW * 0.68;
+            const mdRoasted = targetW * 0.32;
 
-          document.getElementById(`row_green_${i}`).innerText = `${greenW.toFixed(1)} kg`;
-          document.getElementById(`row_batch_${i}`).innerText = `${batches} แบทช์`;
+            const darkGreen = darkRoasted * 1.25;
+            const mdGreen = mdRoasted * 1.25;
+            const rowTotalGreen = darkGreen + mdGreen;
 
-          totalRoasted += targetW;
-          totalGreen += greenW;
-          totalBatches += batches;
+            const darkBatches = Math.ceil(darkGreen / 25);
+            const mdBatches = Math.ceil(mdGreen / 25);
+            const rowBatches = darkBatches + mdBatches;
+
+            document.getElementById(`row_green_${i}`).innerText = `${rowTotalGreen.toFixed(1)} kg`;
+            document.getElementById(`row_batch_${i}`).innerText = `${rowBatches} แบทช์ (D:${darkBatches}, MD:${mdBatches})`;
+
+            if (hint) {
+              hint.innerText = `Dark (68%): ${darkRoasted.toFixed(1)}kg (สาร ${darkGreen.toFixed(1)}kg) | MD (32%): ${mdRoasted.toFixed(1)}kg (สาร ${mdGreen.toFixed(1)}kg)`;
+            }
+
+            totalRoasted += targetW;
+            totalGreen += rowTotalGreen;
+            totalBatches += rowBatches;
+          } else {
+            // คั่วระดับเดี่ยวปกติ
+            const greenW = targetW * 1.25;
+            const batches = greenW > 0 ? Math.ceil(greenW / 25) : 0;
+
+            document.getElementById(`row_green_${i}`).innerText = `${greenW.toFixed(1)} kg`;
+            document.getElementById(`row_batch_${i}`).innerText = `${batches} แบทช์`;
+
+            totalRoasted += targetW;
+            totalGreen += greenW;
+            totalBatches += batches;
+          }
         }
       }
 
-      // อัปเดตกล่องผลรวม
       document.getElementById('grand-items-count').innerText = `${totalItems} รายการ`;
       document.getElementById('grand-roasted-weight').innerText = `${totalRoasted.toFixed(1)} kg`;
       document.getElementById('grand-green-weight').innerText = `${totalGreen.toFixed(1)} kg`;
@@ -525,7 +563,7 @@
       document.getElementById('grand-total-time').innerText = `${hrs}:${String(mins).padStart(2, '0')} ชม.`;
     }
 
-    // 🌟 บันทึกออเดอร์ที่มีหลายรายการสารพร้อมกัน 🌟
+    // 🌟 บันทึกออเดอร์ (ถ้าเจอ Blend จะแตก 2 แถวให้เตาคั่วอัตโนมัติ) 🌟
     async function submitCreateMultiBooking() {
       const bookingId = document.getElementById('order_booking_id').value.trim();
       const customer = document.getElementById('order_customer_name').value.trim();
@@ -536,19 +574,47 @@
         return alert("กรุณาระบุรหัสใบจองและชื่อลูกค้า");
       }
 
-      // ดึงรายการสารทั้งหมดที่กรอกไว้
       const itemsToBook = [];
       for (let i = 1; i <= rowCounter; i++) {
         const targetInput = document.getElementById(`row_target_${i}`);
         if (targetInput) {
           const targetW = parseFloat(targetInput.value) || 0;
           if (targetW > 0) {
-            itemsToBook.push({
-              bean: document.getElementById(`row_bean_${i}`).value,
-              level: document.getElementById(`row_level_${i}`).value,
-              size: document.getElementById(`row_size_${i}`).value,
-              target_weight: targetW
-            });
+            const beanName = document.getElementById(`row_bean_${i}`).value;
+            const levelVal = document.getElementById(`row_level_${i}`).value;
+            const sizeVal = document.getElementById(`row_size_${i}`).value;
+
+            if (levelVal === 'BLEND_68_32') {
+              // แตกเป็น 2 รายการสำหรับหน้าเตาคั่ว
+              const darkW = parseFloat((targetW * 0.68).toFixed(2));
+              const mdW = parseFloat((targetW * 0.32).toFixed(2));
+
+              itemsToBook.push({
+                bean: beanName,
+                level: 'Dark (Blend 68%)',
+                size: sizeVal,
+                target_weight: darkW,
+                is_blend: true,
+                parent_booking: bookingId
+              });
+              itemsToBook.push({
+                bean: beanName,
+                level: 'Medium Dark (Blend 32%)',
+                size: sizeVal,
+                target_weight: mdW,
+                is_blend: true,
+                parent_booking: bookingId
+              });
+            } else {
+              itemsToBook.push({
+                bean: beanName,
+                level: levelVal,
+                size: sizeVal,
+                target_weight: targetW,
+                is_blend: false,
+                parent_booking: bookingId
+              });
+            }
           }
         }
       }
@@ -561,10 +627,10 @@
       const confirmMsg = `ยืนยันบันทึกใบสั่งจองคั่วของ [${customer}]?\n\n` +
         `- รหัสใบจอง: ${bookingId} (${week})\n` +
         `- วันรับด่วน: ${dueDate}\n` +
-        `- จำนวนรายการสาร: ${itemsToBook.length} รายการ\n` +
+        `- แตกคิวเข้าเตารวม: ${itemsToBook.length} แบทช์\n` +
         `- น้ำหนักสั่งคั่วรวม: ${totalW.toFixed(1)} kg\n\n` +
-        itemsToBook.map((it, idx) => `  ${idx+1}. ${it.bean} (${it.level}) [ถุง ${it.size}kg] = ${it.target_weight} kg`).join('\n') +
-        `\n\n*ระบบจะบรรจุรายการทั้งหมดลงกระดานแผนการผลิต*`;
+        itemsToBook.map((it, idx) => `  ${idx+1}. ${it.bean} [${it.level}] = ${it.target_weight} kg`).join('\n') +
+        `\n\n*ระบบจะแตกแบทช์เตาคั่วและส่งลงกระดานแผนการผลิตทันที*`;
 
       if(!confirm(confirmMsg)) return;
 
@@ -573,7 +639,6 @@
       btn.disabled = true;
 
       try {
-        // ส่งบันทึกทีละรายการ หรือบันทึกรวม
         for (let idx = 0; idx < itemsToBook.length; idx++) {
           const it = itemsToBook[idx];
           const subPlanId = `${bookingId}-${idx + 1}`;
@@ -601,7 +666,7 @@
           });
         }
 
-        alert(`บันทึกใบสั่งจองคั่วของ [${customer}] รวม ${itemsToBook.length} รายการสำเร็จเรียบร้อย!`);
+        alert(`บันทึกใบสั่งจองคั่วของ [${customer}] รวม ${itemsToBook.length} แบทช์สำเร็จเรียบร้อย!`);
 
         renderBookingTable();
         initDefaultBookingID();
@@ -626,7 +691,6 @@
         filtered = bookingPlansList.filter(p => p.product_name && p.product_name.includes(`[${weekFilter}]`));
       }
 
-      // อัปเดต KPI ด้านบน
       const totalRoasted = filtered.reduce((s, p) => s + (parseFloat(p.target_weight) || 0), 0);
       const totalGreen = totalRoasted * 1.25;
       const totalBatches = totalGreen > 0 ? Math.ceil(totalGreen / 25) : 0;
