@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>BJ Roaster - วางแผน</title>
+  <title>BJ Roaster - วางแผน & ระบบจองคั่ว</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     ::-webkit-scrollbar { display: none; }
@@ -13,9 +13,9 @@
 </head>
 <body class="bg-white text-black font-sans antialiased selection:bg-gray-200">
 
-  <div class="flex min-h-screen">
+  <div id="app-layout" class="flex min-h-screen">
     
-    <!-- 💻 Sidebar Desktop -->
+    <!-- 💻 Sidebar Desktop (4 เมนูมาตรฐาน สะอาด คลีน) -->
     <aside class="hidden md:flex flex-col w-64 fixed left-0 top-0 h-screen bg-white border-r border-gray-200 pt-7 pb-6 px-4 z-40 shadow-sm no-print">
       <div class="px-2 mb-7">
         <div class="flex items-center gap-2.5">
@@ -66,7 +66,7 @@
     <main class="w-full md:ml-64 relative flex flex-col min-h-screen">
       
       <!-- 🌟 แถบเมนูด้านบน สไตล์ Binance Tab Header 🌟 -->
-      <div class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-gray-200">
+      <div class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-gray-200 no-print">
         <div class="flex items-center gap-2 overflow-x-auto px-4 md:px-8 py-2.5 snap-x">
           <button class="px-4 py-2 rounded-lg text-sm font-bold bg-black text-white whitespace-nowrap shadow-sm">วางแผน</button>
           <button onclick="window.location.href='wip.html'" class="px-4 py-2 rounded-lg text-sm font-bold text-gray-400 hover:text-black hover:bg-gray-100 transition whitespace-nowrap">เบิกคั่ว</button>
@@ -77,65 +77,255 @@
         </div>
       </div>
 
+      <!-- 👇 พื้นที่ทำงานวางแผน & จองคั่ว 👇 -->
       <div class="p-4 md:p-8 pb-32 max-w-5xl space-y-6">
-        <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-4">
-          <div class="border-b border-gray-100 pb-3">
-            <h2 class="text-base font-bold text-black">สร้างแผนการคั่ว</h2>
-            <p class="text-xs text-gray-400">กำหนดออเดอร์และระดับการคั่วสำหรับเข้าเตา</p>
+        
+        <!-- Header & ปุ่มเปิดคู่มือ SOP ประจำหน้าจอ -->
+        <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-3 border-b border-gray-100 pb-3 no-print">
+          <div>
+            <h1 class="text-xl font-black text-black tracking-tight">ระบบจองคั่ว & วางแผนการผลิต OEM</h1>
+            <p class="text-xs text-gray-400">ลงทะเบียนออเดอร์ลูกค้า ➔ คำนวณสารดิบ & แบทช์ ➔ เช็คสต๊อกสาร ➔ ปล่อยคิวเข้าเตาคั่ว</p>
           </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <div>
-              <label class="block text-xs font-bold text-gray-600 mb-1">เลขออเดอร์ลูกค้า *</label>
-              <input type="text" id="order_no" placeholder="เช่น ORD-2026-001" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm font-bold uppercase focus:border-black focus:outline-none">
-            </div>
-            <div>
-              <label class="block text-xs font-bold text-gray-600 mb-1">สารกาแฟที่จะใช้คั่ว *</label>
-              <input type="text" id="plan_item_name" placeholder="เช่น Brazil Cerrado" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:border-black focus:outline-none">
-            </div>
-            <div>
-              <label class="block text-xs font-bold text-gray-600 mb-1">น้ำหนักสารกาแฟเป้าหมาย kg *</label>
-              <input type="number" id="plan_weight" placeholder="30.00" class="w-full px-3 py-2 border border-black rounded-lg text-base font-black focus:outline-none">
-            </div>
-            <div>
-              <label class="block text-xs font-bold text-gray-600 mb-1">ระดับการคั่ว *</label>
-              <select id="roast_level" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white font-bold focus:border-black focus:outline-none">
-                <option value="Light">Light (คั่วอ่อน)</option>
-                <option value="Medium">Medium (คั่วกลาง)</option>
-                <option value="Medium-Dark">Medium-Dark (คั่วกลางเข้ม)</option>
-                <option value="Dark">Dark (คั่วเข้ม)</option>
-              </select>
-            </div>
-            <div class="md:col-span-2">
-              <label class="block text-xs font-bold text-gray-600 mb-1">วันที่กำหนดคั่ว</label>
-              <input type="date" id="roast_date" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:border-black focus:outline-none">
-            </div>
-          </div>
-
-          <button type="button" onclick="savePlan()" id="save-plan-btn" class="w-full bg-black hover:bg-gray-800 text-white font-bold py-3.5 rounded-lg text-sm transition active:scale-95 cursor-pointer">
-            บันทึกแผนการคั่ว
+          <!-- ปุ่มเปิดคู่มือหลัก -->
+          <button type="button" onclick="toggleGlobalSOPGuide()" class="flex items-center gap-1.5 px-3 py-1.5 bg-black hover:bg-gray-800 text-white rounded-lg text-xs font-bold transition cursor-pointer self-start sm:self-auto shadow-sm">
+            <span>คู่มือการทำงาน (SOP)</span>
+            <span id="sop-toggle-icon" class="text-[10px]">▼</span>
           </button>
         </div>
 
-        <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-          <div class="p-4 border-b border-gray-100 flex justify-between items-center">
-            <h3 class="font-bold text-black text-sm">คิวแผนการคั่ว</h3>
-            <button type="button" onclick="loadPlans()" class="text-xs bg-gray-100 hover:bg-gray-200 text-black font-bold px-3 py-1.5 rounded-lg transition cursor-pointer">รีเฟรช</button>
+        <!-- 🌟 กล่องคู่มือการทำงาน SOP ประจำหน้าจอ (เปิด-ปิดได้ สไตล์คลีน 100%) 🌟 -->
+        <div id="sop-guide-drawer" class="hidden p-5 bg-gray-50 rounded-2xl border-2 border-black space-y-4 no-print transition-all">
+          <div class="flex justify-between items-center border-b border-gray-200 pb-2">
+            <div>
+              <span class="text-[10px] font-black uppercase tracking-widest text-gray-400 block">ROAST BOOKING & PLANNING SOP</span>
+              <h3 class="text-sm font-black text-black">คู่มือมาตรฐานการรับจองคั่ว & วางแผนผลิต (Booking Flow)</h3>
+            </div>
+            <button type="button" onclick="toggleGlobalSOPGuide()" class="text-gray-400 hover:text-black font-bold text-lg leading-none">&times;</button>
           </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+            <!-- คู่มือขั้นตอน 1 -->
+            <div class="p-3.5 bg-white rounded-xl border border-gray-200 space-y-1.5 flex flex-col justify-between">
+              <div>
+                <span class="font-black text-black text-xs block">1. เลือกลูกค้า & ชนิดสารกาแฟ</span>
+                <p class="text-[11px] text-gray-500 mt-1">ระบุชื่อลูกค้า (คุณลี, พี่กานต์, เนิส, คุณโอ๊ค, Office) หรือลูกค้า OEM ➔ ระบบจะดึงสต๊อกสารดิบของลูกค้าที่ค้างในคลังมาแสดงทันที</p>
+              </div>
+              <div class="pt-2 border-t border-gray-100 text-[10px] text-gray-400">
+                👉 เช็คทันทีก่อนรับงานว่ามีสารดิบพอคั่วหรือไม่
+              </div>
+            </div>
+
+            <!-- คู่มือขั้นตอน 2 -->
+            <div class="p-3.5 bg-white rounded-xl border border-gray-200 space-y-1.5 flex flex-col justify-between">
+              <div>
+                <span class="font-black text-black text-xs block">2. เลือกระดับคั่ว & จำนวนสั่ง</span>
+                <p class="text-[11px] text-gray-500 mt-1">ระบุระดับคั่ว (L, M, MD, D, DD, F) และขนาดถุง (0.25, 0.50, 1.00 kg) ➔ ระบบจะคำนวณสารดิบ (Factor 1.25x) และจำนวนแบทช์เตาคั่วให้อัตโนมัติ</p>
+              </div>
+              <div class="pt-2 border-t border-gray-100 text-[10px] text-gray-400">
+                ⚡ คำนวณเวลาเตาคั่ว (ชม.:นาที) ให้อัตโนมัติ
+              </div>
+            </div>
+
+            <!-- คู่มือขั้นตอน 3 -->
+            <div class="p-3.5 bg-white rounded-xl border border-gray-200 space-y-1.5 flex flex-col justify-between">
+              <div>
+                <span class="font-black text-black text-xs block">3. บันทึกจองคั่ว & ส่งเข้าเตา</span>
+                <p class="text-[11px] text-gray-500 mt-1">บันทึกใบจองคั่วลงกระดาน เมื่อถึงวันนัดหมาย กดปุ่ม <b>ส่งเข้าเตาคั่ว</b> เพื่อแปลงเป็นรหัส WO พร้อมพิมพ์ใบนำงาน A4 หน้าเตา</p>
+              </div>
+              <div class="pt-2 border-t border-gray-100 text-[10px] text-gray-400">
+                ☕ เชื่อมต่อไปยังหน้าเตาคั่ว (wip.html) ทันที
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- แดชบอร์ดสรุปยอดแผนจองคั่ว -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center text-xs">
+          <div class="p-3.5 bg-gray-50 rounded-xl border border-gray-200">
+            <span class="text-gray-400 block text-[10px]">ยอดจองคั่วรวม</span>
+            <b id="kpi-booked-roasted" class="text-base font-black text-black">0.0 kg</b>
+            <span class="text-[10px] text-gray-400 mt-0.5 block" id="kpi-booked-orders">0 รายการ</span>
+          </div>
+          <div class="p-3.5 bg-gray-50 rounded-xl border border-gray-200">
+            <span class="text-gray-400 block text-[10px]">สารดิบที่ต้องใช้</span>
+            <b id="kpi-est-green" class="text-base font-black text-black">0.0 kg</b>
+            <span class="text-[10px] text-gray-400 mt-0.5 block">Factor 1.25x</span>
+          </div>
+          <div class="p-3.5 bg-gray-50 rounded-xl border border-gray-200">
+            <span class="text-gray-400 block text-[10px]">จำนวนแบทช์คั่ว</span>
+            <b id="kpi-total-batches" class="text-base font-black text-black">0 แบทช์</b>
+            <span class="text-[10px] text-gray-400 mt-0.5 block">ขนาด 25 kg/เตา</span>
+          </div>
+          <div class="p-3.5 bg-gray-50 rounded-xl border border-gray-200">
+            <span class="text-gray-400 block text-[10px]">เวลาเตาคั่วที่ต้องใช้</span>
+            <b id="kpi-roast-hours" class="text-base font-black text-black">0:00 ชม.</b>
+            <span class="text-[10px] text-gray-400 mt-0.5 block">~20 นาที/แบทช์</span>
+          </div>
+        </div>
+
+        <!-- 📝 ฟอร์มลงทะเบียนจองคั่วกาแฟ (Roast Booking Form) 📝 -->
+        <div class="bg-white p-6 rounded-xl border-2 border-black shadow-sm space-y-5">
+          <div class="border-b border-gray-100 pb-3 flex justify-between items-center">
+            <div>
+              <h2 class="text-base font-bold text-black">ลงทะเบียนใบสั่งจองคั่ว (Create Roast Booking)</h2>
+              <p class="text-xs text-gray-400">บันทึกยอดสั่งจองจากลูกค้าหรือแผนสต๊อกโรงงาน พร้อมคำนวณการใช้สารดิบ</p>
+            </div>
+            <span class="text-xs font-mono font-bold bg-gray-100 text-black px-2.5 py-1 rounded" id="today-date-badge">2026-09-17</span>
+          </div>
+
+          <form id="form-create-booking" onsubmit="event.preventDefault(); submitCreateBooking();" class="space-y-4 text-xs">
+            
+            <!-- แถวที่ 1: ข้อมูลลูกค้า & วันที่ -->
+            <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
+              <div>
+                <label class="block font-bold text-black mb-1">รหัสใบจอง (Plan ID) *</label>
+                <input type="text" id="plan_id_input" required class="w-full px-3 py-2 border-2 border-black rounded-lg font-mono font-black text-black uppercase focus:outline-none">
+              </div>
+
+              <div>
+                <label class="block font-bold text-black mb-1">ชื่อลูกค้า / ฝ่ายสั่งผลิต *</label>
+                <div class="flex gap-1">
+                  <input type="text" id="customer_name_input" oninput="checkCustomerGreenStock()" required placeholder="เช่น คุณลี, เนิส, พี่กานต์" class="w-full px-3 py-2 border border-gray-300 rounded-lg font-bold text-black focus:border-black focus:outline-none">
+                  <select onchange="document.getElementById('customer_name_input').value=this.value; checkCustomerGreenStock();" class="px-2 border border-gray-300 rounded-lg bg-gray-50 text-xs font-bold text-black cursor-pointer">
+                    <option value="">เลือกด่วน</option>
+                    <option value="คุณลี">คุณลี</option>
+                    <option value="พี่กานต์">พี่กานต์</option>
+                    <option value="เนิส">เนิส</option>
+                    <option value="คุณโอ๊ค">คุณโอ๊ค</option>
+                    <option value="Office">Office</option>
+                    <option value="คั่ว Stock">คั่ว Stock โรงงาน</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label class="block font-bold text-gray-700 mb-1">สัปดาห์ที่ผลิต (Week) *</label>
+                <select id="booking_week_select" class="w-full px-3 py-2 border border-gray-300 rounded-lg font-bold bg-white text-black focus:outline-none">
+                  <option value="W1" selected>สัปดาห์ที่ 1</option>
+                  <option value="W2">สัปดาห์ที่ 2</option>
+                  <option value="W3">สัปดาห์ที่ 3</option>
+                  <option value="W4">สัปดาห์ที่ 4</option>
+                  <option value="W5">สัปดาห์ที่ 5</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block font-bold text-black mb-1">วันรับด่วน / วันนัดรับ *</label>
+                <input type="date" id="due_date_input" required class="w-full px-3 py-2 border border-black rounded-lg font-bold text-black focus:outline-none">
+              </div>
+            </div>
+
+            <!-- แถวที่ 2: สารกาแฟ & ระดับคั่ว & ขนาดถุง -->
+            <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
+              <div>
+                <label class="block font-bold text-black mb-1">เลือกสารกาแฟ (จาก Master) *</label>
+                <select id="plan_item_select" onchange="onPlanItemSelected()" required class="w-full px-3 py-2 border-2 border-black rounded-lg font-bold bg-white text-black focus:outline-none">
+                  <option value="">-- คลิกเลือกสารกาแฟ --</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block font-bold text-black mb-1">ระดับการคั่ว (Roast Level) *</label>
+                <select id="plan_roast_level" class="w-full px-3 py-2 border border-gray-300 rounded-lg font-bold bg-white text-black focus:border-black focus:outline-none">
+                  <option value="L">Light (L - คั่วอ่อน)</option>
+                  <option value="M" selected>Medium (M - คั่วกลาง)</option>
+                  <option value="MD">Medium Dark (MD - กลางค่อนเข้ม)</option>
+                  <option value="D">Dark (D - คั่วเข้ม)</option>
+                  <option value="DD">Double Dark (DD - เข้มพิเศษ)</option>
+                  <option value="F">French / Filter (F)</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block font-bold text-black mb-1">ขนาดถุงบรรจุ (Bag Size) *</label>
+                <select id="plan_bag_size" onchange="calculateBookingMath()" class="w-full px-3 py-2 border border-gray-300 rounded-lg font-bold bg-white text-black focus:border-black focus:outline-none">
+                  <option value="0.25" selected>250 กรัม (0.25 kg)</option>
+                  <option value="0.50">500 กรัม (0.50 kg)</option>
+                  <option value="1.00">1,000 กรัม (1.00 kg)</option>
+                  <option value="bulk">ไม่บรรจุซอง (ส่งเป็นถังคั่ว)</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block font-bold text-black mb-1">จำนวนที่สั่งคั่วสุก (kg) *</label>
+                <input type="number" id="plan_target_weight" oninput="calculateBookingMath()" step="0.5" placeholder="เช่น 100.0" required class="w-full px-3 py-2 border-2 border-black rounded-lg font-black text-base text-black focus:outline-none">
+              </div>
+            </div>
+
+            <!-- กล่องแสดงสถานะสต๊อกสารดิบคงเหลือของลูกค้า (Customer Stock Monitor) -->
+            <div id="customer-stock-box" class="p-3 bg-gray-50 rounded-xl border border-gray-200 space-y-1.5 text-xs">
+              <div class="flex justify-between items-center">
+                <span class="font-bold text-black">สต๊อกสารดิบในคลังที่พร้อมใช้:</span>
+                <b id="cust-stock-available" class="font-mono font-black text-black">0.00 kg (0 กระสอบ)</b>
+              </div>
+              <p class="text-[10px] text-gray-500" id="cust-stock-hint">กรุณาระบุสารกาแฟเพื่อตรวจสอบว่ามีสารดิบในคลัง BJ เพียงพอหรือไม่</p>
+            </div>
+
+            <!-- กล่องผลลัพธ์คำนวณ Auto (Yield & Batch Math) -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs p-3 bg-gray-100 rounded-xl">
+              <div>
+                <span class="text-gray-500 block">สารดิบที่ต้องเบิก (1.25x)</span>
+                <b id="math-green-needed" class="text-sm font-black text-black">0.0 kg</b>
+              </div>
+              <div>
+                <span class="text-gray-500 block">จำนวนถุงที่จะได้</span>
+                <b id="math-total-bags" class="text-sm font-black text-black">0 ถุง</b>
+              </div>
+              <div>
+                <span class="text-gray-500 block">จำนวนแบทช์เตา</span>
+                <b id="math-batches-count" class="text-sm font-black text-black">0 แบทช์</b>
+              </div>
+              <div>
+                <span class="text-gray-500 block">เวลาคั่วโดยประมาณ</span>
+                <b id="math-est-time" class="text-sm font-black text-black">0:00 ชม.</b>
+              </div>
+            </div>
+
+            <!-- ปุ่มบันทึก -->
+            <button type="submit" id="btn-save-booking" class="w-full bg-black hover:bg-gray-800 text-white font-bold py-3.5 rounded-lg text-xs transition active:scale-95 cursor-pointer">
+              บันทึกใบสั่งจองคั่ว & บรรจุลงแผนผลิต (Save Booking)
+            </button>
+          </form>
+        </div>
+
+        <!-- 📋 กระดานคิวจองคั่วประจำสัปดาห์ (Production Booking Board) 📋 -->
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden p-5 space-y-3">
+          <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-2 border-b border-gray-100 pb-2">
+            <div>
+              <h3 class="font-bold text-black text-sm">กระดานคิวจองคั่ว & แผนการผลิต</h3>
+              <p class="text-[11px] text-gray-400">รายการสั่งผลิตแบ่งตามลูกค้า พร้อมปุ่มส่งเข้าเตาคั่ว</p>
+            </div>
+            <div class="flex gap-2">
+              <select id="filter_week_select" onchange="renderBookingTable()" class="px-2.5 py-1 bg-gray-50 border border-gray-200 rounded text-xs font-bold text-black">
+                <option value="ALL">ดูทุกสัปดาห์</option>
+                <option value="W1">สัปดาห์ที่ 1</option>
+                <option value="W2">สัปดาห์ที่ 2</option>
+                <option value="W3">สัปดาห์ที่ 3</option>
+                <option value="W4">สัปดาห์ที่ 4</option>
+                <option value="W5">สัปดาห์ที่ 5</option>
+              </select>
+              <button onclick="loadInitialPlannerData()" class="text-xs font-bold text-black bg-gray-100 hover:bg-gray-200 px-3 py-1 rounded transition cursor-pointer">รีเฟรช</button>
+            </div>
+          </div>
+
           <div class="overflow-x-auto">
             <table class="min-w-full text-xs">
               <thead class="bg-gray-50 text-gray-500 border-b border-gray-200">
                 <tr>
-                  <th class="py-2.5 px-3 text-left font-bold">รหัสแผน / ออเดอร์</th>
-                  <th class="py-2.5 px-3 text-left font-bold">สารกาแฟ</th>
-                  <th class="py-2.5 px-3 text-right font-bold">น้ำหนัก</th>
-                  <th class="py-2.5 px-3 text-center font-bold">ระดับคั่ว</th>
+                  <th class="py-2.5 px-3 text-left font-bold">รหัสใบจอง</th>
+                  <th class="py-2.5 px-3 text-left font-bold">ลูกค้า / สัปดาห์</th>
+                  <th class="py-2.5 px-3 text-left font-bold">สารกาแฟ & ระดับคั่ว</th>
+                  <th class="py-2.5 px-3 text-center font-bold">ขนาดถุง</th>
+                  <th class="py-2.5 px-3 text-right font-bold">ยอดสั่งคั่ว</th>
+                  <th class="py-2.5 px-3 text-right font-bold">สารดิบที่ใช้</th>
+                  <th class="py-2.5 px-3 text-center font-bold">แบทช์ / เวลา</th>
+                  <th class="py-2.5 px-3 text-center font-bold">นัดรับด่วน</th>
                   <th class="py-2.5 px-3 text-center font-bold">สถานะ</th>
-                  <th class="py-2.5 px-3 text-center font-bold">จัดการ</th>
+                  <th class="py-2.5 px-3 text-center font-bold">การจัดการ</th>
                 </tr>
               </thead>
-              <tbody id="plan-table-body" class="text-black divide-y divide-gray-100">
-                <tr><td colspan="6" class="py-6 text-center text-gray-400">กำลังโหลด...</td></tr>
+              <tbody id="booking-plans-tbody" class="text-black divide-y divide-gray-100">
+                <tr><td colspan="10" class="py-6 text-center text-gray-400">กำลังโหลดรายการจองคั่ว...</td></tr>
               </tbody>
             </table>
           </div>
@@ -145,7 +335,7 @@
     </main>
   </div>
 
-  <!-- 📱 Bottom Navigation มือถือ (แสดงผลตลอดเวลา 100%) -->
+  <!-- 📱 Bottom Navigation มือถือ -->
   <div id="bottom-nav" class="fixed bottom-0 w-full bg-white border-t border-gray-200 pb-safe z-50 md:hidden shadow-lg no-print">
     <div class="flex justify-around items-center pt-2.5 pb-1 px-1">
       <div onclick="window.location.href='index.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-black cursor-pointer">
@@ -168,6 +358,10 @@
 
   <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbxQywqP4da0BYdt_dHQtQl-kYlvGxmdJWNA59oqnZ_AM7SRyEESbMd73UD3Xx6VffQ/exec";
+    
+    let itemMasterList = [];
+    let allInventoryData = [];
+    let bookingPlansList = [];
 
     function handleLogout() {
       if(confirm("ต้องการออกจากระบบใช่หรือไม่?")) {
@@ -176,59 +370,268 @@
       }
     }
 
-    window.onload = loadPlans;
+    window.onload = function() {
+      const now = new Date();
+      document.getElementById('today-date-badge').innerText = now.toISOString().split('T')[0];
+      document.getElementById('due_date_input').value = now.toISOString().split('T')[0];
+      initDefaultPlanID();
+      loadInitialPlannerData();
+    };
 
-    async function loadPlans() {
-      const tbody = document.getElementById('plan-table-body');
-      tbody.innerHTML = `<tr><td colspan="6" class="py-4 text-center text-gray-400">กำลังโหลด...</td></tr>`;
+    function toggleGlobalSOPGuide() {
+      const drawer = document.getElementById('sop-guide-drawer');
+      const icon = document.getElementById('sop-toggle-icon');
+      const isHidden = drawer.classList.contains('hidden');
+      drawer.classList.toggle('hidden', !isHidden);
+      icon.innerText = isHidden ? '▲' : '▼';
+    }
+
+    function initDefaultPlanID() {
+      const now = new Date();
+      const yyyy = now.getFullYear();
+      const mm = String(now.getMonth() + 1).padStart(2, '0');
+      const dd = String(now.getDate()).padStart(2, '0');
+      const rand = String(now.getTime()).slice(-4);
+      document.getElementById('plan_id_input').value = `PLN-${String(yyyy).slice(-2)}${mm}${dd}-${rand}`;
+    }
+
+    async function loadInitialPlannerData() {
       try {
-        const res = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'get_plans' }) });
-        const result = await res.json();
-        if(result.success && result.data && result.data.length > 0) {
-          tbody.innerHTML = result.data.map(p => `
-            <tr class="hover:bg-gray-50">
-              <td class="py-2 px-3 font-mono font-bold text-black">${p.plan_id}<br><span class="text-[10px] text-gray-400 font-normal">${p.order_no || '-'}</span></td>
-              <td class="py-2 px-3 text-black font-medium">${p.item_name}</td>
-              <td class="py-2 px-3 text-right font-bold text-black">${p.target_weight} kg</td>
-              <td class="py-2 px-3 text-center">${p.roast_level}</td>
-              <td class="py-2 px-3 text-center"><span class="px-2 py-0.5 rounded text-[10px] font-bold border border-gray-300 ${p.status === 'Completed' ? 'bg-gray-100 text-black' : 'text-gray-500'}">${p.status}</span></td>
-              <td class="py-2 px-3 text-center">
-                ${p.status !== 'Completed' ? `<button type="button" onclick="updateStatus('${p.plan_id}', 'Completed')" class="text-black hover:underline font-bold cursor-pointer">เสร็จสิ้น</button>` : '—'}
-              </td>
-            </tr>
-          `).join('');
-        } else {
-          tbody.innerHTML = `<tr><td colspan="6" class="py-4 text-center text-gray-400">ยังไม่มีแผนการคั่ว</td></tr>`;
+        // ดึงสารกาแฟ Master
+        const resItem = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'get_items' }) });
+        const resItemJson = await resItem.json();
+        if(resItemJson.success && resItemJson.data) {
+          itemMasterList = resItemJson.data;
+          renderItemSelect();
         }
-      } catch (e) {}
+
+        // ดึงสต๊อกสารปัจจุบัน
+        const resInv = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'get_inventory' }) });
+        const resInvJson = await resInv.json();
+        if(resInvJson.success && resInvJson.data) {
+          allInventoryData = resInvJson.data;
+        }
+
+        // ดึงรายการแผนจองคั่ว
+        const resPlans = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'get_plans' }) });
+        const resPlansJson = await resPlans.json();
+        if(resPlansJson.success && resPlansJson.data) {
+          bookingPlansList = resPlansJson.data;
+          renderBookingTable();
+        }
+      } catch(e) {}
     }
 
-    async function savePlan() {
-      const orderNo = document.getElementById('order_no').value.trim();
-      const itemName = document.getElementById('plan_item_name').value.trim();
-      const weight = document.getElementById('plan_weight').value;
-      const roastLevel = document.getElementById('roast_level').value;
-      const roastDate = document.getElementById('roast_date').value;
+    function renderItemSelect() {
+      const sel = document.getElementById('plan_item_select');
+      sel.innerHTML = '<option value="">-- คลิกเลือกสารกาแฟ --</option>' + 
+        itemMasterList.map((item, idx) => `<option value="${idx}">[${item.bean_code || item.product_code}] ${item.bean_name || item.product_name}</option>`).join('');
+    }
 
-      if(!itemName || !weight) return alert("กรุณาระบุชื่อสารกาแฟและน้ำหนัก");
+    function onPlanItemSelected() {
+      checkCustomerGreenStock();
+      calculateBookingMath();
+    }
+
+    // ตรวจสอบสต๊อกสารดิบในคลัง BJ ว่าพอหรือไม่
+    function checkCustomerGreenStock() {
+      const idx = document.getElementById('plan_item_select').value;
+      if(idx === "") {
+        document.getElementById('cust-stock-available').innerText = "0.00 kg (0 กระสอบ)";
+        document.getElementById('cust-stock-hint').innerText = "กรุณาระบุสารกาแฟเพื่อตรวจสอบสต๊อกสารดิบในคลัง";
+        return;
+      }
+
+      const item = itemMasterList[idx];
+      const beanName = item.bean_name || item.product_name;
+
+      // กรองหาสารตัวนี้ใน Inventory
+      const matchedStock = allInventoryData.filter(i => 
+        (i.item_name && i.item_name.includes(beanName)) &&
+        i.status === 'Active' &&
+        parseFloat(i.weight_current) > 0
+      );
+
+      const totalWeight = matchedStock.reduce((s, i) => s + (parseFloat(i.weight_current) || 0), 0);
+      const totalSacks = matchedStock.reduce((s, i) => s + (parseInt(i.sacks) || Math.round((parseFloat(i.weight_current)||0)/50) || 1), 0);
+
+      document.getElementById('cust-stock-available').innerText = `${totalWeight.toFixed(1)} kg (${totalSacks} กระสอบ)`;
+      
+      const neededGreen = parseFloat(document.getElementById('plan_target_weight').value || 0) * 1.25;
+      if (totalWeight >= neededGreen) {
+        document.getElementById('cust-stock-hint').innerText = `มีสารดิบ [${beanName}] ในคลังเพียงพอสำหรับการคั่วรอบนี้`;
+        document.getElementById('cust-stock-hint').className = "text-[10px] text-black font-bold";
+      } else {
+        document.getElementById('cust-stock-hint').innerText = `สารดิบในคลังอาจไม่พอ (ต้องการ ${neededGreen.toFixed(1)} kg แต่มี ${totalWeight.toFixed(1)} kg)`;
+        document.getElementById('cust-stock-hint').className = "text-[10px] text-red-600 font-bold";
+      }
+    }
+
+    // คำนวณสารดิบ (Factor 1.25x), จำนวนถุง, จำนวนแบทช์ และเวลาคั่ว
+    function calculateBookingMath() {
+      const roastedTarget = parseFloat(document.getElementById('plan_target_weight').value) || 0;
+      const bagSizeVal = document.getElementById('plan_bag_size').value;
+
+      // 1. สารดิบที่ต้องใช้ (คิด Factor 1.25 หรือ Loss ~20%)
+      const greenNeeded = roastedTarget * 1.25;
+      document.getElementById('math-green-needed').innerText = `${greenNeeded.toFixed(1)} kg`;
+
+      // 2. จำนวนถุง
+      if (bagSizeVal !== "bulk" && parseFloat(bagSizeVal) > 0) {
+        const bags = Math.round(roastedTarget / parseFloat(bagSizeVal));
+        document.getElementById('math-total-bags').innerText = `${bags} ถุง`;
+      } else {
+        document.getElementById('math-total-bags').innerText = `ส่งเป็นถัง`;
+      }
+
+      // 3. จำนวนแบทช์ (สมมุติเตาขนาด 25 kg/แบทช์)
+      const batches = greenNeeded > 0 ? Math.ceil(greenNeeded / 25) : 0;
+      document.getElementById('math-batches-count').innerText = `${batches} แบทช์`;
+
+      // 4. เวลาคั่วโดยประมาณ (~20 นาทีต่อแบทช์)
+      const totalMinutes = batches * 20;
+      const hours = Math.floor(totalMinutes / 60);
+      const mins = totalMinutes % 60;
+      document.getElementById('math-est-time').innerText = `${hours}:${String(mins).padStart(2, '0')} ชม.`;
+    }
+
+    async function submitCreateBooking() {
+      const planId = document.getElementById('plan_id_input').value.trim();
+      const customer = document.getElementById('customer_name_input').value.trim();
+      const week = document.getElementById('booking_week_select').value;
+      const dueDate = document.getElementById('due_date_input').value;
+      const idx = document.getElementById('plan_item_select').value;
+      const roastLevel = document.getElementById('plan_roast_level').value;
+      const bagSize = document.getElementById('plan_bag_size').value;
+      const roastedTarget = parseFloat(document.getElementById('plan_target_weight').value) || 0;
+
+      if(!planId || !customer || idx === "" || roastedTarget <= 0) {
+        return alert("กรุณาระบุข้อมูลใบจองและน้ำหนักที่สั่งให้ครบถ้วน");
+      }
+
+      const item = itemMasterList[idx];
+      const beanName = item.bean_name || item.product_name;
+      const greenNeeded = (roastedTarget * 1.25).toFixed(1);
+      const batches = Math.ceil((roastedTarget * 1.25) / 25);
+
+      const confirmMsg = `ยืนยันบันทึกใบสั่งจองคั่วกาแฟ?\n\n` +
+        `- รหัสใบจอง: ${planId}\n` +
+        `- ลูกค้า: ${customer} (${week})\n` +
+        `- สารกาแฟ: ${beanName} [คั่ว ${roastLevel}]\n` +
+        `- ยอดสั่งคั่ว: ${roastedTarget} kg ➔ ใช้สารดิบ ${greenNeeded} kg\n` +
+        `- ขนาดแบทช์เตา: ${batches} แบทช์\n` +
+        `- วันรับด่วน: ${dueDate}\n\n` +
+        `*ข้อมูลจะถูกบรรจุลงกระดานแผนการผลิตทันที*`;
+
+      if(!confirm(confirmMsg)) return;
+
+      const btn = document.getElementById('btn-save-booking');
+      btn.innerText = "กำลังบันทึก...";
+      btn.disabled = true;
+
+      const payload = {
+        action: 'create_plan',
+        plan_id: planId,
+        plan_date: dueDate,
+        product_code: item.bean_code || item.product_code || '',
+        product_name: `${customer} | ${beanName} (${roastLevel}) [${week}]`,
+        target_weight: roastedTarget,
+        operator: localStorage.getItem('name') || "Planner"
+      };
 
       try {
-        await fetch(API_URL, {
-          method: "POST",
-          body: JSON.stringify({ action: 'add_plan', order_no: orderNo, item_name: itemName, target_weight: weight, roast_level: roastLevel, roast_date: roastDate, operator: localStorage.getItem('name') || "Admin" })
+        const res = await fetch(API_URL, { method: "POST", body: JSON.stringify(payload) });
+        const result = await res.json();
+        alert(result.message);
+
+        // เพิ่มลงรายการหน้าบ้านทันที
+        bookingPlansList.unshift({
+          plan_id: planId,
+          plan_date: dueDate,
+          product_name: `${customer} | ${beanName} (${roastLevel}) [${week}]`,
+          target_weight: roastedTarget,
+          status: 'Planned',
+          operator: localStorage.getItem('name') || "Planner"
         });
-        document.getElementById('order_no').value = '';
-        document.getElementById('plan_item_name').value = '';
-        document.getElementById('plan_weight').value = '';
-        loadPlans();
-      } catch (e) {}
+
+        renderBookingTable();
+        initDefaultPlanID();
+        document.getElementById('plan_target_weight').value = '';
+        calculateBookingMath();
+      } catch(e) {
+        alert("เชื่อมต่อไม่สำเร็จ");
+      } finally {
+        btn.innerText = "บันทึกใบสั่งจองคั่ว & บรรจุลงแผนผลิต (Save Booking)";
+        btn.disabled = false;
+      }
     }
 
-    async function updateStatus(planId, status) {
-      try {
-        await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'update_plan_status', plan_id: planId, status: status }) });
-        loadPlans();
-      } catch (e) {}
+    function renderBookingTable() {
+      const tbody = document.getElementById('booking-plans-tbody');
+      const weekFilter = document.getElementById('filter_week_select').value;
+
+      let filtered = bookingPlansList;
+      if (weekFilter !== "ALL") {
+        filtered = bookingPlansList.filter(p => p.product_name && p.product_name.includes(`[${weekFilter}]`));
+      }
+
+      // อัปเดต KPI ด้านบน
+      const totalRoasted = filtered.reduce((s, p) => s + (parseFloat(p.target_weight) || 0), 0);
+      const totalGreen = totalRoasted * 1.25;
+      const totalBatches = totalGreen > 0 ? Math.ceil(totalGreen / 25) : 0;
+      const totalMinutes = totalBatches * 20;
+      const hours = Math.floor(totalMinutes / 60);
+      const mins = totalMinutes % 60;
+
+      document.getElementById('kpi-booked-roasted').innerText = `${totalRoasted.toFixed(1)} kg`;
+      document.getElementById('kpi-booked-orders').innerText = `${filtered.length} รายการ`;
+      document.getElementById('kpi-est-green').innerText = `${totalGreen.toFixed(1)} kg`;
+      document.getElementById('kpi-total-batches').innerText = `${totalBatches} แบทช์`;
+      document.getElementById('kpi-roast-hours').innerText = `${hours}:${String(mins).padStart(2, '0')} ชม.`;
+
+      if(filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="10" class="py-6 text-center text-gray-400">ไม่มีรายการจองคั่วในสัปดาห์นี้</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(p => {
+        const parts = (p.product_name || '').split('|');
+        const customerPart = parts[0] ? parts[0].trim() : 'ลูกค้า';
+        const beanPart = parts[1] ? parts[1].trim() : p.product_name;
+        const targetW = parseFloat(p.target_weight) || 0;
+        const greenW = targetW * 1.25;
+        const batches = Math.ceil(greenW / 25);
+        const estTime = `${Math.floor((batches * 20)/60)}:${String((batches * 20)%60).padStart(2, '0')}`;
+
+        return `
+          <tr class="hover:bg-gray-50 transition">
+            <td class="py-2.5 px-3 font-mono font-black text-black">${p.plan_id}</td>
+            <td class="py-2.5 px-3 font-bold text-black">${customerPart}</td>
+            <td class="py-2.5 px-3 text-black font-medium">${beanPart}</td>
+            <td class="py-2.5 px-3 text-center text-gray-600 font-semibold">250g / 500g</td>
+            <td class="py-2.5 px-3 text-right font-black text-black">${targetW.toFixed(1)} kg</td>
+            <td class="py-2.5 px-3 text-right font-black text-black">${greenW.toFixed(1)} kg</td>
+            <td class="py-2.5 px-3 text-center font-mono font-bold text-gray-700">${batches} แบทช์ (${estTime})</td>
+            <td class="py-2.5 px-3 text-center font-mono font-bold text-black">${p.plan_date || '-'}</td>
+            <td class="py-2.5 px-3 text-center">
+              <span class="px-2 py-0.5 rounded text-[10px] font-bold ${p.status === 'Completed' ? 'bg-black text-white' : 'bg-gray-100 text-black'}">${p.status || 'Planned'}</span>
+            </td>
+            <td class="py-2.5 px-3 text-center">
+              <button type="button" onclick="dispatchPlanToRoaster('${p.plan_id}', '${customerPart}', '${beanPart}', ${targetW})" class="px-2.5 py-1 bg-black hover:bg-gray-800 text-white rounded text-xs font-bold transition cursor-pointer">
+                ส่งเข้าเตาคั่ว ➔
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // ส่งยอดจองคั่วไปหน้าเตาคั่ว (wip.html)
+    function dispatchPlanToRoaster(planId, customer, bean, weight) {
+      if(!confirm(`ต้องการส่งใบจองคั่ว [${planId}] ของ [${customer}] เข้าสู่หน้าเตาคั่วใช่หรือไม่?`)) return;
+      localStorage.setItem('bj_active_dispatch_wo', planId);
+      alert(`ส่งใบสั่งผลิต [${planId}] เรียบร้อย! กำลังนำทางไปยังหน้าเบิกคั่ว...`);
+      window.location.href = 'wip.html';
     }
   </script>
 </body>
