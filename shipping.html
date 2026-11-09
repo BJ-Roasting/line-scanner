@@ -5,17 +5,32 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>BJ Roaster - จัดส่งสินค้า</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/html5-qrcode"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
     ::-webkit-scrollbar { display: none; }
     body { -ms-overflow-style: none; scrollbar-width: none; }
-    .pb-safe { padding-bottom: env(safe-area-inset-bottom, 20px); }
+    .pb-safe { padding-bottom: env(safe-area-inset-bottom, 24px); }
+
+    /* 🖨️ ระบบพิมพ์ใบสรุปการจัดส่ง A4 Daily Shipping Manifest */
+    @page { size: A4 portrait; margin: 10mm; }
+    @media print {
+      #app-layout, aside, #bottom-nav, .no-print, nav, button, header { display: none !important; }
+      html, body { background: white !important; margin: 0 !important; padding: 0 !important; width: 100% !important; overflow: visible !important; }
+      #manifest-print-modal { display: block !important; position: static !important; width: 100% !important; padding: 0 !important; background: transparent !important; }
+      .a4-manifest-sheet {
+        width: 190mm !important; min-height: 270mm !important; page-break-inside: avoid !important; break-inside: avoid !important;
+        border: 2px solid #000 !important; margin: 0 auto !important; padding: 10mm 12mm !important; background: white !important;
+        box-sizing: border-box !important; display: flex !important; flex-direction: column !important; justify-content: space-between !important;
+      }
+    }
   </style>
 </head>
 <body class="bg-white text-black font-sans antialiased selection:bg-gray-200">
 
   <div id="app-layout" class="flex min-h-screen">
     
-    <!-- 💻 Sidebar Desktop (ขนาดฟอนต์ & ระยะเป๊ะตามมาตรฐานทุกหน้า) -->
+    <!-- 💻 Sidebar Desktop (4 เมนูมาตรฐาน สะอาด คลีน) -->
     <aside class="hidden md:flex flex-col w-64 fixed left-0 top-0 h-screen bg-white border-r border-gray-200 pt-7 pb-6 px-4 z-40 shadow-sm no-print">
       <div class="px-2 mb-7">
         <div class="flex items-center gap-2.5">
@@ -34,7 +49,6 @@
             <a href="index.html" class="flex items-center gap-3 text-gray-500 hover:text-black hover:bg-gray-100 px-3 py-2 rounded-lg font-bold text-xs transition">
               <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg> หน้าแรก
             </a>
-            <!-- 🌟 ทำงาน ACTIVE (สีดำ) -->
             <a href="planner.html" class="flex items-center gap-3 bg-black text-white px-3 py-2 rounded-lg font-bold text-xs transition shadow-sm">
               <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 011.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.56.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.893.149c-.425.07-.765.383-.93.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 01-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.397.165-.71.505-.78.929l-.15.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 01-.12-1.45l.527-.737c.25-.35.273-.806.108-1.204-.165-.397-.505-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.107-1.204l-.527-.738a1.125 1.125 0 01.12-1.45l.773-.773a1.125 1.125 0 011.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg> ทำงาน
             </a>
@@ -66,89 +80,325 @@
 
     <main class="w-full md:ml-64 relative flex flex-col min-h-screen">
       
-      <!-- 🌟 แถบเมนูด้านบน สไตล์ Binance Tab Header (Active: จัดส่ง) 🌟 -->
-      <div class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-gray-200">
+      <!-- 🌟 แถบเมนูด้านบน สไตล์ Binance Tab Header 🌟 -->
+      <div class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-gray-200 no-print">
         <div class="flex items-center gap-2 overflow-x-auto px-4 md:px-8 py-2.5 snap-x">
           <button onclick="window.location.href='planner.html'" class="px-4 py-2 rounded-lg text-sm font-bold text-gray-400 hover:text-black hover:bg-gray-100 transition whitespace-nowrap">วางแผน</button>
           <button onclick="window.location.href='wip.html'" class="px-4 py-2 rounded-lg text-sm font-bold text-gray-400 hover:text-black hover:bg-gray-100 transition whitespace-nowrap">เบิกคั่ว</button>
           <button onclick="window.location.href='packing.html'" class="px-4 py-2 rounded-lg text-sm font-bold text-gray-400 hover:text-black hover:bg-gray-100 transition whitespace-nowrap">บรรจุสินค้า</button>
-          <!-- Active Tab: จัดส่ง -->
           <button class="px-4 py-2 rounded-lg text-sm font-bold bg-black text-white whitespace-nowrap shadow-sm">จัดส่ง</button>
           <button onclick="window.location.href='item_master.html'" class="px-4 py-2 rounded-lg text-sm font-bold text-gray-400 hover:text-black hover:bg-gray-100 transition whitespace-nowrap">เพิ่มข้อมูลใหม่</button>
           <button onclick="window.location.href='inbound.html'" class="px-4 py-2 rounded-lg text-sm font-bold text-gray-400 hover:text-black hover:bg-gray-100 transition whitespace-nowrap">รับสินค้าเข้า</button>
         </div>
       </div>
 
-      <!-- 👇 เนื้อหาหลัก (ขนาดความกว้าง max-w-5xl เท่ากับ inbound.html เป๊ะ) 👇 -->
-      <div class="p-4 md:p-8 pb-28 max-w-5xl space-y-6">
+      <!-- 👇 พื้นที่ทำงานจัดส่งสินค้า 👇 -->
+      <div class="p-4 md:p-8 pb-32 max-w-5xl space-y-6">
         
-        <!-- ฟอร์มตัดสต๊อกจัดส่งสินค้า -->
-        <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-4">
-          <div class="border-b border-gray-100 pb-3">
-            <h2 class="text-base font-bold text-black">ตัดสต๊อกจัดส่งสินค้า</h2>
-            <p class="text-xs text-gray-400">สแกนบาร์โค้ดสินค้าสำเร็จรูปเพื่อตัดส่งให้ลูกค้า</p>
+        <!-- Header & ปุ่มเปิดคู่มือ SOP ประจำหน้าจอ -->
+        <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-3 border-b border-gray-100 pb-3 no-print">
+          <div>
+            <h1 class="text-xl font-black text-black tracking-tight">การจัดส่งสินค้า & ส่งมอบ</h1>
+            <p class="text-xs text-gray-400">เบิกกล่องจากชั้นวาง RT-PACK ➔ ตรวจสอบออเดอร์ ➔ บันทึกเลขพัสดุ ➔ ตัดส่งมอบ RT-OUT</p>
+          </div>
+          <!-- ปุ่มเปิดคู่มือหลัก -->
+          <button type="button" onclick="toggleGlobalSOPGuide()" class="flex items-center gap-1.5 px-3 py-1.5 bg-black hover:bg-gray-800 text-white rounded-lg text-xs font-bold transition cursor-pointer self-start sm:self-auto shadow-sm">
+            <span>คู่มือการทำงาน (SOP)</span>
+            <span id="sop-toggle-icon" class="text-[10px]">▼</span>
+          </button>
+        </div>
+
+        <!-- 🌟 กล่องคู่มือการทำงาน SOP ประจำหน้าจอ (เปิด-ปิดได้ สไตล์คลีน 100%) 🌟 -->
+        <div id="sop-guide-drawer" class="hidden p-5 bg-gray-50 rounded-2xl border-2 border-black space-y-4 no-print transition-all">
+          <div class="flex justify-between items-center border-b border-gray-200 pb-2">
+            <div>
+              <span class="text-[10px] font-black uppercase tracking-widest text-gray-400 block">SHIPPING & DISPATCH SOP</span>
+              <h3 class="text-sm font-black text-black">คู่มือมาตรฐานการปฏิบัติงานจัดส่งสินค้า (Outbound Flow)</h3>
+            </div>
+            <button type="button" onclick="toggleGlobalSOPGuide()" class="text-gray-400 hover:text-black font-bold text-lg leading-none">&times;</button>
           </div>
 
-          <div class="space-y-3">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+            <!-- คู่มือขั้นตอน 1 -->
+            <div class="p-3.5 bg-white rounded-xl border border-gray-200 space-y-1.5 flex flex-col justify-between">
               <div>
-                <label class="block text-xs font-bold text-gray-700 mb-1">เลขออเดอร์ลูกค้า *</label>
-                <input type="text" id="ship_order_no" placeholder="เช่น ORD-1002" class="w-full px-3 py-2 border border-gray-300 rounded-lg font-bold text-black uppercase text-sm focus:border-black focus:outline-none">
+                <span class="font-black text-black text-xs block">1. สแกนกล่องจากชั้นวาง RT-PACK</span>
+                <p class="text-[11px] text-gray-500 mt-1">เดินไปที่ชั้นวาง RT-PACK-01 ถึง 05 ยิงสแกน QR หน้ากล่อง (หรือใบคู่ A4) เพื่อดึงข้อมูลสินค้า Lot และน้ำหนัก</p>
               </div>
-              <div>
-                <label class="block text-xs font-bold text-gray-700 mb-1">ชื่อลูกค้า / ร้านค้า</label>
-                <input type="text" id="ship_customer" list="customer-list" placeholder="เลือกลูกค้าหรือพิมพ์" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-black focus:border-black focus:outline-none">
-                <datalist id="customer-list"></datalist>
+              <div class="pt-2 border-t border-gray-100 text-[10px] text-gray-400">
+                👉 ตรวจสอบชื่อสินค้าและ Lot ให้ตรงกับออเดอร์
               </div>
             </div>
 
-            <div>
-              <label class="block text-xs font-bold text-gray-700 mb-1">รหัสบาร์โค้ดสินค้าที่ส่ง *</label>
-              <input type="text" id="ship_barcode" placeholder="สแกนบาร์โค้ดสินค้า" class="w-full px-3 py-2 border border-gray-300 rounded-lg font-mono font-bold text-black uppercase text-sm focus:border-black focus:outline-none">
-            </div>
-
-            <div>
-              <label class="block text-xs font-bold text-gray-700 mb-1">จำนวนที่จัดส่ง (ถุง) *</label>
-              <input type="number" id="ship_qty" placeholder="ระบุจำนวน" class="w-full px-3 py-2 border border-black rounded-lg font-black text-black text-base focus:outline-none">
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <!-- คู่มือขั้นตอน 2 -->
+            <div class="p-3.5 bg-white rounded-xl border border-gray-200 space-y-1.5 flex flex-col justify-between">
               <div>
-                <label class="block text-xs font-bold text-gray-500 mb-1">ขนส่ง (Carrier)</label>
-                <select id="ship_carrier" class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-xs font-medium focus:border-black focus:outline-none">
-                  <option value="Kerry">Kerry Express</option>
-                  <option value="Flash">Flash Express</option>
-                  <option value="J&T">J&T Express</option>
-                  <option value="Self-Delivery">ส่งเอง / เข้ารับที่โรงคั่ว</option>
+                <span class="font-black text-black text-xs block">2. เลือกขนส่ง & บันทึกเลขพัสดุ</span>
+                <p class="text-[11px] text-gray-500 mt-1">เลือกรูปแบบขนส่ง (Flash, Kerry, ไปรษณีย์, รถโรงงาน) และเปิดกล้องยิงสแกน Barcode เลขพัสดุจากสลิป</p>
+              </div>
+              <div class="pt-2 border-t border-gray-100 text-[10px] text-gray-400">
+                ⚠️ ยิง Barcode จากสลิปขนส่งได้ทันที ไม่ต้องพิมพ์มือ
+              </div>
+            </div>
+
+            <!-- คู่มือขั้นตอน 3 -->
+            <div class="p-3.5 bg-white rounded-xl border border-gray-200 space-y-1.5 flex flex-col justify-between">
+              <div>
+                <span class="font-black text-black text-xs block">3. บันทึกส่งมอบ & พิมพ์สรุป A4</span>
+                <p class="text-[11px] text-gray-500 mt-1">กดยืนยันตัดสต๊อก สินค้าจะถูกย้ายเป็น <b>RT-OUT (ส่งมอบสำเร็จ)</b> พร้อมกดพิมพ์ใบสรุปประจำวัน A4 ส่งมอบให้คนขับรถ</p>
+              </div>
+              <div class="pt-2 border-t border-gray-100 text-[10px] text-gray-400">
+                🚚 สินค้าหลุดจากชั้นวาง RT-PACK ทันที สต๊อกแม่นยำ
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- แดชบอร์ดสรุปยอดกะการจัดส่ง -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center text-xs no-print">
+          <div class="p-3.5 bg-gray-50 rounded-xl border border-gray-200">
+            <span class="text-gray-400 block text-[10px]">กล่องที่ส่งวันนี้</span>
+            <b id="kpi-ship-boxes" class="text-base font-black text-black">0 ลัง</b>
+          </div>
+          <div class="p-3.5 bg-gray-50 rounded-xl border border-gray-200">
+            <span class="text-gray-400 block text-[10px]">จำนวนถุงส่งมอบ</span>
+            <b id="kpi-ship-bags" class="text-base font-black text-black">0 ถุง</b>
+          </div>
+          <div class="p-3.5 bg-gray-50 rounded-xl border border-gray-200">
+            <span class="text-gray-400 block text-[10px]">น้ำหนักส่งมอบรวม</span>
+            <b id="kpi-ship-weight" class="text-base font-black text-black">0.0 kg</b>
+          </div>
+          <div class="p-3.5 bg-gray-50 rounded-xl border border-gray-200">
+            <span class="text-gray-400 block text-[10px]">รอบขนส่งวันนี้</span>
+            <b id="kpi-ship-orders" class="text-base font-black text-black">0 ออเดอร์</b>
+          </div>
+        </div>
+
+        <!-- ฟอร์มบันทึกการจัดส่งสินค้า -->
+        <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-5 no-print">
+          <div class="border-b border-gray-100 pb-3 flex justify-between items-center">
+            <div>
+              <h2 class="text-base font-bold text-black">บันทึกการตัดส่งมอบสินค้า (Dispatch Order)</h2>
+              <p class="text-xs text-gray-400">สแกนกล่องจากชั้นวาง RT-PACK และบันทึกข้อมูลการจัดส่ง</p>
+            </div>
+            <span class="text-xs font-mono font-bold bg-gray-100 text-black px-2.5 py-1 rounded" id="today-date-badge">2026-09-17</span>
+          </div>
+
+          <!-- ช่องสแกนกล่องสินค้าจากชั้นวาง RT-PACK -->
+          <div class="space-y-1.5">
+            <div class="flex justify-between items-center">
+              <label class="block text-xs font-bold text-black">1. สแกน QR หน้ากล่องลัง หรือใบนำงาน A4 *</label>
+              <span class="text-[10px] text-gray-500 font-bold">ยิง QR ป้ายกล่องลัง</span>
+            </div>
+            <div class="flex gap-2">
+              <input type="text" id="ship_box_input" oninput="onShippingBoxInputChanged()" placeholder="ยิงสแกน QR เช่น WO-R260917-01 หรือ BOX-..." class="flex-1 px-3 py-2.5 border-2 border-black rounded-lg font-mono font-black text-black uppercase text-xs focus:outline-none">
+              <button type="button" onclick="startScanner('ship_box_input')" class="bg-black hover:bg-gray-800 text-white px-4 rounded-lg font-bold text-xs transition cursor-pointer">
+                เปิดกล้อง
+              </button>
+            </div>
+          </div>
+
+          <!-- การ์ดแสดงข้อมูลกล่องที่ตรวจพบ -->
+          <div id="ship-box-info" class="p-4 bg-gray-50 rounded-xl border border-gray-200 space-y-2 text-xs">
+            <div class="flex justify-between items-start">
+              <div>
+                <span class="text-[10px] text-gray-400 font-bold uppercase block">สินค้าสำเร็จรูปที่ตรวจพบ</span>
+                <h4 id="info-box-name" class="text-sm font-black text-black">กรุณาสแกน QR Code หน้ากล่องลัง</h4>
+              </div>
+              <span id="info-box-id" class="font-mono font-black text-black bg-white px-2 py-0.5 rounded border border-gray-200">-</span>
+            </div>
+            <div class="grid grid-cols-4 gap-2 pt-1 border-t border-gray-200 text-center">
+              <div><span class="text-gray-400 block">ชั้นวางปัจจุบัน</span><b id="info-box-shelf" class="text-black font-mono font-bold">-</b></div>
+              <div><span class="text-gray-400 block">รหัส Lot</span><b id="info-box-lot" class="text-black font-mono font-bold">-</b></div>
+              <div><span class="text-gray-400 block">จำนวนในกล่อง</span><b id="info-box-bags" class="text-black font-bold">0 ถุง</b></div>
+              <div><span class="text-gray-400 block">น้ำหนักสุทธิ</span><b id="info-box-weight" class="text-black font-black">0.00 kg</b></div>
+            </div>
+          </div>
+
+          <!-- รายละเอียดการจัดส่ง & ขนส่ง -->
+          <div class="border-t border-gray-100 pt-3 space-y-3 text-xs">
+            <span class="font-black text-black uppercase block">ข้อมูลการจัดส่ง & เลขพัสดุ (Shipping & Courier)</span>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div>
+                <label class="block font-bold text-gray-700 mb-1">ช่องทางจัดส่ง (Courier) *</label>
+                <select id="ship_courier_select" class="w-full px-3 py-2 border border-gray-300 rounded-lg font-bold bg-white text-black text-xs focus:border-black focus:outline-none">
+                  <option value="Flash Express" selected>Flash Express</option>
+                  <option value="Kerry Express">Kerry Express</option>
+                  <option value="ไปรษณีย์ไทย (EMS)">ไปรษณีย์ไทย (EMS)</option>
+                  <option value="รถโรงงานส่งมอบ">รถโรงงานส่งมอบ (Factory Truck)</option>
+                  <option value="ลูกค้ารับเองหน้าร้าน">ลูกค้ารับเองหน้าร้าน (Customer Pickup)</option>
                 </select>
               </div>
+
               <div>
-                <label class="block text-xs font-bold text-gray-500 mb-1">เลขพัสดุ (Tracking No.)</label>
-                <input type="text" id="ship_tracking" placeholder="THxxxxxxxxx" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs uppercase font-mono">
+                <label class="block font-bold text-gray-700 mb-1">ชื่อลูกค้า / ปลายทาง *</label>
+                <input type="text" id="ship_customer_name" placeholder="เช่น ร้านกาแฟ Blue House" class="w-full px-3 py-2 border border-gray-300 rounded-lg font-bold text-black text-xs focus:border-black focus:outline-none">
               </div>
+
+              <div>
+                <label class="block font-bold text-gray-700 mb-1">เลขที่ออเดอร์ (Order / PO No.)</label>
+                <input type="text" id="ship_order_no" placeholder="เช่น SO-2609-001" class="w-full px-3 py-2 border border-gray-300 rounded-lg font-mono font-bold text-black text-xs focus:border-black focus:outline-none">
+              </div>
+            </div>
+
+            <!-- กล่องสแกนเลขพัสดุ Tracking Barcode จากสลิปขนส่ง -->
+            <div class="p-3 bg-gray-50 rounded-xl border border-gray-200 space-y-1.5">
+              <div class="flex justify-between items-center">
+                <label class="block font-bold text-black">2. เลขพัสดุ (Tracking No.) *</label>
+                <span class="text-[10px] text-gray-500 font-bold">ยิง Barcode จากสลิปขนส่งได้</span>
+              </div>
+              <div class="flex gap-2">
+                <input type="text" id="ship_tracking_input" placeholder="ยิง Barcode หรือพิมพ์เลขพัสดุ เช่น TH0123456789A" class="flex-1 px-3 py-2 border-2 border-black rounded-lg font-mono font-black text-black uppercase text-xs focus:outline-none">
+                <button type="button" onclick="startScanner('ship_tracking_input')" class="bg-black hover:bg-gray-800 text-white px-3.5 rounded-lg font-bold text-xs transition cursor-pointer">
+                  เปิดกล้อง
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-gray-500 font-bold mb-0.5">หมายเหตุการจัดส่ง</label>
+              <input type="text" id="ship_notes" placeholder="เช่น กล่องสมบูรณ์, ส่งมอบคนขับรถเรียบร้อย" class="w-full px-3 py-1.5 border border-gray-300 rounded text-xs">
             </div>
           </div>
 
-          <button type="button" onclick="submitShipping()" id="ship-btn" class="w-full bg-black hover:bg-gray-800 text-white font-bold py-3.5 rounded-lg text-sm transition active:scale-95 cursor-pointer">
-            ยืนยันจัดส่งและตัดสต๊อก
-          </button>
+          <!-- ปุ่มกดยืนยันตัดส่งมอบ -->
+          <div class="pt-2 flex flex-col sm:flex-row gap-3">
+            <button type="button" onclick="submitShippingProcess()" id="btn-submit-ship" class="flex-1 bg-black hover:bg-gray-800 text-white font-bold py-4 rounded-lg text-sm transition active:scale-95 cursor-pointer">
+              บันทึกตัดส่งมอบสินค้าขึ้นรถ (Done)
+            </button>
+            <button type="button" onclick="openShippingManifestModal()" id="btn-print-manifest" class="px-5 bg-white hover:bg-gray-100 text-black border-2 border-black font-bold py-4 rounded-lg text-xs transition cursor-pointer">
+              พิมพ์ใบสรุปการจัดส่ง A4
+            </button>
+          </div>
+        </div>
+
+        <!-- ตารางประวัติการจัดส่งล่าสุด -->
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden p-5 space-y-3 no-print">
+          <div class="flex justify-between items-center border-b border-gray-100 pb-2">
+            <div>
+              <h3 class="font-bold text-black text-sm">ประวัติการตัดส่งมอบสินค้าล่าสุด</h3>
+              <p class="text-[11px] text-gray-400">รายการที่ตัดสต๊อกเป็น RT-OUT ส่งมอบเรียบร้อย</p>
+            </div>
+            <button onclick="loadShippingInitialData()" class="text-xs font-bold text-black bg-gray-100 hover:bg-gray-200 px-3 py-1 rounded-lg transition cursor-pointer">รีเฟรช</button>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="min-w-full text-xs">
+              <thead class="bg-gray-50 text-gray-500 border-b border-gray-200">
+                <tr>
+                  <th class="py-2.5 px-3 text-left font-bold">เวลาส่งมอบ</th>
+                  <th class="py-2.5 px-3 text-left font-bold">สินค้ากาแฟ</th>
+                  <th class="py-2.5 px-3 text-left font-bold">ลูกค้า / ปลายทาง</th>
+                  <th class="py-2.5 px-3 text-center font-bold">ขนส่ง</th>
+                  <th class="py-2.5 px-3 text-center font-bold">เลขพัสดุ (Tracking)</th>
+                  <th class="py-2.5 px-3 text-right font-bold">จำนวนถุง</th>
+                  <th class="py-2.5 px-3 text-right font-bold">นน. รวม</th>
+                  <th class="py-2.5 px-3 text-center font-bold">สถานะ</th>
+                </tr>
+              </thead>
+              <tbody id="shipping-history-tbody" class="text-black divide-y divide-gray-100">
+                <tr><td colspan="8" class="py-6 text-center text-gray-400">กำลังโหลดประวัติการจัดส่ง...</td></tr>
+              </tbody>
+            </table>
+          </div>
         </div>
 
       </div>
     </main>
   </div>
 
+  <!-- 🖨️ MODAL พิมพ์ใบสรุปการจัดส่ง A4 Daily Shipping Manifest -->
+  <div id="manifest-print-modal" style="display: none;" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex-col overflow-y-auto p-4 md:p-8">
+    <div class="max-w-[190mm] w-full mx-auto bg-black text-white p-3 rounded-xl mb-4 shadow-2xl flex justify-between items-center no-print sticky top-2 z-50 border border-gray-700">
+      <span class="text-xs font-bold">พรีวิวใบสรุปการจัดส่งสินค้าประจำวัน (A4 Shipping Manifest)</span>
+      <div class="flex gap-2">
+        <button type="button" onclick="window.print()" class="bg-white hover:bg-gray-100 text-black font-black px-4 py-1.5 rounded-lg text-xs transition active:scale-95 cursor-pointer">สั่งพิมพ์ A4</button>
+        <button type="button" onclick="closeShippingManifestModal()" class="bg-gray-800 text-gray-300 px-3 py-1.5 rounded-lg text-xs cursor-pointer">ปิด</button>
+      </div>
+    </div>
+
+    <!-- กระดาษ A4 ใบสรุปการจัดส่ง ชัดเจน คลีน สำหรับส่งมอบคนขับรถ -->
+    <div class="a4-manifest-sheet shadow-2xl border-2 border-black bg-white rounded-lg p-8 mx-auto text-black flex flex-col justify-between">
+      
+      <!-- ส่วนหัวใบสรุป -->
+      <div class="border-b-2 border-black pb-4 flex justify-between items-start">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 bg-black text-white font-black flex items-center justify-center rounded-xl text-xl tracking-tighter">BJ</div>
+          <div>
+            <h1 class="text-xl font-black text-black leading-none">BJ ROASTER</h1>
+            <span class="text-[10px] font-bold text-gray-600 uppercase tracking-widest mt-1 block">DAILY OUTBOUND SHIPPING MANIFEST</span>
+          </div>
+        </div>
+        <div class="text-right">
+          <span class="font-mono font-black text-sm block text-black" id="prt-manifest-date">วันที่: 17/09/2569</span>
+          <span class="text-xs text-gray-500 font-bold">พิกัดต้นทาง: RT-PACK (คลังสำเร็จรูป)</span>
+        </div>
+      </div>
+
+      <!-- รายการสินค้าที่จัดส่งในรอบนี้ -->
+      <div class="my-6 space-y-4 flex-1">
+        <div class="flex justify-between items-center">
+          <span class="text-xs font-black uppercase text-black">รายการพัสดุส่งมอบรอบนี้ (Dispatched Shipments)</span>
+          <span class="text-xs font-bold text-gray-600">รวมทั้งหมด: <b id="prt-manifest-total-count" class="text-black">0</b> รายการ</span>
+        </div>
+
+        <table class="w-full border-collapse border border-black text-xs">
+          <thead class="bg-gray-100 font-bold">
+            <tr>
+              <th class="border border-black p-2 text-center w-10">ลำดับ</th>
+              <th class="border border-black p-2 text-left">สินค้ากาแฟ / รหัส Lot</th>
+              <th class="border border-black p-2 text-left">ลูกค้า / เลขคำสั่งซื้อ</th>
+              <th class="border border-black p-2 text-center">ขนส่ง / เลขพัสดุ</th>
+              <th class="border border-black p-2 text-right">จำนวนถุง</th>
+              <th class="border border-black p-2 text-right">นน. (kg)</th>
+            </tr>
+          </thead>
+          <tbody id="prt-manifest-tbody">
+            <tr><td colspan="6" class="border border-black p-4 text-center text-gray-400">ยังไม่มีรายการส่งมอบในรอบนี้</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- สรุปผลรวมและช่องลายเซ็น -->
+      <div class="border-t-2 border-black pt-4 space-y-6">
+        <div class="grid grid-cols-2 gap-4 text-xs font-bold">
+          <div>จำนวนถุงรวมทั้งสิ้น: <b id="prt-manifest-sum-bags" class="text-black text-sm">0 ถุง</b></div>
+          <div class="text-right">น้ำหนักรวมทั้งสิ้น: <b id="prt-manifest-sum-weight" class="text-black text-sm">0.0 kg</b></div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-4 pt-4 border-t border-gray-300 text-center text-xs font-bold">
+          <div>
+            ผู้จัดเตรียมพัสดุ<br><br>
+            _________________________<br>
+            ( ฝ่ายจัดส่ง BJ Roaster )
+          </div>
+          <div>
+            พนักงานขนส่งผู้รับมอบ<br><br>
+            _________________________<br>
+            ( ตัวแทนขนส่ง / คนขับรถ )
+          </div>
+          <div>
+            ผู้อนุมัติปล่อยสินค้า<br><br>
+            _________________________<br>
+            ( ผู้จัดการคลังสินค้า )
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
   <!-- 📱 Bottom Navigation มือถือ -->
-  <div id="bottom-nav" class="fixed bottom-0 w-full bg-white border-t border-gray-200 pb-safe z-30 md:hidden shadow-lg no-print">
+  <div id="bottom-nav" class="fixed bottom-0 w-full bg-white border-t border-gray-200 pb-safe z-50 md:hidden shadow-lg no-print">
     <div class="flex justify-around items-center pt-2.5 pb-1 px-1">
       <div onclick="window.location.href='index.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-black cursor-pointer">
         <svg class="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg><span class="text-[10px] font-medium">หน้าแรก</span>
       </div>
-      <div onclick="window.location.href='planner.html'" class="flex flex-col items-center justify-center w-[20%] text-black cursor-pointer">
-        <svg class="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 011.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.56.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.893.149c-.425.07-.765.383-.93.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 01-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.397.165-.71.505-.78.929l-.15.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 01-.12-1.45l.527-.737c.25-.35.273-.806.108-1.204-.165-.397-.505-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.107-1.204l-.527-.738a1.125 1.125 0 01.12-1.45l.773-.773a1.125 1.125 0 011.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg><span class="text-[10px] font-bold">ทำงาน</span>
+      <div onclick="window.location.href='planner.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-black cursor-pointer">
+        <svg class="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 011.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.56.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.893.149c-.425.07-.765.383-.93.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 01-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.397.165-.71.505-.78.929l-.15.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 01-.12-1.45l.527-.737c.25-.35.273-.806.108-1.204-.165-.397-.505-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.107-1.204l-.527-.738a1.125 1.125 0 01.12-1.45l.773-.773a1.125 1.125 0 011.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg><span class="text-[10px] font-medium">วางแผน</span>
       </div>
-      <div onclick="window.location.href='report.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-black cursor-pointer">
-        <svg class="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" /></svg><span class="text-[10px] font-medium">รายงาน</span>
+      <div onclick="window.location.href='wip.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-black cursor-pointer">
+        <svg class="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.362 5.214A8.252 8.252 0 0112 21 8.25 8.25 0 016.038 7.048 8.287 8.287 0 009 9.6a8.983 8.983 0 013.361-6.867 8.21 8.21 0 003 2.48z" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 18a3.75 3.75 0 00.495-7.467 5.99 5.99 0 00-1.925 3.546 5.974 5.974 0 01-2.133-1A3.75 3.75 0 0012 18z" /></svg><span class="text-[10px] font-medium">เบิกคั่ว</span>
       </div>
       <div onclick="window.location.href='stock.html'" class="flex flex-col items-center justify-center w-[20%] text-gray-400 hover:text-black cursor-pointer">
         <svg class="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" /></svg><span class="text-[10px] font-medium">สต๊อก</span>
@@ -159,8 +409,27 @@
     </div>
   </div>
 
+  <!-- 📷 CAMERA SCANNER MODAL -->
+  <div id="camera-modal" style="display: none;" class="fixed inset-0 bg-black/90 z-50 flex flex-col items-center justify-center p-4 no-print">
+    <div class="max-w-sm w-full bg-black text-white rounded-xl overflow-hidden shadow-2xl border border-gray-800 space-y-3 p-4">
+      <div class="flex justify-between items-center">
+        <span class="text-xs font-bold text-gray-300">กล้องสแกน Barcode / QR Code</span>
+        <button type="button" onclick="stopScanner()" class="text-gray-400 hover:text-white font-bold">&times;</button>
+      </div>
+      <div id="scanner-view" class="w-full aspect-square bg-gray-900 rounded-lg overflow-hidden border border-gray-800"></div>
+      <button type="button" onclick="stopScanner()" class="w-full py-2 bg-gray-800 text-white rounded-lg text-xs font-bold">ปิดกล้อง</button>
+    </div>
+  </div>
+
   <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbxQywqP4da0BYdt_dHQtQl-kYlvGxmdJWNA59oqnZ_AM7SRyEESbMd73UD3Xx6VffQ/exec";
+    let allInventoryData = [];
+    let packedGoodsList = [];
+    let selectedBoxItem = null;
+
+    let dailyShippingRecords = [];
+    let html5QrScanner = null;
+    let activeTargetInputId = null;
 
     function handleLogout() {
       if(confirm("ต้องการออกจากระบบใช่หรือไม่?")) {
@@ -169,61 +438,266 @@
       }
     }
 
-    window.onload = loadCustomerOptions;
+    window.onload = function() {
+      const now = new Date();
+      document.getElementById('today-date-badge').innerText = now.toISOString().split('T')[0];
+      loadShippingInitialData();
+    };
 
-    async function loadCustomerOptions() {
-      try {
-        const res = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'get_customers' }) });
-        const result = await res.json();
-        if(result.success && result.data) {
-          const list = document.getElementById('customer-list');
-          list.innerHTML = result.data.map(c => `<option value="${c.customer_name}">`).join('');
-        }
-      } catch (e) {}
+    function toggleGlobalSOPGuide() {
+      const drawer = document.getElementById('sop-guide-drawer');
+      const icon = document.getElementById('sop-toggle-icon');
+      const isHidden = drawer.classList.contains('hidden');
+      drawer.classList.toggle('hidden', !isHidden);
+      icon.innerText = isHidden ? '▲' : '▼';
     }
 
-    async function submitShipping() {
-      const orderNo = document.getElementById('ship_order_no').value.trim();
-      const customer = document.getElementById('ship_customer').value.trim();
-      const barcode = document.getElementById('ship_barcode').value.trim();
-      const qty = document.getElementById('ship_qty').value;
-      const carrier = document.getElementById('ship_carrier').value;
-      const tracking = document.getElementById('ship_tracking').value.trim();
+    async function loadShippingInitialData() {
+      try {
+        const res = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: 'get_inventory' }) });
+        const result = await res.json();
+        if(result.success && result.data) {
+          allInventoryData = result.data;
+          
+          // ค้นหาสินค้าสำเร็จรูปที่รอจัดส่งบนชั้นวาง RT-PACK
+          packedGoodsList = allInventoryData.filter(i => 
+            i.location && i.location.startsWith('RT-PACK') && 
+            i.status === 'Active' && 
+            parseFloat(i.weight_current) > 0
+          );
+        }
+      } catch(e) {}
+    }
 
-      if(!orderNo || !barcode || !qty) return alert("กรุณากรอกเลขออเดอร์ บาร์โค้ด และจำนวนส่ง");
+    // เมื่อยิงสแกน QR หน้ากล่องลัง
+    function onShippingBoxInputChanged() {
+      const val = document.getElementById('ship_box_input').value.trim().toUpperCase();
+      if(!val) {
+        resetDetectedBoxCard();
+        return;
+      }
 
-      const btn = document.getElementById('ship-btn');
-      btn.innerText = "กำลังประมวลผล...";
+      selectedBoxItem = packedGoodsList.find(b => 
+        b.barcode_id === val || b.pallet_id === val || (b.lot_code && b.lot_code === val)
+      );
+
+      // ถ้าไม่เจอลองค้นหาตัวที่มีสต๊อกอยู่
+      if(!selectedBoxItem) {
+        selectedBoxItem = packedGoodsList.find(b => (b.barcode_id && b.barcode_id.includes(val)));
+      }
+
+      if(selectedBoxItem) {
+        document.getElementById('info-box-name').innerText = selectedBoxItem.item_name;
+        document.getElementById('info-box-id').innerText = selectedBoxItem.barcode_id;
+        document.getElementById('info-box-shelf').innerText = selectedBoxItem.location;
+        document.getElementById('info-box-lot').innerText = selectedBoxItem.lot_code || '-';
+        document.getElementById('info-box-bags').innerText = `${selectedBoxItem.sacks || 0} ถุง`;
+        document.getElementById('info-box-weight').innerText = `${parseFloat(selectedBoxItem.weight_current).toFixed(2)} kg`;
+
+        document.getElementById('ship_tracking_input').focus();
+      } else {
+        document.getElementById('info-box-name').innerText = "ไม่พบสินค้าบนชั้นวาง RT-PACK";
+        document.getElementById('info-box-id').innerText = val;
+        document.getElementById('info-box-shelf').innerText = "-";
+        document.getElementById('info-box-lot').innerText = "-";
+        document.getElementById('info-box-bags').innerText = "0 ถุง";
+        document.getElementById('info-box-weight').innerText = "0.00 kg";
+      }
+    }
+
+    function resetDetectedBoxCard() {
+      selectedBoxItem = null;
+      document.getElementById('info-box-name').innerText = "กรุณาสแกน QR Code หน้ากล่องลัง";
+      document.getElementById('info-box-id').innerText = "-";
+      document.getElementById('info-box-shelf').innerText = "-";
+      document.getElementById('info-box-lot').innerText = "-";
+      document.getElementById('info-box-bags').innerText = "0 ถุง";
+      document.getElementById('info-box-weight').innerText = "0.00 kg";
+    }
+
+    async function submitShippingProcess() {
+      const boxId = document.getElementById('ship_box_input').value.trim().toUpperCase();
+      const courier = document.getElementById('ship_courier_select').value;
+      const customer = document.getElementById('ship_customer_name').value.trim() || 'ลูกค้าทั่วไป';
+      const orderNo = document.getElementById('ship_order_no').value.trim() || '-';
+      const tracking = document.getElementById('ship_tracking_input').value.trim() || '-';
+      const notes = document.getElementById('ship_notes').value.trim() || '-';
+
+      if(!selectedBoxItem) return alert("กรุณาสแกนกล่องสินค้าจากชั้นวาง RT-PACK ให้ถูกต้องก่อน");
+
+      const confirmMsg = `ยืนยันการตัดส่งมอบสินค้า [${selectedBoxItem.item_name}]?\n\n` +
+        `- รหัสกล่อง: ${selectedBoxItem.barcode_id}\n` +
+        `- หยิบจากชั้นวาง: ${selectedBoxItem.location}\n` +
+        `- ลูกค้า: ${customer}\n` +
+        `- ขนส่ง: ${courier}\n` +
+        `- เลขพัสดุ: ${tracking}\n` +
+        `- จำนวนส่งมอบ: ${selectedBoxItem.sacks || 0} ถุง (${selectedBoxItem.weight_current} kg)\n\n` +
+        `*สถานะบนชั้นวางจะถูกตัดออกเป็น RT-OUT (ส่งมอบสำเร็จ)*`;
+
+      if(!confirm(confirmMsg)) return;
+
+      const btn = document.getElementById('btn-submit-ship');
+      btn.innerText = "กำลังตัดสต๊อกส่งมอบ...";
       btn.disabled = true;
 
+      const payload = {
+        action: 'process_shipping_order',
+        box_barcode_id: selectedBoxItem.barcode_id,
+        item_name: selectedBoxItem.item_name,
+        lot_code: selectedBoxItem.lot_code || '-',
+        origin_shelf: selectedBoxItem.location,
+        courier: courier,
+        customer_name: customer,
+        order_no: orderNo,
+        tracking_no: tracking,
+        bags_shipped: parseInt(selectedBoxItem.sacks) || 0,
+        weight_shipped: parseFloat(selectedBoxItem.weight_current) || 0,
+        notes: notes,
+        operator: localStorage.getItem('name') || "Shipping Officer"
+      };
+
       try {
-        const res = await fetch(API_URL, {
-          method: "POST",
-          body: JSON.stringify({
-            action: 'ship_order',
-            order_no: orderNo,
-            customer: customer,
-            barcode_id: barcode,
-            qty: qty,
-            carrier: carrier,
-            tracking_no: tracking,
-            operator: localStorage.getItem('name') || "Shipper"
-          })
-        });
+        const res = await fetch(API_URL, { method: "POST", body: JSON.stringify(payload) });
         const result = await res.json();
         alert(result.message);
-        if(result.success) {
-          document.getElementById('ship_order_no').value = '';
-          document.getElementById('ship_customer').value = '';
-          document.getElementById('ship_barcode').value = '';
-          document.getElementById('ship_qty').value = '';
-          document.getElementById('ship_tracking').value = '';
-        }
-      } catch (e) {
+
+        // บันทึกสถิติกะวันนี้
+        dailyShippingRecords.push({
+          time: new Date().toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' }),
+          name: selectedBoxItem.item_name,
+          lot: selectedBoxItem.lot_code || '-',
+          customer: customer,
+          orderNo: orderNo,
+          courier: courier,
+          tracking: tracking,
+          bags: parseInt(selectedBoxItem.sacks) || 0,
+          weight: parseFloat(selectedBoxItem.weight_current) || 0
+        });
+
+        updateDailyShippingKPI();
+        addShippingHistoryRow(dailyShippingRecords[dailyShippingRecords.length - 1]);
+
+        // ล้างฟอร์ม
+        document.getElementById('ship_box_input').value = '';
+        document.getElementById('ship_customer_name').value = '';
+        document.getElementById('ship_order_no').value = '';
+        document.getElementById('ship_tracking_input').value = '';
+        document.getElementById('ship_notes').value = '';
+        resetDetectedBoxCard();
+
+        loadShippingInitialData();
+      } catch(e) {
         alert("เชื่อมต่อไม่สำเร็จ");
       } finally {
-        btn.innerText = "ยืนยันจัดส่งและตัดสต๊อก";
+        btn.innerText = "บันทึกตัดส่งมอบสินค้าขึ้นรถ (Done)";
         btn.disabled = false;
+      }
+    }
+
+    function updateDailyShippingKPI() {
+      const boxes = dailyShippingRecords.length;
+      const totalBags = dailyShippingRecords.reduce((s, r) => s + r.bags, 0);
+      const totalWeight = dailyShippingRecords.reduce((s, r) => s + r.weight, 0);
+
+      document.getElementById('kpi-ship-boxes').innerText = `${boxes} ลัง`;
+      document.getElementById('kpi-ship-bags').innerText = `${totalBags} ถุง`;
+      document.getElementById('kpi-ship-weight').innerText = `${totalWeight.toFixed(1)} kg`;
+      document.getElementById('kpi-ship-orders').innerText = `${boxes} ออเดอร์`;
+    }
+
+    function addShippingHistoryRow(rec) {
+      const tbody = document.getElementById('shipping-history-tbody');
+      const tr = document.createElement('tr');
+      tr.className = "hover:bg-gray-50 transition";
+      tr.innerHTML = `
+        <td class="py-2.5 px-3 font-mono text-gray-500">${rec.time}</td>
+        <td class="py-2.5 px-3 font-bold text-black">${rec.name}</td>
+        <td class="py-2.5 px-3 text-black font-medium">${rec.customer}</td>
+        <td class="py-2.5 px-3 text-center font-bold text-black">${rec.courier}</td>
+        <td class="py-2.5 px-3 text-center font-mono font-black text-black bg-gray-50">${rec.tracking}</td>
+        <td class="py-2.5 px-3 text-right font-black text-black">${rec.bags} ถุง</td>
+        <td class="py-2.5 px-3 text-right font-black text-black">${rec.weight.toFixed(2)} kg</td>
+        <td class="py-2.5 px-3 text-center"><span class="px-2 py-0.5 bg-black text-white rounded text-[10px] font-bold">RT-OUT</span></td>
+      `;
+      if(tbody.children[0] && tbody.children[0].children.length === 1) tbody.innerHTML = '';
+      tbody.prepend(tr);
+    }
+
+    // 🖨️ MODAL พิมพ์ใบสรุปการจัดส่ง A4 Daily Shipping Manifest
+    function openShippingManifestModal() {
+      if(dailyShippingRecords.length === 0) {
+        return alert("ยังไม่มีรายการจัดส่งสินค้าที่บันทึกสำเร็จในกะวันนี้");
+      }
+
+      const now = new Date();
+      const dd = String(now.getDate()).padStart(2, '0');
+      const mm = String(now.getMonth() + 1).padStart(2, '0');
+      const yyyy = now.getFullYear();
+      document.getElementById('prt-manifest-date').innerText = `วันที่: ${dd}/${mm}/${yyyy + 543}`;
+      document.getElementById('prt-manifest-total-count').innerText = dailyShippingRecords.length;
+
+      const tbody = document.getElementById('prt-manifest-tbody');
+      tbody.innerHTML = dailyShippingRecords.map((rec, idx) => `
+        <tr class="h-8">
+          <td class="border border-black p-2 text-center font-bold">${idx + 1}</td>
+          <td class="border border-black p-2 font-bold">${rec.name}<br><span class="font-mono text-[10px] text-gray-600">Lot: ${rec.lot}</span></td>
+          <td class="border border-black p-2 font-medium">${rec.customer}<br><span class="font-mono text-[10px] text-gray-600">${rec.orderNo}</span></td>
+          <td class="border border-black p-2 text-center font-bold">${rec.courier}<br><span class="font-mono text-[10px]">${rec.tracking}</span></td>
+          <td class="border border-black p-2 text-right font-black">${rec.bags} ถุง</td>
+          <td class="border border-black p-2 text-right font-black">${rec.weight.toFixed(1)} kg</td>
+        </tr>
+      `).join('');
+
+      const totalBags = dailyShippingRecords.reduce((s, r) => s + r.bags, 0);
+      const totalWeight = dailyShippingRecords.reduce((s, r) => s + r.weight, 0);
+      document.getElementById('prt-manifest-sum-bags').innerText = `${totalBags} ถุง`;
+      document.getElementById('prt-manifest-sum-weight').innerText = `${totalWeight.toFixed(1)} kg`;
+
+      document.getElementById('manifest-print-modal').style.display = 'flex';
+    }
+
+    function closeShippingManifestModal() {
+      document.getElementById('manifest-print-modal').style.display = 'none';
+    }
+
+    // 📷 CAMERA SCANNER
+    function startScanner(targetInputId) {
+      activeTargetInputId = targetInputId;
+      document.getElementById('camera-modal').style.display = 'flex';
+
+      if (!html5QrScanner) {
+        html5QrScanner = new Html5Qrcode("scanner-view");
+      }
+
+      html5QrScanner.start(
+        { facingMode: "environment" },
+        { fps: 10, qrbox: { width: 240, height: 240 } },
+        (decodedText) => {
+          if (activeTargetInputId) {
+            const val = decodedText.trim();
+            document.getElementById(activeTargetInputId).value = val;
+            if(activeTargetInputId === 'ship_box_input') {
+              onShippingBoxInputChanged();
+            }
+          }
+          stopScanner();
+        },
+        (error) => {}
+      ).catch(err => {
+        alert("กรุณาอนุญาตสิทธิ์การเข้าถึงกล้องครับ");
+        stopScanner();
+      });
+    }
+
+    function stopScanner() {
+      if (html5QrScanner && html5QrScanner.isScanning) {
+        html5QrScanner.stop().then(() => {
+          document.getElementById('camera-modal').style.display = 'none';
+        }).catch(() => {
+          document.getElementById('camera-modal').style.display = 'none';
+        });
+      } else {
+        document.getElementById('camera-modal').style.display = 'none';
       }
     }
   </script>
